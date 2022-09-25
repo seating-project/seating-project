@@ -5,7 +5,7 @@ curr_room = list()
 room_dict = dict()
 c = 0
 try:
-    for i in class_array:
+    for i in class_array: 
         for j in range(30):
             if ckt_array[c] and nckt_array[c]:
                 curr_room.append([nckt_array[c],ckt_array[c]])
@@ -28,5 +28,5 @@ except(IndexError):
 
 # The structure should give output like this
 # F1:
-#     210421104 001 - 30
-#     210421102 031 - 61 
+#     104: 210421104 001 - 30
+#     102: 210421102 031 - 61 
