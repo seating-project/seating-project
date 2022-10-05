@@ -1,4 +1,3 @@
-from operator import index
 import mysql.connector
 from tabulate import tabulate
 import bs4
