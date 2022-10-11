@@ -41,9 +41,10 @@ class_array = ["F1","F2","F3","F4", "F5","F6"] # Room names
 curr_room = list()
 room_dict = dict()
 c = 0
-try:
-    for i in class_array: 
-        for j in range(30):
+# try:
+for i in class_array: 
+    for j in range(30):
+        try:    
             if ckt_array[c] and nckt_array[c]:
                 curr_room.append([nckt_array[c],ckt_array[c]])
             elif nckt_array[c]:
@@ -53,15 +54,24 @@ try:
             else:
                 break
             c += 1
-        room_dict[i] = curr_room
-        curr_room = []
+        except IndexError:
+            try:
+                if nckt_array[c]:
+                    curr_room.append([nckt_array[c],0])
+            except:
+                if ckt_array [c]:
+                    curr_room.append([0,ckt_array[c]])
+            c+=1
 
-except (IndexError):
-    
     room_dict[i] = curr_room
     curr_room = []
-    print("Seats alloted!")
-    print(room_dict)
+
+# except (IndexError):
+
+#     room_dict[i] = curr_room
+#     curr_room = []
+#     print("Seats alloted!")
+#     print(room_dict)
 
 print(room_dict)
 
@@ -80,24 +90,25 @@ with open('table.css', 'w')  as f:
 
         .header {
             font-family: 'Roboto', sans-serif;
-            display: flex;
-            justify-content: space-between;
             align-items: center;
             height: 100px;
         }
 
         .content {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-left: 10rem;
+            margin-top: 1rem;
+            margin-left: 5rem;
         }
-        .range {
+
+        .container {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
+            
+            margin-left: 2rem;
+        }
+
+        .range {
+            
             margin-left: 10rem;
-            flex-direction: column;
+            
             width: 100%;
             font-size: 1.2rem;
             font-family: 'Roboto', sans-serif;
@@ -116,10 +127,11 @@ with open('table.css', 'w')  as f:
         }
 
         td {
-            padding: 15px;
-            font-size: 20px;
+            padding: 20px;
+            font-size: 18px;
             line-height: 1.5;
             text-align: center;
+            width: 150px;
         }
 
         body {
@@ -128,7 +140,7 @@ with open('table.css', 'w')  as f:
         }
 
         .logo {
-            margin: 30px;
+            
             height: 60px;
             object-fit: cover;
         }
@@ -139,15 +151,31 @@ with open('table.css', 'w')  as f:
             justify-content: center;
             justify-items: center;
             width: 50%
-            height: 100vh;
-            margin-left: 15%;
-            margin-right: 20%;
+            height: 20vh;
+            margin-left: 5%;
+            margin-right: 45%;
+        }
+
+        tr {
+            height: 80px;
+        }
+
+        .parts {
+            display: flex;
+            flex-direction: column;
+            width: 50%
+            margin-left: 25%;
+            margin: 10rem;
+            
         }
 
         ''')
 
 ranges = []
 
+totalStrength = len(ckt_array) + len(nckt_array)
+print(totalStrength)
+    
 for i in room_dict:
     print(i)
     with open('check.html', 'r')  as f:
@@ -170,6 +198,7 @@ for i in room_dict:
     currdept1 = ""
     currdept2 = ""
     changedDept = 0
+    rowCount = 1
 
     for k in room_dict[i]:
         if str(k[0])[6:9] != currdept1 or str(k[1])[6:9] != currdept2:
@@ -194,17 +223,27 @@ for i in room_dict:
         if tableIndex >= maxTables:
             continue
         singleTable = ''''''
-        singleTable += str(k[0]) + " "  + str(k[1])
+
+        try:
+            singleTable += dept[int(currdept1)] + str(k[0])[9:] + " " +  dept[int(currdept2)] + str(k[1])[9:]
+        except:
+            try:
+                singleTable += dept[int(currdept1)]  + str(k[0])[9:]
+            except:
+                singleTable += dept[int(currdept2)] + str(k[1])[9:]
+            
         table.append([singleTable])
         row.append([singleTable])
         tableCounter += 1
         tableIndex += 1
-        if tableCounter == 5:
+        if tableCounter == 6:
             print(table)
             if snakeRow % 2 == 0:
-                tableStuff = bs4.BeautifulSoup(tabulate(row, tablefmt='html'), 'html.parser')
+                tableStuff = bs4.BeautifulSoup(tabulate(row, headers=["Row %s" % (rowCount)] ,tablefmt='html'), 'html.parser')
+                rowCount+=1
             else:
-                tableStuff = bs4.BeautifulSoup(tabulate(row[::-1], tablefmt='html'), 'html.parser')
+                tableStuff = bs4.BeautifulSoup(tabulate(row[::-1], headers=["Row %s" % (rowCount)], tablefmt='html'), 'html.parser')
+                rowCount+=1
             snakeRow += 1
             #tableStuff.td.replace_with("and", tableStuff.new_tag('br'))
 
@@ -243,7 +282,10 @@ for i in room_dict:
                         ranges2Tag.string = dept[int(str(ranges[0][1])[6:9])] + ": " + str(ranges[0][1]) + " to " + str(ranges[3][1])
                         print(ranges2Tag)
                         print(str(ranges[2][0])[6:9])
-                        ranges3Tag.string = dept[int(str(ranges[2][0])[6:9])] + ": " + str(ranges[2][0]) + " to " + str(ranges[3][0])
+                        try:
+                            ranges3Tag.string = dept[int(str(ranges[2][0])[6:9])] + ": " + str(ranges[2][0]) + " to " + str(ranges[3][0])
+                        except:
+                            ranges2Tag.string = dept[int(str(ranges[0][1])[6:9])] + ": " + str(ranges[0][1]) + " to " + str(ranges[3][1])
                         print(ranges3Tag)
                         basicSyntax.body.find_all("div", class_="range")[0].append(ranges1Tag)
                         basicSyntax.body.find_all("div", class_="range")[0].append(ranges2Tag)
@@ -260,7 +302,11 @@ for i in room_dict:
                         ranges2Tag.string = dept[int(str(ranges[0][1])[6:9])] + ": " + str(ranges[0][1]) + " to " + str(ranges[1][1])
                         print(ranges2Tag)
                         print(str(ranges[2][1])[6:9])
-                        ranges3Tag.string = dept[int(str(ranges[2][1])[6:9])] + ": " + str(ranges[2][1]) + " to " + str(ranges[3][1])
+                        try:
+                            ranges3Tag.string = dept[int(str(ranges[2][1])[6:9])] + ": " + str(ranges[2][1]) + " to " + str(ranges[3][1])
+                        except:
+                            ranges1Tag.string = dept[int(str(ranges[0][0])[6:9])] + ": " + str(ranges[0][0]) + " to " + str(ranges[3][0])
+
                         print(ranges3Tag)
                         basicSyntax.body.find_all("div", class_="range")[0].append(ranges1Tag)
                         basicSyntax.body.find_all("div", class_="range")[0].append(ranges2Tag)
@@ -269,8 +315,6 @@ for i in room_dict:
             # if len(room_dict[i]) < maxTables:
             #    for j in range(maxTables - len(room_dict[i])):
             #     
-                  
-                print(basicSyntax.body.find_all("div", class_="range")[0])
                 ranges = []
             
             with open(i+'.html', 'w') as f2:
@@ -278,6 +322,7 @@ for i in room_dict:
             tableCounter = 0
             row = []
         
+        #if 
     
 
 # {"F1":[[2, 52], [3, 53]],"F2":[[2, 52], [3, 53]]}

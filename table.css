@@ -11,24 +11,25 @@
 
         .header {
             font-family: 'Roboto', sans-serif;
-            display: flex;
-            justify-content: space-between;
             align-items: center;
             height: 100px;
         }
 
         .content {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-left: 10rem;
+            margin-top: 1rem;
+            margin-left: 5rem;
         }
-        .range {
+
+        .container {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
+            
+            margin-left: 2rem;
+        }
+
+        .range {
+            
             margin-left: 10rem;
-            flex-direction: column;
+            
             width: 100%;
             font-size: 1.2rem;
             font-family: 'Roboto', sans-serif;
@@ -47,10 +48,11 @@
         }
 
         td {
-            padding: 15px;
-            font-size: 20px;
+            padding: 20px;
+            font-size: 18px;
             line-height: 1.5;
             text-align: center;
+            width: 150px;
         }
 
         body {
@@ -59,7 +61,7 @@
         }
 
         .logo {
-            margin: 30px;
+            
             height: 60px;
             object-fit: cover;
         }
@@ -70,9 +72,22 @@
             justify-content: center;
             justify-items: center;
             width: 50%
-            height: 100vh;
-            margin-left: 15%;
-            margin-right: 20%;
+            height: 20vh;
+            margin-left: 5%;
+            margin-right: 45%;
+        }
+
+        tr {
+            height: 80px;
+        }
+
+        .parts {
+            display: flex;
+            flex-direction: column;
+            width: 50%
+            margin-left: 25%;
+            margin: 10rem;
+            
         }
 
         
