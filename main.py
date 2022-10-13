@@ -1,4 +1,4 @@
-# Program for sootha thechifying in exams (A joke, please give us OD 😭) 
+# Program for seating arrangment in exams (A joke, please give us OD 😭) 
 
 # Importing the required modules 🚀
 from sql import GetStudents
