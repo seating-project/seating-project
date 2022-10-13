@@ -1,9 +1,7 @@
-# Program for sootha thechifying in exams (A joke, please give us OD😭 ) 
+# Program for sootha thechifying in exams (A joke, please give us OD 😭) 
 
 # Importing the required modules 🚀
-from tabulate import tabulate
-import bs4
-from sql import GetStudents, dept, years
+from sql import GetStudents
 from allotment import Allotment
 from tablestuff import CreateTable
 
