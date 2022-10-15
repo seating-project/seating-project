@@ -1,0 +1,47 @@
+body {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.tables table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+    
+}
+
+.tables table {
+    margin: 30px auto;
+    padding: 10px;
+    page-break-inside: auto;
+}
+
+.tables td {
+    padding: 5px;
+    font-size: 10px;
+    line-height: 1.2;
+    text-align: center;
+    width: 150px;
+}
+
+.tables th {
+    text-align: center;
+}
+
+.logo {
+    height: 80px;
+    object-fit: contain;
+}
+
+h1 {
+    font-family: 'Roboto', sans-serif;
+    font-size: 2rem;
+}
+@media print {
+    table {
+        page-break-inside: auto;
+    }
+    tr    { page-break-inside:avoid; page-break-after:auto }
+    thead { display:table-header-group }
+    tfoot { display:table-footer-group }
+}

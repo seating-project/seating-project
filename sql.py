@@ -1,7 +1,7 @@
 from itertools import count
 import mysql.connector
 import random
-
+from attendance import Attendance
 
 
 time_table = {'CSE':[['FDS',17],['DS',18],[]]}
@@ -24,7 +24,14 @@ dept = {
         114:"MECH",
         115:"MCT",
         205:"IT",
+        103:"CIVIL",
+        105:"EEE",
+        106:"ECE",
+        243:"AIDS",
+        121:"BME",
+        244:"CSBS",
         }
+        
 years = {
     21:"1st Year",
     20:"2nd Year",
@@ -32,12 +39,21 @@ years = {
     18:"4th Year",
 }
 
-table_ids_ckt = ["cseii", "mechii", "mctii", "itii"]
+# table_ids_ckt = ["cseii", "mechii", "mctii", "itii"]
 
+ARRAYS = []
 
+ALLTABLEARRAYS = []
 
-def GetStudents():
+DATES = []
 
+def GetStudents(Gender):
+
+    G = ""
+    if Gender == "M" or Gender == "Male":
+        G = "M"
+    else:
+        G = "F" 
     nckt_array = [] # Array for circuit group students
     ckt_array = [] # Array for non circuit group students
     sample1 = []
@@ -46,19 +62,48 @@ def GetStudents():
     db = mysql.connector.connect(host="localhost", user="root", passwd="root")
     cursor = db.cursor()
 
+    #arrangment stuff
     cursor.execute("USE secondthird")
-    cursor.execute("SELECT RegisterNo FROM itii where Gender='M'")
+
+    stmt = "SELECT RegisterNo FROM itii where Gender='%s'" % (G)
+    print(stmt)
+    cursor.execute("SELECT RegisterNo FROM itii where Gender='%s'" % (G))
     cseData = cursor.fetchall()
     sample1.append(cseData)
-    cursor.execute("SELECT RegisterNo FROM cseii where Gender='M'")
+    cursor.execute("SELECT RegisterNo FROM cseii where Gender='%s'" % (G))
     itData = cursor.fetchall()
     sample1.append(itData)
-    cursor.execute("SELECT RegisterNo FROM mctii where Gender='M'")
+    cursor.execute("SELECT RegisterNo FROM mctii where Gender='%s'" % (G))
     mechData = cursor.fetchall()
     sample2.append(mechData)
-    cursor.execute("SELECT RegisterNo FROM mechii where Gender='M'")
+    cursor.execute("SELECT RegisterNo FROM mechii where Gender='%s'" % (G))
     mctData = cursor.fetchall()
     sample2.append(mctData)
+
+    #Attendance stuff
+
+    tableNames = ["cseii", "mechii", "mctii", "itii"]
+    cursor.execute("USE secondthird")
+
+    for a in range(len(tableNames)):
+        cursor.execute("SELECT SNo, RegisterNo, Name FROM  %s" % (tableNames[a]))
+        ARRAYS.append(cursor.fetchall())
+    
+    # cursor.execute("SELECT SNo, RegisterNo, Name FROM mechii")
+    # MECHARRAY = cursor.fetchall()
+    # cursor.execute("SELECT SNo, RegisterNo, Name FROM mctii")
+    # MCTARRAY = cursor.fetchall()
+    # cursor.execute("SELECT SNo, RegisterNo, Name FROM itii")
+    # ITARRAY = cursor.fetchall()
+
+
+    #Time table stuff
+    cursor.execute("USE secondthird")
+    cursor.execute("SELECT Date from timetable")
+    DATES = cursor.fetchall()
+
+    for b in ARRAYS:
+        Attendance(b, DATES)
 
     # random.shuffle(sample1)
     # random.shuffle(sample2)
@@ -69,7 +114,7 @@ def GetStudents():
         ckt_array.append(i[0])
     for i in sample2:
         nckt_array.append(i[0])
-
+    print(ckt_array, nckt_array)
     return ckt_array, nckt_array
 
 def displayCount(countDict):
