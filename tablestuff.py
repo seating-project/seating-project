@@ -154,8 +154,6 @@ def CreateTable(room_dict):
                         print("GOPAL",masterRanges[i])
 
                     elif len(ranges) == 2:
-                        
-                            
 
                         ranges1Tag = basicSyntax.new_tag("p")
                         print(str(ranges[0][0])[6:9])
@@ -171,9 +169,9 @@ def CreateTable(room_dict):
                         masterRanges[i] = [ranges1Tag.string, ranges2Tag.string]
                         print("GOPAL",masterRanges[i])
 
-                    if len(ranges) == 4:
+                    elif len(ranges) == 4:
+
                         ranges3Tag = basicSyntax.new_tag("p")
-                        
                         if changedDept == 1:
                             ranges1Tag = basicSyntax.new_tag("p")
                             print(str(ranges[0][0])[6:9])
@@ -215,13 +213,14 @@ def CreateTable(room_dict):
                             basicSyntax.body.find_all("div", class_="range")[0].append(ranges3Tag)
                             masterRanges[i] = [ranges1Tag.string , ranges2Tag.string, ranges3Tag.string]
                             print("GOPAL",masterRanges[i])
+
                     elif len(ranges) == 6:
                         print("FOPAL")
                         print(changedBothDept)
                         ranges3Tag = basicSyntax.new_tag("p")
                         ranges4Tag = basicSyntax.new_tag("p")
 
-                        if ranges[0][0]==ranges[1][0]:
+                        if ranges[0]==ranges[1]:
                             ranges1Tag = basicSyntax.new_tag("p")
                             ranges1Tag.string = dept[int(str(ranges[0][0])[6:9])] + ": " + str(ranges[0][0])
                             ranges2Tag = basicSyntax.new_tag("p")
@@ -230,7 +229,7 @@ def CreateTable(room_dict):
                             ranges4Tag.string = dept[int(str(ranges[4][0])[6:9])] + ": " + str(ranges[4][0]) + " to " + str(ranges[5][0])
 
 
-                        if changedBothDept[0] == 1:
+                        elif changedBothDept[0] == 1:
 
                             ranges1Tag = basicSyntax.new_tag("p")
                             ranges1Tag.string = dept[int(str(ranges[0][0])[6:9])] + ": " + str(ranges[0][0]) + " to " + str(ranges[3][0])
@@ -273,7 +272,7 @@ def CreateTable(room_dict):
                     countsTableinHTML.find_all("td")[0].string
                     basicSyntax.body.find_all("div", class_="parts")[0].append(countsTableinHTML)
 
-                with open(i+'.html', 'w') as f2:
+                with open('./rooms/'+i+'.html', 'w') as f2:
                     f2.write(str(basicSyntax.prettify()))
                 tableCounter = 0
                 changedBothDept = []

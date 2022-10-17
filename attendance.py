@@ -27,13 +27,13 @@ def Attendance(Arr, DATES):
             
             tableForAtt.append([Arr[i][1], Arr[i][2], " ", " ", " ", " ", " ", " "])
 
-    with open('attendance.html', 'r')  as f:
+    with open('./attendance/attendance.html', 'r')  as f:
         AttSyntax = bs4.BeautifulSoup(f.read(), 'html.parser')
         check = tabulate(tableForAtt, headers=headers, tablefmt="html")
         TableDone = bs4.BeautifulSoup(check, 'html.parser')
         AttSyntax.body.find_all("div", class_="tables")[0].append(TableDone)
     print(dp + "DONE")
-    with open(dp + 'attend.html', 'w') as f2:
+    with open('./attendance/' + dp + 'attend.html', 'w') as f2:
         f2.write(str(AttSyntax.prettify()))
 
 
