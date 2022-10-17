@@ -41,5 +41,7 @@ def Allotment(ckt_array, nckt_array):
 
     totalStrength = len(ckt_array) + len(nckt_array)
     print("hiii",class_array)
-    class_array = class_array[(class_array.index(i)+1):]
+    i = class_array[(class_array.index(i)+1)]
+    class_array = class_array[(class_array.index(i)):]
+    
     return room_dict

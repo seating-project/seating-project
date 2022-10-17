@@ -1,3 +1,4 @@
+from doctest import master
 import bs4
 from sql import dept
 from tabulate import tabulate
@@ -104,11 +105,12 @@ def CreateTable(room_dict):
 
             
 
-            if tableCounter == 6 or tableIndex == maxTables:
+            if tableCounter == 6 or tableIndex == maxTables or len(row)==len(room_dict[i]):
 
                 print(table)
                 if tableIndex == maxTables:
-                    tableStuff = bs4.BeautifulSoup(str(tabulate(row,headers=["Row %s" % (rowCount)], tablefmt="html")), 'html.parser')
+                    tableStuff = bs4.BeautifulSoup(tabulate(row,headers=["Row %s" % (rowCount)], tablefmt="html"), 'html.parser')
+                    print(tableStuff)
                     # if ranges[0][0]==0 and ranges[1][0]==0:
                     #     ranges1Tag = basicSyntax.new_tag("p")
                     #     ranges1Tag.string = dept[int(str(ranges[0][1])[6:9])] + ": " + str(ranges[0][1]) + " to " + str(ranges[1][1])
@@ -120,7 +122,8 @@ def CreateTable(room_dict):
                     #     ranges1Tag.string = dept[int(str(ranges[0][0])[6:9])] + ": " + str(ranges[0][0]) + " to " + str(ranges[1][0])
                     #     basicSyntax.body.find_all("div", class_="range")[0].append(ranges1Tag)
                     #     masterRanges[i] = [ranges1Tag.string]
-
+                if len(row) == len(room_dict[i]):
+                    tableStuff = bs4.BeautifulSoup(tabulate(row,headers=["Row %s" % (rowCount)], tablefmt="html"), 'html.parser')
 
                 elif snakeRow % 2 == 0:
                     tableStuff = bs4.BeautifulSoup(tabulate(row, headers=["Row %s" % (rowCount)] ,tablefmt='html'), 'html.parser')
@@ -138,15 +141,17 @@ def CreateTable(room_dict):
                     
                     if ranges[0][0]==0 and ranges[1][0]==0:
                         ranges1Tag = basicSyntax.new_tag("p")
-                        ranges1Tag.string = dept[int(str(ranges[0][1])[6:9])] + ": " + str(ranges[0][1]) + " to " + str(ranges[1][1])
+                        ranges1Tag.string = dept[int(str(ranges[0][1])[6:9])] + dept[int(str(ranges[0][1])[6:9])] + ": " + str(ranges[0][1]) + " to " + str(ranges[1][1])
                         basicSyntax.body.find_all("div", class_="range")[0].append(ranges1Tag)
                         masterRanges[i] = [ranges1Tag.string]
+                        print("GOPAL",masterRanges[i])
                     
                     elif ranges[0][1]==0 and ranges[1][1]==0:
                         ranges1Tag = basicSyntax.new_tag("p")
                         ranges1Tag.string = dept[int(str(ranges[0][0])[6:9])] + ": " + str(ranges[0][0]) + " to " + str(ranges[1][0])
                         basicSyntax.body.find_all("div", class_="range")[0].append(ranges1Tag)
                         masterRanges[i] = [ranges1Tag.string]
+                        print("GOPAL",masterRanges[i])
 
                     elif len(ranges) == 2:
                         
@@ -164,6 +169,7 @@ def CreateTable(room_dict):
                         basicSyntax.body.find_all("div", class_="range")[0].append(ranges1Tag)
                         basicSyntax.body.find_all("div", class_="range")[0].append(ranges2Tag)
                         masterRanges[i] = [ranges1Tag.string, ranges2Tag.string]
+                        print("GOPAL",masterRanges[i])
 
                     if len(ranges) == 4:
                         ranges3Tag = basicSyntax.new_tag("p")
@@ -187,6 +193,7 @@ def CreateTable(room_dict):
                             basicSyntax.body.find_all("div", class_="range")[0].append(ranges2Tag)
                             basicSyntax.body.find_all("div", class_="range")[0].append(ranges3Tag)
                             masterRanges[i] = [ranges1Tag.string , ranges2Tag.string, ranges3Tag.string]
+                            print("GOPAL",masterRanges[i])
                         if changedDept == 2:
 
                             ranges1Tag = basicSyntax.new_tag("p")
@@ -207,11 +214,21 @@ def CreateTable(room_dict):
                             basicSyntax.body.find_all("div", class_="range")[0].append(ranges2Tag)
                             basicSyntax.body.find_all("div", class_="range")[0].append(ranges3Tag)
                             masterRanges[i] = [ranges1Tag.string , ranges2Tag.string, ranges3Tag.string]
+                            print("GOPAL",masterRanges[i])
                     elif len(ranges) == 6:
                         print("FOPAL")
                         print(changedBothDept)
                         ranges3Tag = basicSyntax.new_tag("p")
                         ranges4Tag = basicSyntax.new_tag("p")
+
+                        if ranges[0][0]==ranges[1][0]:
+                            ranges1Tag = basicSyntax.new_tag("p")
+                            ranges1Tag.string = dept[int(str(ranges[0][0])[6:9])] + ": " + str(ranges[0][0])
+                            ranges2Tag = basicSyntax.new_tag("p")
+                            ranges2Tag.string = dept[int(str(ranges[0][1])[6:9])] + ": " + str(ranges[0][1]) + " to " + str(ranges[3][1])
+                            ranges3Tag.string = dept[int(str(ranges[2][1])[6:9])] + ": " + str(ranges[2][1]) + " to " + str(ranges[5][1])
+                            ranges4Tag.string = dept[int(str(ranges[4][0])[6:9])] + ": " + str(ranges[4][0]) + " to " + str(ranges[5][0])
+
 
                         if changedBothDept[0] == 1:
 
@@ -226,6 +243,7 @@ def CreateTable(room_dict):
                             basicSyntax.body.find_all("div", class_="range")[0].append(ranges3Tag)
                             basicSyntax.body.find_all("div", class_="range")[0].append(ranges4Tag)
                             masterRanges[i] = [ranges1Tag.string , ranges2Tag.string, ranges3Tag.string, ranges4Tag.string]
+                            print("GOPAL",masterRanges[i])
                         elif changedBothDept[0] == 2:
 
                             ranges1Tag = basicSyntax.new_tag("p")
@@ -239,6 +257,8 @@ def CreateTable(room_dict):
                             basicSyntax.body.find_all("div", class_="range")[0].append(ranges3Tag)
                             basicSyntax.body.find_all("div", class_="range")[0].append(ranges4Tag)
                             masterRanges[i] = [ranges1Tag.string , ranges2Tag.string, ranges3Tag.string, ranges4Tag.string]
+                            print("GOPAL",masterRanges[i])
+
                     ranges = []
                     counts = displayCount(countDict)
                     subjects = """"""

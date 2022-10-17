@@ -17,8 +17,8 @@ room_dict = Allotment(ckt_array, nckt_array)
 CreateTable(room_dict)
 totRange2 = returnRanges()
 countsOfAll = getTotalCount()
-totRange1.update(totRange2)
-print(totRange1)
+# totRange1.update(totRange2)
+print("Roshan is a bad person", totRange1)
 
 # Creating the table 📑
 
