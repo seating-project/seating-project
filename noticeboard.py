@@ -7,7 +7,24 @@ from sql import dept
 print(dept)
 
 def NoticeBoard(counts, ranges):
-    pass
+
+    CSEII = []
+    CSEIII = []
+    MECHIII = []
+    MECHII = []
+
+    tables = []
+    for i in ranges:
+        room = i
+        for j in ranges[i]:
+            if j == None:
+                pass
+            elif "CSE" in j and "2nd Year" in j:
+                CSEII.append([j, i])
+
+    print("NOTICE BOARD", counts)
+    print("RANGES", ranges)
+    print("CSEII", CSEII)
 # print(countsOfAll)
 
 def tableMate(data, headers):

@@ -1,5 +1,7 @@
 # Program for seating arrangment in exams (please give us OD 😭) 
 
+#!FINISH THE PROJECT ASAP 
+
 # Importing the required modules 🚀
 from sql import GetStudents
 from allotment import Allotment

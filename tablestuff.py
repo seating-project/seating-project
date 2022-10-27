@@ -1,6 +1,6 @@
 from doctest import master
 import bs4
-from sql import dept
+from sql import dept, years
 from tabulate import tabulate
 # from common import Common
 from sql import displayCount
@@ -41,11 +41,15 @@ def CreateTable(room_dict):
         snakeRow = 0           # if 0, row is normal, if 1, row is reversed
         currdept1 = ""         # Current department of the first student
         currdept2 = ""         # Current department of the second student
-        changedDept = 0        # If 1, the first dept changed, if 2, the second dept changed
-        changedBothDept = []   # If both changes, first changing student value appended to the list
+        changedDept = 0        # If 1, the first dept changed, if 2, the second dept changed 
+        changedYear = 0            
+        changedBothDept = [] 
+        changedBothYears = []  # If both changes, first changing student value appended to the list
         rowCount = 1           # Maximum number of rows in a room
         deptChange = False     # If true, dept changed
         countDict = {}         # Count of students in a room dept wise
+        curryear1 = ""
+        curryear2 = ""
 
         for k in room_dict[i]:                 #Traversing through the rooms array       k = [210421104067, 210421114068]
             
@@ -73,6 +77,18 @@ def CreateTable(room_dict):
                     countDict[currdept1] = 0
                 if currdept2 not in countDict:
                     countDict[currdept2] = 0
+
+            if str(k[0])[9:11] != curryear1 or str(k[1])[9:11] != curryear2:
+                if str(k[0])[9:11] != curryear1:
+                    changedYear = 1
+                    changedBothYears.append(1)
+                else:
+                    changedYear = 2
+                    changedBothYears.append(2)
+                
+                curryear1 = str(k[0])[9:11]
+                curryear2 = str(k[1])[9:11]
+
 
             countDict[currdept1] += 1
             countDict[currdept2] += 1
@@ -104,8 +120,9 @@ def CreateTable(room_dict):
             tableIndex += 1
 
             
-
-            if tableCounter == 6 or tableIndex == maxTables or len(row)==len(room_dict[i]):
+            print(len(row),len(room_dict[i]))
+            print(tableIndex, maxTables)
+            if tableCounter == 6 or tableIndex == maxTables or tableIndex==len(room_dict[i]):
 
                 print(table)
                 if tableIndex == maxTables:
@@ -135,20 +152,23 @@ def CreateTable(room_dict):
                 
                 basicSyntax.body.find_all("div", class_="tables")[0].append(tableStuff)
                 print(tableStuff)
+                print(len(room_dict) - 1)
+                print(room_dict[i].index(k))
+
                 if room_dict[i].index(k) == len(room_dict[i]) - 1:
                     ranges.append(k)
                     print("Range: ",ranges)
                     
                     if ranges[0][0]==0 and ranges[1][0]==0:
                         ranges1Tag = basicSyntax.new_tag("p")
-                        ranges1Tag.string = dept[int(str(ranges[0][1])[6:9])] + dept[int(str(ranges[0][1])[6:9])] + ": " + str(ranges[0][1]) + " to " + str(ranges[1][1])
+                        ranges1Tag.string = dept[int(str(ranges[0][1])[6:9])] + " " + years[int(str(ranges[0][1])[4:6])] + ": " + str(ranges[0][1]) + " to " + str(ranges[1][1])
                         basicSyntax.body.find_all("div", class_="range")[0].append(ranges1Tag)
                         masterRanges[i] = [ranges1Tag.string]
                         print("GOPAL",masterRanges[i])
                     
                     elif ranges[0][1]==0 and ranges[1][1]==0:
                         ranges1Tag = basicSyntax.new_tag("p")
-                        ranges1Tag.string = dept[int(str(ranges[0][0])[6:9])] + ": " + str(ranges[0][0]) + " to " + str(ranges[1][0])
+                        ranges1Tag.string = dept[int(str(ranges[0][0])[6:9])] + " " + years[int(str(ranges[0][0])[4:6])] + ": " + str(ranges[0][0]) + " to " + str(ranges[1][0])
                         basicSyntax.body.find_all("div", class_="range")[0].append(ranges1Tag)
                         masterRanges[i] = [ranges1Tag.string]
                         print("GOPAL",masterRanges[i])
@@ -157,11 +177,11 @@ def CreateTable(room_dict):
 
                         ranges1Tag = basicSyntax.new_tag("p")
                         print(str(ranges[0][0])[6:9])
-                        ranges1Tag.string = dept[int(str(ranges[0][0])[6:9])] + ": " + str(ranges[0][0]) + " to " + str(ranges[1][0])
+                        ranges1Tag.string = dept[int(str(ranges[0][0])[6:9])] + " " + years[int(str(ranges[0][0])[4:6])] + ": " + str(ranges[0][0]) + " to " + str(ranges[1][0])
                         print(ranges1Tag)
                         ranges2Tag = basicSyntax.new_tag("p")
                         print(str(ranges[0][0])[6:9])
-                        ranges2Tag.string = dept[int(str(ranges[0][1])[6:9])] + ": " + str(ranges[0][1]) + " to " + str(ranges[1][1])
+                        ranges2Tag.string = dept[int(str(ranges[0][1])[6:9])] + " " + years[int(str(ranges[0][1])[4:6])] + ": " + str(ranges[0][1]) + " to " + str(ranges[1][1])
                         print(ranges2Tag)
                         
                         basicSyntax.body.find_all("div", class_="range")[0].append(ranges1Tag)
@@ -175,17 +195,17 @@ def CreateTable(room_dict):
                         if changedDept == 1:
                             ranges1Tag = basicSyntax.new_tag("p")
                             print(str(ranges[0][0])[6:9])
-                            ranges1Tag.string = dept[int(str(ranges[0][0])[6:9])] + ": " + str(ranges[0][0]) + " to " + str(ranges[1][0])
+                            ranges1Tag.string = dept[int(str(ranges[0][0])[6:9])] + " " + years[int(str(ranges[0][0])[4:6])] + ": " + str(ranges[0][0]) + " to " + str(ranges[1][0])
                             print(ranges1Tag)
                             ranges2Tag = basicSyntax.new_tag("p")
                             print(str(ranges[0][0])[6:9])
-                            ranges2Tag.string = dept[int(str(ranges[0][1])[6:9])] + ": " + str(ranges[0][1]) + " to " + str(ranges[3][1])
+                            ranges2Tag.string = dept[int(str(ranges[0][1])[6:9])] + " " + years[int(str(ranges[0][1])[4:6])] + ": " + str(ranges[0][1]) + " to " + str(ranges[3][1])
                             print(ranges2Tag)
                             print(str(ranges[2][0])[6:9])
                             try:
-                                ranges3Tag.string = dept[int(str(ranges[2][0])[6:9])] + ": " + str(ranges[2][0]) + " to " + str(ranges[3][0])
+                                ranges3Tag.string = dept[int(str(ranges[2][0])[6:9])] + " " + years[int(str(ranges[2][0])[4:6])] + ": " + str(ranges[2][0]) + " to " + str(ranges[3][0])
                             except:
-                                ranges2Tag.string = dept[int(str(ranges[0][1])[6:9])] + ": " + str(ranges[0][1]) + " to " + str(ranges[3][1])
+                                ranges2Tag.string = dept[int(str(ranges[0][1])[6:9])] + " " + years[int(str(ranges[0][1])[4:6])] + ": " + str(ranges[0][1]) + " to " + str(ranges[3][1])
                             print(ranges3Tag)
                             basicSyntax.body.find_all("div", class_="range")[0].append(ranges1Tag)
                             basicSyntax.body.find_all("div", class_="range")[0].append(ranges2Tag)
@@ -196,17 +216,17 @@ def CreateTable(room_dict):
 
                             ranges1Tag = basicSyntax.new_tag("p")
                             print(str(ranges[0][0])[6:9])
-                            ranges1Tag.string = dept[int(str(ranges[0][0])[6:9])] + ": " + str(ranges[0][0]) + " to " + str(ranges[3][0])
+                            ranges1Tag.string = dept[int(str(ranges[0][0])[6:9])] + " " + years[int(str(ranges[0][0])[4:6])] + ": " + str(ranges[0][0]) + " to " + str(ranges[3][0])
                             print(ranges1Tag)
                             ranges2Tag = basicSyntax.new_tag("p")
                             print(str(ranges[0][0])[6:9])
-                            ranges2Tag.string = dept[int(str(ranges[0][1])[6:9])] + ": " + str(ranges[0][1]) + " to " + str(ranges[1][1])
+                            ranges2Tag.string = dept[int(str(ranges[0][1])[6:9])] + " " + years[int(str(ranges[0][1])[4:6])] + ": " + str(ranges[0][1]) + " to " + str(ranges[1][1])
                             print(ranges2Tag)
                             print(str(ranges[2][1])[6:9])
                             try:
-                                ranges3Tag.string = dept[int(str(ranges[2][1])[6:9])] + ": " + str(ranges[2][1]) + " to " + str(ranges[3][1])
+                                ranges3Tag.string = dept[int(str(ranges[2][1])[6:9])] + " " + years[int(str(ranges[2][1])[4:6])] + ": " + str(ranges[2][1]) + " to " + str(ranges[3][1])
                             except:
-                                ranges1Tag.string = dept[int(str(ranges[0][0])[6:9])] + ": " + str(ranges[0][0]) + " to " + str(ranges[3][0])
+                                ranges1Tag.string = dept[int(str(ranges[0][0])[6:9])] + " " + years[int(str(ranges[0][0])[4:6])] + ": " + str(ranges[0][0]) + " to " + str(ranges[3][0])
                             print(ranges3Tag)
                             basicSyntax.body.find_all("div", class_="range")[0].append(ranges1Tag)
                             basicSyntax.body.find_all("div", class_="range")[0].append(ranges2Tag)
@@ -220,43 +240,176 @@ def CreateTable(room_dict):
                         ranges3Tag = basicSyntax.new_tag("p")
                         ranges4Tag = basicSyntax.new_tag("p")
 
-                        if ranges[0]==ranges[1]:
-                            ranges1Tag = basicSyntax.new_tag("p")
-                            ranges1Tag.string = dept[int(str(ranges[0][0])[6:9])] + ": " + str(ranges[0][0])
-                            ranges2Tag = basicSyntax.new_tag("p")
-                            ranges2Tag.string = dept[int(str(ranges[0][1])[6:9])] + ": " + str(ranges[0][1]) + " to " + str(ranges[3][1])
-                            ranges3Tag.string = dept[int(str(ranges[2][1])[6:9])] + ": " + str(ranges[2][1]) + " to " + str(ranges[5][1])
-                            ranges4Tag.string = dept[int(str(ranges[4][0])[6:9])] + ": " + str(ranges[4][0]) + " to " + str(ranges[5][0])
+                        # if ranges[0]==ranges[1]:
+                        #     ranges1Tag = basicSyntax.new_tag("p")
+                        #     ranges1Tag.string = dept[int(str(ranges[0][0])[6:9])] + " " + years[int(str(ranges[0][0])[4:6])] + ": " + str(ranges[0][0])
+                        #     ranges2Tag = basicSyntax.new_tag("p")
+                        #     ranges2Tag.string = dept[int(str(ranges[0][1])[6:9])] + " " + years[int(str(ranges[0][1])[4:6])] + ": " + str(ranges[0][1]) + " to " + str(ranges[3][1])
+                        #     ranges3Tag.string = dept[int(str(ranges[2][1])[6:9])] + " " + years[int(str(ranges[2][1])[4:6])] + ": " + str(ranges[2][1]) + " to " + str(ranges[5][1])
+                        #     ranges4Tag.string = dept[int(str(ranges[4][0])[6:9])] + " " + years[int(str(ranges[4][0])[4:6])] + ": " + str(ranges[4][0]) + " to " + str(ranges[5][0])
+                        #     basicSyntax.body.find_all("div", class_="range")[0].append(ranges1Tag)
+                        #     basicSyntax.body.find_all("div", class_="range")[0].append(ranges2Tag)
+                        #     basicSyntax.body.find_all("div", class_="range")[0].append(ranges3Tag)
+                        #     basicSyntax.body.find_all("div", class_="range")[0].append(ranges4Tag)
+                        #     masterRanges[i] = [ranges1Tag.string , ranges2Tag.string, ranges3Tag.string, ranges4Tag.string]
+                        if changedBothDept == []:
 
+                            print("FOPAL")
+                            print(changedDept)
+                            print("ranges first", ranges[0], ranges[1])
 
-                        elif changedBothDept[0] == 1:
+                            if changedDept == 1:
+                                
+                                if ranges[0][0]==ranges[1][0] and ranges[0][1]==ranges[1][1]:
+                                    ranges1Tag = basicSyntax.new_tag("p")
+                                    ranges1Tag.string = dept[int(str(ranges[0][0])[6:9])] + " " + years[int(str(ranges[0][0])[4:6])] + ": " + str(ranges[0][0])
+                                    ranges2Tag = basicSyntax.new_tag("p")
+                                    ranges2Tag.string = dept[int(str(ranges[0][1])[6:9])] + " " + years[int(str(ranges[0][1])[4:6])] + ": " + str(ranges[0][1]) + " to " + str(ranges[3][1])
+                                    ranges3Tag.string = dept[int(str(ranges[2][0])[6:9])] + " " + years[int(str(ranges[2][0])[4:6])] + ": " + str(ranges[2][0]) + " to " + str(ranges[5][0])
+                                    ranges4Tag.string = dept[int(str(ranges[4][1])[6:9])] + " " + years[int(str(ranges[4][1])[4:6])] + ": " + str(ranges[4][1]) + " to " + str(ranges[5][1])
+                                    basicSyntax.body.find_all("div", class_="range")[0].append(ranges1Tag)
+                                    basicSyntax.body.find_all("div", class_="range")[0].append(ranges2Tag)
+                                    basicSyntax.body.find_all("div", class_="range")[0].append(ranges3Tag)
+                                    basicSyntax.body.find_all("div", class_="range")[0].append(ranges4Tag)
+                                    masterRanges[i] = [ranges1Tag.string , ranges2Tag.string, ranges3Tag.string, ranges4Tag.string]
+                                    print("FOPAL",masterRanges[i])
 
-                            ranges1Tag = basicSyntax.new_tag("p")
-                            ranges1Tag.string = dept[int(str(ranges[0][0])[6:9])] + ": " + str(ranges[0][0]) + " to " + str(ranges[3][0])
-                            ranges2Tag = basicSyntax.new_tag("p")
-                            ranges2Tag.string = dept[int(str(ranges[0][1])[6:9])] + ": " + str(ranges[0][1]) + " to " + str(ranges[1][1])
-                            ranges3Tag.string = dept[int(str(ranges[2][1])[6:9])] + ": " + str(ranges[2][1]) + " to " + str(ranges[5][1])
-                            ranges4Tag.string = dept[int(str(ranges[4][0])[6:9])] + ": " + str(ranges[4][0]) + " to " + str(ranges[5][0])
-                            basicSyntax.body.find_all("div", class_="range")[0].append(ranges1Tag)
-                            basicSyntax.body.find_all("div", class_="range")[0].append(ranges2Tag)
-                            basicSyntax.body.find_all("div", class_="range")[0].append(ranges3Tag)
-                            basicSyntax.body.find_all("div", class_="range")[0].append(ranges4Tag)
-                            masterRanges[i] = [ranges1Tag.string , ranges2Tag.string, ranges3Tag.string, ranges4Tag.string]
-                            print("GOPAL",masterRanges[i])
-                        elif changedBothDept[0] == 2:
+                                else:
+                                    ranges1Tag = basicSyntax.new_tag("p")
+                                    ranges1Tag.string = dept[int(str(ranges[0][0])[6:9])] + " " + years[int(str(ranges[0][0])[4:6])] + ": " + str(ranges[0][0])
+                                    ranges2Tag = basicSyntax.new_tag("p")
+                                    ranges2Tag.string = dept[int(str(ranges[0][1])[6:9])] + " " + years[int(str(ranges[0][1])[4:6])] + ": " + str(ranges[0][1]) + " to " + str(ranges[3][1])
+                                    ranges3Tag.string = dept[int(str(ranges[2][1])[6:9])] + " " + years[int(str(ranges[2][1])[4:6])] + ": " + str(ranges[2][1]) + " to " + str(ranges[5][1])
+                                    ranges4Tag.string = dept[int(str(ranges[4][0])[6:9])] + " " + years[int(str(ranges[4][0])[4:6])] + ": " + str(ranges[4][0]) + " to " + str(ranges[5][0])
+                                    basicSyntax.body.find_all("div", class_="range")[0].append(ranges1Tag)
+                                    basicSyntax.body.find_all("div", class_="range")[0].append(ranges2Tag)
+                                    basicSyntax.body.find_all("div", class_="range")[0].append(ranges3Tag)
+                                    basicSyntax.body.find_all("div", class_="range")[0].append(ranges4Tag)
+                                    masterRanges[i] = [ranges1Tag.string , ranges2Tag.string, ranges3Tag.string, ranges4Tag.string]
+                                    print("GOPAL",masterRanges[i])
 
-                            ranges1Tag = basicSyntax.new_tag("p")
-                            ranges1Tag.string = dept[int(str(ranges[0][0])[6:9])] + ": " + str(ranges[0][0]) + " to " + str(ranges[1][0])
-                            ranges2Tag = basicSyntax.new_tag("p")
-                            ranges2Tag.string = dept[int(str(ranges[0][1])[6:9])] + ": " + str(ranges[0][1]) + " to " + str(ranges[3][1])
-                            ranges3Tag.string = dept[int(str(ranges[2][0])[6:9])] + ": " + str(ranges[2][0]) + " to " + str(ranges[5][0])
-                            ranges4Tag.string = dept[int(str(ranges[0][1])[6:9])] + ": " + str(ranges[4][1]) + " to " + str(ranges[5][1])
-                            basicSyntax.body.find_all("div", class_="range")[0].append(ranges1Tag)
-                            basicSyntax.body.find_all("div", class_="range")[0].append(ranges2Tag)
-                            basicSyntax.body.find_all("div", class_="range")[0].append(ranges3Tag)
-                            basicSyntax.body.find_all("div", class_="range")[0].append(ranges4Tag)
-                            masterRanges[i] = [ranges1Tag.string , ranges2Tag.string, ranges3Tag.string, ranges4Tag.string]
-                            print("GOPAL",masterRanges[i])
+                            if changedDept == 2:
+                                if ranges[0][0]==ranges[1][0] and ranges[0][1]==ranges[1][1]:
+                                    ranges1Tag = basicSyntax.new_tag("p")
+                                    ranges1Tag.string = dept[int(str(ranges[0][0])[6:9])] + " " + years[int(str(ranges[0][0])[4:6])] + ": " + str(ranges[0][0])
+                                    ranges2Tag = basicSyntax.new_tag("p")
+                                    ranges2Tag.string = dept[int(str(ranges[0][1])[6:9])] + " " + years[int(str(ranges[0][1])[4:6])] + ": " + str(ranges[0][1]) + " to " + str(ranges[3][1])
+                                    ranges3Tag.string = dept[int(str(ranges[2][0])[6:9])] + " " + years[int(str(ranges[2][0])[4:6])] + ": " + str(ranges[2][0]) + " to " + str(ranges[5][0])
+                                    ranges4Tag.string = dept[int(str(ranges[4][1])[6:9])] + " " + years[int(str(ranges[4][1])[4:6])] + ": " + str(ranges[4][1]) + " to " + str(ranges[5][1])
+                                    basicSyntax.body.find_all("div", class_="range")[0].append(ranges1Tag)
+                                    basicSyntax.body.find_all("div", class_="range")[0].append(ranges2Tag)
+                                    basicSyntax.body.find_all("div", class_="range")[0].append(ranges3Tag)
+                                    basicSyntax.body.find_all("div", class_="range")[0].append(ranges4Tag)
+                                    masterRanges[i] = [ranges1Tag.string , ranges2Tag.string, ranges3Tag.string, ranges4Tag.string]
+                                    print("GOPAL",masterRanges[i])
+
+                                else:
+                                    ranges1Tag = basicSyntax.new_tag("p")
+                                    ranges1Tag.string = dept[int(str(ranges[0][0])[6:9])] + " " + years[int(str(ranges[0][0])[4:6])] + ": " + str(ranges[0][0]) + " to " + str(ranges[1][0])
+                                    ranges2Tag = basicSyntax.new_tag("p")
+                                    ranges2Tag.string = dept[int(str(ranges[2][0])[6:9])] + " " + years[int(str(ranges[2][0])[4:6])] + ": " + str(ranges[2][0]) + " to " + str(ranges[3][0])
+                                    ranges3Tag.string = dept[int(str(ranges[4][0])[6:9])] + " " + years[int(str(ranges[4][0])[4:6])] + ": " + str(ranges[4][0]) + " to " + str(ranges[5][0])
+                                    ranges4Tag.string = dept[int(str(ranges[0][1])[6:9])] + " " + years[int(str(ranges[0][1])[4:6])] + ": " + str(ranges[0][1]) + " to " + str(ranges[1][1])
+                                    basicSyntax.body.find_all("div", class_="range")[0].append(ranges1Tag)
+                                    basicSyntax.body.find_all("div", class_="range")[0].append(ranges2Tag)
+                                    basicSyntax.body.find_all("div", class_="range")[0].append(ranges3Tag)
+                                    basicSyntax.body.find_all("div", class_="range")[0].append(ranges4Tag)
+                                    masterRanges[i] = [ranges1Tag.string , ranges2Tag.string, ranges3Tag.string, ranges4Tag.string]
+                                    print("GOPAL",masterRanges[i])
+
+                        elif changedBothDept[0] == 1 or changedBothYears[0] == 1:
+
+                            if ranges[0]==ranges[1]:
+                                ranges1Tag = basicSyntax.new_tag("p")
+                                ranges1Tag.string = dept[int(str(ranges[0][0])[6:9])] + " " + years[int(str(ranges[0][0])[4:6])] + ": " + str(ranges[0][0])
+                                ranges2Tag = basicSyntax.new_tag("p")
+                                ranges2Tag.string = dept[int(str(ranges[0][1])[6:9])] + " " + years[int(str(ranges[0][1])[4:6])] + ": " + str(ranges[0][1]) + " to " + str(ranges[3][1])
+                                ranges3Tag.string = dept[int(str(ranges[2][0])[6:9])] + " " + years[int(str(ranges[2][0])[4:6])] + ": " + str(ranges[2][0]) + " to " + str(ranges[5][0])
+                                ranges4Tag.string = dept[int(str(ranges[4][1])[6:9])] + " " + years[int(str(ranges[4][1])[4:6])] + ": " + str(ranges[4][1]) + " to " + str(ranges[5][1])
+                                basicSyntax.body.find_all("div", class_="range")[0].append(ranges1Tag)
+                                basicSyntax.body.find_all("div", class_="range")[0].append(ranges2Tag)
+                                basicSyntax.body.find_all("div", class_="range")[0].append(ranges3Tag)
+                                basicSyntax.body.find_all("div", class_="range")[0].append(ranges4Tag)
+                                masterRanges[i] = [ranges1Tag.string , ranges2Tag.string, ranges3Tag.string, ranges4Tag.string]
+
+                            elif str(ranges[0][0])[6:9] == str(ranges[5][0])[6:9] and str(ranges[0][0])[4:6] == str(ranges[5][0])[4:6]:
+                                ranges1Tag = basicSyntax.new_tag("p")
+                                ranges1Tag.string = dept[int(str(ranges[0][0])[6:9])] + " " + years[int(str(ranges[0][0])[4:6])] + ": " + str(ranges[0][0]) + " to " + str(ranges[5][0])
+                                ranges2Tag = basicSyntax.new_tag("p")
+                                ranges2Tag.string = dept[int(str(ranges[0][1])[6:9])] + " " + years[int(str(ranges[0][1])[4:6])] + ": " + str(ranges[0][1]) + " to " + str(ranges[1][1])
+                                ranges3Tag.string = dept[int(str(ranges[2][1])[6:9])] + " " + years[int(str(ranges[2][1])[4:6])] + ": " + str(ranges[2][1]) + " to " + str(ranges[3][1])
+                                
+                                basicSyntax.body.find_all("div", class_="range")[0].append(ranges1Tag)
+                                basicSyntax.body.find_all("div", class_="range")[0].append(ranges2Tag)
+                                basicSyntax.body.find_all("div", class_="range")[0].append(ranges3Tag)
+                                if ranges[4][0] != 0 and ranges[4][1] != 0:
+                                    ranges4Tag.string = dept[int(str(ranges[4][1])[6:9])] + " " + years[int(str(ranges[4][1])[4:6])] + ": " + str(ranges[4][1]) + " to " + str(ranges[5][1])
+                                    basicSyntax.body.find_all("div", class_="range")[0].append(ranges4Tag)
+                                    masterRanges[i] = [ranges1Tag.string , ranges2Tag.string, ranges3Tag.string, ranges4Tag.string]
+                                    continue
+                                masterRanges[i] = [ranges1Tag.string , ranges2Tag.string, ranges3Tag.string]
+                                print("Hey", masterRanges[i])
+                            else:
+                                ranges1Tag = basicSyntax.new_tag("p")
+                                ranges1Tag.string = dept[int(str(ranges[0][0])[6:9])] + " " + years[int(str(ranges[0][0])[4:6])] + ": " + str(ranges[0][0]) + " to " + str(ranges[3][0])
+                                ranges2Tag = basicSyntax.new_tag("p")
+                                ranges2Tag.string = dept[int(str(ranges[0][1])[6:9])] + " " + years[int(str(ranges[0][1])[4:6])] + ": " + str(ranges[0][1]) + " to " + str(ranges[1][1])
+                                ranges3Tag.string = dept[int(str(ranges[2][1])[6:9])] + " " + years[int(str(ranges[2][1])[4:6])] + ": " + str(ranges[2][1]) + " to " + str(ranges[5][1])
+                                ranges4Tag.string = dept[int(str(ranges[4][0])[6:9])] + " " + years[int(str(ranges[4][0])[4:6])] + ": " + str(ranges[4][0]) + " to " + str(ranges[5][0])
+                                basicSyntax.body.find_all("div", class_="range")[0].append(ranges1Tag)
+                                basicSyntax.body.find_all("div", class_="range")[0].append(ranges2Tag)
+                                basicSyntax.body.find_all("div", class_="range")[0].append(ranges3Tag)
+                                basicSyntax.body.find_all("div", class_="range")[0].append(ranges4Tag)
+                                masterRanges[i] = [ranges1Tag.string , ranges2Tag.string, ranges3Tag.string, ranges4Tag.string]
+                                print("GOPAL 01",masterRanges[i])
+                            
+                        elif changedBothDept[0] == 2 or changedBothYears[0] == 2:
+
+                            if ranges[0]==ranges[1]:
+                                ranges1Tag = basicSyntax.new_tag("p")
+                                ranges1Tag.string = dept[int(str(ranges[0][0])[6:9])] + " " + years[int(str(ranges[0][0])[4:6])] + ": " + str(ranges[0][0])
+                                ranges2Tag = basicSyntax.new_tag("p")
+                                ranges2Tag.string = dept[int(str(ranges[0][1])[6:9])] + " " + years[int(str(ranges[0][1])[4:6])] + ": " + str(ranges[0][1]) + " to " + str(ranges[3][1])
+                                ranges3Tag.string = dept[int(str(ranges[2][1])[6:9])] + " " + years[int(str(ranges[2][1])[4:6])] + ": " + str(ranges[2][1]) + " to " + str(ranges[5][1])
+                                ranges4Tag.string = dept[int(str(ranges[4][0])[6:9])] + " " + years[int(str(ranges[4][0])[4:6])] + ": " + str(ranges[4][0]) + " to " + str(ranges[5][0])
+                                basicSyntax.body.find_all("div", class_="range")[0].append(ranges1Tag)
+                                basicSyntax.body.find_all("div", class_="range")[0].append(ranges2Tag)
+                                basicSyntax.body.find_all("div", class_="range")[0].append(ranges3Tag)
+                                basicSyntax.body.find_all("div", class_="range")[0].append(ranges4Tag)
+                                masterRanges[i] = [ranges1Tag.string , ranges2Tag.string, ranges3Tag.string, ranges4Tag.string]
+                            
+                            elif str(ranges[0][0])[6:9] == str(ranges[5][0])[6:9] and str(ranges[0][0])[4:6] == str(ranges[5][0])[4:6]:
+                                ranges1Tag = basicSyntax.new_tag("p")
+                                ranges1Tag.string = dept[int(str(ranges[0][1])[6:9])] + " " + years[int(str(ranges[0][1])[4:6])] + ": " + str(ranges[0][1]) + " to " + str(ranges[5][1])
+                                ranges2Tag = basicSyntax.new_tag("p")
+                                ranges2Tag.string = dept[int(str(ranges[0][0])[6:9])] + " " + years[int(str(ranges[0][0])[4:6])] + ": " + str(ranges[0][0]) + " to " + str(ranges[1][0])
+                                ranges3Tag.string = dept[int(str(ranges[2][0])[6:9])] + " " + years[int(str(ranges[2][0])[4:6])] + ": " + str(ranges[2][0]) + " to " + str(ranges[3][0])
+                                
+                                basicSyntax.body.find_all("div", class_="range")[0].append(ranges1Tag)
+                                basicSyntax.body.find_all("div", class_="range")[0].append(ranges2Tag)
+                                basicSyntax.body.find_all("div", class_="range")[0].append(ranges3Tag)
+                                if ranges[4][0] != 0 and ranges[4][1] != 0:
+                                    ranges4Tag.string = dept[int(str(ranges[4][0])[6:9])] + " " + years[int(str(ranges[4][0])[4:6])] + ": " + str(ranges[4][0]) + " to " + str(ranges[5][0])
+                                    basicSyntax.body.find_all("div", class_="range")[0].append(ranges4Tag)
+                                    masterRanges[i] = [ranges1Tag.string , ranges2Tag.string, ranges3Tag.string, ranges4Tag.string]
+                                    continue
+                                masterRanges[i] = [ranges1Tag.string , ranges2Tag.string, ranges3Tag.string]
+                                print("Hey", masterRanges[i])
+                            
+                            else:
+                                    
+                                ranges1Tag = basicSyntax.new_tag("p")
+                                ranges1Tag.string = dept[int(str(ranges[0][0])[6:9])] + " " + years[int(str(ranges[0][0])[4:6])] + ": " + str(ranges[0][0]) + " to " + str(ranges[1][0])
+                                ranges2Tag = basicSyntax.new_tag("p")
+                                ranges2Tag.string = dept[int(str(ranges[0][1])[6:9])] + " " + years[int(str(ranges[0][1])[4:6])] + ": " + str(ranges[0][1]) + " to " + str(ranges[3][1])
+                                ranges3Tag.string = dept[int(str(ranges[2][0])[6:9])] + " " + years[int(str(ranges[2][0])[4:6])] + ": " + str(ranges[2][0]) + " to " + str(ranges[5][0])
+                                ranges4Tag.string = dept[int(str(ranges[0][1])[6:9])] + " " + years[int(str(ranges[0][1])[4:6])] + ": " + str(ranges[4][1]) + " to " + str(ranges[5][1])
+                                basicSyntax.body.find_all("div", class_="range")[0].append(ranges1Tag)
+                                basicSyntax.body.find_all("div", class_="range")[0].append(ranges2Tag)
+                                basicSyntax.body.find_all("div", class_="range")[0].append(ranges3Tag)
+                                basicSyntax.body.find_all("div", class_="range")[0].append(ranges4Tag)
+                                masterRanges[i] = [ranges1Tag.string , ranges2Tag.string, ranges3Tag.string, ranges4Tag.string]
+                                print("GOPAL 00",masterRanges[i])
 
                     ranges = []
                     counts = displayCount(countDict)
