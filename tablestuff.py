@@ -1,4 +1,5 @@
 from doctest import master
+from tokenize import Single
 import bs4
 from sql import dept, years
 from tabulate import tabulate
@@ -6,23 +7,33 @@ from tabulate import tabulate
 from sql import displayCount
 
 TotalRoomCount = {}
+BoysAndGirlsRoomCount = []
+
+def getBoysAndGirlsCount():
+    return BoysAndGirlsRoomCount
+
+def getBoysAndGirlsRange():
+    return BoysAndGirlsRanges
 
 def getTotalCount():
     return TotalRoomCount
 
 def returnRanges():
     return masterRanges
+
 masterRanges = {}
+BoysAndGirlsRanges = []
 def CreateTable(room_dict):
     # global TotalRoomCount
     # TotalRoomCount = {}
     global masterRanges
     
     ranges = []
-
+    SingleTotalCount = {}
+    SingleTotalRanges = {}
     for i in room_dict:
         print(i)
-        with open('check.html', 'r')  as f:
+        with open('./rooms/basicStructure.html', 'r')  as f:
             basicSyntax = bs4.BeautifulSoup(f.read(), 'html.parser')
             cssLink = basicSyntax.new_tag("link", rel="stylesheet", type="text/css", href="table.css")
             basicSyntax.head.append(cssLink)
@@ -72,26 +83,41 @@ def CreateTable(room_dict):
                 ranges.append(k)                             #[[210421114101, 210421104144], [210421114120, 210421104172], [0, 210421104173], [0, 210421104185]]
                 currdept1 = str(k[0])[6:9]
                 currdept2 = str(k[1])[6:9]
+                if curryear1 == "":
+                    curryear1 = str(k[0])[4:6]
+                if curryear2 == "":
+                    curryear2 = str(k[1])[4:6]
 
-                if currdept1 not in countDict:
-                    countDict[currdept1] = 0
-                if currdept2 not in countDict:
-                    countDict[currdept2] = 0
+                if currdept1+"-"+curryear1 not in countDict:
+                    countDict[currdept1+"-"+curryear1] = 0
+                if currdept2+"-"+curryear2 not in countDict:
+                    countDict[currdept2+"-"+curryear2] = 0
 
-            if str(k[0])[9:11] != curryear1 or str(k[1])[9:11] != curryear2:
-                if str(k[0])[9:11] != curryear1:
+            if str(k[0])[4:6] != curryear1 or str(k[1])[4:6] != curryear2:
+                print("SED")
+                if str(k[0])[4:6] != curryear1:
                     changedYear = 1
                     changedBothYears.append(1)
+                    curryear1 = str(k[0])[4:6]
                 else:
                     changedYear = 2
                     changedBothYears.append(2)
+                    curryear2 = str(k[1])[4:6]
                 
-                curryear1 = str(k[0])[9:11]
-                curryear2 = str(k[1])[9:11]
+                # curryear1 = str(k[0])[4:6]
+                # curryear2 = str(k[1])[4:6]
 
-
-            countDict[currdept1] += 1
-            countDict[currdept2] += 1
+            if currdept1+"-"+curryear1 == "-" or currdept2+"-"+curryear2 == "-" or currdept1+"-"+curryear1 == "-"+curryear1 or currdept2+"-"+curryear2 == "-"+curryear2:
+                print("LONELY BOI IN TABLE")
+                if str(k[0]) == "0" or str(k[1]) == "0":
+                    if str(k[0]) == "0":
+                        countDict[currdept2+"-"+curryear2] += 1
+                    else:
+                        countDict[currdept1+"-"+curryear1] += 1
+            else:
+                print(currdept1+"-"+curryear1, currdept2+"-"+curryear2)
+                countDict[currdept1+"-"+curryear1] += 1
+                countDict[currdept2+"-"+curryear2] += 1
             if tableIndex == 0:
                 if ranges[len(ranges)-1] == k:
                     pass
@@ -119,15 +145,11 @@ def CreateTable(room_dict):
             tableCounter += 1
             tableIndex += 1
 
-            
-            print(len(row),len(room_dict[i]))
-            print(tableIndex, maxTables)
             if tableCounter == 6 or tableIndex == maxTables or tableIndex==len(room_dict[i]):
 
-                print(table)
                 if tableIndex == maxTables:
                     tableStuff = bs4.BeautifulSoup(tabulate(row,headers=["Row %s" % (rowCount)], tablefmt="html"), 'html.parser')
-                    print(tableStuff)
+                    
                     # if ranges[0][0]==0 and ranges[1][0]==0:
                     #     ranges1Tag = basicSyntax.new_tag("p")
                     #     ranges1Tag.string = dept[int(str(ranges[0][1])[6:9])] + ": " + str(ranges[0][1]) + " to " + str(ranges[1][1])
@@ -164,6 +186,7 @@ def CreateTable(room_dict):
                         ranges1Tag.string = dept[int(str(ranges[0][1])[6:9])] + " " + years[int(str(ranges[0][1])[4:6])] + ": " + str(ranges[0][1]) + " to " + str(ranges[1][1])
                         basicSyntax.body.find_all("div", class_="range")[0].append(ranges1Tag)
                         masterRanges[i] = [ranges1Tag.string]
+                        SingleTotalRanges[i] = [ranges1Tag.string]
                         print("GOPAL",masterRanges[i])
                     
                     elif ranges[0][1]==0 and ranges[1][1]==0:
@@ -171,6 +194,7 @@ def CreateTable(room_dict):
                         ranges1Tag.string = dept[int(str(ranges[0][0])[6:9])] + " " + years[int(str(ranges[0][0])[4:6])] + ": " + str(ranges[0][0]) + " to " + str(ranges[1][0])
                         basicSyntax.body.find_all("div", class_="range")[0].append(ranges1Tag)
                         masterRanges[i] = [ranges1Tag.string]
+                        SingleTotalRanges[i] = [ranges1Tag.string]
                         print("GOPAL",masterRanges[i])
 
                     elif len(ranges) == 2:
@@ -187,6 +211,7 @@ def CreateTable(room_dict):
                         basicSyntax.body.find_all("div", class_="range")[0].append(ranges1Tag)
                         basicSyntax.body.find_all("div", class_="range")[0].append(ranges2Tag)
                         masterRanges[i] = [ranges1Tag.string, ranges2Tag.string]
+                        SingleTotalRanges[i] = [ranges1Tag.string, ranges2Tag.string]
                         print("GOPAL",masterRanges[i])
 
                     elif len(ranges) == 4:
@@ -211,6 +236,7 @@ def CreateTable(room_dict):
                             basicSyntax.body.find_all("div", class_="range")[0].append(ranges2Tag)
                             basicSyntax.body.find_all("div", class_="range")[0].append(ranges3Tag)
                             masterRanges[i] = [ranges1Tag.string , ranges2Tag.string, ranges3Tag.string]
+                            SingleTotalRanges[i] = [ranges1Tag.string , ranges2Tag.string, ranges3Tag.string]
                             print("GOPAL",masterRanges[i])
                         if changedDept == 2:
 
@@ -232,6 +258,7 @@ def CreateTable(room_dict):
                             basicSyntax.body.find_all("div", class_="range")[0].append(ranges2Tag)
                             basicSyntax.body.find_all("div", class_="range")[0].append(ranges3Tag)
                             masterRanges[i] = [ranges1Tag.string , ranges2Tag.string, ranges3Tag.string]
+                            SingleTotalRanges[i] = [ranges1Tag.string , ranges2Tag.string, ranges3Tag.string]
                             print("GOPAL",masterRanges[i])
 
                     elif len(ranges) == 6:
@@ -272,6 +299,7 @@ def CreateTable(room_dict):
                                     basicSyntax.body.find_all("div", class_="range")[0].append(ranges3Tag)
                                     basicSyntax.body.find_all("div", class_="range")[0].append(ranges4Tag)
                                     masterRanges[i] = [ranges1Tag.string , ranges2Tag.string, ranges3Tag.string, ranges4Tag.string]
+                                    SingleTotalRanges[i] = [ranges1Tag.string , ranges2Tag.string, ranges3Tag.string, ranges4Tag.string]
                                     print("FOPAL",masterRanges[i])
 
                                 else:
@@ -286,6 +314,7 @@ def CreateTable(room_dict):
                                     basicSyntax.body.find_all("div", class_="range")[0].append(ranges3Tag)
                                     basicSyntax.body.find_all("div", class_="range")[0].append(ranges4Tag)
                                     masterRanges[i] = [ranges1Tag.string , ranges2Tag.string, ranges3Tag.string, ranges4Tag.string]
+                                    SingleTotalRanges[i] = [ranges1Tag.string , ranges2Tag.string, ranges3Tag.string, ranges4Tag.string]
                                     print("GOPAL",masterRanges[i])
 
                             if changedDept == 2:
@@ -301,6 +330,7 @@ def CreateTable(room_dict):
                                     basicSyntax.body.find_all("div", class_="range")[0].append(ranges3Tag)
                                     basicSyntax.body.find_all("div", class_="range")[0].append(ranges4Tag)
                                     masterRanges[i] = [ranges1Tag.string , ranges2Tag.string, ranges3Tag.string, ranges4Tag.string]
+                                    SingleTotalRanges[i] = [ranges1Tag.string , ranges2Tag.string, ranges3Tag.string, ranges4Tag.string]
                                     print("GOPAL",masterRanges[i])
 
                                 else:
@@ -315,6 +345,7 @@ def CreateTable(room_dict):
                                     basicSyntax.body.find_all("div", class_="range")[0].append(ranges3Tag)
                                     basicSyntax.body.find_all("div", class_="range")[0].append(ranges4Tag)
                                     masterRanges[i] = [ranges1Tag.string , ranges2Tag.string, ranges3Tag.string, ranges4Tag.string]
+                                    SingleTotalRanges[i] = [ranges1Tag.string , ranges2Tag.string, ranges3Tag.string, ranges4Tag.string]
                                     print("GOPAL",masterRanges[i])
 
                         elif changedBothDept[0] == 1 or changedBothYears[0] == 1:
@@ -331,6 +362,7 @@ def CreateTable(room_dict):
                                 basicSyntax.body.find_all("div", class_="range")[0].append(ranges3Tag)
                                 basicSyntax.body.find_all("div", class_="range")[0].append(ranges4Tag)
                                 masterRanges[i] = [ranges1Tag.string , ranges2Tag.string, ranges3Tag.string, ranges4Tag.string]
+                                SingleTotalRanges[i] = [ranges1Tag.string , ranges2Tag.string, ranges3Tag.string, ranges4Tag.string]
 
                             elif str(ranges[0][0])[6:9] == str(ranges[5][0])[6:9] and str(ranges[0][0])[4:6] == str(ranges[5][0])[4:6]:
                                 ranges1Tag = basicSyntax.new_tag("p")
@@ -346,9 +378,32 @@ def CreateTable(room_dict):
                                     ranges4Tag.string = dept[int(str(ranges[4][1])[6:9])] + " " + years[int(str(ranges[4][1])[4:6])] + ": " + str(ranges[4][1]) + " to " + str(ranges[5][1])
                                     basicSyntax.body.find_all("div", class_="range")[0].append(ranges4Tag)
                                     masterRanges[i] = [ranges1Tag.string , ranges2Tag.string, ranges3Tag.string, ranges4Tag.string]
+                                    SingleTotalRanges[i] = [ranges1Tag.string , ranges2Tag.string, ranges3Tag.string, ranges4Tag.string]
                                     continue
                                 masterRanges[i] = [ranges1Tag.string , ranges2Tag.string, ranges3Tag.string]
+                                SingleTotalRanges[i] = [ranges1Tag.string , ranges2Tag.string, ranges3Tag.string]
                                 print("Hey", masterRanges[i])
+
+                            elif str(ranges[0][1])[6:9] == str(ranges[5][1])[6:9] and str(ranges[0][1])[4:6] == str(ranges[5][1])[4:6]:
+                                ranges1Tag = basicSyntax.new_tag("p")
+                                ranges1Tag.string = dept[int(str(ranges[0][1])[6:9])] + " " + years[int(str(ranges[0][1])[4:6])] + ": " + str(ranges[0][1]) + " to " + str(ranges[5][1])
+                                ranges2Tag = basicSyntax.new_tag("p")
+                                ranges2Tag.string = dept[int(str(ranges[0][0])[6:9])] + " " + years[int(str(ranges[0][0])[4:6])] + ": " + str(ranges[0][0]) + " to " + str(ranges[1][0])
+                                ranges3Tag.string = dept[int(str(ranges[2][0])[6:9])] + " " + years[int(str(ranges[2][0])[4:6])] + ": " + str(ranges[2][0]) + " to " + str(ranges[3][0])
+                                
+                                basicSyntax.body.find_all("div", class_="range")[0].append(ranges1Tag)
+                                basicSyntax.body.find_all("div", class_="range")[0].append(ranges2Tag)
+                                basicSyntax.body.find_all("div", class_="range")[0].append(ranges3Tag)
+                                if ranges[4][0] != 0 and ranges[4][1] != 0:
+                                    ranges4Tag.string = dept[int(str(ranges[4][0])[6:9])] + " " + years[int(str(ranges[4][0])[4:6])] + ": " + str(ranges[4][0]) + " to " + str(ranges[5][0])
+                                    basicSyntax.body.find_all("div", class_="range")[0].append(ranges4Tag)
+                                    masterRanges[i] = [ranges1Tag.string , ranges2Tag.string, ranges3Tag.string, ranges4Tag.string]
+                                    SingleTotalRanges[i] = [ranges1Tag.string , ranges2Tag.string, ranges3Tag.string, ranges4Tag.string]
+                                    continue
+                                masterRanges[i] = [ranges1Tag.string , ranges2Tag.string, ranges3Tag.string]
+                                SingleTotalRanges[i] = [ranges1Tag.string , ranges2Tag.string, ranges3Tag.string]
+                                print("Hey", masterRanges[i])
+
                             else:
                                 ranges1Tag = basicSyntax.new_tag("p")
                                 ranges1Tag.string = dept[int(str(ranges[0][0])[6:9])] + " " + years[int(str(ranges[0][0])[4:6])] + ": " + str(ranges[0][0]) + " to " + str(ranges[3][0])
@@ -361,6 +416,7 @@ def CreateTable(room_dict):
                                 basicSyntax.body.find_all("div", class_="range")[0].append(ranges3Tag)
                                 basicSyntax.body.find_all("div", class_="range")[0].append(ranges4Tag)
                                 masterRanges[i] = [ranges1Tag.string , ranges2Tag.string, ranges3Tag.string, ranges4Tag.string]
+                                SingleTotalRanges[i] = [ranges1Tag.string , ranges2Tag.string, ranges3Tag.string, ranges4Tag.string]
                                 print("GOPAL 01",masterRanges[i])
                             
                         elif changedBothDept[0] == 2 or changedBothYears[0] == 2:
@@ -377,8 +433,29 @@ def CreateTable(room_dict):
                                 basicSyntax.body.find_all("div", class_="range")[0].append(ranges3Tag)
                                 basicSyntax.body.find_all("div", class_="range")[0].append(ranges4Tag)
                                 masterRanges[i] = [ranges1Tag.string , ranges2Tag.string, ranges3Tag.string, ranges4Tag.string]
+                                SingleTotalRanges[i] = [ranges1Tag.string , ranges2Tag.string, ranges3Tag.string, ranges4Tag.string]
                             
                             elif str(ranges[0][0])[6:9] == str(ranges[5][0])[6:9] and str(ranges[0][0])[4:6] == str(ranges[5][0])[4:6]:
+                                ranges1Tag = basicSyntax.new_tag("p")
+                                ranges1Tag.string = dept[int(str(ranges[0][0])[6:9])] + " " + years[int(str(ranges[0][0])[4:6])] + ": " + str(ranges[0][0]) + " to " + str(ranges[5][0])
+                                ranges2Tag = basicSyntax.new_tag("p")
+                                ranges2Tag.string = dept[int(str(ranges[0][1])[6:9])] + " " + years[int(str(ranges[0][1])[4:6])] + ": " + str(ranges[0][1]) + " to " + str(ranges[1][1])
+                                ranges3Tag.string = dept[int(str(ranges[2][1])[6:9])] + " " + years[int(str(ranges[2][1])[4:6])] + ": " + str(ranges[2][1]) + " to " + str(ranges[3][1])
+                                
+                                basicSyntax.body.find_all("div", class_="range")[0].append(ranges1Tag)
+                                basicSyntax.body.find_all("div", class_="range")[0].append(ranges2Tag)
+                                basicSyntax.body.find_all("div", class_="range")[0].append(ranges3Tag)
+                                if ranges[4][0] != 0 and ranges[4][1] != 0:
+                                    ranges4Tag.string = dept[int(str(ranges[4][1])[6:9])] + " " + years[int(str(ranges[4][1])[4:6])] + ": " + str(ranges[4][1]) + " to " + str(ranges[5][1])
+                                    basicSyntax.body.find_all("div", class_="range")[0].append(ranges4Tag)
+                                    masterRanges[i] = [ranges1Tag.string , ranges2Tag.string, ranges3Tag.string, ranges4Tag.string]
+                                    SingleTotalRanges[i] = [ranges1Tag.string , ranges2Tag.string, ranges3Tag.string, ranges4Tag.string]
+                                    continue
+                                masterRanges[i] = [ranges1Tag.string , ranges2Tag.string, ranges3Tag.string]
+                                SingleTotalRanges[i] = [ranges1Tag.string , ranges2Tag.string, ranges3Tag.string]
+                                print("Hey", masterRanges[i])
+
+                            elif str(ranges[0][1])[6:9] == str(ranges[5][1])[6:9] and str(ranges[0][1])[4:6] == str(ranges[5][1])[4:6]:
                                 ranges1Tag = basicSyntax.new_tag("p")
                                 ranges1Tag.string = dept[int(str(ranges[0][1])[6:9])] + " " + years[int(str(ranges[0][1])[4:6])] + ": " + str(ranges[0][1]) + " to " + str(ranges[5][1])
                                 ranges2Tag = basicSyntax.new_tag("p")
@@ -392,8 +469,10 @@ def CreateTable(room_dict):
                                     ranges4Tag.string = dept[int(str(ranges[4][0])[6:9])] + " " + years[int(str(ranges[4][0])[4:6])] + ": " + str(ranges[4][0]) + " to " + str(ranges[5][0])
                                     basicSyntax.body.find_all("div", class_="range")[0].append(ranges4Tag)
                                     masterRanges[i] = [ranges1Tag.string , ranges2Tag.string, ranges3Tag.string, ranges4Tag.string]
+                                    SingleTotalRanges[i] = [ranges1Tag.string , ranges2Tag.string, ranges3Tag.string, ranges4Tag.string]
                                     continue
                                 masterRanges[i] = [ranges1Tag.string , ranges2Tag.string, ranges3Tag.string]
+                                SingleTotalRanges[i] = [ranges1Tag.string , ranges2Tag.string, ranges3Tag.string]
                                 print("Hey", masterRanges[i])
                             
                             else:
@@ -409,10 +488,12 @@ def CreateTable(room_dict):
                                 basicSyntax.body.find_all("div", class_="range")[0].append(ranges3Tag)
                                 basicSyntax.body.find_all("div", class_="range")[0].append(ranges4Tag)
                                 masterRanges[i] = [ranges1Tag.string , ranges2Tag.string, ranges3Tag.string, ranges4Tag.string]
+                                SingleTotalRanges[i] = [ranges1Tag.string , ranges2Tag.string, ranges3Tag.string, ranges4Tag.string]
                                 print("GOPAL 00",masterRanges[i])
 
                     ranges = []
                     counts = displayCount(countDict)
+                    print("COUNTS OF ONE TIME: ",counts)
                     subjects = """"""
                     c = """"""
                     for l in counts:
@@ -432,9 +513,16 @@ def CreateTable(room_dict):
                 row = []
                 
         TotalRoomCount[i] = countDict
+        print("count dict at the end", countDict)
+        SingleTotalCount[i] = countDict
+    BoysAndGirlsRanges.append(SingleTotalRanges)
+        
         # Common(TotalRoomCount)
+    
 
-    print(TotalRoomCount)
+    print("THE TOTAL ROOM COUNT OF ONE TIME:", SingleTotalCount)
+    BoysAndGirlsRoomCount.append(SingleTotalCount)
+    TotalCounts = {}
 
-    TotalCounts = TotalRoomCount
+    
             

@@ -127,8 +127,9 @@ def GetStudents(Gender):
     return ckt_array, nckt_array
 
 def displayCount(countDict):
+    print("COUNT DICT AT LAST:", countDict)
 
-    deptsInRoomIds = [i for i in countDict.keys()]
+    deptsInRoomIds = [i for i in countDict.keys() if i in dept.values()]
     db = mysql.connector.connect(host="localhost", user="root", passwd="root")
     cursor = db.cursor()
 

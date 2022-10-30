@@ -1,0 +1,46 @@
+.entiretable table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+
+.entiretable table {
+    width: 100%;
+    margin: 20px auto;
+    padding: 10px;
+}
+
+.entiretable td {
+    padding: 20px;
+    font-size: 18px;
+    line-height: 1.5;
+    text-align: center;
+    width: 150px;
+}
+
+body {
+    align-items: center;
+    justify-content: center;
+}
+
+.logo {
+    height: 80px;
+    object-fit: cover;
+}
+
+.entiretable {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    justify-items: center;
+    flex-direction: column;
+    /* width: 50%
+    height: 20vh; */
+    margin-left: 5%;
+    margin-right: 25%;
+}
+
+.entiretable tr {
+    height: 100px;
+    font-size: 1.5rem;
+    font-family: 'Poppins', sans-serif;
+}
