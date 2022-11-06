@@ -51,25 +51,31 @@ def NoticeBoard(counts, ranges):
     for k in ALLDepts:
 
         String = """"""
+        RollNoList = []
+        RoomList = []
+        CountList = []
+
+
         for l in range(1, len(k)):
-            String += f"""<p>{k[l][0]}</p>"""
+            String += f"""{k[l][0]}\n"""
+            RollNoList.append(k[l][0])
         RoomString = """"""
         for l in range(1, len(k)):
-            RoomString += f"""<p>{k[l][1]}</p>"""
+            RoomString += f"""{k[l][1]}\n"""
+            RoomList.append(k[l][1])
         CountString = """"""
         for l in range(1, len(k)):
-            CountString += f"""<p>{k[l][2]}</p>"""
+            CountString += f"""{k[l][2]}\n"""
+            CountList.append(k[l][2])
         if String=="":
             continue
-        tabless = [k[0], ["", String, RoomString, CountString]]
+        # tabless = [k[0], ["", String, RoomString, CountString]]
+        tabless = [k[0], ["", RollNoList, RoomList, CountList]]
         tab = tabulate(tabless, headers=["Year", "Department", "Room", "Count"], tablefmt="html")
         tabForHTML = bs4.BeautifulSoup(tab, 'html.parser')
         print(tab)
         data.find_all("div", class_="entiretable")[0].append(tabForHTML)
 
-    
-        
-        
     with open ("./noticeboardcopys/notice"+file+".html", "w") as f2:
         f2.write(str(data.prettify()))
     file = "GIRLS"

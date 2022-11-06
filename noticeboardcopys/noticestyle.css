@@ -3,12 +3,21 @@
     border-collapse: collapse;
 }
 
-.entiretable table {
-    width: 100%;
+
+ .entiretable table {
+    
     margin: 20px auto;
     padding: 10px;
 }
 
+.entiretable td:nth-child(2) {
+    
+    width: 330px;
+}
+.entiretable td:nth-child(3) {
+    width: 25px;
+}
+/*
 .entiretable td {
     padding: 20px;
     font-size: 18px;
@@ -35,7 +44,7 @@ body {
     flex-direction: column;
     /* width: 50%
     height: 20vh; */
-    margin-left: 5%;
+    /* margin-left: 5%;
     margin-right: 25%;
 }
 
@@ -43,4 +52,4 @@ body {
     height: 100px;
     font-size: 1.5rem;
     font-family: 'Poppins', sans-serif;
-}
+} */ 

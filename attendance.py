@@ -14,9 +14,17 @@ dept = {
         244:"CSBS",
         }
 
+years = {
+    22:"1st Year",
+    21:"2nd Year",
+    19:"3rd Year",
+    18:"4th Year",
+}
+
 
 def Attendance(Arr, DATES):
     dp = dept[int(str(Arr[0][1])[6:9])]
+    yr = years[int(str(Arr[0][1])[4:6])]
     tableForAtt = []
     headers = headers = ["RegisterNo","Name", DATES[0][0], DATES[1][0], DATES[2][0], DATES[3][0], DATES[4][0], DATES[5][0]]
     for i in range(len(Arr)):
@@ -33,7 +41,7 @@ def Attendance(Arr, DATES):
         TableDone = bs4.BeautifulSoup(check, 'html.parser')
         AttSyntax.body.find_all("div", class_="tables")[0].append(TableDone)
     print(dp + "DONE")
-    with open('./attendance/' + dp + 'attend.html', 'w') as f2:
+    with open('./attendance/' + dp + yr + 'attend.html', 'w') as f2:
         f2.write(str(AttSyntax.prettify()))
 
 
