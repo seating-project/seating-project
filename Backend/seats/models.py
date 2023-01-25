@@ -6,6 +6,7 @@
 #   * Remove `managed = False` lines if you wish to allow Django to create, modify, and delete the table
 # Feel free to rename the models, but don't rename db_table values or field names.
 from django.db import models
+import json
 
 
 class AuthGroup(models.Model):
@@ -242,3 +243,16 @@ class Timetable(models.Model):
     class Meta:
         managed = False
         db_table = "timetable"
+
+class ExamTemplate(models.Model):
+    rows = models.IntegerField(db_column="Rows", blank=True, null=False)  # Field name made lowercase.
+    columns = models.IntegerField(db_column="Columns", blank=True, null=False)  # Field name made lowercase.
+    room_strength = models.IntegerField(db_column="Room_Strength", blank=True, null=False)  # Field name made lowercase.
+    count_in_bench = models.IntegerField(db_column="Count_in_Bench", blank=True, null=False)  # Field name made lowercase.
+    rooms = models.CharField(max_length=200)
+
+    def set_rooms(self, x):
+        self.rooms = json.dumps(x)
+
+    def get_rooms(self):
+        return json.loads(self.rooms)

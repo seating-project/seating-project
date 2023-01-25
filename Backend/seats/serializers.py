@@ -12,3 +12,4 @@ class MechiiSerializer(serializers.ModelSerializer):
     class Meta:
         model = Mechii
         fields = '__all__'
+
