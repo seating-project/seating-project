@@ -256,3 +256,4 @@ class ExamTemplate(models.Model):
 
     def get_rooms(self):
         return json.loads(self.rooms)
+
