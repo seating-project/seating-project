@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Cseii, Mechii, ExamTemplate
+from .models import Cseii, Mechii, ExamTemplate, Students, RoomData
 
 
 class CseiiSerializer(serializers.ModelSerializer):
@@ -21,4 +21,9 @@ class ExamTemplateSerializer(serializers.ModelSerializer):
 class CreateExamTemplateSerializer(serializers.ModelSerializer):
     class Meta:
         model = ExamTemplate
+        fields = '__all__'
+
+class RoomDataSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RoomData
         fields = '__all__'

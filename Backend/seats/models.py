@@ -14,29 +14,29 @@ class AuthGroup(models.Model):
 
     class Meta:
         managed = False
-        db_table = "auth_group"
+        db_table = 'auth_group'
 
 
 class AuthGroupPermissions(models.Model):
-    id = models.BigAutoField(primary_key=True, null=False)
+    id = models.BigAutoField(primary_key=True)
     group = models.ForeignKey(AuthGroup, models.DO_NOTHING)
-    permission = models.ForeignKey("AuthPermission", models.DO_NOTHING)
+    permission = models.ForeignKey('AuthPermission', models.DO_NOTHING)
 
     class Meta:
         managed = False
-        db_table = "auth_group_permissions"
-        unique_together = (("group", "permission"),)
+        db_table = 'auth_group_permissions'
+        unique_together = (('group', 'permission'),)
 
 
 class AuthPermission(models.Model):
     name = models.CharField(max_length=255)
-    content_type = models.ForeignKey("DjangoContentType", models.DO_NOTHING)
+    content_type = models.ForeignKey('DjangoContentType', models.DO_NOTHING)
     codename = models.CharField(max_length=100)
 
     class Meta:
         managed = False
-        db_table = "auth_permission"
-        unique_together = (("content_type", "codename"),)
+        db_table = 'auth_permission'
+        unique_together = (('content_type', 'codename'),)
 
 
 class AuthUser(models.Model):
@@ -53,7 +53,7 @@ class AuthUser(models.Model):
 
     class Meta:
         managed = False
-        db_table = "auth_user"
+        db_table = 'auth_user'
 
 
 class AuthUserGroups(models.Model):
@@ -63,8 +63,8 @@ class AuthUserGroups(models.Model):
 
     class Meta:
         managed = False
-        db_table = "auth_user_groups"
-        unique_together = (("user", "group"),)
+        db_table = 'auth_user_groups'
+        unique_together = (('user', 'group'),)
 
 
 class AuthUserUserPermissions(models.Model):
@@ -74,47 +74,44 @@ class AuthUserUserPermissions(models.Model):
 
     class Meta:
         managed = False
-        db_table = "auth_user_user_permissions"
-        unique_together = (("user", "permission"),)
+        db_table = 'auth_user_user_permissions'
+        unique_together = (('user', 'permission'),)
 
 
 class Civilii(models.Model):
-    sno = models.IntegerField(db_column="SNo", blank=True, null=True)  # Field name made lowercase.
-    registerno = models.BigIntegerField(
-        primary_key=True, db_column="RegisterNo", blank=True, null=False
-    )  # Field name made lowercase.
-    name = models.TextField(db_column="Name", blank=True, null=True)  # Field name made lowercase.
-    gender = models.TextField(db_column="Gender", blank=True, null=True)  # Field name made lowercase.
+    registerno = models.BigIntegerField(primary_key=True,db_column='RegisterNo', blank=True, null=False)  # Field name made lowercase.
+    name = models.TextField(db_column='Name', blank=True, null=True)  # Field name made lowercase.
+    gender = models.TextField(db_column='Gender', blank=True, null=True)  # Field name made lowercase.
+    dept = models.CharField(max_length=10, blank=True, null=True)
+    year = models.IntegerField(blank=True, null=True)
 
     class Meta:
         managed = False
-        db_table = "civilii"
+        db_table = 'civilii'
 
 
 class Cseii(models.Model):
-    sno = models.IntegerField(db_column="SNo", blank=True, null=True)  # Field name made lowercase.
-    registerno = models.BigIntegerField(
-        primary_key=True, db_column="RegisterNo", blank=True, null=False
-    )  # Field name made lowercase.
-    name = models.TextField(db_column="Name", blank=True, null=True)  # Field name made lowercase.
-    gender = models.TextField(db_column="Gender", blank=True, null=True)  # Field name made lowercase.
+    registerno = models.BigIntegerField(primary_key=True, db_column='RegisterNo', blank=True, null=False)  # Field name made lowercase.
+    name = models.TextField(db_column='Name', blank=True, null=True)  # Field name made lowercase.
+    gender = models.TextField(db_column='Gender', blank=True, null=True)  # Field name made lowercase.
+    dept = models.CharField(max_length=10, blank=True, null=True)
+    year = models.IntegerField(blank=True, null=True)
 
     class Meta:
         managed = False
-        db_table = "cseii"
+        db_table = 'cseii'
 
 
 class Cseiii(models.Model):
-    sno = models.IntegerField(db_column="SNo", blank=True, null=True)  # Field name made lowercase.
-    registerno = models.BigIntegerField(
-        primary_key=True, db_column="RegisterNo", blank=True, null=False
-    )  # Field name made lowercase.
-    name = models.TextField(db_column="Name", blank=True, null=True)  # Field name made lowercase.
-    gender = models.TextField(db_column="Gender", blank=True, null=True)  # Field name made lowercase.
+    registerno = models.BigIntegerField(primary_key=True, db_column='RegisterNo', blank=True, null=False)  # Field name made lowercase.
+    name = models.TextField(db_column='Name', blank=True, null=True)  # Field name made lowercase.
+    gender = models.TextField(db_column='Gender', blank=True, null=True)  # Field name made lowercase.
+    dept = models.CharField(max_length=10, blank=True, null=True)
+    year = models.IntegerField(blank=True, null=True)
 
     class Meta:
         managed = False
-        db_table = "cseiii"
+        db_table = 'cseiii'
 
 
 class DjangoAdminLog(models.Model):
@@ -123,12 +120,12 @@ class DjangoAdminLog(models.Model):
     object_repr = models.CharField(max_length=200)
     action_flag = models.PositiveSmallIntegerField()
     change_message = models.TextField()
-    content_type = models.ForeignKey("DjangoContentType", models.DO_NOTHING, blank=True, null=True)
+    content_type = models.ForeignKey('DjangoContentType', models.DO_NOTHING, blank=True, null=True)
     user = models.ForeignKey(AuthUser, models.DO_NOTHING)
 
     class Meta:
         managed = False
-        db_table = "django_admin_log"
+        db_table = 'django_admin_log'
 
 
 class DjangoContentType(models.Model):
@@ -137,8 +134,8 @@ class DjangoContentType(models.Model):
 
     class Meta:
         managed = False
-        db_table = "django_content_type"
-        unique_together = (("app_label", "model"),)
+        db_table = 'django_content_type'
+        unique_together = (('app_label', 'model'),)
 
 
 class DjangoMigrations(models.Model):
@@ -149,7 +146,7 @@ class DjangoMigrations(models.Model):
 
     class Meta:
         managed = False
-        db_table = "django_migrations"
+        db_table = 'django_migrations'
 
 
 class DjangoSession(models.Model):
@@ -159,92 +156,70 @@ class DjangoSession(models.Model):
 
     class Meta:
         managed = False
-        db_table = "django_session"
+        db_table = 'django_session'
 
 
 class Itii(models.Model):
-    sno = models.IntegerField(db_column="SNo", blank=True, null=True)  # Field name made lowercase.
-    registerno = models.BigIntegerField(
-        primary_key=True, db_column="RegisterNo", blank=True, null=False
-    )  # Field name made lowercase.
-    name = models.TextField(db_column="Name", blank=True, null=True)  # Field name made lowercase.
-    gender = models.TextField(db_column="Gender", blank=True, null=True)  # Field name made lowercase.
+    registerno = models.BigIntegerField(primary_key=True, db_column='RegisterNo', blank=True, null=False)  # Field name made lowercase.
+    name = models.TextField(db_column='Name', blank=True, null=True)  # Field name made lowercase.
+    gender = models.TextField(db_column='Gender', blank=True, null=True)  # Field name made lowercase.
+    dept = models.CharField(max_length=10, blank=True, null=True)
+    year = models.IntegerField(blank=True, null=True)
 
     class Meta:
         managed = False
-        db_table = "itii"
+        db_table = 'itii'
 
 
 class Itiii(models.Model):
-    sno = models.IntegerField(db_column="SNo", blank=True, null=True)  # Field name made lowercase.
-    registerno = models.BigIntegerField(
-        primary_key=True, db_column="RegisterNo", blank=True, null=False
-    )  # Field name made lowercase.
-    name = models.TextField(db_column="Name", blank=True, null=True)  # Field name made lowercase.
-    gender = models.TextField(db_column="Gender", blank=True, null=True)  # Field name made lowercase.
+    registerno = models.BigIntegerField(primary_key=True, db_column='RegisterNo', blank=True, null=False)  # Field name made lowercase.
+    name = models.TextField(db_column='Name', blank=True, null=True)  # Field name made lowercase.
+    gender = models.TextField(db_column='Gender', blank=True, null=True)  # Field name made lowercase.
+    dept = models.CharField(max_length=10, blank=True, null=True)
+    year = models.IntegerField(blank=True, null=True)
 
     class Meta:
         managed = False
-        db_table = "itiii"
+        db_table = 'itiii'
 
 
 class Mctii(models.Model):
-    sno = models.IntegerField(db_column="SNo", blank=True, null=True)  # Field name made lowercase.
-    registerno = models.BigIntegerField(
-        primary_key=True, db_column="RegisterNo", blank=True, null=False
-    )  # Field name made lowercase.
-    name = models.TextField(db_column="Name", blank=True, null=True)  # Field name made lowercase.
-    gender = models.TextField(db_column="Gender", blank=True, null=True)  # Field name made lowercase.
+    registerno = models.BigIntegerField(primary_key=True, db_column='RegisterNo', blank=True, null=False)  # Field name made lowercase.
+    name = models.TextField(db_column='Name', blank=True, null=True)  # Field name made lowercase.
+    gender = models.TextField(db_column='Gender', blank=True, null=True)  # Field name made lowercase.
+    dept = models.CharField(max_length=10, blank=True, null=True)
+    year = models.IntegerField(blank=True, null=True)
 
     class Meta:
         managed = False
-        db_table = "mctii"
+        db_table = 'mctii'
 
 
 class Mechii(models.Model):
-    sno = models.IntegerField(db_column="SNo", blank=True, null=True)  # Field name made lowercase.
-    registerno = models.BigIntegerField(
-        primary_key=True, db_column="RegisterNo", blank=True, null=False
-    )  # Field name made lowercase.
-    name = models.TextField(db_column="Name", blank=True, null=True)  # Field name made lowercase.
-    gender = models.TextField(db_column="Gender", blank=True, null=True)  # Field name made lowercase.
+    registerno = models.BigIntegerField(primary_key=True, db_column='RegisterNo', blank=True, null=False)  # Field name made lowercase.
+    name = models.TextField(db_column='Name', blank=True, null=True)  # Field name made lowercase.
+    gender = models.TextField(db_column='Gender', blank=True, null=True)  # Field name made lowercase.
+    year = models.IntegerField(blank=True, null=True)
+    dept = models.CharField(max_length=10, blank=True, null=True)
 
     class Meta:
         managed = False
-        db_table = "mechii"
+        db_table = 'mechii'
 
 
 class Mechiii(models.Model):
-    sno = models.IntegerField(db_column="SNo", blank=True, null=True)  # Field name made lowercase.
-    registerno = models.BigIntegerField(
-        primary_key=True, db_column="RegisterNo", blank=True, null=False
-    )  # Field name made lowercase.
-    name = models.TextField(db_column="Name", blank=True, null=True)  # Field name made lowercase.
-    gender = models.TextField(db_column="Gender", blank=True, null=True)  # Field name made lowercase.
+    registerno = models.BigIntegerField(primary_key=True, db_column='RegisterNo', blank=True, null=False)  # Field name made lowercase.
+    name = models.TextField(db_column='Name', blank=True, null=True)  # Field name made lowercase.
+    gender = models.TextField(db_column='Gender', blank=True, null=True)  # Field name made lowercase.
+    dept = models.CharField(max_length=10, blank=True, null=True)
+    year = models.IntegerField(blank=True, null=True)
 
     class Meta:
         managed = False
-        db_table = "mechiii"
-
-
-class Timetable(models.Model):
-    date = models.TextField(primary_key=True, db_column="DATE", blank=True, null=False)  # Field name made lowercase.
-    civil = models.TextField(db_column="CIVIL", blank=True, null=True)  # Field name made lowercase.
-    cse = models.TextField(db_column="CSE", blank=True, null=True)  # Field name made lowercase.
-    eee = models.TextField(db_column="EEE", blank=True, null=True)  # Field name made lowercase.
-    ece = models.TextField(db_column="ECE", blank=True, null=True)  # Field name made lowercase.
-    mech = models.TextField(db_column="MECH", blank=True, null=True)  # Field name made lowercase.
-    mct = models.TextField(db_column="MCT", blank=True, null=True)  # Field name made lowercase.
-    bme = models.TextField(db_column="BME", blank=True, null=True)  # Field name made lowercase.
-    it = models.TextField(db_column="IT", blank=True, null=True)  # Field name made lowercase.
-    aids = models.TextField(db_column="AIDS", blank=True, null=True)  # Field name made lowercase.
-    csbs = models.TextField(db_column="CSBS", blank=True, null=True)  # Field name made lowercase.
-
-    class Meta:
-        managed = False
-        db_table = "timetable"
+        db_table = 'mechiii'
 
 class ExamTemplate(models.Model):
+    id = models.CharField(max_length=200, primary_key=True, unique=True)
     rows = models.IntegerField(db_column="Rows", blank=True, null=False)  # Field name made lowercase.
     columns = models.IntegerField(db_column="Columns", blank=True, null=False)  # Field name made lowercase.
     room_strength = models.IntegerField(db_column="Room_Strength", blank=True, null=False)  # Field name made lowercase.
@@ -257,3 +232,37 @@ class ExamTemplate(models.Model):
     def get_rooms(self):
         return json.loads(self.rooms)
 
+
+class Students(models.Model):
+    registerno = models.BigIntegerField(primary_key=True, db_column='RegisterNo', blank=True, null=False)  # Field name made lowercase.
+    name = models.TextField(db_column='Name', blank=True, null=True)  # Field name made lowercase.
+    gender = models.TextField(db_column='Gender', blank=True, null=True)  # Field name made lowercase.
+    dept = models.CharField(max_length=10, blank=True, null=True)
+    year = models.IntegerField(blank=True, null=True)
+    ctype = models.CharField(max_length=1, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'students'
+
+
+class Timetable(models.Model):
+    date = models.TextField(db_column='DATE', blank=True, null=True)  # Field name made lowercase.
+    civil = models.TextField(db_column='CIVIL', blank=True, null=True)  # Field name made lowercase.
+    cse = models.TextField(db_column='CSE', blank=True, null=True)  # Field name made lowercase.
+    eee = models.TextField(db_column='EEE', blank=True, null=True)  # Field name made lowercase.
+    ece = models.TextField(db_column='ECE', blank=True, null=True)  # Field name made lowercase.
+    mech = models.TextField(db_column='MECH', blank=True, null=True)  # Field name made lowercase.
+    mct = models.TextField(db_column='MCT', blank=True, null=True)  # Field name made lowercase.
+    bme = models.TextField(db_column='BME', blank=True, null=True)  # Field name made lowercase.
+    it = models.TextField(db_column='IT', blank=True, null=True)  # Field name made lowercase.
+    aids = models.TextField(db_column='AIDS', blank=True, null=True)  # Field name made lowercase.
+    csbs = models.TextField(db_column='CSBS', blank=True, null=True)  # Field name made lowercase.
+
+    class Meta:
+        managed = False
+        db_table = 'timetable'
+
+class RoomData(models.Model):
+    rooms = models.JSONField(null=True, blank=True)
+    
