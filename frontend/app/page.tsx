@@ -2,6 +2,7 @@ import axios from "axios";
 import Navbar from "../components/Navbar";
 import Header from "../components/Header";
 import TemplateCard from "../components/TemplateCard";
+import Background from "../public/background.svg"
 
 async function getTemplateData() {
   try {
@@ -46,7 +47,8 @@ async function Homepage() {
 
   const tdata = await getTemplateData();
   return (
-    <div className="bg-white">
+    <div className="bg-white bg-background bg-cover">
+      
       <div className="flex h-screen ">
         <Navbar />
         <div className="flex flex-col">
