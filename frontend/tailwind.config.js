@@ -14,6 +14,7 @@ module.exports = {
       'gray': '#f5f5f5',
       'dark-gray': '#e5e5e5',
       'screen': '#c5c6d0',
+      'yellow': "#ffff66"
     },
     fontFamily: {
       'sans': ['Inter', 'sans-serif'],
@@ -26,7 +27,8 @@ module.exports = {
     },
     extend: {
       boxShadow: {
-        'blue': '0 0 0 3px rgba(60, 205, 255, 0.45)',
+        'custom': 'rgba(0, 0, 0, 0.07) 0px 1px 2px, rgba(0, 0, 0, 0.07) 0px 2px 4px, rgba(0, 0, 0, 0.07) 0px 4px 8px, rgba(0, 0, 0, 0.07) 0px 8px 16px, rgba(0, 0, 0, 0.07) 0px 16px 32px, rgba(0, 0, 0, 0.07) 0px 32px 64px;',
+        
       }
     },
   },

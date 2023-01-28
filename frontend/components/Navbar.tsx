@@ -5,7 +5,7 @@ const Navbar = () => {
   return (
     <div
       className="flex flex-col items-center min-w-[280px] w-1/5 justify-around p-4 h-full bg-white
-    rounded-r-lg border-r-2 border-screen"
+    rounded-r-3xl border-r-2 border-screen"
     >
       <div className="flex flex-col items-center">
         <div className="flex items-center ">
@@ -33,8 +33,8 @@ const Navbar = () => {
       </div>
 
       <div className="flex flex-col items-center">
-        <Link href="/login" className="text-xl font-semibold py-3">
-          Login
+        <Link href="/test" className="text-xl font-semibold py-3">
+          Test
         </Link>
         <Link href="/signup" className="text-xl font-semibold">
           Sign Up
