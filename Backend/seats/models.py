@@ -224,13 +224,7 @@ class ExamTemplate(models.Model):
     columns = models.IntegerField(db_column="Columns", blank=True, null=False)  # Field name made lowercase.
     room_strength = models.IntegerField(db_column="Room_Strength", blank=True, null=False)  # Field name made lowercase.
     count_in_bench = models.IntegerField(db_column="Count_in_Bench", blank=True, null=False)  # Field name made lowercase.
-    rooms = models.CharField(max_length=200)
-
-    def set_rooms(self, x):
-        self.rooms = json.dumps(x)
-
-    def get_rooms(self):
-        return json.loads(self.rooms)
+    rooms = models.JSONField(db_column="Rooms", blank=True, null=False)  # Field name made lowercase.
 
 
 class Students(models.Model):

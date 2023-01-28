@@ -5,7 +5,7 @@ from .models import Cseii, Mechii, ExamTemplate, Students, RoomData
 from .serializers import CseiiSerializer, MechiiSerializer, ExamTemplateSerializer, CreateExamTemplateSerializer, RoomDataSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from django.http import QueryDict
+
 
 
 class CseiiList(generics.ListAPIView):
@@ -79,6 +79,11 @@ class RoomDataList(generics.ListAPIView):
         if f == 1:
             break
     
+    try:
+        i = room[(room.index(i)+1)]
+        room = room[(room.index(i)):]
+    except:
+        pass
     model = RoomData(rooms=room_dict)
     model.save()
     queryset = RoomData.objects.all()
