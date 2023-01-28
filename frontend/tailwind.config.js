@@ -27,7 +27,10 @@ module.exports = {
     extend: {
       boxShadow: {
         'blue': '0 0 0 3px rgba(60, 205, 255, 0.45)',
-      }
+      },
+      backgroundImage: {
+        'background': "url('/background.svg')",
+      },
     },
   },
   plugins: [],

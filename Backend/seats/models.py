@@ -156,8 +156,7 @@ class DjangoSession(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'django_session'
-
+        db_table = 'dd'
 
 class Itii(models.Model):
     registerno = models.BigIntegerField(primary_key=True, db_column='RegisterNo', blank=True, null=False)  # Field name made lowercase.
@@ -260,3 +259,4 @@ class Timetable(models.Model):
 class RoomData(models.Model):
     rooms = models.JSONField(null=True, blank=True)
     
+
