@@ -4,8 +4,7 @@ import Image from "next/image";
 const Navbar = () => {
   return (
     <div
-      className="flex flex-col items-center min-w-[280px] w-1/5 justify-around p-4 h-full bg-white
-    rounded-r-3xl border-r-2 border-screen"
+      className="flex flex-col items-center min-w-[280px] w-1/5 justify-around p-4 h-full  rounded-r-3xl border-r-2 border-screen bg-white"
     >
       <div className="flex flex-col items-center">
         <div className="flex items-center ">
@@ -16,7 +15,7 @@ const Navbar = () => {
             className="rounded-full border-black border-2"
             alt="logo"
           />
-          <h1 className="text-6xl font-extrabold pl-2">Seats</h1>
+          <h1 className=" text-6xl font-extrabold pl-2   ">Seats</h1>
         </div>
         <hr className="w-full border-black border-1 mt-4" />
       </div>
