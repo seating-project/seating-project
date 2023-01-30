@@ -29,7 +29,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts"
-  ],
+, "pdf_components/ClassAllotment.jsx"  ],
   "exclude": [
     "node_modules"
   ]

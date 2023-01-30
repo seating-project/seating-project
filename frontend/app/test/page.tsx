@@ -1,7 +1,8 @@
 import axios from "axios";
-import Navbar from "../components/Navbar";
-import Header from "../components/Header";
-import TemplateCard from "../components/TemplateCard";
+import Navbar from "../../components/Navbar";
+import Header from "../../components/Header";
+import TemplateCard from "../../components/TemplateCard";
+import ClassAllotment from "../../pdf_components/ClassAllotment";
 
 async function getTemplateData() {
   try {
@@ -41,9 +42,23 @@ async function Testpage() {
   // const roomArray = Object.entries(roomSingle);
   // console.log(roomArray);
 
-  return <div className="bg-white">
+  const rdata = await getRoomData();
+  const roomSingle = rdata[0].rooms;
+  const roomArray = Object.entries(roomSingle);
+  console.log(roomSingle["F1"])
+  const tdata = await getTemplateData();
 
-  </div>;
+  return (
+    // <div className="bg-white h-screen w-screen">
+    //   {Object.keys(roomSingle).map((room) => {
+    //     return (
+    //       <ClassAllotment key={room} room={room} roomArray={roomSingle[room]} rows={tdata[0].rows} columns={tdata[0].columns}/>
+    //     );
+    //   })
+    //   }
+    // </div>
+    <ClassAllotment key={"F1"} room={"F1"} roomArray={roomSingle["F1"]} rows={tdata[0].rows} columns={tdata[0].columns}/>
+  )
 }
 
 export default Testpage;

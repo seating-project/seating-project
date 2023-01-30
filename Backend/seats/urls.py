@@ -9,5 +9,6 @@ urlpatterns = [
     path("mechii/", MechiiList.as_view(), name="seats_home"),
     path("examtemplate/", ExamTemplateList.as_view(), name="seats_home"),
     path("createexamtemplate/", CreateExamTemplateView.as_view(), name="seats_home"),
-    path("roomdata/", RoomDataList.as_view(), name="seats_home"),
+    path("roomdata/",  RoomDataList.as_view(), name="seats_home"),
+
 ]

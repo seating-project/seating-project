@@ -1,5 +1,9 @@
 // {key, id, rows, columns, room_strength, counts_in_bench, rooms}
 
+
+
+
+
 const TemplateCard = ({
   key,
   id,
@@ -38,3 +42,4 @@ const TemplateCard = ({
 };
 
 export default TemplateCard;
+

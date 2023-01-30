@@ -1,11 +1,11 @@
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
 
 const Navbar = () => {
   return (
-    <div
-      className="flex flex-col items-center min-w-[280px] w-1/5 justify-around p-4 h-full  rounded-r-3xl border-r-2 border-screen bg-white"
-    >
+    <div className="flex flex-col items-center min-w-[280px] w-1/5 justify-around p-4 h-full  rounded-r-3xl border-r-2 border-screen bg-white">
       <div className="flex flex-col items-center">
         <div className="flex items-center ">
           <Image
@@ -21,14 +21,25 @@ const Navbar = () => {
       </div>
 
       <div className="flex flex-col items-center pb-2">
+        
         <Link href="/" className="text-xl font-semibold py-3">
           Home
         </Link>
-        <Link href="/createexamtemplate" className="text-xl font-semibold py-3">Exam Templates</Link>
-        <Link href="/roomdata" className="text-xl font-semibold py-3">Room Data</Link>
-        <Link href="/examdata" className="text-xl font-semibold py-3">Exam Data</Link>
-        <Link href="/examtemplate" className="text-xl font-semibold py-3">Exam Template</Link>
-        <Link href="/exam" className="text-xl font-semibold py-3">Exam</Link>
+        <Link href="/createexamtemplate" className="text-xl font-semibold py-3">
+          Exam Templates
+        </Link>
+        <Link href="/roomdata" className="text-xl font-semibold py-3">
+          Room Data
+        </Link>
+        <Link href="/examdata" className="text-xl font-semibold py-3">
+          Exam Data
+        </Link>
+        <Link href="/examtemplate" className="text-xl font-semibold py-3">
+          Exam Template
+        </Link>
+        <Link href="/exam" className="text-xl font-semibold py-3">
+          Exam
+        </Link>
       </div>
 
       <div className="flex flex-col items-center">
