@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .views import CseiiList, MechiiList, ExamTemplateList, CreateExamTemplateView, RoomDataList
+from .views import CseiiList, MechiiList, ExamTemplateList, CreateExamTemplateView, RoomDataList, StudentsList
 
 app_name = "seats"
 
@@ -10,5 +10,6 @@ urlpatterns = [
     path("examtemplate/", ExamTemplateList.as_view(), name="seats_home"),
     path("createexamtemplate/", CreateExamTemplateView.as_view(), name="seats_home"),
     path("roomdata/",  RoomDataList.as_view(), name="seats_home"),
+    path("students/",  StudentsList.as_view(), name="seats_home"),
 
 ]

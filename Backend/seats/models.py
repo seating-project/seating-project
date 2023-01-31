@@ -182,6 +182,7 @@ class ExamTemplate(models.Model):
 class RoomData(models.Model):
     id = models.BigAutoField(primary_key=True, null=False)
     rooms = models.JSONField(blank=True, null=True)
+    ranges = models.JSONField(blank=True, null=True)
 
     class Meta:
         verbose_name = 'Room Data'
@@ -230,3 +231,14 @@ class Timetable(models.Model):
 
     def __str__(self):
         return (self.date + " " + self.name)
+
+# class RoomRanges(models.Model):
+#     id = models.BigAutoField(primary_key=True, null=False)
+#     room_range = models.JSONField(blank=True, null=True)
+
+#     class Meta:
+#         verbose_name = 'Room Ranges'
+#         verbose_name_plural = 'Room Ranges'
+
+#     def __str__(self):
+#         return self.id

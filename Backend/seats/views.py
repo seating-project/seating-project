@@ -2,7 +2,7 @@ from django.shortcuts import render
 from rest_framework import generics, status
 
 from .models import Cseii, Mechii, ExamTemplate, Students, RoomData
-from .serializers import CseiiSerializer, MechiiSerializer, ExamTemplateSerializer, CreateExamTemplateSerializer, RoomDataSerializer
+from .serializers import CseiiSerializer, MechiiSerializer, ExamTemplateSerializer, CreateExamTemplateSerializer, RoomDataSerializer, StudentsSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from asgiref.sync import async_to_sync, sync_to_async
@@ -10,7 +10,18 @@ from django.shortcuts import get_object_or_404
 import asyncio
 from asyncio import run_coroutine_threadsafe
 
-
+DEPT = {
+    '104': "CSE",
+    '114': "MECH",
+    '115': "MCT",
+    '205': "IT",
+    '103': "CIVIL",
+    '105': "EEE",
+    '106': "ECE",
+    '243': "AIDS",
+    '121': "BME",
+    '244': "CSBS",
+}
 
 class CseiiList(generics.ListAPIView):
     queryset = Cseii.objects.all()
@@ -107,56 +118,110 @@ class RoomDataList(generics.ListAPIView):
     print(curr_template.rooms)
     RoomData.objects.all().delete()
 
-    room = ['F1', 'F2', 'F3']
+    
+
+    room = ['F1', 'F2', 'F3', 'F4', 'F5', 'F6', 'F7', 'F8', 'F9', 'F10', 'F11', 'F12', 'F13', 'F14', 'F15', 'F16']
     serializer_class = RoomDataSerializer
-    ckt_array = Students.objects.filter(ctype='C').values_list('registerno', 'dept')
+    ckt_array = Students.objects.filter(ctype='C').values_list('registerno', 'dept','year')
     ckt_array = list(ckt_array)
-    nckt_array = Students.objects.filter(ctype='N').values_list('registerno', 'dept')
+    nckt_array = Students.objects.filter(ctype='N').values_list('registerno', 'dept', 'year')
     nckt_array = list(nckt_array)
 
+
+    ranges_dict = {}
     room_dict = {}
     curr_room = []
     c = 0
     f = 0
     for i in room:
-        for j in range(curr_template.room_strength):
-            if c>=len(ckt_array) and c>=len(nckt_array):
-                f = 1
-                break
-            try:
-                if ckt_array[c] and nckt_array[c]:
-                    curr_room.append([ckt_array[c], nckt_array[c]])
-                elif ckt_array[c]:
-                    curr_room.append([ckt_array[c], 0])
-                elif nckt_array[c]:
-                    curr_room.append([0, nckt_array[c]])
-                else:
+
+        if curr_template.single_seater == True:
+
+            for j in range(curr_template.room_strength):
+                if c>=len(ckt_array) and c>=len(nckt_array):
+                    f = 1
                     break
-                c+=1
-            except IndexError:
                 try:
-                    if nckt_array[c]:
-                        curr_room.append([0, nckt_array[c]])
-                except:
-                    if ckt_array[c]:
+                    if ckt_array[c] and nckt_array[c]:
+                        curr_room.append([ckt_array[c]])
+                        curr_room.append([nckt_array[c]])
+                    elif ckt_array[c]:
+                        curr_room.append([ckt_array[c]])
+                    elif nckt_array[c]:
+                        curr_room.append([nckt_array[c]])
+                    else:
+                        break
+                    c+=1
+                except IndexError:
+                    try:
+                        if nckt_array[c]:
+                            curr_room.append([nckt_array[c]])
+                    except:
+                        if ckt_array[c]:
+                            curr_room.append([ckt_array[c]])
+                    c+=1
+        else:
+            strength = curr_template.room_strength//2
+            for j in range(strength):
+                if c>=len(ckt_array) and c>=len(nckt_array):
+                    f = 1
+                    break
+                try:
+                    if ckt_array[c] and nckt_array[c]:
+                        curr_room.append([ckt_array[c], nckt_array[c]])
+                    elif ckt_array[c]:
                         curr_room.append([ckt_array[c], 0])
-                c+=1
-        print(curr_room)
+                    elif nckt_array[c]:
+                        curr_room.append([0, nckt_array[c]])
+                    else:
+                        break
+                    c+=1
+                except IndexError:
+                    try:
+                        if nckt_array[c]:
+                            curr_room.append([0, nckt_array[c]])
+                    except:
+                        if ckt_array[c]:
+                            curr_room.append([ckt_array[c], 0])
+                    c+=1
+    
+            
         room_dict[i] = curr_room
         curr_room = []
         if f == 1:
             break
+        print("ROOM DICT", room_dict)
+    for i in room_dict:
+        ranges_dict[i] = {}
+        for j in room_dict[i]:
+            if j[0] == 0:
+                continue
+            if (j[0][1] + " " + str(j[0][2])) not in ranges_dict[i]:
+                ranges_dict[i][j[0][1] + " " + str(j[0][2])] = []
+            ranges_dict[i][j[0][1] + " " + str(j[0][2])].append(j[0])
     
+        for j in room_dict[i]:
+            if j[1] == 0:
+                continue
+            if (j[1][1] + " " + str(j[1][2])) not in ranges_dict[i]:
+                ranges_dict[i][j[1][1] + " " + str(j[1][2])] = []
+            ranges_dict[i][j[1][1] + " " + str(j[1][2])].append(j[1])
+    print(ranges_dict)  
+
+            
+
     try:
         i = room[(room.index(i)+1)]
         room = room[(room.index(i)):]
     except:
         pass
-    model = RoomData(rooms=room_dict)
+    model = RoomData(rooms=room_dict, ranges=ranges_dict)
     model.save()
     queryset = RoomData.objects.all()
 
-
+class StudentsList(generics.ListAPIView):
+    queryset = Students.objects.all()
+    serializer_class = StudentsSerializer
 
 
 
