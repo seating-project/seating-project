@@ -47,18 +47,19 @@ async function Testpage() {
   const rangesNeeded = rdata[0].ranges;
   const roomArray = Object.entries(roomSingle);
   const tdata = await getTemplateData();
+  console.log(roomSingle["F1"])
   console.log(rangesNeeded["F1"])
 
   return (
-    // <div className="bg-white h-screen w-screen">
-    //   {Object.keys(roomSingle).map((room) => {
-    //     return (
-    //       <ClassAllotment key={room} room={room} roomArray={roomSingle[room]} rows={tdata[0].rows} columns={tdata[0].columns}/>
-    //     );
-    //   })
-    //   }
-    // </div>
-    <ClassAllotment key={"F1"} room={"F1"} roomArray={roomSingle["F1"]} rows={tdata[0].num_rows} columns={tdata[0].num_columns} rangesSingle={rangesNeeded["F1"]} exam={tdata[0].template_exam_name}/>
+    <div className="bg-white h-screen w-screen">
+      {Object.keys(roomSingle).map((room) => {
+        return (
+          <ClassAllotment key={room} room={room} roomArray={roomSingle[room]} rows={tdata[0].num_rows} columns={tdata[0].num_columns} rangesSingle={rangesNeeded[room]} exam={tdata[0].template_exam_name}/>
+        );
+      })
+      }
+    </div>
+    
   )
 }
 

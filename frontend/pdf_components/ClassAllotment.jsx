@@ -17,7 +17,14 @@ const YEARSUFFIX = {
   4: "th",
 };
 
-function ClassAllotment({ room, roomArray, rows, columns, rangesSingle, exam }) {
+function ClassAllotment({
+  room,
+  roomArray,
+  rows,
+  columns,
+  rangesSingle,
+  exam,
+}) {
   const deptID = useDeptID.getState().dept_id_object;
   const componentRef = useRef();
   const [downloading, setDownloading] = useState(false);
@@ -27,11 +34,22 @@ function ClassAllotment({ room, roomArray, rows, columns, rangesSingle, exam }) 
     let r = [];
     let count = 0;
     for (const i in rangesSingle) {
-      r.push(<p key={i}><b>{i.toUpperCase() + YEARSUFFIX[rangesSingle[i][0][2]] + " Year"}</b> <br/> {rangesSingle[i][0][0] + " to " + rangesSingle[i][rangesSingle[i].length-1][0]}</p>);
+      r.push(
+        <p key={i}>
+          <b>{i.toUpperCase() + YEARSUFFIX[rangesSingle[i][0][2]] + " Year"}</b>{" "}
+          <br />{" "}
+          {rangesSingle[i][0][0] +
+            " to " +
+            rangesSingle[i][rangesSingle[i].length - 1][0]}
+        </p>
+      );
       count++;
     }
     rangesDiv.push(
-      <div key={count} className="flex flex-col justify-center mt-4 pt-4 text-xl">
+      <div
+        key={count}
+        className="flex flex-col justify-center mt-4 pt-4 text-xl"
+      >
         {r}
       </div>
     );
@@ -51,26 +69,67 @@ function ClassAllotment({ room, roomArray, rows, columns, rangesSingle, exam }) 
     let row = [];
     let tableCounter = 0;
     let tableIndex = 0;
-
+    console.log("ROOM ARRAY INSIDE LMAO", roomArray);
     roomArray.forEach((i) => {
-      row.push(
-        <tr className="h-4" key={i}>
-          <td className="border-2 border-black h-4 p-2">
-            <b>{i[0][1].toUpperCase()}</b>{" "}
-            {" " +
-              i[0][2] +
-              YEARSUFFIX[i[0][2]] +
-              " Year " +
-              i[0][0].toString().slice(-3)}{" "}
-            <br /> <b>{i[1][1].toUpperCase()}</b>{" "}
-            {" " +
-              i[1][2] +
-              YEARSUFFIX[i[1][2]] +
-              " Year " +
-              i[1][0].toString().slice(-3)}
-          </td>
-        </tr>
-      );
+      console.log("I", i);
+
+      if ((i.length === 2) && (i[0] !== 0) && (i[1] !== 0)) {
+        row.push(
+          <tr className="h-4" key={i}>
+            <td className="border-2 border-black h-4 p-2">
+              <b>{i[0][1].toUpperCase()}</b>{" "}
+              {" " +
+                i[0][2] +
+                YEARSUFFIX[i[0][2]] +
+                " Year " +
+                i[0][0].toString().slice(-3)}{" "}
+              <br /> <b>{i[1][1].toUpperCase()}</b>{" "}
+              {" " +
+                i[1][2] +
+                YEARSUFFIX[i[1][2]] +
+                " Year " +
+                i[1][0].toString().slice(-3)}
+            </td>
+          </tr>
+        );
+      } else {
+        if (i[0] === 0) {
+          row.push(
+            <tr className="h-4" key={i}>
+              <td className="border-2 border-black h-4 p-2">
+                {" "}
+                <b>{i[1][1].toUpperCase()}</b>{" "}
+                {i[1][2] +
+                  YEARSUFFIX[i[1][2]] +
+                  " Year " +
+                  i[1][0].toString().slice(-3)}
+                <br/>{" "}
+              </td>
+            </tr>
+          );
+        } else if (i[1] === 0) {
+          row.push(
+            <tr className="h-4" key={i}>
+              <td className="border-2 border-black h-4 p-2">
+                <b>{i[0][1].toUpperCase()}</b>{" "}
+                {" " +
+                  i[0][2] +
+                  YEARSUFFIX[i[0][2]] +
+                  " Year " +
+                  i[0][0].toString().slice(-3)}
+                <br/>{" "}
+              </td>
+            </tr>
+          );
+        } else {
+          row.push(
+            <tr className="h-4" key={i}>
+              <td className="border-2 border-black h-4 p-2">
+                </td>
+            </tr>
+          )
+        }
+      }
       if (row.length === columns) {
         table2.push(
           <table key={i} className="border-2 border-black text-lg ">
@@ -127,8 +186,14 @@ function ClassAllotment({ room, roomArray, rows, columns, rangesSingle, exam }) 
           alt="dasd"
           className="object-contain"
         />
-        <h1 className="text-2xl text-center mt-4 font-bold"> {exam.toUpperCase()} </h1>
-        <h1 className="text-2xl text-center mt-4 "> Room: <b>{room}</b> </h1>
+        <h1 className="text-2xl text-center mt-4 font-bold">
+          {" "}
+          {exam.toUpperCase()}{" "}
+        </h1>
+        <h1 className="text-2xl text-center mt-4 ">
+          {" "}
+          Room: <b>{room}</b>{" "}
+        </h1>
         {rangesCreate(rangesSingle)}
         {/* {!downloading && <button onClick={downloadPDF}>Download PDF</button>} */}
       </div>
@@ -140,4 +205,3 @@ function ClassAllotment({ room, roomArray, rows, columns, rangesSingle, exam }) 
   );
 }
 export default ClassAllotment;
-
