@@ -5,6 +5,7 @@ import TemplateCard from "../components/TemplateCard";
 import Background from "../public/background.svg";
 import { PlusCircleIcon } from "@heroicons/react/outline";
 import { useTemplateData } from "../src/store";
+import Link from "next/link";
 
 async function getTemplateData() {
   try {
@@ -37,22 +38,17 @@ async function postTemplateData() {
   });
 }
 
-async function openForm() {
-  null;
-}
-
 async function Homepage() {
   // const data = await getData();
 
-
   const tdata = await getTemplateData();
-  console.log(tdata);
+  // console.log(tdata);
 
   const rdata = await getRoomData();
-  
+
   const roomSingle = rdata[0].rooms;
   const roomArray = Object.entries(roomSingle);
-  console.log(roomArray);
+  // console.log(roomArray);
 
   return (
     <div className="bg-white bg-background bg-cover">
@@ -61,21 +57,34 @@ async function Homepage() {
         <div className="flex flex-col">
           <Header />
           <div className="flex p-4 flex-wrap flex-row items-center">
-            {tdata.map((item: { id: any; rows: any; columns: any; room_strength: any; counts_in_bench: any; rooms: any; }) => (
-              <TemplateCard
-                key={item.id}
-                id={item.id}
-                rows={item.rows}
-                columns={item.columns}
-                room_strength={item.room_strength}
-                counts_in_bench={item.counts_in_bench}
-                rooms={item.rooms}
-              />
-            ))}
+            {tdata.map(
+              (item: {
+                id: any;
+                rows: any;
+                columns: any;
+                room_strength: any;
+                counts_in_bench: any;
+                rooms: any;
+              }) => (
+                <TemplateCard
+                  key={item.id}
+                  id={item.id}
+                  rows={item.rows}
+                  columns={item.columns}
+                  room_strength={item.room_strength}
+                  counts_in_bench={item.counts_in_bench}
+                  rooms={item.rooms}
+                />
+              )
+            )}
             <div className="flex flex-col items-center justify-center w-1/4 h-1/4 m-4 p-4 min-h-[200px] rounded-2xl bg-screen">
               <div className="flex flex-col items-center justify-center">
-                <PlusCircleIcon className="h-20 w-20 text-black cursor-pointer hover:text-gray transition duration-400 ease-out scale-105" />
-                <h1 className="text-2xl font-semibold text-center">Create New Template</h1>
+                <Link href="/templateform">
+                  <PlusCircleIcon className="h-20 w-20 text-black cursor-pointer hover:text-gray transition duration-400 ease-out scale-105" />
+                </Link>
+                <h1 className="text-2xl font-semibold text-center">
+                  Create New Template
+                </h1>
               </div>
             </div>
           </div>

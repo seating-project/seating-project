@@ -1,11 +1,11 @@
-"use client"
+"use client";
 
-import { useEffect } from 'react';
+import { useEffect } from "react";
 
 const LoadingPage = () => {
   useEffect(() => {
-    const loadingElem = document.getElementById('loading');
-    const loadingTextElem = document.getElementById('loading-text');
+    const loadingElem = document.getElementById("loading");
+    const loadingTextElem = document.getElementById("loading-text");
     let loading = 0;
 
     const loadingInterval = setInterval(() => {

@@ -232,6 +232,23 @@ class Timetable(models.Model):
     def __str__(self):
         return (self.date + " " + self.name)
 
+class Exam(models.Model):
+
+    exam_id = models.BigAutoField(primary_key=True)
+    exam_name = models.CharField(max_length=200)
+    exam_fromdate = models.DateField()
+    exam_todate = models.DateField()
+    exam_template = models.ForeignKey(ExamTemplate, models.CASCADE) 
+    exam_depts = models.JSONField()
+
+    class Meta:
+        verbose_name = 'Exam'
+        verbose_name_plural = 'Exams'
+
+    def __str__(self):
+        return self.exam_name
+
+
 # class RoomRanges(models.Model):
 #     id = models.BigAutoField(primary_key=True, null=False)
 #     room_range = models.JSONField(blank=True, null=True)
