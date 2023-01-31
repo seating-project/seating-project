@@ -2,239 +2,142 @@
 
 import Image from "next/image";
 import { useDeptID } from "../src/store";
+import React, { useRef, useEffect, useState } from "react";
+import { jsPDF, HTMLOptionImage } from "jspdf";
+import { toPng, toCanvas } from "html-to-image";
+import dynamic from "next/dynamic";
+const GeneratePDF = dynamic(() => import("../components/GeneratePDF"), {
+  ssr: false,
+});
 
-function ClassAllotment({ room, roomArray, rows, columns }) {
+const YEARSUFFIX = {
+  1: "st",
+  2: "nd",
+  3: "rd",
+  4: "th",
+};
+
+function ClassAllotment({ room, roomArray, rows, columns, rangesSingle, exam }) {
   const deptID = useDeptID.getState().dept_id_object;
+  const componentRef = useRef();
+  const [downloading, setDownloading] = useState(false);
 
+  const rangesCreate = (rangesSingle) => {
+    let rangesDiv = [];
+    let r = [];
+    let count = 0;
+    for (const i in rangesSingle) {
+      r.push(<p key={i}><b>{i.toUpperCase() + YEARSUFFIX[rangesSingle[i][0][2]] + " Year"}</b> <br/> {rangesSingle[i][0][0] + " to " + rangesSingle[i][rangesSingle[i].length-1][0]}</p>);
+      count++;
+    }
+    rangesDiv.push(
+      <div key={count} className="flex flex-col justify-center mt-4 pt-4 text-xl">
+        {r}
+      </div>
+    );
+    return rangesDiv;
+  };
+  const downloadPDF = async () => {
+    setDownloading(true);
+    const image = await toPng(componentRef.current, { quality: 0.95 });
+    const doc = new jsPDF();
+
+    doc.addImage(image, "JPEG", 5, 22, 200, 160);
+    doc.save();
+  };
   const create = (room, roomArray, rows) => {
     let tables = [];
     let table2 = [];
+    let row = [];
+    let tableCounter = 0;
+    let tableIndex = 0;
 
-    roomArray.forEach((row) => {
-      let children = [];
-      row.forEach((col, j) => {
-        children.push(
-          <tr>
-            <td>
-              {deptID[col[0].toString().slice(6, 9)] +
-                col[0].toString().slice(-3) +
-                " " +
-                deptID[col[1].toString().slice(6, 9)] +
-                col[1].toString().slice(-3)}
-            </td>
-          </tr>
+    roomArray.forEach((i) => {
+      row.push(
+        <tr className="h-4" key={i}>
+          <td className="border-2 border-black h-4 p-2">
+            <b>{i[0][1].toUpperCase()}</b>{" "}
+            {" " +
+              i[0][2] +
+              YEARSUFFIX[i[0][2]] +
+              " Year " +
+              i[0][0].toString().slice(-3)}{" "}
+            <br /> <b>{i[1][1].toUpperCase()}</b>{" "}
+            {" " +
+              i[1][2] +
+              YEARSUFFIX[i[1][2]] +
+              " Year " +
+              i[1][0].toString().slice(-3)}
+          </td>
+        </tr>
+      );
+      if (row.length === columns) {
+        table2.push(
+          <table key={i} className="border-2 border-black text-lg ">
+            <thead>
+              <tr key={i} className="h-16 text-4xl">
+                <th className="border border-black text-xl p-2">
+                  {"Row " + (tableIndex + 1)}
+                </th>
+              </tr>
+            </thead>
+            <tbody>{row}</tbody>
+          </table>
         );
-      });
+        row = [];
+        tableCounter++;
+        tableIndex++;
+      }
     });
-  }
-    return (
-      <div className="flex flex-row h-[80vh]">
-        <div className="w-2/5">
-          <Image
-            src="/cit.png"
-            width={400}
-            height={300}
-            alt="dasd"
-            className="object-contain"
-          />
+
+    if (row.length > 0) {
+      table2.push(
+        <table className="border-2 border-black min-h-[700px] ">
+          <thead>
+            <tr>
+              <th className="border-2 border-solid border-black">
+                {"Row " + (tableIndex + 1)}
+              </th>
+            </tr>
+          </thead>
+          <tbody>{row}</tbody>
+        </table>
+      );
+    }
+
+    if (table2.length > 0) {
+      tables.push(
+        <div
+          key={table2}
+          className="flex flex-row justify-center items-center min-h-[700px] overflow-x-auto "
+        >
+          {table2}
         </div>
-        <div className="flex flex-col justify-center items-center h-screen w-3/5">
-          {/* {create(room, roomArray, rows)} */}
-        </div>
+      );
+    }
+    return tables;
+  };
+  return (
+    <div ref={componentRef} className="flex flex-row mt-4">
+      <div className="w-2/5 m-4 items-center">
+        <Image
+          src="/cit.png"
+          width={300}
+          height={300}
+          alt="dasd"
+          className="object-contain"
+        />
+        <h1 className="text-2xl text-center mt-4 font-bold"> {exam.toUpperCase()} </h1>
+        <h1 className="text-2xl text-center mt-4 "> Room: <b>{room}</b> </h1>
+        {rangesCreate(rangesSingle)}
+        {/* {!downloading && <button onClick={downloadPDF}>Download PDF</button>} */}
       </div>
-    );
+      <div className="flex flex-col m-4 justify-center items-center w-3/5">
+        {create(room, roomArray, rows)}
+        <GeneratePDF html={componentRef} />
+      </div>
+    </div>
+  );
 }
 export default ClassAllotment;
 
-// import React, { useRef, useEffect } from "react";
-// import html2canvas from "html2canvas";
-// import jsPDF from "jspdf";
-
-// const ClassAllotment = ({ room, roomArray, rows, columns,  }) => {
-//   const deptID = useDeptID.getState().dept_id_object;
-//   const tableRef = useRef(null);
-
-//   // useEffect(() => {
-//   //   const generatePDF = async () => {
-//   //     const canvas = await html2canvas(tableRef.current, {
-//   //       scale: 2,
-//   //       scrollY: -window.scrollY,
-//   //     });
-//   //     const pdf = new jsPDF("l", "mm", "a4");
-//   //     pdf.addImage(canvas.toDataURL("image/png"), "JPEG", 0, 0, 297, 210);
-//   //     pdf.save(`class_allotment_${room}.pdf`);
-//   //   };
-
-//   //   generatePDF();
-//   // }, []);
-
-//   const createTable = (room, roomArray, rows) => {
-//     let tables = [];
-//     let table2 = [];
-
-//     console.log("roomArray[i][0]: ", roomArray[0][0][0]);
-
-//     for (let i = 0; i < rows; i++) {
-//       let children = [];
-//       for (let j = 0; j < columns; j++) {
-//         children.push(
-//           <tr className="h-20 justify-center w-40">
-//             <td className="border-2 text-center justify-center p-10 text-xl w-40 ">
-//               {deptID[roomArray[j][0][0].toString().slice(6, 9)] +
-//                 roomArray[j][0][0].toString().slice(-3) +
-//                 " " +
-//                 deptID[roomArray[j][1][0].toString().slice(6, 9)] +
-//                 roomArray[j][1][0].toString().slice(-3)}
-//             </td>
-//           </tr>
-//         );
-//       }
-//       table2.push(
-//         <div className="flex flex-col items-center justify-center mt-4">
-//           <table className="table-fixed p-4 border-2 border-black w-full">
-//             <thead className="h-20 text-2xl text-center w-40 p-5">
-//               <tr className="w-32">
-//                 <th>Row {i + 1}</th>
-//               </tr>
-//             </thead>
-//             <tbody className="min-h-[500px]">{children}</tbody>
-//           </table>
-//         </div>
-//       );
-//     }
-//     tables.push(
-//       <div className="flex flex-row justify-center items-center m-2 mr-8">
-//         {table2}
-//       </div>
-//     );
-//     console.log("tables: ", tables)
-//     return tables;
-//   };
-
-//   return (
-//     <div
-//       // ref={tableRef}
-//       className="flex flex-row text-xl font-medium p-5 min-h-screen min-w-full pl-4 "
-//       key = {room}
-//     >
-//       <div className="w-2/5 min-w-[500px]">
-//         <Image
-//           src="/cit.png"
-//           width={400}
-//           height={300}
-//           alt="dasd"
-//           className="object-contain"
-//         />
-//       </div>
-//       <div className="flex flex-col p-4 h-screen w-3/5">
-//         {createTable(room, roomArray, rows, columns)}
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default ClassAllotment;
-
-// console.log("roomArray[i][0]: ", roomArray[0][0][0]);
-// console.log("rows: ", rows);
-// for (let i = 0; i < rows; i++) {
-//   let children = [];
-//   for (let j = 0; j < columns; j++) {
-//     children.push(
-//       <tr>
-//         <td>
-//           {deptID[roomArray[j][0][0].toString().slice(6, 9)] +
-//             roomArray[j][0][0].toString().slice(-3) +
-//             " " +
-//             deptID[roomArray[j][1][0].toString().slice(6, 9)] +
-//             roomArray[j][1][0].toString().slice(-3)
-//             }
-//         </td>
-//       </tr>
-//     );
-//   }
-//   console.log("children: ", children);
-//   table2.push(
-//     <div>
-//       <table>
-//         <thead>
-//           <tr>
-//             <th>Row {i + 1}</th>
-//           </tr>
-//         </thead>
-//         <tbody>{children}</tbody>
-//       </table>
-//     </div>
-//   );
-// }
-// tables.push(
-//   <div className="flex flex-row justify-center items-center m-2 mr-8" key={room}>
-//     {table2}
-//   </div>
-// );
-// console.log("tables: ", tables);
-// return tables;
-
-//   // function ClassAllotment({ room, roomArray, rows, columns }) {
-//   //   const deptID = useDeptID.getState().dept_id_object;
-
-//   //   const create = (room, roomArray, rows) => {
-//   //     let tables = [];
-//   //     let table2 = [];
-
-//   //     console.log("roomArray[i][0]: ", roomArray[0][0][0]);
-
-//   //     for (let i = 0; i < rows; i++) {
-//   //       let children = [];
-//   //       for (let j = 0; j < columns; j++) {
-//   //         children.push(
-//   //           <tr className="h-[100px]">
-//   //             <td className="border-2 p-5 text-xl text-center w-[150px]">
-//   //               {deptID[roomArray[j][0][0].toString().slice(6, 9)] +
-//   //                 roomArray[j][0][0].toString().slice(-3) +
-//   //                 " " +
-//   //                 deptID[roomArray[j][1][0].toString().slice(6, 9)] +
-//   //                 roomArray[j][1][0].toString().slice(-3)}
-//   //             </td>
-//   //           </tr>
-//   //         );
-//   //       }
-//   //       table2.push(
-//   //         <table className="table-auto border-spacing-1 border-black border-2 w-full m-5 p-2">
-//   //           <thead>
-//   //             <tr className="h-[10  0px] text-2xl w-[150px] p-5 text-center">
-//   //               <th>Row {i + 1}</th>
-//   //             </tr>
-//   //           </thead>
-//   //           <tbody>{children}</tbody>
-//   //         </table>
-//   //       );
-//   //     }
-//   //     tables.push(<div className="flex flex-row justify-center justify-items-center m-2 mr-8  ">{table2}</div>);
-//   //     return tables;
-//   //   };
-
-//   // let table = []
-//   // let done = []
-//   // let head=[]
-//   // for (let i=1; i<=rows; i++) {
-
-//   //   head.push(<th className='block [&:not(:last-child)]:border-b-0 '>Row {i}</th>)
-//   // }
-//   // done.push(<thead className='flex shrink-0 min-w-min'><tr>{head}</tr></thead>)
-//   // for (let i=0; i<rows; i++) {
-//   //   let children = []
-
-//   //   for (let j=0; j<columns; j++) {
-//   //     children.push(<td className='block !bg-none border-l-0 [&:not(:last-child)]:border-b-0'>{i}{j}</td>)
-//   //   }
-//   //   if (i%2==0) {
-//   //     table.push(<tr className='flex flex-col min-w-min shrink-0'>{children}</tr>)
-//   //   } else {
-//   //     children.reverse()
-//   //     table.push(<tr>{children}</tr>)
-//   //   }
-
-//   // }
-//   // done.push(<tbody className='flex relative overflow-x-auto overflow-y-hidden'>{table}</tbody>)
-//   // return done

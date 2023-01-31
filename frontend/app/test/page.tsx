@@ -44,11 +44,10 @@ async function Testpage() {
 
   const rdata = await getRoomData();
   const roomSingle = rdata[0].rooms;
+  const rangesNeeded = rdata[0].ranges;
   const roomArray = Object.entries(roomSingle);
-  console.log("F1" , roomSingle["F1"])
   const tdata = await getTemplateData();
-  console.log(roomSingle)
-  console.log(tdata);
+  console.log(rangesNeeded["F1"])
 
   return (
     // <div className="bg-white h-screen w-screen">
@@ -59,7 +58,7 @@ async function Testpage() {
     //   })
     //   }
     // </div>
-    <ClassAllotment key={"F1"} room={"F1"} roomArray={roomSingle["F1"]} rows={tdata[0].num_rows} columns={tdata[0].num_columns}/>
+    <ClassAllotment key={"F1"} room={"F1"} roomArray={roomSingle["F1"]} rows={tdata[0].num_rows} columns={tdata[0].num_columns} rangesSingle={rangesNeeded["F1"]} exam={tdata[0].template_exam_name}/>
   )
 }
 
