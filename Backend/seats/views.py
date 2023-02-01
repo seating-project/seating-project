@@ -1,8 +1,8 @@
 from django.shortcuts import render
 from rest_framework import generics, status
 
-from .models import Cseii, Mechii, ExamTemplate, Students, RoomData
-from .serializers import CseiiSerializer, MechiiSerializer, ExamTemplateSerializer, CreateExamTemplateSerializer, RoomDataSerializer, StudentsSerializer
+from .models import Cseii, Mechii, ExamTemplate, Students, RoomData, Exam
+from .serializers import CseiiSerializer, MechiiSerializer, ExamTemplateSerializer, CreateExamTemplateSerializer, RoomDataSerializer, StudentsSerializer, ExamSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from asgiref.sync import async_to_sync, sync_to_async
@@ -223,7 +223,9 @@ class StudentsList(generics.ListAPIView):
     queryset = Students.objects.all()
     serializer_class = StudentsSerializer
 
-
+class ExamList(generics.ListAPIView):
+    queryset = Exam.objects.all()
+    serializer_class = ExamSerializer
 
 
 
