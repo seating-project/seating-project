@@ -1,9 +1,5 @@
 // {key, id, rows, columns, room_strength, counts_in_bench, rooms}
 
-
-
-
-
 const TemplateCard = ({
   key,
   id,
@@ -18,9 +14,11 @@ const TemplateCard = ({
       <div className="flex flex-col">
         <p className="font-bold text-4xl p-2">Template {id}</p>
       </div>
-      <div className="flex flex-row items-center inline-block relative text-blue after:content-[''] after:absolute after:w-full 
+      <div
+        className="flex flex-row items-center inline-block relative text-blue after:content-[''] after:absolute after:w-full 
         after:scale-x-0 after:h-[2px] after:bottom-0 after:left-0 after:bg-[#0087ca] after:origin-bottom-right after:transition-transform
-        after:duration-300 ease-out hover:after:scale-x-100 hover:after:origin-bottom-left justify-between pr-2">
+        after:duration-300 ease-out hover:after:scale-x-100 hover:after:origin-bottom-left justify-between pr-2"
+      >
         <p className="font-normal text-xl p-2"> See more </p>
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -42,4 +40,3 @@ const TemplateCard = ({
 };
 
 export default TemplateCard;
-
