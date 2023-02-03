@@ -3,6 +3,7 @@ import Navbar from "../../components/Navbar";
 import Header from "../../components/Header";
 import TemplateCard from "../../components/TemplateCard";
 import ClassAllotment from "../../pdf_components/ClassAllotment";
+import NoticeBoardCopy from "../../pdf_components/NoticeBoardCopy";
 
 async function getTemplateData() {
   try {
@@ -47,12 +48,12 @@ async function Testpage() {
   const rangesNeeded = rdata[0].ranges;
   const roomArray = Object.entries(roomSingle);
   const tdata = await getTemplateData();
-  console.log(roomSingle["F1"]);
-  console.log(rangesNeeded["F1"]);
+  console.log(roomSingle);
+  console.log(rangesNeeded);
 
   return (
     <div className="bg-white h-screen w-screen">
-      {Object.keys(roomSingle).map((room) => {
+      {/* {Object.keys(roomSingle).map((room) => {
         return (
           <ClassAllotment
             key={room}
@@ -64,7 +65,8 @@ async function Testpage() {
             exam={tdata[0].template_exam_name}
           />
         );
-      })}
+      })} */}
+      <NoticeBoardCopy ranges={rangesNeeded} exam={tdata[0].template_exam_name} />
     </div>
   );
 }

@@ -70,6 +70,7 @@ function ClassAllotment({
     let tableCounter = 0;
     let tableIndex = 0;
     console.log("ROOM ARRAY INSIDE LMAO", roomArray);
+    
     roomArray.forEach((i) => {
       console.log("I", i);
 
@@ -125,7 +126,7 @@ function ClassAllotment({
           row.push(
             <tr className="h-4" key={i}>
               <td className="border-2 border-black h-4 p-2">
-                </td>
+              </td>
             </tr>
           )
         }
