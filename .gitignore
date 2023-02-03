@@ -1,22 +1,21 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
-
-# dependencies
-/node_modules
+/Backend/core/creds.py
+/Backend/core/__pycache__/
+/frontend/node_modules/
 /.pnp
 .pnp.js
 
 # testing
-/coverage
+/frontend/coverage
 
 # next.js
-/.next/
-/out/
+/frontend/.next/
+/front/out/
 
 # production
-/build
+/frontend/build
 
 # misc
-.DS_Store
+/frontend/.DS_Store
 *.pem
 
 # debug
@@ -33,4 +32,4 @@ yarn-error.log*
 
 # typescript
 *.tsbuildinfo
-next-env.d.ts
+/frontend/next-env.d.ts
