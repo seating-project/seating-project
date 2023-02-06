@@ -12,7 +12,7 @@ class CSVImportForm(forms.Form):
 
 class StudentsAdmin(admin.ModelAdmin):
 
-    list_display = ("name", "registerno", "dept")
+    list_display = ("name", "registerno", "dept", "year")
 
     def get_urls(self):
         urls = super().get_urls()

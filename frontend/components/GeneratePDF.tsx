@@ -6,15 +6,40 @@ type props = {
 };
 
 const GeneratePdf: React.FC<props> = ({ html }) => {
+  // const generateImage = async () => {
+  //   const image = await toPng(html.current, { quality: 0.95 });
+  //   const doc = new jsPDF({
+  //     orientation: "portrait",
+  //     unit: "mm",
+  //     format: "a4",
+  //   });
+  
+  //   const imgHeight = html.current.offsetHeight;
+  //   const pageHeight = 297;
+  //   let currentPage = 1;
+  //   let y = 0;
+  
+  //   while (y < imgHeight) {
+  //     doc.addPage();
+  //     y = 0;
+  //     let h = imgHeight - y > pageHeight ? pageHeight : imgHeight - y;
+  //     doc.addImage(image, "JPEG", 0, y, 210, h, "", "FAST");
+  //     y += h;
+  //     currentPage++;
+  //   }
+  
+  //   doc.save();
+  // };
+  
   const generateImage = async () => {
     const image = await toPng(html.current, { quality: 0.95 });
     const doc = new jsPDF({
-      orientation: "landscape",
+      orientation: "portrait",
       unit: "mm",
       format: "a4",
     });
 
-    doc.addImage(image, "JPEG", 5, 22, 350, 160);
+    doc.addImage(image, "JPEG", 0, 0, 210, 297);
     doc.save();
   };
   return (

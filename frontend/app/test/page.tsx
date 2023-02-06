@@ -4,6 +4,7 @@ import Header from "../../components/Header";
 import TemplateCard from "../../components/TemplateCard";
 import ClassAllotment from "../../pdf_components/ClassAllotment";
 import NoticeBoardCopy from "../../pdf_components/NoticeBoardCopy";
+import Attendance from "../../pdf_components/Attendance";
 
 async function getTemplateData() {
   try {
@@ -48,11 +49,14 @@ async function Testpage() {
   const rangesNeeded = rdata[0].ranges;
   const roomArray = Object.entries(roomSingle);
   const tdata = await getTemplateData();
-  console.log(roomSingle);
-  console.log(rangesNeeded);
+  console.log(tdata);
+  //console.log("ROOM SINGLE LOL",roomSingle);
+  //console.log("RANGES LMAO", rangesNeeded);
+  //console.log("room length", roomSingle["F1"].length)
+  console.log("room length", tdata[0].room_strength)
 
   return (
-    <div className="bg-white h-screen w-screen">
+    <div className="bg-white h-screen w-screen" >
       {/* {Object.keys(roomSingle).map((room) => {
         return (
           <ClassAllotment
@@ -63,10 +67,15 @@ async function Testpage() {
             columns={tdata[0].num_columns}
             rangesSingle={rangesNeeded[room]}
             exam={tdata[0].template_exam_name}
+            room_strength = {tdata[0].room_strength}
+            single_seater = {tdata[0].single_seater}
+            boys_girls_separation = {tdata[0].boys_girls_separation}
+            
           />
         );
       })} */}
-      <NoticeBoardCopy ranges={rangesNeeded} exam={tdata[0].template_exam_name} />
+      {/* <NoticeBoardCopy ranges={rangesNeeded} exam={tdata[0].template_exam_name} /> */}
+      <Attendance />
     </div>
   );
 }

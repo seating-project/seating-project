@@ -165,11 +165,11 @@ class ExamTemplate(models.Model):
     num_rows = models.IntegerField(default=5)
     num_columns = models.IntegerField(default=6)
     room_strength = models.IntegerField(default=60)
-    count_in_bench = models.IntegerField(default=2)
+    #count_in_bench = models.IntegerField(default=2)
     rooms = models.JSONField()
     single_seater = models.BooleanField(default=False)
     boys_girls_separation = models.BooleanField(default=False)
-    needed_documents = models.ForeignKey(NeededDocuments, models.CASCADE)
+    #needed_documents = models.ForeignKey(NeededDocuments, models.CASCADE)
 
     class Meta:
         verbose_name = 'Exam Template'
@@ -194,8 +194,7 @@ class RoomData(models.Model):
 
 class Students(models.Model):
 
-    registerno = models.BigIntegerField(
-        primary_key=True, blank=True, null=False)
+    registerno = models.CharField(max_length=20, primary_key=True, blank=True, null=False)
     name = models.TextField(blank=True, null=True)
     gender = models.TextField(blank=True, null=True)
     dept = models.CharField(max_length=10, blank=True, null=True)

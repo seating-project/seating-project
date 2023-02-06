@@ -1,0 +1,26 @@
+
+/* styles/Page.module.css */
+
+.page {
+  margin: auto; /* centers element within parent container */
+  background: white; /* ofcourse we want our pdf background to be white */
+  position: relative; /* for child elements that need absolute positioning */
+
+  /* below is the width/height for an A4 sized sheet. For other standards lookup 
+       the dimensios and apply those. */
+  width: 210mm;
+  height: 297mm;
+
+  padding: 32px;
+  /* optional: Add drop shadow for floating paper effect. */
+  filter: drop-shadow(0 10px 8px rgb(0 0 0 / 0.04))
+    drop-shadow(0 4px 3px rgb(0 0 0 / 0.1));
+
+    /* optional: Add a border for a more realistic look. */
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+@page {
+  size: A4;
+  margin: 0;
+}
