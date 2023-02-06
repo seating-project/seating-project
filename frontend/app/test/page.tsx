@@ -4,7 +4,7 @@ import Header from "../../components/Header";
 import TemplateCard from "../../components/TemplateCard";
 import ClassAllotment from "../../pdf_components/ClassAllotment";
 import NoticeBoardCopy from "../../pdf_components/NoticeBoardCopy";
-import Attendance from "../../pdf_components/Attendance";
+import AttendanceSheets from "../../pdf_components/AttendanceSheets";
 
 async function getTemplateData() {
   try {
@@ -74,8 +74,8 @@ async function Testpage() {
           />
         );
       })} */}
-      {/* <NoticeBoardCopy ranges={rangesNeeded} exam={tdata[0].template_exam_name} /> */}
-      <Attendance />
+      <NoticeBoardCopy ranges={rangesNeeded} exam={tdata[0].template_exam_name} />
+      <AttendanceSheets ranges = {rangesNeeded}/>
     </div>
   );
 }

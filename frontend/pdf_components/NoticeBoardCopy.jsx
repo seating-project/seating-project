@@ -8,6 +8,7 @@ const GeneratePDF = dynamic(() => import("../components/GeneratePDF"), {
   ssr: false,
 });
 import Page from "../components/PotraitPage";
+import styles from "../styles/NoticeBoardCopy.module.css";
 
 const YEARSUFFIX = {
   1: "st",
@@ -35,6 +36,13 @@ const NoticeBoardCopy = ({ ranges, exam }) => {
       }
     });
   });
+  // Sorting the object
+  let sorted = {};
+  Object.keys(dept_and_their_ranges).sort().reduce(function (r, k) {
+    return sorted[k] = dept_and_their_ranges[k];
+  }, {});
+  dept_and_their_ranges = sorted;
+
   console.log("DEPT SPECIFIC STUFF", dept_and_their_ranges);
   console.log("DEPT SPECIFIC ONLY CSE", dept_and_their_ranges["cse 2"]);
 
@@ -101,7 +109,7 @@ const NoticeBoardCopy = ({ ranges, exam }) => {
         </td>
       );
       sed.push(
-        <tr key={c} className="border-2 p-2 text-center">
+        <tr key={c} className={styles.unbreak}>
           {r}
         </tr>
       );
@@ -116,7 +124,7 @@ const NoticeBoardCopy = ({ ranges, exam }) => {
       </a>
       <Page>
         <div
-          className="flex flex-col items-center justify-center"
+          className="items-center justify-center"
           ref={componentRef}
         >
           {/* <GeneratePDF html={componentRef}/> */}
@@ -124,7 +132,7 @@ const NoticeBoardCopy = ({ ranges, exam }) => {
             <Image src="/cit.png" alt="logo" width={308} height={380} />
             <h1 className="text-4xl font-semibold p-4">{exam}</h1>
           </div>
-          <div className="flex flex-col">
+          <div className="">
             <table className="border-2 ">
               <thead>
                 <tr>
@@ -146,12 +154,12 @@ const NoticeBoardCopy = ({ ranges, exam }) => {
                   <th className="border-2 p-4">End</th>
                 </tr>
               </thead>
-              <tbody>
+              
                 {Object.keys(dept_and_their_ranges).map((dept) => {
-                  return <>{roomRanges(dept)}</>;
+                  return <tbody className={styles.unbreak}>{roomRanges(dept)}</tbody>;
                 })}
                 {/* {roomRanges('cse 2') } */}
-              </tbody>
+              
             </table>
           </div>
         </div>
