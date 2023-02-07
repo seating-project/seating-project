@@ -27,6 +27,6 @@
     ".next/types/**/*.ts",
     "pdf_components/ClassAllotment.jsx",
     "components/ExamCard.jsx"
-  ],
+, "components/TimeTable.jsx"  ],
   "exclude": ["node_modules"]
 }

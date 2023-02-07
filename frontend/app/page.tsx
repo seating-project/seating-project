@@ -8,7 +8,7 @@ import ExamCard from "../components/ExamCard";
 
 async function getExamData() {
   try {
-    const res = await axios.get("http://localhost:8000/exam/");
+    const res = await axios.get("http://127.0.0.1:8080/exams/");
     return res.data;
   } catch (error) {
     console.error(error);
@@ -17,7 +17,7 @@ async function getExamData() {
 }
 
 async function postExamData() {
-  const res = await axios.post("http://127.0.0.1:8000/createexamtemplate/", {
+  const res = await axios.post("http://127.0.0.1:8080/createexamtemplate/", {
     exam_id: 2,
     exam_name: "Internal Assessment 2",
     exam_fromdate: "2023-02-03",
@@ -28,8 +28,6 @@ async function postExamData() {
 }
 
 async function Homepage() {
-  // const data = await getData();
-
   const edata = await getExamData();
   console.log(edata);
 

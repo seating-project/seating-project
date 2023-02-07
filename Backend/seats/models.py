@@ -165,11 +165,11 @@ class ExamTemplate(models.Model):
     num_rows = models.IntegerField(default=5)
     num_columns = models.IntegerField(default=6)
     room_strength = models.IntegerField(default=60)
-    count_in_bench = models.IntegerField(default=2)
+    # count_in_bench = models.IntegerField(default=2)
     rooms = models.JSONField()
     single_seater = models.BooleanField(default=False)
     boys_girls_separation = models.BooleanField(default=False)
-    needed_documents = models.ForeignKey(NeededDocuments, models.CASCADE)
+    # needed_documents = models.ForeignKey(NeededDocuments, models.CASCADE)
 
     class Meta:
         verbose_name = 'Exam Template'
