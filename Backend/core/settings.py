@@ -51,7 +51,7 @@ JAZZMIN_SETTINGS = {
     "site_header": "Seatz Admin",
     "site_brand": "Seatz Admin",
 
-    "copyright": "2021 Seatz",
+    "copyright": "Seatz",
 
     
     "welcome_sign": "Welcome to Seatz Admin",
@@ -72,6 +72,25 @@ MIDDLEWARE = [
 ]
 
 CORS_ORIGIN_ALLOW_ALL = True
+
+# CSRF_TRUSTED_ORIGINS = [
+#     'http://localhost:3000',
+#     'http://127.0.0.1:8000',
+#     'http://127.0.0.1:3000',
+#     'http://localhost:8000',
+# ]
+
+# ALLOWED_HOSTS = [
+#     'localhost',
+# ]
+
+# CORS_ORIGIN_WHITELIST = [
+#     'http://localhost:3000',
+#     'http://localhost:8000',
+#     'http://127.0.0.1:3000',
+#     'http://127.0.0.1:8000',
+
+# ]
 
 ROOT_URLCONF = "core.urls"
 

@@ -410,6 +410,7 @@ admin.site.register(Civilii, CiviliiAdmin)
 admin.site.register(RoomData)
 admin.site.register(Students, StudentsAdmin)
 admin.site.register(NeededDocuments)
+admin.site.register(Exam)
 
 
 # admin.site.site_header = "Seat Allocation System"

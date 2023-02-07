@@ -20,7 +20,7 @@ export default function ExamForm() {
   return (
     <div className="p-8 justify-center items-center">
       <h1 className="font-semibold pt-5 text-4xl">New Exam</h1>
-      <form action="/api/form" method="post">
+      <form action="/createexam" method="post">
         <div className="mt-8 ">
           <label className="block my-5" htmlFor="templatename">
             <span>Exam Name</span>

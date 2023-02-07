@@ -25,7 +25,11 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "pdf_components/ClassAllotment.jsx"
-, "pdf_components/NoticeBoardCopy.jsx", "pdf_components/Attendance.jsx"  ],
+    "pdf_components/ClassAllotment.jsx",
+    "pdf_components/NoticeBoardCopy.jsx", 
+    "pdf_components/Attendance.jsx", 
+    "components/ExamCard.jsx",
+    "components/TimeTable.jsx"  
+  ],
   "exclude": ["node_modules"]
 }
