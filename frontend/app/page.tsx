@@ -83,7 +83,7 @@ async function Homepage() {
                   <PlusCircleIcon className="h-20 w-20 text-black cursor-pointer hover:text-gray transition duration-400 ease-out scale-105" />
                 </Link>
                 <h1 className="text-2xl font-semibold text-center">
-                  Create New Template
+                  Create New Exam
                 </h1>
               </div>
             </div>
