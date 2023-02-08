@@ -119,7 +119,7 @@ const NoticeBoardCopy = ({ ranges, exam }) => {
 
   return (
     <>
-      <a href="/api/pdf" download="class_allotment.pdf" className="downloadBtn">
+      <a href="/api/pdf" download="notice_board_copy.pdf" className="downloadBtn">
         Download PDF
       </a>
       <Page>
@@ -129,11 +129,11 @@ const NoticeBoardCopy = ({ ranges, exam }) => {
         >
           {/* <GeneratePDF html={componentRef}/> */}
           <div className="flex flex-col items-center justify-center p-4">
-            <Image src="/cit.png" alt="logo" width={308} height={380} />
+            <Image src="/citlogo.png" alt="logo" width={600} height={680} />
             <h1 className="text-4xl font-semibold p-4">{exam}</h1>
           </div>
-          <div className="">
-            <table className="border-2 ">
+          <div className="ml-4">
+            <table className="border-2 " width={700}>
               <thead>
                 <tr>
                   <th className="border-2 p-4" rowSpan={2}>
@@ -146,12 +146,12 @@ const NoticeBoardCopy = ({ ranges, exam }) => {
                     Register No
                   </th>
                   <th className="border-2 p-4" rowSpan={2}>
-                    Count
+                    Total
                   </th>
                 </tr>
                 <tr>
-                  <th className="border-2 p-4">Start</th>
-                  <th className="border-2 p-4">End</th>
+                  <th className="border-2 p-4">From</th>
+                  <th className="border-2 p-4">To</th>
                 </tr>
               </thead>
               
