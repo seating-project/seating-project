@@ -8,7 +8,7 @@ import AttendanceSheets from "../../pdf_components/AttendanceSheets";
 
 async function getTemplateData() {
   try {
-    const res = await axios.get("http://127.0.0.1:8000/examtemplate/");
+    const res = await axios.get("http://127.0.0.1:8080/examtemplate/");
     return res.data;
   } catch (error) {
     console.error(error);
@@ -18,7 +18,7 @@ async function getTemplateData() {
 
 async function getRoomData() {
   try {
-    const res = await axios.get("http://127.0.0.1:8000/roomdata/");
+    const res = await axios.get("http://127.0.0.1:8080/roomdata/");
     return res.data;
   } catch (error) {
     console.error(error);
@@ -27,7 +27,7 @@ async function getRoomData() {
 }
 
 async function postTemplateData() {
-  const res = await axios.post("http://127.0.0.1:8000/createexamtemplate/", {
+  const res = await axios.post("http://127.0.0.1:8080/createexamtemplate/", {
     id: "2",
     rows: 5,
     columns: 5,

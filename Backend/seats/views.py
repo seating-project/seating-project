@@ -53,8 +53,8 @@ class CreateExamTemplateView(APIView):
 
 class RoomDataList(generics.ListAPIView):
     pass
-    # curr_template = ExamTemplate.objects.filter(id=1)[0]
-    # RoomData.objects.all().delete()
+    curr_template = ExamTemplate.objects.filter(id=1)[0]
+    RoomData.objects.all().delete()
 
     # room = ['F1', 'F2', 'F3', 'F4', 'F5', 'F6', 'F7', 'F8', 'F9', 'F10', 'F11', 'F12', 'F13', 'F14', 'F15', 'F16']
     room = curr_template.rooms["rooms"]
@@ -101,7 +101,7 @@ class RoomDataList(generics.ListAPIView):
     depts = []
     for i in room:
 
-    #     if curr_template.single_seater == True:
+        if curr_template.single_seater == True:
 
             for j in range(curr_template.room_strength):
                 if c>=len(ckt_array) and c>=len(nckt_array):
@@ -153,55 +153,55 @@ class RoomDataList(generics.ListAPIView):
                         if ckt_array[c]:
                             curr_room.append([ckt_array[c], 0])
                     c+=1
-    
-            
-    #     room_dict[i] = curr_room
-    #     curr_room = []
-    #     if f == 1:
-    #         break
-    #     print()
-    #     print("ROOM DICT", room_dict)
-    #     for i in room_dict:
-    #         print(i)
-    #         for j in room_dict[i]:
-    #             print(j)
-    # for i in room_dict:
-    #     ranges_dict[i] = {}
 
-    #     if curr_template.single_seater == True:
-    #         for j in room_dict[i]:
-    #             if j[0] == 0:
-    #                 continue
-    #             if (j[0][1] + " " + str(j[0][2])) not in ranges_dict[i]:
-    #                 ranges_dict[i][j[0][1] + " " + str(j[0][2])] = []
-    #             ranges_dict[i][j[0][1] + " " + str(j[0][2])].append(j[0])
-    #     else:
-    #         for j in room_dict[i]:
-    #             if j[0] == 0:
-    #                 continue
-    #             if (j[0][1] + " " + str(j[0][2])) not in ranges_dict[i]:
-    #                 ranges_dict[i][j[0][1] + " " + str(j[0][2])] = []
-    #             ranges_dict[i][j[0][1] + " " + str(j[0][2])].append(j[0])
+            
+        room_dict[i] = curr_room
+        curr_room = []
+        if f == 1:
+            break
+        print()
+        print("ROOM DICT", room_dict)
+        for i in room_dict:
+            print(i)
+            for j in room_dict[i]:
+                print(j)
+    for i in room_dict:
+        ranges_dict[i] = {}
+
+        if curr_template.single_seater == True:
+            for j in room_dict[i]:
+                if j[0] == 0:
+                    continue
+                if (j[0][1] + " " + str(j[0][2])) not in ranges_dict[i]:
+                    ranges_dict[i][j[0][1] + " " + str(j[0][2])] = []
+                ranges_dict[i][j[0][1] + " " + str(j[0][2])].append(j[0])
+        else:
+            for j in room_dict[i]:
+                if j[0] == 0:
+                    continue
+                if (j[0][1] + " " + str(j[0][2])) not in ranges_dict[i]:
+                    ranges_dict[i][j[0][1] + " " + str(j[0][2])] = []
+                ranges_dict[i][j[0][1] + " " + str(j[0][2])].append(j[0])
         
-    #         for j in room_dict[i]:
-    #             if j[1] == 0:
-    #                 continue
-    #             if (j[1][1] + " " + str(j[1][2])) not in ranges_dict[i]:
-    #                 ranges_dict[i][j[1][1] + " " + str(j[1][2])] = []
-    #             ranges_dict[i][j[1][1] + " " + str(j[1][2])].append(j[1])
-    # # print(ranges_dict)  
-    # print()
+            for j in room_dict[i]:
+                if j[1] == 0:
+                    continue
+                if (j[1][1] + " " + str(j[1][2])) not in ranges_dict[i]:
+                    ranges_dict[i][j[1][1] + " " + str(j[1][2])] = []
+                ranges_dict[i][j[1][1] + " " + str(j[1][2])].append(j[1])
+    # print(ranges_dict)  
+    print()
 
             
 
-    # try:
-    #     i = room[(room.index(i)+1)]
-    #     room = room[(room.index(i)):]
-    # except:
-    #     pass
-    # model = RoomData(rooms=room_dict, ranges=ranges_dict)
-    # model.save()
-    # queryset = RoomData.objects.all()
+    try:
+        i = room[(room.index(i)+1)]
+        room = room[(room.index(i)):]
+    except:
+        pass
+    model = RoomData(rooms=room_dict, ranges=ranges_dict)
+    model.save()
+    queryset = RoomData.objects.all()
     
 class StudentsList(generics.ListAPIView):
     queryset = Students.objects.all()
