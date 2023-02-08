@@ -232,7 +232,6 @@ class Timetable(models.Model):
         return (self.date + " " + self.name)
 
 class Exam(models.Model):
-
     exam_id = models.BigAutoField(primary_key=True)
     exam_name = models.CharField(max_length=200)
     exam_fromdate = models.DateField()

@@ -1,5 +1,5 @@
 /Backend/core/creds.py
-/Backend/core/__pycache__/
+__pycache__/
 /frontend/node_modules/
 /.pnp
 .pnp.js
@@ -10,7 +10,7 @@
 # next.js
 /frontend/.next/
 /front/out/
-
+l'p
 # production
 /frontend/build
 

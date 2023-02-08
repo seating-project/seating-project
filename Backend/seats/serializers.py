@@ -37,3 +37,8 @@ class ExamSerializer(serializers.ModelSerializer):
     class Meta:
         model = Exam
         fields = '__all__'
+
+class CreateExamSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ExamTemplate
+        fields = '__all__'
