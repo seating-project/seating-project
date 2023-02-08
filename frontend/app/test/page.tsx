@@ -57,7 +57,7 @@ async function Testpage() {
 
   return (
     <div className="bg-white h-screen w-screen" >
-      {/* {Object.keys(roomSingle).map((room) => {
+      {Object.keys(roomSingle).map((room) => {
         return (
           <ClassAllotment
             key={room}
@@ -73,9 +73,9 @@ async function Testpage() {
             
           />
         );
-      })} */}
-      <NoticeBoardCopy ranges={rangesNeeded} exam={tdata[0].template_exam_name} />
-      <AttendanceSheets ranges = {rangesNeeded}/>
+      })}
+      {/* <NoticeBoardCopy ranges={rangesNeeded} exam={tdata[0].template_exam_name} /> */}
+      {/* <AttendanceSheets ranges = {rangesNeeded}/> */}
     </div>
   );
 }

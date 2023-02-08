@@ -26,6 +26,16 @@ const ROMAN = {
   5: "V",
 };
 
+const FLOORS = {
+  F: "First Floor",
+  S: "Second Floor",
+  T: "Third Floor",
+  MT: "Third Floor", 
+  EH: "New Building",
+};
+
+const REG = new RegExp("(?<=\\D)(?=\\d)|(?<=\\d)(?=\\D)");
+
 function ClassAllotment({
   room,
   roomArray,
@@ -47,15 +57,18 @@ function ClassAllotment({
     let count = 0;
     for (const i in rangesSingle) {
       r.push(
-        <p key={i}>
+        <p key={i} className="border-2 p-2">
           <b>
-            {i.split(" ")[0].toUpperCase() + " " + ROMAN[rangesSingle[i][0][2]]}
+            {i.split(" ")[0].toUpperCase() +
+              " " +
+              ROMAN[rangesSingle[i][0][2]] +
+              " - "}
           </b>{" "}
-          <br />{" "}
+          {columns==7 ? null : <br />}
           {rangesSingle[i][0][0] +
             " to " +
             rangesSingle[i][rangesSingle[i].length - 1][0]}
-          {" - "} {rangesSingle[i].length}
+          {" - "} <b>{rangesSingle[i].length}</b>
         </p>
       );
       count++;
@@ -63,7 +76,7 @@ function ClassAllotment({
     rangesDiv.push(
       <div
         key={count}
-        className="flex flex-col justify-center mt-4 pt-4 text-xl"
+        className="flex flex-row justify-center mt-4 pt-4 text-xl"
       >
         {r}
       </div>
@@ -153,14 +166,12 @@ function ClassAllotment({
           row.push(
             <tr className="h-4" key={i}>
               <td
-                className="border-2 border-black h-4 p-2"
+                className="border-2 border-black h-4 p-2 text-center"
                 width={200}
                 height={66}
               >
-                <b>{i[0][1].toUpperCase()}</b>{" "}
-                {  " " + i[0][0]}{" "}
-                <br /> <b>{i[1][1].toUpperCase()}</b>{" "}
-                {" " + i[1][0]}
+                <b>{i[0][1].toUpperCase()}</b> {" " + i[0][0]} <br />{" "}
+                <b>{i[1][1].toUpperCase()}</b> {" " + i[1][0]}
               </td>
             </tr>
           );
@@ -169,14 +180,12 @@ function ClassAllotment({
           row.unshift(
             <tr className="h-4" key={i}>
               <td
-                className="border-2 border-black h-4 p-2"
+                className="border-2 border-black h-4 p-2 text-center"
                 width={200}
                 height={66}
               >
-                <b>{i[0][1].toUpperCase()}</b>{" "}
-                {  " " + i[0][0]}{" "}
-                <br /> <b>{i[1][1].toUpperCase()}</b>{" "}
-                {" " + i[1][0]}
+                <b>{i[0][1].toUpperCase()}</b> {" " + i[0][0]} <br />{" "}
+                <b>{i[1][1].toUpperCase()}</b> {" " + i[1][0]}
               </td>
             </tr>
           );
@@ -188,7 +197,7 @@ function ClassAllotment({
             row.push(
               <tr className="h-4" key={i}>
                 <td
-                  className="border-2 border-black h-4 p-2"
+                  className="border-2 border-black h-4 p-2 text-center"
                   width={200}
                   height={66}
                 ></td>
@@ -200,7 +209,7 @@ function ClassAllotment({
             row.unshift(
               <tr className="h-4" key={i}>
                 <td
-                  className="border-2 border-black h-4 p-2"
+                  className="border-2 border-black h-4 p-2 text-center"
                   width={200}
                   height={66}
                 ></td>
@@ -215,13 +224,12 @@ function ClassAllotment({
             row.push(
               <tr className="h-4" key={i}>
                 <td
-                  className="border-2 border-black h-4 p-2"
+                  className="border-2 border-black h-4 p-2 text-center"
                   width={200}
                   height={66}
                 >
                   {" "}
-                  <b>{i[1][1].toUpperCase()}</b>{" "}
-                  {" " + i[1][0]}
+                  <b>{i[1][1].toUpperCase()}</b> {" " + i[1][0]}
                   <br />{" "}
                 </td>
               </tr>
@@ -231,13 +239,12 @@ function ClassAllotment({
             row.unshift(
               <tr className="h-4" key={i}>
                 <td
-                  className="border-2 border-black h-4 p-2"
+                  className="border-2 border-black h-4 p-2 text-center"
                   width={200}
                   height={66}
                 >
                   {" "}
-                  <b>{i[1][1].toUpperCase()}</b>{" "}
-                  {" " + i[1][0]}
+                  <b>{i[1][1].toUpperCase()}</b> {" " + i[1][0]}
                   <br />{" "}
                 </td>
               </tr>
@@ -249,12 +256,11 @@ function ClassAllotment({
             row.push(
               <tr className="h-4" key={i}>
                 <td
-                  className="border-2 border-black h-4 p-2"
+                  className="border-2 border-black h-4 p-2 text-center"
                   width={200}
                   height={66}
                 >
-                  <b>{i[0][1].toUpperCase()}</b>{" "}
-                  {  " " + i[0][0]}
+                  <b>{i[0][1].toUpperCase()}</b> {" " + i[0][0]}
                   <br />{" "}
                 </td>
               </tr>
@@ -264,12 +270,11 @@ function ClassAllotment({
             row.unshift(
               <tr className="h-4" key={i}>
                 <td
-                  className="border-2 border-black h-4 p-2"
+                  className="border-2 border-black h-4 p-2 text-center"
                   width={200}
                   height={66}
                 >
-                  <b>{i[0][1].toUpperCase()}</b>{" "}
-                  {  " " + i[0][0]}
+                  <b>{i[0][1].toUpperCase()}</b> {" " + i[0][0]}
                   <br />{" "}
                 </td>
               </tr>
@@ -281,7 +286,7 @@ function ClassAllotment({
             row.push(
               <tr className="h-4" key={i}>
                 <td
-                  className="border-2 border-black h-4 p-2"
+                  className="border-2 border-black h-4 p-2 text-center"
                   width={200}
                   height={66}
                 >
@@ -294,7 +299,7 @@ function ClassAllotment({
             row.unshift(
               <tr className="h-4" key={i}>
                 <td
-                  className="border-2 border-black h-4 p-2"
+                  className="border-2 border-black h-4 p-2 text-center"
                   width={200}
                   height={66}
                 >
@@ -311,8 +316,8 @@ function ClassAllotment({
       if (row.length === columns) {
         if (snakeRow === 1) {
           // row.reverse();
-          row.unshift(row[row.length - 1]);
-          row.pop();
+          // row.unshift(row[row.length - 1]);
+          // row.pop();
         }
         table2.push(
           <table key={i} className="border-2 border-black text-lg ">
@@ -341,7 +346,7 @@ function ClassAllotment({
 
     if (row.length > 0) {
       table2.push(
-        <table className="border-2 border-black min-h-[900px] text-lg ">
+        <table className="border-2 border-black min-h-[900px] text-sm ">
           <thead>
             <tr>
               <th className="border-2 border-solid border-black text-xl p-2">
@@ -373,49 +378,64 @@ function ClassAllotment({
         Download PDF
       </a>
       <Page>
-        <div className="flex flex-row mt-4 justify-center items-center">
-          <div className="w-2/5 m-4 items-center">
-            <Image
-              src="/cit.png"
-              width={300}
-              height={300}
-              alt="dasd"
-              className="object-contain"
-            />
-            <h1 className="text-2xl text-center mt-4 font-bold">
-              {" "}
-              {exam.toUpperCase()}{" "}
-            </h1>
-            <h1 className="text-2xl text-center mt-4 ">
-              {" "}
-              Room: <b>{room}</b>{" "}
-            </h1>
-            {rangesCreate(rangesSingle)}
-            <table className="border-2 border-black text-lg m-4" >
-              <thead></thead>
-              <tbody>
-                <tr >
-                  <th className="border-2 border-black text-xl p-2"> Date </th>
-                  <td className="border-2 border-black text-xl p-2"> 13/02/2022</td>
-                </tr>
-                <tr>
-                  <th className="border-2 border-black text-xl p-2"> Session </th>
-                  <td className="border-2 border-black text-xl p-2"> AN</td>
-                </tr>
-                <tr>
-                  <th className="border-2 border-black text-xl p-2"> Time </th>
-                  <td className="border-2 border-black text-xl p-2"> 12:00 PM to 3:00 PM </td>
-                </tr>
-              </tbody>
-            </table>
+        <div className="flex flex-col">
+          <div className="w-3/5  flex justify-between items-center">
+            <div className="flex flex-col items-center justify-between">
+              <div className="flex items-center justify-between ">
+                <Image
+                  src="/citlogo.png"
+                  width={500}
+                  height={500}
+                  alt="dasd"
+                  className="object-contain pr-4"
+                />
+                <h1 className="text-2xl text-center pl-4 font-bold ml-2">
+                  {" "}
+                  {exam.toUpperCase()}{" "}
+                </h1>
+              </div>
+              <table className={`border-2 border-black text-lg ${columns==7 ? "" : "m-4"}  text-center`}>
+                <thead></thead>
+                <tbody>
+                  <tr>
+                    <th className="border-2 border-black text-xl p-2">
+                      {" "}
+                      Date: 13/02/2022{" "}
+                    </th>
+                    <th className="border-2 border-black text-xl p-2">
+                      {" "}
+                      Session: AN
+                    </th>
+                    <th className="border-2 border-black text-xl p-2">
+                      {" "}
+                      Time: 12:00 PM to 3:00 PM{" "}
+                    </th>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div className=" p-2 text-center m-2 border-2 rounded-md mr-4">
+              <h1 className=" text-2xl p-2 text-center ">
+                {" "}
+                Hall: <br />
+                <b className="text-4xl">{room}</b>{" "}
+              </h1>
+              <p className="italic">{FLOORS[room.split(REG)[0]]} </p>
+            </div>
+
             {/* <p> Date: 13/02/2023  </p>
             <p> Session: AN </p>
             <p> Time:  </p> */}
             {/* {!downloading && <button onClick={downloadPDF}>Download PDF</button>} */}
           </div>
-          <div className="flex flex-col m-4  w-3/5">
+          <div className="flex flex-col m-2  w-3/5 items-center">
             {create(room, roomArray, rows)}
             {/* <GeneratePDF html={componentRef} /> */}
+            {rangesCreate(rangesSingle)}
+          </div>
+          <div className="flex justify-between">
+            <p className="p-2"> Verified by: </p>
+            <p className="p-2"> Approved by: </p>
           </div>
         </div>
       </Page>
