@@ -16,6 +16,7 @@ const TableInput = ({ data }) => {
   return (
     <div className="p-8 justify-center items-center">
       <h1 className="font-semibold py-5 text-4xl">Exam Time Table</h1>
+      <form method="post" action="http://127.0.0.1:8080/createtimetable" >
       <table className="table-auto m-5 border">
         <thead className="border">
           <tr>
@@ -43,6 +44,7 @@ const TableInput = ({ data }) => {
           ))}
         </tbody>
       </table>
+      </form>
     </div>
   );
 };

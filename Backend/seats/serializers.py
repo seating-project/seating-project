@@ -40,5 +40,6 @@ class ExamSerializer(serializers.ModelSerializer):
 
 class CreateExamSerializer(serializers.ModelSerializer):
     class Meta:
-        model = ExamTemplate
+        model = Exam
         fields = '__all__'
+

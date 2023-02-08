@@ -161,11 +161,11 @@ class NeededDocuments(models.Model):
 class ExamTemplate(models.Model):
     id = models.CharField(primary_key=True, max_length=200, null=False)
     template_name = models.CharField(max_length=200)
-    template_exam_name = models.CharField(max_length=200)
+    # template_exam_name = models.CharField(max_length=200, default='exam')
     num_rows = models.IntegerField(default=5)
     num_columns = models.IntegerField(default=6)
     room_strength = models.IntegerField(default=60)
-    #count_in_bench = models.IntegerField(default=2)
+    ##count_in_bench = models                                                                                           .IntegerField(default=2)
     rooms = models.JSONField()
     single_seater = models.BooleanField(default=False)
     boys_girls_separation = models.BooleanField(default=False)
@@ -232,12 +232,12 @@ class Timetable(models.Model):
         return (self.date + " " + self.name)
 
 class Exam(models.Model):
-    exam_id = models.BigAutoField(primary_key=True)
-    exam_name = models.CharField(max_length=200)
-    exam_fromdate = models.DateField()
-    exam_todate = models.DateField()
-    exam_template = models.ForeignKey(ExamTemplate, models.CASCADE) 
-    exam_depts = models.JSONField()
+    id = models.BigAutoField(primary_key=True)
+    name = models.CharField(max_length=200)
+    fromdate = models.DateField()
+    todate = models.DateField()
+    template = models.ForeignKey(ExamTemplate, models.CASCADE) 
+    depts = models.JSONField()
 
     class Meta:
         verbose_name = 'Exam'

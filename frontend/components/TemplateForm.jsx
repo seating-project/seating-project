@@ -1,7 +1,10 @@
 "use client";
+import axios from "axios";
+import { useRouter } from "next/navigation";
 import Select from "react-select";
+import { useState } from "react";
 
-export default function TemplateForm() {
+function MyForm() {
   const rooms = [
     { value: "T1", label: "T1", group: "Third Floor" },
     { value: "T2", label: "T2", group: "Third Floor" },
@@ -25,13 +28,46 @@ export default function TemplateForm() {
     { value: "T20", label: "T20", group: "Third Floor" },
   ];
 
+  const [selectedRooms, setSelectedRooms] = useState([]);
+
+  const router = useRouter();
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    console.log("submitting form data");
+    const form = document.getElementById("templateform");
+    const formData = new FormData(form);
+    const data = Object.fromEntries(formData.entries());
+    const selectedRoomsValues = selectedRooms.map((room) => room.value);
+    data["rooms"] = { rooms: selectedRoomsValues };
+    console.log(data);
+    console.log(selectedRoomsValues);
+    const res = await axios.post(
+      "http://127.0.0.1:8080/createexamtemplate/",
+      data
+    );
+    router.push("/templates");
+  };
+
+  const handleRoomChange = (selectedOption) => {
+    setSelectedRooms(selectedOption);
+  };
+
+  // const handleSubmit = () => {
+  //   const selectedRoomsValues = selectedRooms.map((room) => room.value);
+  //   console.log({ rooms: { rooms: selectedRoomsValues } });
+  // };
+
+  // need
+
   return (
     <div className="p-8 justify-center items-center">
       <h1 className="font-semibold pt-5 text-4xl">Template Wizard</h1>
       <form
-        action="http://localhost:8000/createexamtemplate/"
-        method="POST"
+        action="http://127.0.0.1:8080/createexamtemplate/"
+        method="post"
         id="templateform"
+        onSubmit={handleSubmit}
       >
         <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
           <div className="grid grid-cols-1 gap-6">
@@ -50,12 +86,13 @@ export default function TemplateForm() {
                 required
               />
             </label>
-            <label className="block" htmlFor="templatename">
+
+            <label className="block" htmlFor="template_name">
               <span>Template Name</span>
               <input
                 type="text"
-                id="templatename"
-                name="templatename"
+                id="template_name"
+                name="template_name"
                 className="mt-1
                   block
                   rounded-md
@@ -65,13 +102,12 @@ export default function TemplateForm() {
                 required
               />
             </label>
-
-            <label htmlFor="rows" className="block">
+            <label htmlFor="num_rows" className="block">
               <span>Rows</span>
               <input
                 type="number"
-                id="rows"
-                name="rows"
+                id="num_rows"
+                name="num_rows"
                 className="mt-1
                   block
                   rounded-md
@@ -82,12 +118,12 @@ export default function TemplateForm() {
               />
             </label>
 
-            <label htmlFor="columns" className="block">
+            <label htmlFor="num_columns" className="block">
               <span>Columns</span>
               <input
                 type="number"
-                id="columns"
-                name="columns"
+                id="num_columns"
+                name="num_columns"
                 className="mt-1
                   block
                   rounded-md
@@ -116,62 +152,42 @@ export default function TemplateForm() {
           </div>
 
           <div className="grid grid-cols-1 gap-6">
-            {/* <label htmlFor="count_in_bench" className="block">
-              <span>Count in Bench</span>
-              <input
-                type="number"
-                id="count_in_bench"
-                name="count_in_bench"
-                className="mt-1
-                  block
-                  rounded-md
-                  bg-gray-200
-                  border-transparent
-                  focus:border-gray-300 focus:bg-gray-200 focus:ring-0"
-                required
-              />
-            </label> */}
-
-            {/* <label htmlFor="rooms">
-              <span>Rooms (select multiple)</span> <br />
-              <select
-                name="rooms"
-                id="rooms"
-                className="form-multiselect w-1/4"
-                multiple
-              >
-                <option value="F1">F1</option>
-                <option value="F2">F2</option>
-                <option value="F3">F3</option>
-              </select>
-            </label> */}
-
             <label htmlFor="rooms">
               <span>Rooms (select multiple)</span> <br />
-              <Select options={rooms} isMulti className="w-max"></Select>
+              <Select
+                id="rooms"
+                name="rooms"
+                options={rooms}
+                value={selectedRooms}
+                onChange={handleRoomChange}
+                isMulti
+                className="w-max"
+              ></Select>
             </label>
 
-            <label htmlFor="seperator" className="block">
-              <span>Boys/Girls seperation</span>
-              <input
-                type="checkbox"
-                id="seperator"
-                name="seperator"
-                className="mt-1
-                  block
-                  rounded-md
-                  bg-gray-200
-                  border-transparent
-                  focus:border-gray-300 focus:bg-gray-200 focus:ring-0"
-              />
-            </label>
-
-            <label htmlFor="singleseater" className="block">
+            <label htmlFor="single_seater" className="block">
               <span>Single Seater</span>
               <input
                 type="checkbox"
-                id="singleseater"
-                name="singleseater"
+                value={true}
+                id="single_seater"
+                name="single_seater"
+                className="mt-1
+                  block
+                  rounded-md
+                  bg-gray-200
+                  border-transparent
+                  focus:border-gray-300 focus:bg-gray-200 focus:ring-0"
+              />
+            </label>
+
+            <label htmlFor="boys_girls_separation" className="block">
+              <span>Boys/Girls seperation</span>
+              <input
+                type="checkbox"
+                id="boys_girls_separation"
+                name="boys_girls_separation"
+                value={true}
                 className="mt-1
                   block
                   rounded-md
@@ -193,3 +209,25 @@ export default function TemplateForm() {
     </div>
   );
 }
+
+export default MyForm;
+
+// {
+//   "id": "2",
+//   "template_name": "test template",
+//   "num_rows": 5,
+//   "num_columns": 6,
+//   "room_strength": 60,
+// "rooms": {
+//     "rooms": [
+//         "F1",
+//         "F2",
+//         "F3",
+//         "F4",
+//         "F5",
+//         "F6"
+//     ]
+// },
+//   "single_seater": false,
+//   "boys_girls_separation": false
+// }

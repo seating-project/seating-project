@@ -30,6 +30,6 @@
     "pdf_components/Attendance.jsx", 
     "components/ExamCard.jsx",
     "components/TimeTable.jsx"  
-  ],
+, "components/TemplateForm.jsx", "components/ExamForm.jsx"  ],
   "exclude": ["node_modules"]
 }
