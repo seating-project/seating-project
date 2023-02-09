@@ -52,8 +52,9 @@ class CreateExamTemplateView(APIView):
 
 
 class RoomDataList(generics.ListAPIView):
-    pass
-    curr_template = ExamTemplate.objects.filter(id=1)[0]
+
+    curr_template = ExamTemplate.objects.filter(id=2)[0]
+    print(curr_template)
     RoomData.objects.all().delete()
 
     # room = ['F1', 'F2', 'F3', 'F4', 'F5', 'F6', 'F7', 'F8', 'F9', 'F10', 'F11', 'F12', 'F13', 'F14', 'F15', 'F16']
@@ -86,12 +87,6 @@ class RoomDataList(generics.ListAPIView):
     # if "Model" in curr_template .template_exam_name:
     #     if abs(len(ckt_array)-len(nckt_array)) > 64:
     #         if len(ckt_array)>len(nckt_array):
-                
-
-                
-
-        
-
 
     ranges_dict = {}
     room_dict = {}
@@ -191,9 +186,6 @@ class RoomDataList(generics.ListAPIView):
                 ranges_dict[i][j[1][1] + " " + str(j[1][2])].append(j[1])
     # print(ranges_dict)  
     print()
-
-            
-
     try:
         i = room[(room.index(i)+1)]
         room = room[(room.index(i)):]
