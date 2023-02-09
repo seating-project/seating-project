@@ -37,3 +37,17 @@ export const useDeptID = create<{
     '244': "CSBS",
   },
 }));
+
+export const examData = create<{
+  name: string;
+  fromdate: Date;
+  todate: Date;
+  depts: Object;
+  template: string;
+}>((set, get) => ({
+  name: "",
+  fromdate: new Date(),
+  todate: new Date(),
+  depts: {},
+  template: "",
+}));

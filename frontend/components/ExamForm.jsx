@@ -3,6 +3,12 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import Select from "react-select";
 import { useState } from "react";
+import { examData } from "../src/store";
+// import { useContext } from "react";
+// import { createContext }
+import TableInput from "./TimeTable";
+
+// const DataContext = createContext();
 
 const dept_options = [
   { value: "MECH", label: "MECH" },
@@ -16,6 +22,58 @@ const dept_options = [
   { value: "CSBS", label: "CSBS" },
   { value: "BME", label: "BME" },
 ];
+
+// function getDates(startDate, endDate) {
+//   var dates = [],
+//     currentDate = startDate,
+//     addDays = function (days) {
+//       var date = new Date(this.valueOf());
+//       date.setDate(date.getDate() + days);
+//       return date;
+//     };
+//   while (currentDate <= endDate) {
+//     dates.push(currentDate);
+//     currentDate = addDays.call(currentDate, 1);
+//   }
+//   return dates;
+// }
+
+// var getDates = function (start, end) {
+//   var arr = new Array(),
+//     dt = start;
+//   console.log(dt, end);
+
+//   while (dt <= end) {
+//     arr.push(new Date(dt));
+//     dt.setDate(dt.getDate() + 1);
+//   }
+
+// Date.prototype.addDays = function (days) {
+//   var date = new Date(this.valueOf());
+//   date.setDate(date.getDate() + days);
+//   return date;
+// };
+
+// function getDates(startDate, stopDate) {
+//   var dateArray = new Array();
+//   var currentDate = startDate;
+//   while (currentDate <= stopDate) {
+//     dateArray.push(new Date(currentDate));
+//     currentDate = currentDate.addDays(1);
+//   }
+//   return dateArray;
+// }
+
+function getDates(startDate, endDate) {
+  let dates = [];
+  let currentDate = new Date(startDate);
+  let end = new Date(endDate);
+  while (currentDate <= end) {
+    dates.push(new Date(currentDate));
+    currentDate.setDate(currentDate.getDate() + 1);
+  }
+  return dates;
+}
 
 export default function ExamForm({ templates }) {
   const template_options = [];
@@ -36,7 +94,7 @@ export default function ExamForm({ templates }) {
   });
   const [selectedDept, setSelectedDept] = useState([]);
   const router = useRouter();
-
+  let deptanddate;
   const handleSubmit = async (event) => {
     event.preventDefault();
     console.log("Submitted");
@@ -46,7 +104,22 @@ export default function ExamForm({ templates }) {
     const selectedDeptValues = selectedDept.map((dept) => dept.value);
     data["depts"] = { depts: selectedDeptValues };
     console.log(data);
-    const res = await axios.post("http://127.0.0.1:8080/createexam/", data);
+    deptanddate = {
+      departments: data["depts"],
+      dates: getDates(data["fromdate"], data["todate"]),
+    };
+    console.log(new Date(data["fromdate"]), new Date(data["todate"]));
+    console.log(deptanddate);
+    // const { setData } = useContext(DataContext);
+
+    // examData.getState().set({
+    //   name: data.name,
+    //   fromdate: data.fromdate,
+    //   todate: data.todate,
+    //   depts: data.depts,
+    //   template: data.template,
+    // });
+    // const res = await axios.post("http://127.0.0.1:8080/createexam/", data);
     // router.push("/exams");
   };
 
@@ -57,12 +130,7 @@ export default function ExamForm({ templates }) {
   return (
     <div className="p-8 justify-center items-center">
       <h1 className="font-semibold pt-5 text-4xl">New Exam</h1>
-      <form
-        action="http://127.0.0.1:8080/createexam"
-        method="post"
-        id="examform"
-        onSubmit={handleSubmit}
-      >
+      <form id="examform" onSubmit={handleSubmit}>
         <div className="mt-8 ">
           {/* <label className="block my-5" htmlFor="id">
             <span>Exam ID</span>
@@ -153,8 +221,9 @@ export default function ExamForm({ templates }) {
             type="submit"
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full mt-5 w-max"
           >
-            Submit
+            Next
           </button>
+          {deptanddate ? <TableInput data={deptanddate} /> : null}
         </div>
       </form>
     </div>

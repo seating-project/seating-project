@@ -209,27 +209,27 @@ class Students(models.Model):
         return self.name
 
 
-class Timetable(models.Model):
+# class Timetable(models.Model):
 
-    name = models.TextField(blank=True, null=True)
-    date=models.DateField(blank=True, null=False, primary_key=True)
-    civil=models.TextField(blank=True, null=True)
-    cse=models.TextField(blank=True, null=True)
-    eee=models.TextField(blank=True, null=True)
-    ece=models.TextField(blank=True, null=True)
-    mech=models.TextField(blank=True, null=True)
-    mct=models.TextField(blank=True, null=True)
-    bme=models.TextField(blank=True, null=True)
-    it=models.TextField( blank=True, null=True)
-    aids=models.TextField(blank=True, null=True)
-    csbs=models.TextField(blank=True, null=True)
+#     name = models.TextField(blank=True, null=True)
+#     date=models.DateField(blank=True, null=False, primary_key=True)
+#     civil=models.TextField(blank=True, null=True)
+#     cse=models.TextField(blank=True, null=True)
+#     eee=models.TextField(blank=True, null=True)
+#     ece=models.TextField(blank=True, null=True)
+#     mech=models.TextField(blank=True, null=True)
+#     mct=models.TextField(blank=True, null=True)
+#     bme=models.TextField(blank=True, null=True)
+#     it=models.TextField( blank=True, null=True)
+#     aids=models.TextField(blank=True, null=True)
+#     csbs=models.TextField(blank=True, null=True)
 
-    class Meta:
-        verbose_name='Time Table'
-        verbose_name_plural='Time Tables'
+#     class Meta:
+#         verbose_name='Time Table'
+#         verbose_name_plural='Time Tables'
 
-    def __str__(self):
-        return (self.date + " " + self.name)
+#     def __str__(self):
+#         return (self.date + " " + self.name)
 
 class Exam(models.Model):
     id = models.BigAutoField(primary_key=True)
@@ -238,6 +238,7 @@ class Exam(models.Model):
     todate = models.DateField()
     template = models.ForeignKey(ExamTemplate, models.CASCADE) 
     depts = models.JSONField()
+    # timetable = models.JSONField(null=False)
 
     class Meta:
         verbose_name = 'Exam'
