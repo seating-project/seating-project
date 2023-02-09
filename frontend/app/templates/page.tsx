@@ -5,10 +5,12 @@ import Background from "../public/background.svg";
 import { PlusCircleIcon } from "@heroicons/react/outline";
 import Link from "next/link";
 import ExamCard from "../../components/ExamCard";
+import TemplateCard from "../../components/TemplateCard";
+import drf from "../../pages/api/axiosConfig";
 
-async function getExamData() {
+async function getTemplateData() {
   try {
-    const res = await axios.get("http://127.0.0.1:8080/exams/");
+    const res = await drf.get("/examtemplate/");
     return res.data;
   } catch (error) {
     console.error(error);
@@ -16,42 +18,48 @@ async function getExamData() {
   }
 }
 
-async function postExamData() {
-  const res = await axios.post("http://127.0.0.1:8080/createexamtemplate/", {
-    exam_id: 2,
-    exam_name: "Internal Assessment 2",
-    exam_fromdate: "2023-02-03",
-    exam_todate: "2023-02-12",
-    exam_depts: ["cse", "it"],
-    exam_template: "1",
+async function getRoomData() {
+  try {
+    const res = await drf.get("/roomdata/");
+    return res.data;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+}
+
+async function postTemplateData() {
+  const res = await drf.post("/createexamtemplate/", {
+    id: "2",
+    rows: 5,
+    columns: 5,
+    room_strength: 30,
+    count_in_bench: 2,
+    rooms: { rooms: ["A", "B", "C", "D", "E"] },
   });
 }
 
 async function Homepage() {
-  const edata = await getExamData();
-  console.log(edata);
+  const tdata = await getTemplateData();
 
   return (
     <div className="bg-white bg-background bg-cover">
-      <div className="flex h-screen ">
-        <Navbar />
-        <div className="flex flex-col">
-          <Header />
-          <div className="flex p-4 flex-wrap flex-row items-center">
-            {edata.map((item: { name: any }) => (
-              <ExamCard name={item.name} />
-            ))}
-            <div className="flex flex-col items-center justify-center w-1/4 h-1/4 m-4 p-4 min-h-[200px] rounded-2xl bg-screen">
-              <div className="flex flex-col items-center justify-center">
-                <Link href="/templateform">
-                  <PlusCircleIcon className="h-20 w-20 text-black cursor-pointer hover:text-gray transition duration-400 ease-out scale-105" />
-                </Link>
-                <h1 className="text-2xl font-semibold text-center">
-                  Create New Exam
-                </h1>
-              </div>
-            </div>
-          </div>
+      <div className="flex flex-col h-screen">
+        <div>
+          <h1 className="text-6xl text-blue-50 m-8 font-bold">Templates</h1>
+        </div>
+        <div className="flex flex-wrap m-8">
+          {tdata.map((template : any) => (
+            <TemplateCard
+              key={template.id}
+              id={template.id}
+              rows={template.rows}
+              columns={template.columns}
+              room_strength={template.room_strength}
+              counts_in_bench={template.count_in_bench}
+              rooms={template.rooms}
+            />
+          ))}
         </div>
       </div>
     </div>

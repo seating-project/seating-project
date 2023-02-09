@@ -5,10 +5,11 @@ import Background from "../public/background.svg";
 import { PlusCircleIcon } from "@heroicons/react/outline";
 import Link from "next/link";
 import ExamCard from "../components/ExamCard";
+import drf from "../pages/api/axiosConfig";
 
 async function getExamData() {
   try {
-    const res = await axios.get("http://127.0.0.1:8080/exams/");
+    const res = await drf.get("/exams/");
     return res.data;
   } catch (error) {
     console.error(error);
@@ -17,7 +18,7 @@ async function getExamData() {
 }
 
 async function postExamData() {
-  const res = await axios.post("http://127.0.0.1:8080/createexamtemplate/", {
+  const res = await drf.post("/createexamtemplate/", {
     exam_id: 2,
     exam_name: "Internal Assessment 2",
     exam_fromdate: "2023-02-03",
@@ -38,8 +39,8 @@ async function Homepage() {
         <div className="flex flex-col">
           <Header />
           <div className="flex p-4 flex-wrap flex-row items-center">
-            {edata.map((item: { name: any }) => (
-              <ExamCard name={item.name} />
+            {edata.map((item: { name: any, id: any }) => (
+              <ExamCard name={item.name} id={item.id} />
             ))}
             <div className="flex flex-col items-center justify-center w-1/4 h-1/4 m-4 p-4 min-h-[200px] rounded-2xl bg-screen">
               <div className="flex flex-col items-center justify-center">

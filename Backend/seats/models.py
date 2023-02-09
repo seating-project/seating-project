@@ -244,7 +244,7 @@ class Exam(models.Model):
         verbose_name_plural = 'Exams'
 
     def __str__(self):
-        return self.exam_name
+        return self.name
 
 
 # class RoomRanges(models.Model):
