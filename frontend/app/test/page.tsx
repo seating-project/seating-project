@@ -49,32 +49,72 @@ async function Testpage() {
   const rangesNeeded = rdata[0].ranges;
   const roomArray = Object.entries(roomSingle);
   const tdata = await getTemplateData();
-  console.log(tdata);
-  //console.log("ROOM SINGLE LOL",roomSingle);
+  // console.log(tdata);
+
+
+  const roomGOD = Object.entries(rdata[0].rooms).sort(([a], [b]) => a.localeCompare(b))
+  // console.log("ROOM GOD", roomGOD)
+  
+  let roomsNeeded = [];
+
+  for (let i = 0; i < roomGOD.length; i++) {
+    console.log("roomGOD[i]", roomGOD[i][0])
+    if (roomGOD[i][0].includes("T") && !(roomGOD[i][0].includes("M"))) {
+      roomsNeeded.push(roomGOD[i]);
+      
+    }
+    
+  }
+  for (let i = 0; i < roomGOD.length; i++) {
+    if (roomGOD[i][0].includes("M") && (roomGOD[i][0].includes("T"))) {
+      roomsNeeded.push(roomGOD[i]);
+      
+    }
+    
+  }
+  for (let i = 0; i < roomGOD.length; i++) {
+    if (roomGOD[i][0].includes("EH")) {
+      roomsNeeded.push(roomGOD[i]);
+      
+    }
+    
+  }
+  
+
+
+
+
+  // console.log("ORDERED GOM", roomsNeeded)
+  // console.log("ROOM SINGLE LOL",roomSingle);
   //console.log("RANGES LMAO", rangesNeeded);
   //console.log("room length", roomSingle["F1"].length)
-  console.log("room length", tdata[0].room_strength)
-
+  // console.log("room length", tdata[0].room_strength)
+  let order = 0;
+  const timestamp = Date.now();
   return (
     <div className="bg-white h-screen w-screen" >
-      {Object.keys(roomSingle).map((room) => {
+      
+      
+      {/* {Object.keys(roomSingle).map((room) => {
+        console.log("room", room);
         return (
           <ClassAllotment
-            key={room}
+            key={`page-${timestamp}-${order++}`}
             room={room}
             roomArray={roomSingle[room]}
             rows={tdata[0].num_rows}
             columns={tdata[0].num_columns}
             rangesSingle={rangesNeeded[room]}
-            exam={tdata[0].template_exam_name}
+            // exam={tdata[0].template_exam_name}
+            exam = "Model Examination"
             room_strength = {tdata[0].room_strength}
             single_seater = {tdata[0].single_seater}
             boys_girls_separation = {tdata[0].boys_girls_separation}
             
           />
         );
-      })}
-      {/* <NoticeBoardCopy ranges={rangesNeeded} exam={tdata[0].template_exam_name} /> */}
+      })} */}
+      <NoticeBoardCopy ranges={rangesNeeded} exam={"Model Examination"} />
       {/* <AttendanceSheets ranges = {rangesNeeded}/> */}
     </div>
   );

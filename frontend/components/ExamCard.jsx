@@ -2,9 +2,9 @@ import Link from "next/link";
 
 const ExamCard = ({ name, id }) => {
   return (
-    <div className="w-[250px] h-[250px] bg-white p-4 m-4 rounded-xl shadow-lg hover:shadow-bblue transition backdrop-blur-lg flex flex-col justify-between">
+    <div className="w-auto h-[220px] bg-white p-4 m-4 rounded-xl shadow-lg hover:shadow-bblue transition backdrop-blur-lg flex flex-col justify-between">
       <div className="flex flex-col">
-        <p className="font-bold text-4xl p-2">Exam {name}</p>
+        <p className="font-bold text-4xl p-2">{name}</p>
       </div>
       <div
         className="flex flex-row items-center inline-block relative text-blue after:content-[''] after:absolute after:w-full 

@@ -3,6 +3,7 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import Select from "react-select";
 import { useState } from "react";
+import drf from "../pages/api/axiosConfig";
 
 function MyForm() {
   const rooms = [
@@ -42,10 +43,7 @@ function MyForm() {
     data["rooms"] = { rooms: selectedRoomsValues };
     console.log(data);
     console.log(selectedRoomsValues);
-    const res = await axios.post(
-      "http://127.0.0.1:8080/createexamtemplate/",
-      data
-    );
+    const res = await drf.post("/createexamtemplate/", data);
     router.push("/templates");
   };
 
@@ -61,152 +59,156 @@ function MyForm() {
   // need
 
   return (
-    <div className="p-8 justify-center items-center">
-      <h1 className="font-semibold pt-5 text-4xl">Template Wizard</h1>
-      <form
-        action="http://127.0.0.1:8080/createexamtemplate/"
-        method="post"
-        id="templateform"
-        onSubmit={handleSubmit}
-      >
-        <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
-          <div className="grid grid-cols-1 gap-6">
-            <label htmlFor="id" className="block">
-              <span>Template ID</span>
-              <input
-                type="number"
-                id="id"
-                name="id"
-                className="mt-1
+    <>
+      <div className="p-8 justify-center items-center">
+        <h1 className="font-semibold pt-5 text-4xl">Template Wizard</h1>
+        <form
+          action="http://127.0.0.1:8080/createexamtemplate/"
+          method="post"
+          id="templateform"
+          onSubmit={handleSubmit}
+        >
+          <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
+            <div className="grid grid-cols-1 gap-6">
+              <label htmlFor="id" className="block">
+                <span>Template ID</span>
+                <input
+                  type="number"
+                  id="id"
+                  name="id"
+                  className="mt-1
                   block
                   rounded-md
                   bg-gray-200
                   border-transparent
                   focus:border-gray-300 focus:bg-gray-300 focus:ring-0"
-                required
-              />
-            </label>
+                  required
+                />
+              </label>
 
-            <label className="block" htmlFor="template_name">
-              <span>Template Name</span>
-              <input
-                type="text"
-                id="template_name"
-                name="template_name"
-                className="mt-1
+              <label className="block" htmlFor="template_name">
+                <span>Template Name</span>
+                <input
+                  type="text"
+                  id="template_name"
+                  name="template_name"
+                  className="mt-1
                   block
                   rounded-md
                   bg-gray-200
                   border-transparent
                   focus:border-gray-300 focus:bg-gray-300 focus:ring-0"
-                required
-              />
-            </label>
-            <label htmlFor="num_rows" className="block">
-              <span>Rows</span>
-              <input
-                type="number"
-                id="num_rows"
-                name="num_rows"
-                className="mt-1
+                  required
+                />
+              </label>
+              <label htmlFor="num_rows" className="block">
+                <span>Rows</span>
+                <input
+                  type="number"
+                  id="num_rows"
+                  name="num_rows"
+                  className="mt-1
                   block
                   rounded-md
                   bg-gray-200
                   border-transparent
                   focus:border-gray-300 focus:bg-gray-300 focus:ring-0"
-                required
-              />
-            </label>
+                  required
+                />
+              </label>
 
-            <label htmlFor="num_columns" className="block">
-              <span>Columns</span>
-              <input
-                type="number"
-                id="num_columns"
-                name="num_columns"
-                className="mt-1
+              <label htmlFor="num_columns" className="block">
+                <span>Columns</span>
+                <input
+                  type="number"
+                  id="num_columns"
+                  name="num_columns"
+                  className="mt-1
                   block
                   rounded-md
                   bg-gray-200
                   border-transparent
                   focus:border-gray-300 focus:bg-gray-300 focus:ring-0"
-                required
-              />
-            </label>
+                  required
+                />
+              </label>
 
-            <label htmlFor="room_strength" className="block">
-              <span>Room Strength</span>
-              <input
-                type="number"
-                id="room_strength"
-                name="room_strength"
-                className="mt-1
+              <label htmlFor="room_strength" className="block">
+                <span>Room Strength</span>
+                <input
+                  type="number"
+                  id="room_strength"
+                  name="room_strength"
+                  className="mt-1
                 block
                 rounded-md
                 bg-gray-200
                 border-transparent
                 focus:border-gray-300 focus:bg-gray-200 focus:ring-0"
-                required
-              />
-            </label>
-          </div>
+                  required
+                />
+              </label>
+            </div>
 
-          <div className="grid grid-cols-1 gap-6">
-            <label htmlFor="rooms">
-              <span>Rooms (select multiple)</span> <br />
-              <Select
-                id="rooms"
-                name="rooms"
-                options={rooms}
-                value={selectedRooms}
-                onChange={handleRoomChange}
-                isMulti
-                className="w-max"
-              ></Select>
-            </label>
+            <div className="grid grid-cols-1 gap-6">
+              <label htmlFor="rooms">
+                <span>Rooms (select multiple)</span> <br />
+                <Select
+                  id="rooms"
+                  name="rooms"
+                  options={rooms}
+                  value={selectedRooms}
+                  onChange={handleRoomChange}
+                  isMulti
+                  className="w-max"
+                ></Select>
+              </label>
 
-            <label htmlFor="single_seater" className="block">
-              <span>Single Seater</span>
-              <input
-                type="checkbox"
-                value={true}
-                id="single_seater"
-                name="single_seater"
-                className="mt-1
+              <label htmlFor="single_seater" className="block">
+                <span>Single Seater</span>
+                <input
+                  type="checkbox"
+                  value={true}
+                  id="single_seater"
+                  name="single_seater"
+                  className="mt-1
                   block
                   rounded-md
                   bg-gray-200
                   border-transparent
                   focus:border-gray-300 focus:bg-gray-200 focus:ring-0"
-              />
-            </label>
+                  defaultChecked
+                />
+              </label>
 
-            <label htmlFor="boys_girls_separation" className="block">
-              <span>Boys/Girls seperation</span>
-              <input
-                type="checkbox"
-                id="boys_girls_separation"
-                name="boys_girls_separation"
-                value={true}
-                className="mt-1
+              <label htmlFor="boys_girls_separation" className="block">
+                <span>Boys/Girls seperation</span>
+                <input
+                  type="checkbox"
+                  id="boys_girls_separation"
+                  name="boys_girls_separation"
+                  value={true}
+                  className="mt-1
                   block
                   rounded-md
                   bg-gray-200
                   border-transparent
                   focus:border-gray-300 focus:bg-gray-200 focus:ring-0"
-              />
-            </label>
+                  defaultChecked
+                />
+              </label>
 
-            <button
-              type="submit"
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full mt-5 w-max"
-            >
-              Submit
-            </button>
+              <button
+                type="submit"
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full mt-5 w-max"
+              >
+                Submit
+              </button>
+            </div>
           </div>
-        </div>
-      </form>
-    </div>
+        </form>
+      </div>
+    </>
   );
 }
 
@@ -230,4 +232,23 @@ export default MyForm;
 // },
 //   "single_seater": false,
 //   "boys_girls_separation": false
+// }
+
+// {
+//   "id": "1",
+//   "template_name": "Preetam",
+//   "num_rows": "5",
+//   "num_columns": "5",
+//   "room_strength": "50",
+//   "rooms": {
+//       "rooms": [
+//           "T1",
+//           "T2",
+//           "T3",
+//           "T4",
+//           "T5"
+//       ]
+//   },
+//   "single_seater": "true",
+//   "boys_girls_separation": "true"
 // }

@@ -30,9 +30,23 @@ const FLOORS = {
   F: "First Floor",
   S: "Second Floor",
   T: "Third Floor",
-  MT: "Third Floor", 
+  MT: "Third Floor",
   EH: "New Building",
 };
+
+const ROOMNO = {
+
+}
+
+for (let i = 1; i <= 10; i++) {
+  ROOMNO[i] = "Block A - First Floor";
+}
+for (let i = 11; i <= 20; i++) {
+  ROOMNO[i] = "Block A - Ground Floor";
+}
+for (let i = 21; i <= 27; i++) {
+  ROOMNO[i] = "Block B - First Floor";
+}
 
 const REG = new RegExp("(?<=\\D)(?=\\d)|(?<=\\d)(?=\\D)");
 
@@ -50,7 +64,7 @@ function ClassAllotment({
   const deptID = useDeptID.getState().dept_id_object;
   const componentRef = useRef();
   const [downloading, setDownloading] = useState(false);
-
+  console.log(room_strength);
   const rangesCreate = (rangesSingle) => {
     let rangesDiv = [];
     let r = [];
@@ -64,7 +78,7 @@ function ClassAllotment({
               ROMAN[rangesSingle[i][0][2]] +
               " - "}
           </b>{" "}
-          {columns==7 ? null : <br />}
+          {columns == 7 ? null : <br />}
           {rangesSingle[i][0][0] +
             " to " +
             rangesSingle[i][rangesSingle[i].length - 1][0]}
@@ -99,7 +113,7 @@ function ClassAllotment({
     let tableIndex = 0;
     let oneTableLeave = 0;
     let snakeRow = 0;
-    // console.log("ROOM ARRAY INSIDE LMAO", roomArray);
+    let endthisstuff = 0;
     // console.log("ROOM STRENGTH", room_strength);
 
     // if (single_seater) {
@@ -192,6 +206,28 @@ function ClassAllotment({
           tableCounter++;
         }
       } else {
+        // if (room_strength > 25 && tableCounter == columns-1) {
+        //   console.log("GOPAL dadwadwa")
+        //   if (room_strength - 25 === 1) {
+        //     if (tableIndex===2) {
+        //       if (tableCounter===6) {
+        //         print("GOPAL INCOMING")
+        //         row.push(
+        //           <tr className="h-4" key={i+"1"}>
+        //             <td
+        //               className="border-2 border-black h-4 p-2 text-center"
+        //               width={200}
+        //               height={66}
+        //             >
+        //               <b>{i[0][1].toUpperCase()}</b> {" " + i[0][0]}
+        //             </td>
+        //           </tr>
+        //         )
+        //       }
+        //     }
+        //   }
+        // }
+
         if (room_strength === 25 && oneTableLeave === 0) {
           if (tableIndex != 3 && snakeRow === 0) {
             row.push(
@@ -314,11 +350,75 @@ function ClassAllotment({
         // console.log("ROW LENGTH", row.length);
       }
       if (row.length === columns) {
-        if (snakeRow === 1) {
+        if (snakeRow === 1 && tableIndex != 3) {
+          // console.log("ROW", row)
           // row.reverse();
-          // row.unshift(row[row.length - 1]);
-          // row.pop();
+          row.unshift(row[row.length - 1]);
+
+          row.pop();
         }
+        if (tableIndex == 3) {
+          // row.reverse()
+        }
+        
+        if (roomArray.length > room_strength && tableCounter == columns) {
+          console.log("GOPAL dadwadwa");
+          if (roomArray.length - room_strength === 2) {
+            console.log("GOmmala");
+            if (tableIndex === 2) {
+              row.shift()
+              console.log("GOTHA");
+              console.log("maalaa", roomArray.slice(-1))
+              row.unshift(
+                <tr className="h-4" key={i + "1"}>
+                  <td
+                    className="border-2 border-black h-4 p-2 text-center"
+                    width={200}
+                    height={66}
+                  >
+                    <b>{i[0][1].toUpperCase()}</b> {" " + roomArray.slice(-2)[0][0][0]}
+                  </td>
+                </tr>
+              );
+            }
+            if (tableIndex === 1) {
+              row.shift()
+              console.log("GOTHA");
+              console.log("maalaa", roomArray.slice(-1))
+              row.unshift(
+                <tr className="h-4" key={i + "1"}>
+                  <td
+                    className="border-2 border-black h-4 p-2 text-center"
+                    width={200}
+                    height={66}
+                  >
+                    <b>{i[0][1].toUpperCase()}</b> {" " + roomArray.slice(-1)[0][0][0]}
+                  </td>
+                </tr>
+              );
+            }
+          }
+          if (roomArray.length - room_strength === 1) {
+            console.log("GOmmala");
+            if (tableIndex === 2) {
+              row.shift()
+              console.log("GOTHA");
+              console.log("maalaa", roomArray.slice(-1))
+              row.unshift(
+                <tr className="h-4" key={i + "1"}>
+                  <td
+                    className="border-2 border-black h-4 p-2 text-center"
+                    width={200}
+                    height={66}
+                  >
+                    <b>{i[0][1].toUpperCase()}</b> {" " + roomArray.slice(-1)[0][0][0]}
+                  </td>
+                </tr>
+              );
+            }
+          }
+        }
+        
         table2.push(
           <table key={i} className="border-2 border-black text-lg ">
             <thead>
@@ -340,11 +440,14 @@ function ClassAllotment({
         } else {
           snakeRow = 0;
         }
+        if (tableIndex === rows) {
+          
+        }
       }
     });
     // }
 
-    if (row.length > 0) {
+    if (row.length > 0 && row.length >4) {
       table2.push(
         <table className="border-2 border-black min-h-[900px] text-sm ">
           <thead>
@@ -394,19 +497,23 @@ function ClassAllotment({
                   {exam.toUpperCase()}{" "}
                 </h1>
               </div>
-              <table className={`border-2 border-black text-lg ${columns==7 ? "" : "m-4"}  text-center`}>
+              <table
+                className={`border-2 border-black text-lg ${
+                  (columns == 7 && !single_seater) ? "" : "m-4"
+                }  text-center`}
+              >
                 <thead></thead>
                 <tbody>
                   <tr>
-                    <th className="border-2 border-black text-xl p-2">
+                    <th className="border-2 border-black text-lg p-2">
                       {" "}
-                      Date: 13/02/2022{" "}
+                      Date: 15/02/2022{" "}
                     </th>
-                    <th className="border-2 border-black text-xl p-2">
+                    <th className="border-2 border-black text-lg p-2">
                       {" "}
                       Session: AN
                     </th>
-                    <th className="border-2 border-black text-xl p-2">
+                    <th className="border-2 border-black text-lg p-2">
                       {" "}
                       Time: 12:00 PM to 3:00 PM{" "}
                     </th>
@@ -421,6 +528,9 @@ function ClassAllotment({
                 <b className="text-4xl">{room}</b>{" "}
               </h1>
               <p className="italic">{FLOORS[room.split(REG)[0]]} </p>
+              {room.includes("EH") ? (
+                <p className="italic text-xs"> {ROOMNO[room.split(REG)[1]]} </p>  
+              ) : console.log(room)}
             </div>
 
             {/* <p> Date: 13/02/2023  </p>
@@ -428,14 +538,14 @@ function ClassAllotment({
             <p> Time:  </p> */}
             {/* {!downloading && <button onClick={downloadPDF}>Download PDF</button>} */}
           </div>
-          <div className="flex flex-col m-2  w-3/5 items-center">
+          <div className="flex flex-col m-1  w-3/5 items-center">
             {create(room, roomArray, rows)}
             {/* <GeneratePDF html={componentRef} /> */}
             {rangesCreate(rangesSingle)}
           </div>
           <div className="flex justify-between">
-            <p className="p-2"> Verified by: </p>
-            <p className="p-2"> Approved by: </p>
+            <p className="p-1"> Verified by: </p>
+            <p className="p-1"> Approved by: </p>
           </div>
         </div>
       </Page>

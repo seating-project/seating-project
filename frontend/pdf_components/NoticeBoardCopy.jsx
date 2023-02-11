@@ -116,7 +116,8 @@ const NoticeBoardCopy = ({ ranges, exam }) => {
     }
     return sed;
   };
-
+  const dept1 = ["cse 1", "it 1", "aids 1"]
+  console.log("EXAM", exam)
   return (
     <>
       <a href="/api/pdf" download="notice_board_copy.pdf" className="downloadBtn">
@@ -131,7 +132,13 @@ const NoticeBoardCopy = ({ ranges, exam }) => {
           <div className="flex flex-col items-center justify-center p-4">
             <Image src="/citlogo.png" alt="logo" width={600} height={680} />
             <h1 className="text-4xl font-semibold p-4">{exam}</h1>
+            <h1 className="text-4xl font-semibold p-4">Main Building</h1>
           </div>
+          {/* <div className="flex flex-col justify-center p-4">
+            <p> <b>EH1 - EH10</b>   : Block A - First Floor</p>
+            <p> <b>EH11 - EH20</b>  : Block A - Ground Floor</p>
+            <p> <b>EH21 - EH27</b>  : Block B - First Floor</p>
+          </div> */}
           <div className="ml-4">
             <table className="border-2 " width={700}>
               <thead>
@@ -156,7 +163,10 @@ const NoticeBoardCopy = ({ ranges, exam }) => {
               </thead>
               
                 {Object.keys(dept_and_their_ranges).map((dept) => {
+                  if (dept1.includes(dept)){
+                    console.log("DEPT", dept)
                   return <tbody className={styles.unbreak}>{roomRanges(dept)}</tbody>;
+                  }
                 })}
                 {/* {roomRanges('cse 2') } */}
               
@@ -164,6 +174,52 @@ const NoticeBoardCopy = ({ ranges, exam }) => {
           </div>
         </div>
       </Page>
+      {/* <Page>
+
+      </Page> */}
+        {/* <Page>
+        <div
+            className="items-center justify-center"
+            ref={componentRef}
+          >
+            
+            <div className="flex flex-col items-center justify-center p-4">
+              <Image src="/citlogo.png" alt="logo" width={600} height={680} />
+              <h1 className="text-4xl font-semibold p-4">{exam}</h1>
+            </div>
+            <div className="ml-4">
+              <table className="border-2 " width={700}>
+                <thead>
+                  <tr>
+                    <th className="border-2 p-4" rowSpan={2}>
+                      S. No
+                    </th>
+                    <th className="border-2 p-4" rowSpan={2}>
+                      Room
+                    </th>
+                    <th className="border-2 p-4" colSpan={2}>
+                      Register No
+                    </th>
+                    <th className="border-2 p-4" rowSpan={2}>
+                      Total
+                    </th>
+                  </tr>
+                  <tr>
+                    <th className="border-2 p-4">From</th>
+                    <th className="border-2 p-4">To</th>
+                  </tr>
+                </thead>
+                
+                  {Object.keys(dept_and_their_ranges).map((dept) => {
+                    if (!(dept1.includes(dept))){
+                    return <tbody className={styles.unbreak}>{roomRanges(dept)}</tbody>;
+                    }
+                  })}
+                
+              </table>
+            </div>
+          </div>
+        </Page> */}
     </>
   );
 };

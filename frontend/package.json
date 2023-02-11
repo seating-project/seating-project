@@ -11,7 +11,8 @@
     "@babel/plugin-transform-react-jsx": "7.14.9",
     "@headlessui/react": "^1.7.8",
     "@heroicons/react": "v1",
-    "@react-pdf/renderer": "^3.0.3",
+    "@splinetool/react-spline": "^2.2.5",
+    "@splinetool/runtime": "^0.9.211",
     "@tailwindcss/forms": "^0.5.3",
     "@types/babel-core": "^6.25.7",
     "@types/jspdf": "^2.0.0",
@@ -24,6 +25,7 @@
     "jspdf": "^2.5.1",
     "jspdf-autotable": "^3.5.28",
     "next": "latest",
+    "next-themes": "^0.2.1",
     "puppeteer": "^19.6.3",
     "puppeteer-report": "^3.1.0",
     "react": "18.2.0",
@@ -31,6 +33,8 @@
     "react-pdf": "^6.2.2",
     "react-scripts": "^5.0.1",
     "react-select": "^5.7.0",
+    "three": "^0.149.0",
+    "vanta": "^0.5.24",
     "zustand": "^4.3.2"
   },
   "devDependencies": {

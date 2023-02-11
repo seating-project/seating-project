@@ -5,48 +5,33 @@ import Image from "next/image";
 
 const Navbar = () => {
   return (
-    <div className="flex flex-col items-center min-w-[280px] w-1/5 justify-around p-4 h-full  rounded-r-3xl border-r-2 border-screen bg-white">
-      <div className="flex flex-col items-center">
-        <div className="flex items-center ">
-          <Image
+    <div className="flex p-8 justify-between bg-white shadow-md">
+      <div className="ml-8 flex justify-between items-center mr-8">
+        {/* <div className="flex "> */}
+        <Link href="/" className="flex">
+          {/* <Image
             src="https://images.unsplash.com/photo-1503602642458-232111445657?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80"
             width={40}
             height={40}
-            className="rounded-full border-black border-2"
+            className="rounded-full border-black border-2 items-center "
             alt="logo"
-          />
-          <h1 className=" text-6xl font-extrabold pl-2   ">Seats</h1>
-        </div>
-        <hr className="w-full border-black border-1 mt-4" />
-      </div>
-
-      <div className="flex flex-col items-center pb-2">
+          /> */}
+          <h1 className=" text-6xl font-mono font-semibold text-dark-blue pl-2 items-center">Seats</h1>
+        </Link>
+        {/* </div> */}
+        {/* <hr className="w-full border-black border-1 mt-4" /> */}
         
-        <Link href="/" className="text-xl font-semibold py-3">
-          Home
-        </Link>
-        <Link href="/createexamtemplate" className="text-xl font-semibold py-3">
-          Exam Templates
-        </Link>
-        <Link href="/roomdata" className="text-xl font-semibold py-3">
-          Room Data
-        </Link>
-        <Link href="/examdata" className="text-xl font-semibold py-3">
-          Exam Data
-        </Link>
-        <Link href="/examtemplate" className="text-xl font-semibold py-3">
-          Exam Template
-        </Link>
-        <Link href="/exam" className="text-xl font-semibold py-3">
-          Exam
+      </div>
+      <div className="flex justify-between items-center">
+      <Link href="/templates" className="text-xl font-semibold px-6 font-mono">
+          Templates
         </Link>
       </div>
-
-      <div className="flex flex-col items-center">
-        <Link href="/test" className="text-xl font-semibold py-3">
+      <div className="flex pb-2 mr-8">
+        <Link href="/test" className="text-xl font-semibold py-3 px-3 font-mono">
           Test
         </Link>
-        <Link href="/signup" className="text-xl font-semibold">
+        <Link href="/signup" className="text-xl font-semibold py-3 px-3 font-mono">
           Sign Up
         </Link>
       </div>

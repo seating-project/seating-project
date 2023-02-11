@@ -119,8 +119,8 @@ export default function ExamForm({ templates }) {
     //   depts: data.depts,
     //   template: data.template,
     // });
-    // const res = await axios.post("http://127.0.0.1:8080/createexam/", data);
-    // router.push("/exams");
+    const res = await axios.post("http://127.0.0.1:8080/createexam/", data);
+    router.push("/");
   };
 
   const handleDeptChange = (selectedOption) => {

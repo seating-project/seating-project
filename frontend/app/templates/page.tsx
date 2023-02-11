@@ -8,6 +8,7 @@ import ExamCard from "../../components/ExamCard";
 import TemplateCard from "../../components/TemplateCard";
 import drf from "../../pages/api/axiosConfig";
 
+
 async function getTemplateData() {
   try {
     const res = await drf.get("/examtemplate/");
@@ -43,10 +44,10 @@ async function Homepage() {
   const tdata = await getTemplateData();
 
   return (
-    <div className="bg-white bg-background bg-cover">
+    <div className="bg-cover flex flex-row">
       <div className="flex flex-col h-screen">
         <div>
-          <h1 className="text-6xl text-blue-50 m-8 font-bold">Templates</h1>
+          <h1 className="text-6xl text-black m-8 font-bold">Templates</h1>
         </div>
         <div className="flex flex-wrap m-8">
           {tdata.map((template : any) => (

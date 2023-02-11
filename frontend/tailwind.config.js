@@ -9,7 +9,7 @@ module.exports = {
   theme: {
     colors: {
       bblue: "#3ccdff",
-      "dark-blue": "#0f172a",
+      "dark-blue": "#6666FF",
       black: "#000000",
       white: "#ffffff",
       gray: "#f5f5f5",
@@ -23,6 +23,7 @@ module.exports = {
       gradient2: "#85D2D6",
       blue: colors.blue,
       red: colors.red,
+      "light-blue": "#b9e1ff",
       "gray-200": colors.gray[200],
       "gray-300": colors.gray[300],
       "blue-500": colors.blue[500],
@@ -30,6 +31,7 @@ module.exports = {
     },
     fontFamily: {
       sans: ["Inter", "sans-serif"],
+      mono: ["Fira Code", "monospace"],
     },
     screens: {
       sm: "480px",
