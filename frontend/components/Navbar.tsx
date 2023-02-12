@@ -5,7 +5,7 @@ import Image from "next/image";
 
 const Navbar = () => {
   return (
-    <div className="flex p-8 justify-between bg-white shadow-md">
+    <div className="flex p-8 justify-between bg-white shadow-md absolute w-full">
       <div className="ml-8 flex justify-between items-center mr-8">
         {/* <div className="flex "> */}
         <Link href="/" className="flex">
@@ -16,14 +16,16 @@ const Navbar = () => {
             className="rounded-full border-black border-2 items-center "
             alt="logo"
           /> */}
-          <h1 className=" text-6xl font-mono font-semibold text-dark-blue pl-2 items-center">Seats</h1>
+          <h1 className=" text-6xl font-mono font-semibold text-dark-blue ml-2 items-center border-b-4">Seats</h1>
         </Link>
         {/* </div> */}
         {/* <hr className="w-full border-black border-1 mt-4" /> */}
         
       </div>
-      <div className="flex justify-between items-center">
-      <Link href="/templates" className="text-xl font-semibold px-6 font-mono">
+      <div className="flex justify-between items-center inline-block relative text-blue after:content-[''] after:absolute after:w-full 
+          after:scale-x-0 after:h-[2px] after:bottom-0 after:left-0 after:bg-dark-blue after:origin-bottom-right after:transition-transform
+          after:duration-300 ease-out hover:after:scale-x-100 hover:after:origin-bottom-left">
+      <Link href="/templates" className="text-xl font-semibold px-6 font-mono  ">
           Templates
         </Link>
       </div>

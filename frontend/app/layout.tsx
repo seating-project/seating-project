@@ -14,7 +14,7 @@ export default function RootLayout({
       <body className="bg-light-blue h-screen">
         <Navbar />
         <div className="flex">
-          <div className="mt-4 mx-8 w-9/12">{children}</div>
+          <div className="mt-36 mx-8 w-11/12">{children}</div>
           <div className="mt-4 h-screen w-full">
             <SplineBackground />
           </div>
@@ -23,3 +23,6 @@ export default function RootLayout({
     </html>
   );
 }
+
+//! {CODE RED}
+
