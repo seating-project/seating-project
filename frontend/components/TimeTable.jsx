@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-
+import drf from "../pages/api/axiosConfig";
 // function Convert() {
 //   var table = document.getElementById("timetable");
 //   var header = [];
@@ -31,9 +31,9 @@ function createJSON(dates, depts, inputValues) {
   return result;
 }
 
-const TableInput = ({ data }) => {
+const TableInput = ({ data, json }) => {
   const [inputValues, setInputValues] = useState({});
-
+  console.log(json)
   const handleChange = async (e, department, date) => {
     // console.log(inputValues);
     // inputValues[department][date] = e.target.value;
@@ -49,19 +49,29 @@ const TableInput = ({ data }) => {
   };
 
   const doSomething = async (event) => {
-    event.preventDefault();
-    console.log("Submitted");
-    const form = document.getElementById("timetableform");
-    console.log(form);
-    const formData = new FormData(form);
-    const inputValues = Object.values(formData.entries());
-    console.log("values", inputValues);
-    // const res = await axios.post("http://localhost:8080/createexam/", data);
+    // event.preventDefault();
+    // console.log("Submitted");
+    // const form = document.getElementById("timetableform");
+    // console.log("GOPALALA", form);
+    // const formData = new FormData(form);
+    // const inputValues = Object.values(formData.entries());
+    // console.log("values", inputValues);
+    // json["timtable"] = inputValues;
+    // const res = await drf.post("/createexam/", json);
+    console.log("Gopal", inputValues);
+    json["timetable"] = inputValues
+    const res = await drf.post("/createexam/", json);
+    
     // router.push("/exams");
+    console.log("Omala");
+    
   };
 
-  console.log(inputValues);
+  console.log("GOMTHA", inputValues);
+  json["timetable"] = inputValues;
 
+
+  console.log(data)
   return (
     <div className="p-8 justify-center items-center">
       <h1 className="font-semibold py-5 text-4xl">Exam Time Table</h1>
@@ -71,12 +81,12 @@ const TableInput = ({ data }) => {
             <tr>
               <th className="border"></th>
               {data.departments.map((department) => (
-                <th key={department}>{department}</th>
+                <th key={department} className="border">{department}</th>
               ))}
             </tr>
           </thead>
           <tbody>
-            {data.dates.map((date) => (
+            {/* {data.dates.map((date) => (
               <tr key={date} className="border">
                 <th>{date}</th>
                 {data.departments.map((department) => (
@@ -90,17 +100,35 @@ const TableInput = ({ data }) => {
                   </td>
                 ))}
               </tr>
+            ))} */}
+            {data.dates.map((date) => (
+              <tr key={date} className="border ">
+              <th width={200}>{date.toDateString()}</th>
+              {data.departments.map((department) => (
+                <td key={department} className="border">
+                  <input
+                    type="text" 
+                    value={inputValues[department]?.[date] || ""}
+                    onChange={(e) => handleChange(e, department, date)}
+                    className="border-none"
+                  />
+                </td>
+              ))}
+              
+              </tr>
             ))}
           </tbody>
         </table>
-        <button
+        {/* <button
           type="submit"
           id="formsubmit"
           onSubmit={(event) => doSomething(event)}
         >
           Submit
-        </button>
+        </button> */}
       </form>
+      <button onClick={doSomething}>Submit
+      </button>
     </div>
   );
 };

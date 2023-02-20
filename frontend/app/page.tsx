@@ -9,6 +9,7 @@ import drf from "../pages/api/axiosConfig";
 
 import { useEffect } from "react";
 // import VantaBackground from "../components/SplineBackground";
+import SplineBackground from "../components/SplineBackground";
 
 async function getExamData() {
   try {
@@ -52,7 +53,7 @@ async function Homepage() {
 
   return (
     <>
-      <div className="bg-cover bg-light-blue">
+      <div className="bg-cover bg-light-blue flex">
         <div className="flex ">
           {/* <Navbar /> */}
           <div className="flex flex-col">
@@ -73,6 +74,9 @@ async function Homepage() {
               </div>
             </div>
           </div>
+        </div>
+        <div className="">
+          <SplineBackground />
         </div>
       </div>
     </>

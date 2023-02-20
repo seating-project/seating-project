@@ -1,4 +1,5 @@
 import styles from '../styles/PotraitPage.module.css'
+import Image from 'next/image'
 
 type Props = {
   children: React.ReactNode
@@ -6,6 +7,7 @@ type Props = {
 
 const Page = ({ children }: Props) => (
   <div className={styles.page}>
+      <Image src="/citlogo.png" alt="" width={680} height={600}/>
       {children}
   </div>
 )

@@ -2,8 +2,9 @@
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import Select from "react-select";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { examData } from "../src/store";
+// import {useEffect} from "react";
 // import { useContext } from "react";
 // import { createContext }
 import TableInput from "./TimeTable";
@@ -92,43 +93,85 @@ export default function ExamForm({ templates }) {
     console.log(template[("template_name", "id")], template);
     console.log(template_options);
   });
-  const [selectedDept, setSelectedDept] = useState([]);
-  const router = useRouter();
-  let deptanddate;
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    console.log("Submitted");
-    const form = document.getElementById("examform");
-    const formData = new FormData(form);
-    const data = Object.fromEntries(formData.entries());
-    const selectedDeptValues = selectedDept.map((dept) => dept.value);
-    data["depts"] = { depts: selectedDeptValues };
-    console.log(data);
-    deptanddate = {
-      departments: data["depts"],
-      dates: getDates(data["fromdate"], data["todate"]),
-    };
-    console.log(new Date(data["fromdate"]), new Date(data["todate"]));
-    console.log(deptanddate);
-    // const { setData } = useContext(DataContext);
 
-    // examData.getState().set({
-    //   name: data.name,
-    //   fromdate: data.fromdate,
-    //   todate: data.todate,
-    //   depts: data.depts,
-    //   template: data.template,
-    // });
-    const res = await axios.post("http://127.0.0.1:8080/createexam/", data);
-    router.push("/");
-  };
+  const [selectedDept, setSelectedDept] = useState([]);
+  const [timeTable, showTimeTable] = useState(false);
+
+  const [deptanddate, setDeptanddate] = useState({});
+  const [data, setData] = useState({});
+  // let deptanddate;
+
+  
+    const handleSubmit = async (event) => {
+      event.preventDefault();
+      console.log("Submitted");
+      const form = document.getElementById("examform");
+      const formData = new FormData(form);
+      const data = Object.fromEntries(formData.entries());
+      const selectedDeptValues = selectedDept.map((dept) => dept.value);
+      // data["depts"] = { depts: selectedDeptValues };
+      data["depts"] = selectedDeptValues;
+      console.log(data);
+      // deptanddate = {
+      //   departments: data["depts"],
+      //   dates: getDates(data["fromdate"], data["todate"]),
+      // };
+
+      
+      // console.log(new Date(data["fromdate"]), new Date(data["todate"]));
+      console.log("GOPAL", deptanddate);
+      setDeptanddate({
+        departments: data["depts"],
+        dates: getDates(data["fromdate"], data["todate"]),
+      });
+      setData(data);
+      console.log("Gopal", deptanddate);  
+      // if (deptanddate!={}) {
+      //   showTimeTable(true);
+      // } else {
+      //   showTimeTable(false);
+      // }
+      // const { setData } = useContext(DataContext);
+
+      // examData.getState().set({
+      //   name: data.name,
+      //   fromdate: data.fromdate,
+      //   todate: data.todate,
+      //   depts: data.depts,
+      //   template: data.template,
+      // });
+      // const res = await axios.post("http://127.0.0.1:8080/createexam/", data);
+      // router.push("/");
+    };
+
+
+    useEffect(() => {
+      // if (deptanddate != {}) {
+      //   showTimeTable(true);
+      // } else {
+      //   showTimeTable(false);
+      // }
+      console.log("Gopal", deptanddate);
+      try {
+        if (deptanddate.departments != undefined && data != {}) {
+          showTimeTable(true);
+        } else {
+          showTimeTable(false);
+        }
+      }
+      catch (e) {
+        console.log(e);
+      }
+    }, [deptanddate]);
+
 
   const handleDeptChange = (selectedOption) => {
     setSelectedDept(selectedOption);
   };
 
   return (
-    <div className="p-8 justify-center items-center">
+    <div className="p-8 justify-center items-center flex">
+      <div>
       <h1 className="font-semibold pt-5 text-4xl">New Exam</h1>
       <form id="examform" onSubmit={handleSubmit}>
         <div className="mt-8 ">
@@ -223,9 +266,14 @@ export default function ExamForm({ templates }) {
           >
             Next
           </button>
-          {deptanddate ? <TableInput data={deptanddate} /> : null}
         </div>
       </form>
+      </div>
+      {timeTable && deptanddate != {} ? (
+        <div>
+            <TableInput data={deptanddate} json={data} />
+            </div>
+          ) : null}
     </div>
   );
 }

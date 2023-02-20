@@ -80,19 +80,33 @@ async function Testpage() {
     
   }
   
+  let rangesNeededGirls = {}
+  rangesNeededGirls["S1"] = rangesNeeded["S1"]
+  rangesNeededGirls["S2"] = rangesNeeded["S2"]
+  rangesNeededGirls["S3"] = rangesNeeded["S3"]
+  rangesNeededGirls["S4"] = rangesNeeded["S4"]
+
+  let rangesNeededBoys = {}
+  Object.keys(rangesNeeded).forEach((key) => {
+    if (!(Object.keys(rangesNeededGirls).includes(key))) {
+      rangesNeededBoys[key] = rangesNeeded[key]
+    }
+  })
 
 
+  // console.log("GIRLS RANGES", rangesNeededGirls)
+  // console.log("BOYS RANGEES" , rangesNeededBoys)
 
 
   // console.log("ORDERED GOM", roomsNeeded)
   // console.log("ROOM SINGLE LOL",roomSingle);
-  //console.log("RANGES LMAO", rangesNeeded);
+  // console.log("RANGES LMAO", rangesNeeded);
   //console.log("room length", roomSingle["F1"].length)
   // console.log("room length", tdata[0].room_strength)
   let order = 0;
   const timestamp = Date.now();
   return (
-    <div className="bg-white h-screen w-screen" >
+    <div className="bg-white w-screen" >
       
       
       {/* {Object.keys(roomSingle).map((room) => {
@@ -102,19 +116,18 @@ async function Testpage() {
             key={`page-${timestamp}-${order++}`}
             room={room}
             roomArray={roomSingle[room]}
-            rows={tdata[0].num_rows}
-            columns={tdata[0].num_columns}
+            rows={tdata[1].num_rows}
+            columns={tdata[1].num_columns}
             rangesSingle={rangesNeeded[room]}
             // exam={tdata[0].template_exam_name}
-            exam = "Model Examination"
-            room_strength = {tdata[0].room_strength}
-            single_seater = {tdata[0].single_seater}
-            boys_girls_separation = {tdata[0].boys_girls_separation}
-            
+            exam = "Internal Assessment - I"
+            room_strength = {tdata[1].room_strength}
+            single_seater = {tdata[1].single_seater}
+            boys_girls_separation = {tdata[1].boys_girls_separation}
           />
         );
       })} */}
-      <NoticeBoardCopy ranges={rangesNeeded} exam={"Model Examination"} />
+      <NoticeBoardCopy ranges={rangesNeededGirls} exam={"Model Examination"} />
       {/* <AttendanceSheets ranges = {rangesNeeded}/> */}
     </div>
   );

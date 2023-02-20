@@ -238,7 +238,7 @@ class Exam(models.Model):
     todate = models.DateField()
     template = models.ForeignKey(ExamTemplate, models.CASCADE) 
     depts = models.JSONField()
-    # timetable = models.JSONField(null=False)
+    timetable = models.JSONField(null=True)
 
     class Meta:
         verbose_name = 'Exam'

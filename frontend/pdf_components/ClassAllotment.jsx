@@ -50,7 +50,7 @@ for (let i = 21; i <= 27; i++) {
 
 const REG = new RegExp("(?<=\\D)(?=\\d)|(?<=\\d)(?=\\D)");
 
-function ClassAllotment({
+function  ClassAllotment({
   room,
   roomArray,
   rows,
@@ -68,29 +68,42 @@ function ClassAllotment({
   const rangesCreate = (rangesSingle) => {
     let rangesDiv = [];
     let r = [];
+    let s = []
     let count = 0;
     for (const i in rangesSingle) {
       r.push(
-        <p key={i} className="border-2 p-2">
+        <div key={i+"div"}>
+          <p key={i} className="border-2 p-2 w-1/2 min-w-[100px] px-4">
           <b>
             {i.split(" ")[0].toUpperCase() +
               " " +
               ROMAN[rangesSingle[i][0][2]] +
               " - "}
           </b>{" "}
-          {columns == 7 ? null : <br />}
-          {rangesSingle[i][0][0] +
+          {/* {columns == 7 ? null : <br />} */}
+          {/* {rangesSingle[i][0][0] +
             " to " +
-            rangesSingle[i][rangesSingle[i].length - 1][0]}
-          {" - "} <b>{rangesSingle[i].length}</b>
+            rangesSingle[i][rangesSingle[i].length - 1][0]} */}
+          <b>{rangesSingle[i].length}</b>
+          </p>
+          <div className="flex">
+          <p key={i + 1} className="border p-2 w-full">
+          P 
         </p>
+        <p key={i+2} className="border p-2 w-full"> A   </p>
+        </div>
+        </div>
+        
+        
       );
+      
+      
       count++;
     }
     rangesDiv.push(
       <div
         key={count}
-        className="flex flex-row justify-center mt-4 pt-4 text-xl"
+        className="flex flex-row justify-center  pt-4 text-xs"
       >
         {r}
       </div>
@@ -114,7 +127,14 @@ function ClassAllotment({
     let oneTableLeave = 0;
     let snakeRow = 0;
     let endthisstuff = 0;
-    // console.log("ROOM STRENGTH", room_strength);
+    let totalTables = 1;
+
+    if (!single_seater) {
+      room_strength = Math.ceil(room_strength / 2);
+    }
+    console.log("ROOM STRENGTH", room_strength);
+    console.log("COLUMN", columns);
+    
 
     // if (single_seater) {
 
@@ -178,55 +198,65 @@ function ClassAllotment({
 
         if (snakeRow === 0) {
           row.push(
-            <tr className="h-4" key={i}>
+            <tr className="" key={i}>
+              
               <td
-                className="border-2 border-black h-4 p-2 text-center"
-                width={200}
-                height={66}
+                className="border-2 border-black py-2 text-center text-[8px]"
+                width={220}
+                height={50}
               >
                 <b>{i[0][1].toUpperCase()}</b> {" " + i[0][0]} <br />{" "}
+                <hr className="w-full"/>
                 <b>{i[1][1].toUpperCase()}</b> {" " + i[1][0]}
+              </td>
+              <td className="border-2 border-black py-2 text-center text-xs" width={20}>
+                <hr className="w-full"/>
               </td>
             </tr>
           );
           tableCounter++;
         } else if (snakeRow === 1) {
           row.unshift(
-            <tr className="h-4" key={i}>
+            <tr className="" key={i}>
+              
               <td
-                className="border-2 border-black h-4 p-2 text-center"
-                width={200}
-                height={66}
+                className="border-2 border-black  text-center text-[8px]"
+                width={220}
+                height={40}
               >
                 <b>{i[0][1].toUpperCase()}</b> {" " + i[0][0]} <br />{" "}
+                <hr className="w-full"/>
                 <b>{i[1][1].toUpperCase()}</b> {" " + i[1][0]}
+              </td>
+              <td className="border-2 border-black  text-center text-xs" width={20}>
+              <hr className="w-full"/>
               </td>
             </tr>
           );
           tableCounter++;
-        }
+        } 
       } else {
-        // if (room_strength > 25 && tableCounter == columns-1) {
-        //   console.log("GOPAL dadwadwa")
-        //   if (room_strength - 25 === 1) {
-        //     if (tableIndex===2) {
-        //       if (tableCounter===6) {
-        //         print("GOPAL INCOMING")
-        //         row.push(
-        //           <tr className="h-4" key={i+"1"}>
-        //             <td
-        //               className="border-2 border-black h-4 p-2 text-center"
-        //               width={200}
-        //               height={66}
-        //             >
-        //               <b>{i[0][1].toUpperCase()}</b> {" " + i[0][0]}
-        //             </td>
-        //           </tr>
-        //         )
-        //       }
-        //     }
-        //   }
-        // }
+        if (room_strength > 25 && tableCounter == columns-1) {
+          console.log("GOPAL dadwadwa")
+          if (room_strength - 25 === 1) {
+            if (tableIndex===2) {
+              if (tableCounter===6) {
+                print("GOPAL INCOMING")
+                row.push(
+                  <tr className="h-4" key={i+"1"}>
+                    <td
+                      className="border-2 border-black h-4 p-2 text-center"
+                      width={200}
+                      height={66}
+                    >
+                      <b>{i[0][1].toUpperCase()}</b> {" " + i[0][0]}
+                    </td>
+                  </tr>
+                )
+              }
+            }
+          }
+        }
 
         if (room_strength === 25 && oneTableLeave === 0) {
           if (tableIndex != 3 && snakeRow === 0) {
@@ -234,9 +264,12 @@ function ClassAllotment({
               <tr className="h-4" key={i}>
                 <td
                   className="border-2 border-black h-4 p-2 text-center"
-                  width={200}
-                  height={66}
+                  // width={200}
+                  // height={66}
                 ></td>
+                <td className="border-2 border-black h-4 p-2 text-center">
+
+                </td>
               </tr>
             );
             tableCounter++;
@@ -246,9 +279,10 @@ function ClassAllotment({
               <tr className="h-4" key={i}>
                 <td
                   className="border-2 border-black h-4 p-2 text-center"
-                  width={200}
-                  height={66}
+                  // width={200}
+                  // height={66}
                 ></td>
+                <td className="border-2 border-black h-4 p-2 text-center"> </td>
               </tr>
             );
             tableCounter++;
@@ -258,31 +292,40 @@ function ClassAllotment({
         if (i[0] === 0) {
           if (snakeRow === 0) {
             row.push(
-              <tr className="h-4" key={i}>
+              <tr className="" key={i}>
+                
                 <td
-                  className="border-2 border-black h-4 p-2 text-center"
+                  className="border-2 border-black  text-center"
                   width={200}
-                  height={66}
+                  height={50}
                 >
                   {" "}
                   <b>{i[1][1].toUpperCase()}</b> {" " + i[1][0]}
-                  <br />{" "}
+                  {/* <br />{" "} */}
                 </td>
+                <td className="border-2 border-black text-center" width={30}></td>
               </tr>
             );
             tableCounter++;
           } else {
             row.unshift(
-              <tr className="h-4" key={i}>
+              <tr className="" key={i}>
+                {/* <td>
+                  {" "}
+                </td> */}
+                {/* <td className="border-2 border-black  text-center">{totalTables++}</td> */}
+                
                 <td
-                  className="border-2 border-black h-4 p-2 text-center"
+                  className="border-2 border-black  text-center"
                   width={200}
-                  height={66}
+                  height={50}
                 >
                   {" "}
                   <b>{i[1][1].toUpperCase()}</b> {" " + i[1][0]}
-                  <br />{" "}
+                  {/* <br />{" "} */}
                 </td>
+
+                <td className="border-2 border-black text-center" width={30}></td>
               </tr>
             );
             tableCounter++;
@@ -290,29 +333,33 @@ function ClassAllotment({
         } else if (i[1] === 0) {
           if (snakeRow === 0) {
             row.push(
-              <tr className="h-4" key={i}>
+              <tr className="" key={i}>
+                {/* <td className="border-2 border-black  text-center" >{totalTables++}</td> */}
                 <td
-                  className="border-2 border-black h-4 p-2 text-center"
+                  className="border-2 border-black  text-center"
                   width={200}
-                  height={66}
+                  height={50}
                 >
                   <b>{i[0][1].toUpperCase()}</b> {" " + i[0][0]}
-                  <br />{" "}
+                  {/* <br />{" "} */}
                 </td>
+                <td className="border-2 border-black text-center" width={30}></td>
               </tr>
             );
             tableCounter++;
           } else {
             row.unshift(
-              <tr className="h-4" key={i}>
+              <tr className="" key={i}>
+                {/* <td className="border-2 border-black  text-center" >{totalTables++}</td> */}
                 <td
-                  className="border-2 border-black h-4 p-2 text-center"
+                  className="border-2 border-black  text-center"
                   width={200}
-                  height={66}
+                  height={50}
                 >
                   <b>{i[0][1].toUpperCase()}</b> {" " + i[0][0]}
-                  <br />{" "}
+                  {/* <br />{" "} */}
                 </td>
+                <td className="border-2 border-black text-center" width={30}></td>
               </tr>
             );
             tableCounter++;
@@ -321,6 +368,7 @@ function ClassAllotment({
           if (snakeRow === 0) {
             row.push(
               <tr className="h-4" key={i}>
+                
                 <td
                   className="border-2 border-black h-4 p-2 text-center"
                   width={200}
@@ -328,19 +376,22 @@ function ClassAllotment({
                 >
                   {" "}
                 </td>
+                <td className="border-2 border-black h-4 p-2 text-center" width={30}></td>
               </tr>
             );
             tableCounter++;
           } else {
             row.unshift(
               <tr className="h-4" key={i}>
+                
                 <td
-                  className="border-2 border-black h-4 p-2 text-center"
+                     className="border-2 border-black h-4 p-2 text-center"
                   width={200}
                   height={66}
                 >
                   {" "}
                 </td>
+                <td className="border-2 border-black h-4 p-2 text-center" width={30}></td>
               </tr>
             );
             tableCounter++;
@@ -349,28 +400,37 @@ function ClassAllotment({
         // console.log("TABLE COUNTER", tableCounter);
         // console.log("ROW LENGTH", row.length);
       }
-      if (row.length === columns) {
-        if (snakeRow === 1 && tableIndex != 3) {
+      if (row.length === 6) {   // Columns Variable
+        if (snakeRow === 1 && tableIndex != 3 && room_strength != 25) {
           // console.log("ROW", row)
-          // row.reverse();
-          row.unshift(row[row.length - 1]);
+          row.reverse();
+          // row.unshift(row[row.length - 1]);
 
-          row.pop();
+          // row.pop();
+        } else {
+          row.reverse();
         }
         if (tableIndex == 3) {
           // row.reverse()
         }
-        
-        if (roomArray.length > room_strength && tableCounter == columns) {
-          console.log("GOPAL dadwadwa");
+        console.log("Here coming");
+        console.log("ROOM ACTUAL LENGTH", roomArray.length);
+        console.log(single_seater, room_strength)
+        if (room_strength != 25) {
+        row.reverse()
+        }
+
+        if (roomArray.length > room_strength && tableCounter == columns && room_strength==25) {
+          console.log("caa")
+          
           if (roomArray.length - room_strength === 2) {
-            console.log("GOmmala");
+            
             if (tableIndex === 2) {
               row.shift()
-              console.log("GOTHA");
-              console.log("maalaa", roomArray.slice(-1))
+              
               row.unshift(
                 <tr className="h-4" key={i + "1"}>
+                  <td className="border-2 border-black h-4 p-2 text-center" width={50}>{26}</td>
                   <td
                     className="border-2 border-black h-4 p-2 text-center"
                     width={200}
@@ -378,15 +438,15 @@ function ClassAllotment({
                   >
                     <b>{i[0][1].toUpperCase()}</b> {" " + roomArray.slice(-2)[0][0][0]}
                   </td>
-                </tr>
+                </tr> 
               );
             }
             if (tableIndex === 1) {
               row.shift()
-              console.log("GOTHA");
-              console.log("maalaa", roomArray.slice(-1))
+              
               row.unshift(
                 <tr className="h-4" key={i + "1"}>
+                  <td className="border-2 border-black h-4 p-2 text-center" width={50}>{27}</td>
                   <td
                     className="border-2 border-black h-4 p-2 text-center"
                     width={200}
@@ -399,11 +459,11 @@ function ClassAllotment({
             }
           }
           if (roomArray.length - room_strength === 1) {
-            console.log("GOmmala");
+            console.log("Here caaaaa")
             if (tableIndex === 2) {
               row.shift()
-              console.log("GOTHA");
-              console.log("maalaa", roomArray.slice(-1))
+              
+              
               row.unshift(
                 <tr className="h-4" key={i + "1"}>
                   <td
@@ -418,13 +478,50 @@ function ClassAllotment({
             }
           }
         }
+
+        if (roomArray.length > room_strength && tableCounter == columns && room_strength==30) {
+          console.log("caa")
+          if (roomArray.length - room_strength === 2) {
+            
+            //
+
+            
+          }
+          if (roomArray.length - room_strength === 1) {
+            console.log("Here caaaaa")
+            
+            console.log(tableIndex, "is table Index and columns are", columns)
+            if (tableIndex == rows-1) {
+              console.log(roomArray.slice(-1)[0][0][0])
+              
+              row.push(
+                <tr className="h-4" key={i + "1"}>
+                  
+                <td
+                     className="border-2 border-black h-4 p-2 text-center"
+                  width={200}
+                  height={66}
+                >
+                  <b>{i[0][1].toUpperCase()}</b> {" " + roomArray.slice(-1)[0][0][0]}
+                </td>
+                <td className="border-2 border-black h-4 p-2 text-center" width={30}></td>
+                </tr>
+
+              )
+            }
+          }
+        }
+        
         
         table2.push(
-          <table key={i} className="border-2 border-black text-lg ">
+          <table key={i} className="border-2 border-black text-xs p-2">
             <thead>
-              <tr key={i} className="h-16 text-4xl">
-                <th className="border border-black text-xl p-2">
+              <tr key={i} className=" ">
+                <th className="border border-black text-xs p-2">
                   {"Row " + (tableIndex + 1)}
+                </th>
+                <th className="border-2 border-black text-xs ">
+                  P/A
                 </th>
               </tr>
             </thead>
@@ -447,14 +544,18 @@ function ClassAllotment({
     });
     // }
 
-    if (row.length > 0 && row.length >4) {
+    if (row.length > 3) {
       table2.push(
-        <table className="border-2 border-black min-h-[900px] text-sm ">
+        <table className="border-2 border-black min-h-[900px] text-xs ">
           <thead>
             <tr>
-              <th className="border-2 border-solid border-black text-xl p-2">
+              <th className="border-2 border-solid border-black " colSpan={2}>
                 {"Row " + (tableIndex + 1)}
+                {/* S.No */}
               </th>
+              {/* <th className="border-2 border-solid border-black text-xl p-2">
+                Register No
+              </th> */}
             </tr>
           </thead>
           <tbody>{row}</tbody>
@@ -477,9 +578,9 @@ function ClassAllotment({
   };
   return (
     <>
-      <a href="/api/pdf" download="class_allotment.pdf" className="downloadBtn">
+      {/* <a href="/api/pdf" download="class_allotment.pdf" className="downloadBtn">
         Download PDF
-      </a>
+      </a> */}
       <Page>
         <div className="flex flex-col">
           <div className="w-3/5  flex justify-between items-center">
@@ -487,42 +588,46 @@ function ClassAllotment({
               <div className="flex items-center justify-between ">
                 <Image
                   src="/citlogo.png"
-                  width={500}
-                  height={500}
+                  width={400}
+                  height={400}
                   alt="dasd"
                   className="object-contain pr-4"
                 />
-                <h1 className="text-2xl text-center pl-4 font-bold ml-2">
+                <h1 className="text-xl text-center pl-4 font-bold ml-2">
                   {" "}
                   {exam.toUpperCase()}{" "}
+
+                </h1>
+                <h1 className="text-xl text-center pl-4 font-bold mr-4">
+                  Seating Arrangement / Attendance
                 </h1>
               </div>
               <table
-                className={`border-2 border-black text-lg ${
-                  (columns == 7 && !single_seater) ? "" : "m-4"
+                className={`border-2 border-black text-xs ${
+                  ((columns == 7 || columns == 6) && !single_seater) ? "" : "m-4"
                 }  text-center`}
               >
                 <thead></thead>
                 <tbody>
                   <tr>
-                    <th className="border-2 border-black text-lg p-2">
+                    <th className="border-2 border-black text-xs p-2">
                       {" "}
-                      Date: 15/02/2022{" "}
+                      Date: 22/02/2023{" "}
                     </th>
-                    <th className="border-2 border-black text-lg p-2">
+                    <th className="border-2 border-black text-xs p-2">
                       {" "}
-                      Session: AN
+                      Session: FN
                     </th>
-                    <th className="border-2 border-black text-lg p-2">
+                    <th className="border-2 border-black text-xs p-2">
                       {" "}
-                      Time: 12:00 PM to 3:00 PM{" "}
+                      Time: 08:00 AM to 09:30 AM{" "}
                     </th>
                   </tr>
                 </tbody>
               </table>
             </div>
-            <div className=" p-2 text-center m-2 border-2 rounded-md mr-4">
-              <h1 className=" text-2xl p-2 text-center ">
+            <div className="  text-center m-2 border-2 rounded-md mr-4 px-4">
+              <h1 className=" text-2xl text-center ">
                 {" "}
                 Hall: <br />
                 <b className="text-4xl">{room}</b>{" "}
@@ -538,14 +643,14 @@ function ClassAllotment({
             <p> Time:  </p> */}
             {/* {!downloading && <button onClick={downloadPDF}>Download PDF</button>} */}
           </div>
-          <div className="flex flex-col m-1  w-3/5 items-center">
+          <div className="flex flex-col mt-4  w-3/5 items-center">
             {create(room, roomArray, rows)}
             {/* <GeneratePDF html={componentRef} /> */}
             {rangesCreate(rangesSingle)}
           </div>
           <div className="flex justify-between">
-            <p className="p-1"> Verified by: </p>
-            <p className="p-1"> Approved by: </p>
+            <p className="p-1"> Sign of the Hall Superintendant </p>
+            {/* <p className="p-1"> Approved by: </p> */}
           </div>
         </div>
       </Page>

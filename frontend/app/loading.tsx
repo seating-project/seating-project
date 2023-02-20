@@ -20,7 +20,7 @@ const LoadingPage = () => {
   // }, []);
 
   return (
-    <div className="bg-white bg-opacity-40 backdrop-blur-md drop-shadow-lg flex justify-center items-center h-screen rounded-md">
+    <div className="bg-white bg-opacity-40 backdrop-blur-md drop-shadow-lg flex justify-center items-center h-screen rounded-md w-screen">
       <div className="w-12 h-12 border-8 border-t-8 border-sky-blue rounded-full text-white animate-spin">
         <svg viewBox="0 0 24 24"></svg>
       </div>
