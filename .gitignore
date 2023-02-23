@@ -33,3 +33,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 /frontend/next-env.d.ts
+
+# json
+/*.json

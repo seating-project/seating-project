@@ -165,11 +165,11 @@ class ExamTemplate(models.Model):
     num_rows = models.IntegerField(default=5)
     num_columns = models.IntegerField(default=6)
     room_strength = models.IntegerField(default=60)
-    ##count_in_bench = models                                                                                           .IntegerField(default=2)
+    # count_in_bench = models                                                                                           .IntegerField(default=2)
     rooms = models.JSONField()
     single_seater = models.BooleanField(default=False)
     boys_girls_separation = models.BooleanField(default=False)
-    #needed_documents = models.ForeignKey(NeededDocuments, models.CASCADE)
+    # needed_documents = models.ForeignKey(NeededDocuments, models.CASCADE)
 
     class Meta:
         verbose_name = 'Exam Template'
@@ -179,31 +179,21 @@ class ExamTemplate(models.Model):
         return self.template_name
 
 
-class RoomData(models.Model):
-    id = models.BigAutoField(primary_key=True, null=False)
-    rooms = models.JSONField(blank=True, null=True)
-    ranges = models.JSONField(blank=True, null=True)
-
-    class Meta:
-        verbose_name = 'Room Data'
-        verbose_name_plural = 'Room Data'
-
-    def __str__(self):
-        return self.id
-
-
 class Students(models.Model):
 
-    registerno = models.CharField(max_length=20, primary_key=True, blank=True, null=False)
+    registerno = models.CharField(
+        max_length=20, primary_key=True, blank=True, null=False)
     name = models.TextField(blank=True, null=True)
     gender = models.TextField(blank=True, null=True)
     dept = models.CharField(max_length=10, blank=True, null=True)
     year = models.IntegerField(blank=True, null=True)
     ctype = models.CharField(max_length=1, blank=True, null=True)
+    degree = models.CharField(
+        max_length=5, blank=True, null=True, default='UG')
 
     class Meta:
-        verbose_name='Student'
-        verbose_name_plural='Students'
+        verbose_name = 'Student'
+        verbose_name_plural = 'Students'
 
     def __str__(self):
         return self.name
@@ -236,7 +226,7 @@ class Exam(models.Model):
     name = models.CharField(max_length=200)
     fromdate = models.DateField()
     todate = models.DateField()
-    template = models.ForeignKey(ExamTemplate, models.CASCADE) 
+    template = models.ForeignKey(ExamTemplate, models.CASCADE)
     depts = models.JSONField()
     timetable = models.JSONField(null=True)
 
@@ -246,6 +236,20 @@ class Exam(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class RoomData(models.Model):
+    id = models.BigAutoField(primary_key=True, null=False)
+    exam = models.ForeignKey(Exam, models.CASCADE, default=1)
+    rooms = models.JSONField(blank=True, null=True)
+    ranges = models.JSONField(blank=True, null=True)
+
+    class Meta:
+        verbose_name = 'Room Data'
+        verbose_name_plural = 'Room Data'
+
+    # def __str__(self):
+    #     return self.id
 
 
 # class RoomRanges(models.Model):
@@ -258,3 +262,57 @@ class Exam(models.Model):
 
 #     def __str__(self):
 #         return self.id
+
+
+class Departments(models.Model):
+    id = models.BigAutoField(primary_key=True, null=False)
+    branch = models.CharField(max_length=200)
+    branch_short_name = models.CharField(max_length=200)
+    degree = models.CharField(max_length=200)
+    branch_code = models.CharField(max_length=200)
+
+    class Meta:
+        verbose_name = 'Department'
+        verbose_name_plural = 'Departments'
+
+    def __str__(self):
+        return self.branch
+
+
+class Buildings(models.Model):
+    id = models.BigAutoField(primary_key=True, null=False)
+    building_name = models.CharField(max_length=200)
+    building_blocks = models.JSONField(blank=True, null=True)
+
+    class Meta:
+        verbose_name = 'Building'
+        verbose_name_plural = 'Buildings'
+
+    def __str__(self):
+        return self.building_name
+
+
+class Rooms(models.Model):
+    id = models.BigAutoField(primary_key=True, null=False)
+    room_no = models.CharField(max_length=200)
+    room_floor = models.CharField(max_length=200)
+    room_building = models.ForeignKey(Buildings, models.DO_NOTHING)
+    room_strength = models.IntegerField(default=60)
+    room_block = models.CharField(max_length=200)
+
+    class Meta:
+        verbose_name = 'Room'
+        verbose_name_plural = 'Rooms'
+
+    def __str__(self):
+        return self.room_no
+
+
+class Years(models.Model):
+    year = models.CharField(primary_key=True, null=False, max_length=200)
+    class Meta:
+        verbose_name = 'Year'
+        verbose_name_plural = 'Years'
+
+    def __str__(self):
+        return str(self.year)

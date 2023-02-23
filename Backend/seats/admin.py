@@ -10,9 +10,23 @@ from django.http import HttpResponseRedirect
 class CSVImportForm(forms.Form):
     csv_file = forms.FileField()
 
+class DepartmentsAdmin(admin.ModelAdmin):
+    list_display = ("branch", "branch_code")
+
+class RoomsAdmin(admin.ModelAdmin):
+    list_display = ("room_no", "room_block", "room_floor", "room_strength")
+    
+class BuildingAdmin(admin.ModelAdmin):
+    list_display = ("building_name", )
+
+class YearsAdmin(admin.ModelAdmin):
+    list_display = ("year", )
+
 class StudentsAdmin(admin.ModelAdmin):
 
     list_display = ("name", "registerno", "dept", "year")
+    search_fields = ("registerno", "name")
+    list_filter = ("dept", "year", "degree")
 
     def get_urls(self):
         urls = super().get_urls()
@@ -43,6 +57,8 @@ class StudentsAdmin(admin.ModelAdmin):
                         ctype=fields[5],
                     )
             except IndexError:
+                messages.success(request, 'Data Uploaded Successfully')
+                return HttpResponseRedirect(request.path_info)
                 pass
 
         form = CSVImportForm()
@@ -84,6 +100,8 @@ class CseiiAdmin(admin.ModelAdmin):
                         year=fields[4],
                     )
             except IndexError:
+                messages.success(request, 'Data Uploaded Successfully')
+                return HttpResponseRedirect(request.path_info)
                 pass
 
         form = CSVImportForm()
@@ -125,6 +143,8 @@ class CseiiiAdmin(admin.ModelAdmin):
                         year=fields[4],
                     )
             except IndexError:
+                messages.success(request, 'Data Uploaded Successfully')
+                return HttpResponseRedirect(request.path_info)
                 pass
 
         form = CSVImportForm()
@@ -411,7 +431,10 @@ admin.site.register(RoomData)
 admin.site.register(Students, StudentsAdmin)
 admin.site.register(NeededDocuments)
 admin.site.register(Exam)
-
+admin.site.register(Departments)
+admin.site.register(Rooms, RoomsAdmin)
+admin.site.register(Buildings, BuildingAdmin)
+admin.site.register(Years, YearsAdmin)
 
 # admin.site.site_header = "Seat Allocation System"
 # admin.site.site_title = "Seat Allocation System"

@@ -25,9 +25,13 @@ const FLOORS = {
   EH: "New Building",
 };
 
-const ROOMNO = {
+const PGDEPT = {
+  "ae 1": "Applied Electronics",
+  "cad/cam 1": "CAD/CAM",
+  "csem 1": "Computer Science and Engineering (PG)",
+};
 
-}
+const ROOMNO = {};
 
 for (let i = 1; i <= 10; i++) {
   ROOMNO[i] = "Block A - First Floor";
@@ -81,33 +85,79 @@ const NoticeBoardCopy = ({ ranges, exam }) => {
     let c = 1;
     let sed = [];
     let totalCount = 0;
-    
+
     console.log("DEPT", deptRange);
     console.log("FULL STUFF", dept_and_their_ranges[deptRange]);
     // Sort the array of objects
-    dept_and_their_ranges[deptRange].sort((a,b) => {
+    dept_and_their_ranges[deptRange].sort((a, b) => {
       // console.log("A", a)
       // console.log("B", b)
-      let a1 = Object.entries(a)[0][1][0][0]
-      let b1 = Object.entries(b)[0][1][0][0]
+      let a1 = Object.entries(a)[0][1][0][0];
+      let b1 = Object.entries(b)[0][1][0][0];
       // console.log("A1", a1.slice(-3))
       // console.log("B1", b1)
-      return parseInt(a1.slice(-3)) - parseInt(b1.slice(-3))
-
-    })
-    console.log("SORTED", dept_and_their_ranges[deptRange])
+      return parseInt(a1.slice(-3)) - parseInt(b1.slice(-3));
+    });
+    console.log("SORTED", dept_and_their_ranges[deptRange]);
     sed.push(
       <tr className="font-bold text-xl p-2">
         <td colSpan={5} className="p-2 text-center bg-light-blue">
-          Branch: {deptRange.toUpperCase() + YEARSUFFIX[deptRange.slice(-1)]}{" "}
+          Branch:{" "}
+          {deptRange.includes("ae") ||
+          deptRange.includes("cad/cam") ||
+          deptRange.includes("csem")
+            ? PGDEPT[deptRange] +
+              " " +
+              deptRange.slice(-1) +
+              YEARSUFFIX[deptRange.slice(-1)]
+            : deptRange.toUpperCase() + YEARSUFFIX[deptRange.slice(-1)]}{" "}
           Year
         </td>
       </tr>
     );
     // console.log("MAAME", dept_and_their_ranges[deptRange])
 
-      for (let i in dept_and_their_ranges[deptRange]) {
-      r = [];
+    for (let i in dept_and_their_ranges[deptRange]) {
+      if (deptRange=="Ph.D 1") {
+        r = [];
+        console.log("ROOM now", Object.keys(dept_and_their_ranges[deptRange][i])[0]);
+        console.log(
+          "Start",
+          Object.entries(dept_and_their_ranges[deptRange][i])[0][1][0][0]
+        );
+        console.log(
+          "End",
+          Object.entries(dept_and_their_ranges[deptRange][i])[0][1][ Object.entries(dept_and_their_ranges[deptRange][i])[0][1].length - 1][0]
+        );
+        r.push(
+          <td key={"1" + c} className="border-2 p-2 text-center">
+            {c++}
+          </td>
+        );
+        r.push(
+          <td key={"2" + c} className="border-2 p-2 text-center">
+            <b className="text-xl">
+              {Object.keys(dept_and_their_ranges[deptRange][i])[0]}
+            </b>
+          </td>
+        );
+        r.push(
+          <td key={"3" + c} className="border-2 p-2 text-center" colSpan={2}>
+            <b className="text-lg">
+              {Object.entries(dept_and_their_ranges[deptRange][i])[0][1][0][0]}{", "}
+              {Object.entries(dept_and_their_ranges[deptRange][i])[0][1][1][0]}{", "}
+              {Object.entries(dept_and_their_ranges[deptRange][i])[0][1][2][0]} 
+            </b>
+          </td>
+        );
+        r.push(
+          <td key={"5" + c} className="border-2 p-2 text-center">
+            {Object.entries(dept_and_their_ranges[deptRange][i])[0][1].length}
+          </td>
+        );
+        
+      } else {
+        r = [];
       console.log("ROOM", Object.keys(dept_and_their_ranges[deptRange][i])[0]);
       console.log(
         "Start",
@@ -126,66 +176,80 @@ const NoticeBoardCopy = ({ ranges, exam }) => {
       );
       r.push(
         <td key={"2" + c} className="border-2 p-2 text-center">
-          <b className="text-xl">{Object.keys(dept_and_their_ranges[deptRange][i])[0]}</b> <br />
+          <b className="text-xl">
+            {Object.keys(dept_and_their_ranges[deptRange][i])[0]}
+          </b>
+          <br />
           {/* {FLOORS[Object.keys(dept_and_their_ranges[deptRange][i])[0].split(REG)[0]]} */}
-          {Object.keys(dept_and_their_ranges[deptRange][i])[0].includes("EH") ? 
-          ROOMNO[Object.keys(dept_and_their_ranges[deptRange][i])[0].split(REG)[1]] : FLOORS[Object.keys(dept_and_their_ranges[deptRange][i])[0].split(REG)[0]]}
-          
-          
+          {Object.keys(dept_and_their_ranges[deptRange][i])[0].includes("EH")
+            ? ROOMNO[
+                Object.keys(dept_and_their_ranges[deptRange][i])[0].split(
+                  REG
+                )[1]
+              ]
+            : FLOORS[
+                Object.keys(dept_and_their_ranges[deptRange][i])[0].split(
+                  REG
+                )[0]
+              ]}
         </td>
       );
-      // r.push(
-      //   <td key={"3" + c} className="border-2 p-2 text-center">
-      //     {Object.entries(dept_and_their_ranges[deptRange][i])[0][1][0][0]}
-      //   </td>
-      // );
-      // r.push(
-      //   <td key={"4" + c} className="border-2 p-2 text-center">
-      //     {
-      //       Object.entries(dept_and_their_ranges[deptRange][i])[0][1][
-      //         Object.entries(dept_and_their_ranges[deptRange][i])[0][1].length -
-      //           1
-      //       ][0]
-      //     }
-      //   </td>
-      // );
+      r.push(
+        <td key={"3" + c} className="border-2 p-2 text-center">
+          {Object.entries(dept_and_their_ranges[deptRange][i])[0][1][0][0]}
+        </td>
+      );
+      r.push(
+        <td key={"4" + c} className="border-2 p-2 text-center">
+          {
+            Object.entries(dept_and_their_ranges[deptRange][i])[0][1][
+              Object.entries(dept_and_their_ranges[deptRange][i])[0][1].length -
+                1
+            ][0]
+          }
+        </td>
+      );
       r.push(
         <td key={"5" + c} className="border-2 p-2 text-center">
           {Object.entries(dept_and_their_ranges[deptRange][i])[0][1].length}
         </td>
       );
-      totalCount += Object.entries(dept_and_their_ranges[deptRange][i])[0][1].length
-      totalTotalCount += Object.entries(dept_and_their_ranges[deptRange][i])[0][1].length
+
+      }
+      
+      totalCount += Object.entries(dept_and_their_ranges[deptRange][i])[0][1]
+        .length;
+      totalTotalCount += Object.entries(
+        dept_and_their_ranges[deptRange][i]
+      )[0][1].length;
       sed.push(
         <tr key={c} className={styles.unbreak}>
           {r}
         </tr>
       );
-      
     }
     sed.push(
       <tr key={c + 1} className={styles.unbreak}>
-        <td colSpan={2} className="border-2 p-2 text-center">
+        <td colSpan={4} className="border-2 p-2 text-center">
           <b>Total Students</b>
         </td>
         <td className="border-2 p-2 text-center">
           <b>{totalCount}</b>
         </td>
       </tr>
-    )
+    );
     totalCount = 0;
-    
-    
-    
-    return sed;
 
+    return sed;
   };
 
   const printPage = () => {
-    console.log("PRINTTT")
+    console.log("PRINTTT");
     print();
-  }
+  };
   const dept1 = ["cse 1", "it 1", "aids 1"];
+  const pgdept = ["ae 1", "cad/cam 1", "csem 1"];
+  const phddept = ["Ph.D 1"];
   // console.log("EXAM", exam);
   return (
     <>
@@ -218,35 +282,34 @@ const NoticeBoardCopy = ({ ranges, exam }) => {
                 
               </thead> */}
               <thead className="justify-center items-center text-center">
-                <tr >
-                  
-                    {/* <Image
+                <tr>
+                  {/* <Image
                       src="/citlogo.png"
                       alt="logo"
                       width={600}
                       height={680}
                     /> */}
-                    {/* <th>
+                  {/* <th>
                     <img src="/citlogo.png" alt="logo" width={600} height={680}/>
                     </th> */}
                 </tr>
                 <tr className="border-2">
-                  <th colSpan={5}><h1 className="text-2xl font-semibold p-1">Internal Assessment - I
-                  </h1>
-                  
+                  <th colSpan={5}>
+                    <h1 className="text-2xl font-semibold p-1">{exam}</h1>
                   </th>
-                  
-                </tr>
-                <tr className="border-2">
-                  <th colSpan={5}> <h1 className="text-2xl font-semibold p-1">
-                    Hall Arrangement - 22/02/2023 (FN) - GIRLS
-                  </h1> </th> 
-                  
                 </tr>
                 <tr className="border-2">
                   <th colSpan={5}>
-                  {/* <h1 className="text-2xl font-semibold p-1">New Building (Block A and B)</h1> */}
-                  <h1 className="text-2xl font-semibold p-1">Main Building</h1>
+                    {" "}
+                    <h1 className="text-2xl font-semibold p-1">
+                      Hall Arrangement - 23/02/2023 (AN)
+                    </h1>{" "}
+                  </th>
+                </tr>
+                <tr className="border-2">
+                  <th colSpan={5}>
+                    {/* <h1 className="text-2xl font-semibold p-1">New Building (Block A and B)</h1> */}
+                    <h1 className="text-2xl font-semibold p-1">Main Building</h1>
                   </th>
                 </tr>
                 <tr>
@@ -256,30 +319,71 @@ const NoticeBoardCopy = ({ ranges, exam }) => {
                   <th className="border-2 p-4" rowSpan={2}>
                     Hall No
                   </th>
-                  {/* <th className="border-2 p-4" colSpan={2}>
+                  <th className="border-2 p-4" colSpan={2}>
                     Register No
-                  </th> */}
+                  </th>
                   <th className="border-2 p-4" rowSpan={2}>
                     Total
                   </th>
                 </tr>
-                {/* <tr>
+                <tr>
                   <th className="border-2 p-4">From</th>
                   <th className="border-2 p-4">To</th>
-                </tr> */}
+                </tr>
               </thead>
 
+              <tbody>
+                <tr>
+                  <td colSpan={5} className="border-2 p-2 text-center text-2xl">
+                    <b>UG Students</b>
+                  </td>
+                </tr>
+              </tbody>
               {Object.keys(dept_and_their_ranges).map((dept) => {
-                if (!(dept1.includes(dept))) {
+                if (
+                  dept1.includes(dept) &&
+                  !pgdept.includes(dept) &&
+                  !phddept.includes(dept)
+                ) {
                   console.log("DEPT", dept);
                   return (
                     <tbody className={styles.unbreak}>{roomRanges(dept)}</tbody>
                   );
                 }
               })}
+              {/* <tbody>
+                <tr>
+                  <td colSpan={5} className="border-2 p-2 text-center text-2xl">
+                    <b>PG Students</b>
+                  </td>
+                </tr>
+              </tbody>
+              {Object.keys(dept_and_their_ranges).map((dept) => {
+                if (pgdept.includes(dept)) {
+                  console.log("DEPT", dept);
+                  return (
+                    <tbody className={styles.unbreak}>{roomRanges(dept)}</tbody>
+                  );
+                }
+              })}
+              <tbody>
+                <tr>
+                  <td colSpan={5} className="border-2 p-2 text-center text-2xl">
+                    <b>Ph.D Students</b>
+                  </td>
+                </tr>
+              </tbody>
+              {Object.keys(dept_and_their_ranges).map((dept) => {
+                if (phddept.includes(dept)) {
+                  console.log("DEPT", dept);
+                  return (
+                    <tbody className={styles.unbreak}>{roomRanges(dept)}</tbody>
+                  );
+                }
+              })} */}
               <tbody className={styles.unbreak}>
                 <tr>
-                  <td colSpan={2} className="border-2 p-2 text-center text-2xl">
+                  <td colSpan={4} className="border-2 p-2 text-center text-2xl">
                     <b>Overall Students</b>
                   </td>
                   <td className="border-2 p-2 text-center text-2xl">

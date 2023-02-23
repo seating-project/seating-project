@@ -63,11 +63,11 @@ const TableInput = ({ data, json }) => {
     const res = await drf.post("/createexam/", json);
     
     // router.push("/exams");
-    console.log("Omala");
+    // console.log("Omala");
     
   };
 
-  console.log("GOMTHA", inputValues);
+  // console.log("GOMTHA", inputValues);
   json["timetable"] = inputValues;
 
 

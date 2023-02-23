@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework import generics, status
-from .models import Cseii, Mechii, ExamTemplate, Students, RoomData, Exam
-from .serializers import CseiiSerializer, MechiiSerializer, ExamTemplateSerializer, CreateExamTemplateSerializer, RoomDataSerializer, StudentsSerializer, ExamSerializer, CreateExamSerializer
+from .models import Cseii, Mechii, ExamTemplate, Students, RoomData, Exam, Departments
+from .serializers import CseiiSerializer, MechiiSerializer, ExamTemplateSerializer, CreateExamTemplateSerializer, RoomDataSerializer, StudentsSerializer, ExamSerializer, CreateExamSerializer, DepartmentsSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from asgiref.sync import async_to_sync, sync_to_async
@@ -51,6 +51,10 @@ class CreateExamTemplateView(APIView):
             'message': 'ExamTemplate could not be created with received data.'
         }, status=status.HTTP_400_BAD_REQUEST)
 
+class DeptList(generics.ListAPIView):
+    queryset = Departments.objects.all()
+    serializer_class = DepartmentsSerializer
+
 
 class RoomDataList(generics.ListAPIView):
     serializer_class = RoomDataSerializer
@@ -69,8 +73,9 @@ class CreateExamView(APIView):
     def post(self, request, format=None):
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
-            Allotments(serializer.validated_data)
             serializer.save()
+            Allotments(serializer.validated_data)
+            
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response({
             'status': 'Bad request',

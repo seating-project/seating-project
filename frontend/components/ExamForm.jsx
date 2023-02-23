@@ -11,18 +11,22 @@ import TableInput from "./TimeTable";
 
 // const DataContext = createContext();
 
-const dept_options = [
-  { value: "MECH", label: "MECH" },
-  { value: "CSE", label: "CSE" },
-  { value: "MCT", label: "MCT" },
-  { value: "ECE", label: "ECE" },
-  { value: "EEE", label: "EEE" },
-  { value: "CIVIL", label: "CIVIL" },
-  { value: "IT", label: "IT" },
-  { value: "AI&DS", label: "AI&DS" },
-  { value: "CSBS", label: "CSBS" },
-  { value: "BME", label: "BME" },
-];
+
+
+// const dept_options = [
+//   { value: "MECH", label: "MECH" },
+//   { value: "CSE", label: "CSE" },
+//   { value: "MCT", label: "MCT" },
+//   { value: "ECE", label: "ECE" },
+//   { value: "EEE", label: "EEE" },
+//   { value: "CIVIL", label: "CIVIL" },
+//   { value: "IT", label: "IT" },
+//   { value: "AI&DS", label: "AI&DS" },
+//   { value: "CSBS", label: "CSBS" },
+//   { value: "BME", label: "BME" },
+// ];
+
+const dept_options = [];
 
 // function getDates(startDate, endDate) {
 //   var dates = [],
@@ -76,7 +80,17 @@ function getDates(startDate, endDate) {
   return dates;
 }
 
-export default function ExamForm({ templates }) {
+export default function ExamForm({ templates, departments }) {
+
+  departments.forEach(element => {
+    dept_options.push({
+      value: element["branch_short_name"],
+      label: element["branch_short_name"].toUpperCase(),
+    });
+  });
+
+  console.log(dept_options)
+
   const template_options = [];
   templates.map((template) => {
     if (
@@ -101,69 +115,64 @@ export default function ExamForm({ templates }) {
   const [data, setData] = useState({});
   // let deptanddate;
 
-  
-    const handleSubmit = async (event) => {
-      event.preventDefault();
-      console.log("Submitted");
-      const form = document.getElementById("examform");
-      const formData = new FormData(form);
-      const data = Object.fromEntries(formData.entries());
-      const selectedDeptValues = selectedDept.map((dept) => dept.value);
-      // data["depts"] = { depts: selectedDeptValues };
-      data["depts"] = selectedDeptValues;
-      console.log(data);
-      // deptanddate = {
-      //   departments: data["depts"],
-      //   dates: getDates(data["fromdate"], data["todate"]),
-      // };
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    console.log("Submitted");
+    const form = document.getElementById("examform");
+    const formData = new FormData(form);
+    const data = Object.fromEntries(formData.entries());
+    const selectedDeptValues = selectedDept.map((dept) => dept.value);
+    // data["depts"] = { depts: selectedDeptValues };
+    data["depts"] = selectedDeptValues;
+    console.log(data);
+    // deptanddate = {
+    //   departments: data["depts"],
+    //   dates: getDates(data["fromdate"], data["todate"]),
+    // };
 
-      
-      // console.log(new Date(data["fromdate"]), new Date(data["todate"]));
-      console.log("GOPAL", deptanddate);
-      setDeptanddate({
-        departments: data["depts"],
-        dates: getDates(data["fromdate"], data["todate"]),
-      });
-      setData(data);
-      console.log("Gopal", deptanddate);  
-      // if (deptanddate!={}) {
-      //   showTimeTable(true);
-      // } else {
-      //   showTimeTable(false);
-      // }
-      // const { setData } = useContext(DataContext);
+    // console.log(new Date(data["fromdate"]), new Date(data["todate"]));
+    console.log("GOPAL", deptanddate);
+    setDeptanddate({
+      departments: data["depts"],
+      dates: getDates(data["fromdate"], data["todate"]),
+    });
+    setData(data);
+    console.log("Gopal", deptanddate);
+    // if (deptanddate!={}) {
+    //   showTimeTable(true);
+    // } else {
+    //   showTimeTable(false);
+    // }
+    // const { setData } = useContext(DataContext);
 
-      // examData.getState().set({
-      //   name: data.name,
-      //   fromdate: data.fromdate,
-      //   todate: data.todate,
-      //   depts: data.depts,
-      //   template: data.template,
-      // });
-      // const res = await axios.post("http://127.0.0.1:8080/createexam/", data);
-      // router.push("/");
-    };
+    // examData.getState().set({
+    //   name: data.name,
+    //   fromdate: data.fromdate,
+    //   todate: data.todate,
+    //   depts: data.depts,
+    //   template: data.template,
+    // });
+    // const res = await axios.post("http://127.0.0.1:8080/createexam/", data);
+    // router.push("/");
+  };
 
-
-    useEffect(() => {
-      // if (deptanddate != {}) {
-      //   showTimeTable(true);
-      // } else {
-      //   showTimeTable(false);
-      // }
-      console.log("Gopal", deptanddate);
-      try {
-        if (deptanddate.departments != undefined && data != {}) {
-          showTimeTable(true);
-        } else {
-          showTimeTable(false);
-        }
+  useEffect(() => {
+    // if (deptanddate != {}) {
+    //   showTimeTable(true);
+    // } else {
+    //   showTimeTable(false);
+    // }
+    console.log("Gopal", deptanddate);
+    try {
+      if (deptanddate.departments != undefined && data != {}) {
+        showTimeTable(true);
+      } else {
+        showTimeTable(false);
       }
-      catch (e) {
-        console.log(e);
-      }
-    }, [deptanddate]);
-
+    } catch (e) {
+      console.log(e);
+    }
+  }, [deptanddate]);
 
   const handleDeptChange = (selectedOption) => {
     setSelectedDept(selectedOption);
@@ -172,10 +181,10 @@ export default function ExamForm({ templates }) {
   return (
     <div className="p-8 justify-center items-center flex">
       <div>
-      <h1 className="font-semibold pt-5 text-4xl">New Exam</h1>
-      <form id="examform" onSubmit={handleSubmit}>
-        <div className="mt-8 ">
-          {/* <label className="block my-5" htmlFor="id">
+        <h1 className="font-semibold pt-5 text-4xl">New Exam</h1>
+        <form id="examform" onSubmit={handleSubmit}>
+          <div className="mt-8 ">
+            {/* <label className="block my-5" htmlFor="id">
             <span>Exam ID</span>
             <input
               type="number"
@@ -190,90 +199,90 @@ export default function ExamForm({ templates }) {
             />
           </label> */}
 
-          <label className="block my-5" htmlFor="name">
-            <span>Exam Name</span>
-            <input
-              type="text"
-              id="  name"
-              name="name"
-              className="mt-1
+            <label className="block my-5" htmlFor="name">
+              <span>Exam Name</span>
+              <input
+                type="text"
+                id="  name"
+                name="name"
+                className="mt-1
                   block
                   rounded-md
                   bg-gray-200
                   border-transparent
                   focus:border-gray-300 focus:bg-gray-300 focus:ring-0"
-              required
-            />
-          </label>
+                required
+              />
+            </label>
 
-          <label htmlFor="fromdate" className="block my-5 w-max">
-            <span>From Date</span>
-            <input
-              type="date"
-              id="fromdate"
-              name="fromdate"
-              className="mt-1
+            <label htmlFor="fromdate" className="block my-5 w-max">
+              <span>From Date</span>
+              <input
+                type="date"
+                id="fromdate"
+                name="fromdate"
+                className="mt-1
                   block
                   rounded-md
                   bg-gray-200
                   border-transparent
                   focus:border-gray-300 focus:bg-gray-300 focus:ring-0"
-              required
-            />
-          </label>
+                required
+              />
+            </label>
 
-          <label htmlFor="todate" className="block my-5 w-max">
-            <span>To Date</span>
-            <input
-              type="date"
-              id="todate"
-              name="todate"
-              className="mt-1
+            <label htmlFor="todate" className="block my-5 w-max">
+              <span>To Date</span>
+              <input
+                type="date"
+                id="todate"
+                name="todate"
+                className="mt-1
                   block
                   rounded-md
                   bg-gray-200
                   border-transparent
                   focus:border-gray-300 focus:bg-gray-300 focus:ring-0"
-              required
-            />
-          </label>
+                required
+              />
+            </label>
 
-          <label htmlFor="depts" className="block my-5 w-max">
-            <span>Departments (select multiple)</span>
-            <Select
-              id="depts"
-              name="depts"
-              options={dept_options}
-              value={selectedDept}
-              onChange={handleDeptChange}
-              isMulti
-              className="w-max"
-            />
-          </label>
+            <label htmlFor="depts" className="block my-5 w-max">
+              <span>Departments (select multiple)</span>
+              <Select
+                id="depts"
+                name="depts"
+                options={dept_options}
+                value={selectedDept}
+                onChange={handleDeptChange}
+                isMulti
+                className="w-max min-w-full"
+              />
+            </label>
 
-          <label htmlFor="template">
-            <span>Exam Template</span>
-            <Select
-              id="template"
-              name="template"
-              options={template_options}
-              className="w-max"
-            />
-          </label>
-          <button
-            type="submit"
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full mt-5 w-max"
-          >
-            Next
-          </button>
-        </div>
-      </form>
+            <label htmlFor="template">
+              <span>Exam Template</span>
+              <Select
+                id="template"
+                name="template"
+                options={template_options}
+                className="w-max"
+              />
+            </label>
+            <button
+              type="submit"
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full mt-5 w-max"
+            >
+              Next
+            </button>
+          </div>
+        </form>
       </div>
       {timeTable && deptanddate != {} ? (
         <div>
-            <TableInput data={deptanddate} json={data} />
-            </div>
-          ) : null}
+          <TableInput data={deptanddate} json={data} />
+        </div>
+      ) : null}
     </div>
   );
 }
