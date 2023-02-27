@@ -11,8 +11,6 @@ import TableInput from "./TimeTable";
 
 // const DataContext = createContext();
 
-
-
 // const dept_options = [
 //   { value: "MECH", label: "MECH" },
 //   { value: "CSE", label: "CSE" },
@@ -80,16 +78,24 @@ function getDates(startDate, endDate) {
   return dates;
 }
 
-export default function ExamForm({ templates, departments }) {
-
-  departments.forEach(element => {
+export default function ExamForm({ templates, departments, years }) {
+  departments.forEach((element) => {
     dept_options.push({
       value: element["branch_short_name"],
       label: element["branch_short_name"].toUpperCase(),
     });
   });
 
-  console.log(dept_options)
+  const year_options = [];
+
+  years.forEach((element) => {
+    year_options.push({
+      value: element["year"],
+      label: element["year"],
+    });
+  });
+
+  console.log(dept_options);
 
   const template_options = [];
   templates.map((template) => {
@@ -269,6 +275,16 @@ export default function ExamForm({ templates, departments }) {
                 className="w-max"
               />
             </label>
+
+            {/* <label htmlFor="template">
+              <span>Select the years</span>
+              <Select
+                id="template"
+                name="template"
+                options={year_options}
+                className="w-max"
+              />
+            </label> */}
             <button
               type="submit"
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full mt-5 w-max"

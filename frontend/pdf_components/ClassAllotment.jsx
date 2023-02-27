@@ -52,6 +52,7 @@ const REG = new RegExp("(?<=\\D)(?=\\d)|(?<=\\d)(?=\\D)");
 
 function  ClassAllotment({
   room,
+  date,
   roomArray,
   rows,
   columns,
@@ -61,6 +62,10 @@ function  ClassAllotment({
   single_seater,
   boys_girls_separation,
 }) {
+  date = new Date(date)
+  const options = {day: '2-digit', month: '2-digit', year: 'numeric'}
+  date = date.toLocaleDateString('en-IN', options)
+  
   const deptID = useDeptID.getState().dept_id_object;
   const componentRef = useRef();
   const [downloading, setDownloading] = useState(false);
@@ -578,7 +583,7 @@ function  ClassAllotment({
     // }
 
     console.log("PLEASE WORK HERE", row.length)
-    if (row.length >= 3 && room=="MT5") {
+    if (row.length >= 2 && room=="MT5") {
       
       for (let o=0; o<columns-row.length+4; o++) {
         row.unshift(
@@ -703,7 +708,7 @@ function  ClassAllotment({
                   <tr>
                     <th className="border-2 border-black text-xs p-2">
                       {" "}
-                      Date: 23/02/2023{" "}
+                      Date: {date}{" "}
                     </th>
                     <th className="border-2 border-black text-xs p-2">
                       {" "}

@@ -1,5 +1,6 @@
 "use client";
 import "../../styles/globals.css";
+import Navbar from "../../components/Navbar";
 
 export default function TemplateLayout({
   children,
@@ -7,11 +8,14 @@ export default function TemplateLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html>
-      <head />
-      <body>
-        <div>{children}</div>
-      </body>
-    </html>
+    <div>
+      <Navbar />
+      <div className="flex">
+        <div className="mt-36 mx-8">{children}</div>
+        {/* <div className="mt-4 h-screen w-full">
+            <SplineBackground />
+          </div> */}
+      </div>
+    </div>
   );
 }

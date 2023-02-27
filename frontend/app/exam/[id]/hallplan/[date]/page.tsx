@@ -1,7 +1,7 @@
 import Link from "next/link";
-import drf from "../../../../pages/api/axiosConfig";
-import ClassAllotment from "../../../../pdf_components/ClassAllotment";
-import NoticeBoardCopy from "../../../../pdf_components/NoticeBoardCopy";
+import drf from "../../../../../pages/api/axiosConfig";
+import ClassAllotment from "../../../../../pdf_components/ClassAllotment";
+import NoticeBoardCopy from "../../../../../pdf_components/NoticeBoardCopy";
 
 async function getTemplateData() {
   try {
@@ -33,12 +33,13 @@ async function getRoomData() {
   }
 }
 
-export default async function AllotmentPage({ params }) {
+export default async function HallPlanPage({ params }) {
   
 
   const id = params.id;
 
   console.log("PARAAMS", params);
+  const date = params.date
 
   const edata = await getExamData();
   console.log(edata);
@@ -54,11 +55,8 @@ export default async function AllotmentPage({ params }) {
   console.log(template);
 
   let rooms = await getRoomData();
-  console.log("ROOMS FOR DUN", rooms)
-  
-  console.log(exam.id)
+  console.log("ROOMS", rooms)
   rooms = rooms.filter((item: { exam: any }) => item.exam == exam.id);
-  console.log("ROOM CURRENT NOW", rooms)
   rooms = rooms[0];
   console.log("ROOMS", rooms);
   const roomSingle = rooms.rooms;
@@ -102,24 +100,24 @@ export default async function AllotmentPage({ params }) {
     
   }
   
-  // let rangesNeededGirls = {}
-  // rangesNeededGirls["S1"] = rangesNeeded["S1"]
-  // rangesNeededGirls["S2"] = rangesNeeded["S2"]
-  // rangesNeededGirls["S3"] = rangesNeeded["S3"]
-  // rangesNeededGirls["S4"] = rangesNeeded["S4"]
+//   let rangesNeededGirls = {}
+//   rangesNeededGirls["S1"] = rangesNeeded["S1"]
+//   rangesNeededGirls["S2"] = rangesNeeded["S2"]
+//   rangesNeededGirls["S3"] = rangesNeeded["S3"]
+//   rangesNeededGirls["S4"] = rangesNeeded["S4"]
 
-  // let rangesNeededBoys = {}
-  // Object.keys(rangesNeeded).forEach((key) => {
-  //   if (!(Object.keys(rangesNeededGirls).includes(key))) {
-  //     rangesNeededBoys[key] = rangesNeeded[key]
-  //   }
-  // })
+//   let rangesNeededBoys = {}
+//   Object.keys(rangesNeeded).forEach((key) => {
+//     if (!(Object.keys(rangesNeededGirls).includes(key))) {
+//       rangesNeededBoys[key] = rangesNeeded[key]
+//     }
+//   })
 
   return (
     <div className="bg-white w-screen" >
       
       
-      {Object.keys(roomSingle).map((room) => {
+      {/* {Object.keys(roomSingle).map((room) => {
         // console.log("room", room);
         return (
           <ClassAllotment
@@ -136,8 +134,8 @@ export default async function AllotmentPage({ params }) {
             boys_girls_separation = {template.boys_girls_separation}
           />
         );
-      })}
-      {/* <NoticeBoardCopy ranges={rangesNeededGirls} exam={"Model Examination"} /> */}
+      })} */}
+      <NoticeBoardCopy ranges={rangesNeeded} exam={exam.name} date={date} />
       {/* <AttendanceSheets ranges = {rangesNeeded}/> */}
     </div>
   )

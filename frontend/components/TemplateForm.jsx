@@ -5,7 +5,10 @@ import Select from "react-select";
 import { useState } from "react";
 import drf from "../pages/api/axiosConfig";
 
-function MyForm() {
+
+
+
+function MyForm({roomsAvailable, buildingsAvailable}) {
   const rooms = [
     { value: "T1", label: "T1", group: "Third Floor" },
     { value: "T2", label: "T2", group: "Third Floor" },
@@ -29,7 +32,23 @@ function MyForm() {
     { value: "T20", label: "T20", group: "Third Floor" },
   ];
 
+    const room_options = []
+    roomsAvailable.map((room) => {
+      room_options.push({value: room.room_no, label: room.room_no, group: room.room_floor})
+    })
+
+    const building_options = []
+    buildingsAvailable.map((building) => {
+      building_options.push({value: building.building_name, label: building.building_name})
+    })
+
+
+
+  console.log("ROOOMS IN TEMPLATE", roomsAvailable);
+
+
   const [selectedRooms, setSelectedRooms] = useState([]);
+  const [selectedBuildings, setSelectedBuildings] = useState([]);
 
   const router = useRouter();
 
@@ -40,7 +59,9 @@ function MyForm() {
     const formData = new FormData(form);
     const data = Object.fromEntries(formData.entries());
     const selectedRoomsValues = selectedRooms.map((room) => room.value);
+    const selectedBuildingsValues = selectedBuildings.map((building) => building.value);
     data["rooms"] = { rooms: selectedRoomsValues };
+    data["buildings"] = { buildings: selectedBuildingsValues };
     console.log(data);
     console.log(selectedRoomsValues);
     const res = await drf.post("/createexamtemplate/", data);
@@ -49,6 +70,14 @@ function MyForm() {
 
   const handleRoomChange = (selectedOption) => {
     setSelectedRooms(selectedOption);
+  };
+
+  const handleBuildingChange = (Option) => {
+    setSelectedBuildings(Option);
+    console.log(selectedBuildings);
+    
+
+    
   };
 
   // const handleSubmit = () => {
@@ -150,13 +179,29 @@ function MyForm() {
               </label>
             </div>
 
+
+
             <div className="grid grid-cols-1 gap-6">
+
+              <label htmlFor="rooms">
+                <span>Buildings (select multiple)</span> <br />
+                <Select
+                  id="buildings"
+                  name="buildings"
+                  options={building_options}
+                  value={selectedBuildings}
+                  onChange={handleBuildingChange}
+                  isMulti
+                  className="w-max"
+                ></Select>
+              </label>
+
               <label htmlFor="rooms">
                 <span>Rooms (select multiple)</span> <br />
                 <Select
                   id="rooms"
                   name="rooms"
-                  options={rooms}
+                  options={room_options}
                   value={selectedRooms}
                   onChange={handleRoomChange}
                   isMulti
@@ -197,6 +242,8 @@ function MyForm() {
                   defaultChecked
                 />
               </label>
+
+
 
               <button
                 type="submit"

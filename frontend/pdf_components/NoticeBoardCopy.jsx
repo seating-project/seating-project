@@ -45,8 +45,12 @@ for (let i = 21; i <= 27; i++) {
 
 const REG = new RegExp("(?<=\\D)(?=\\d)|(?<=\\d)(?=\\D)");
 
-const NoticeBoardCopy = ({ ranges, exam }) => {
+const NoticeBoardCopy = ({ ranges, exam, date }) => {
   const componentRef = useRef();
+  date = new Date(date)
+  const options = {day: '2-digit', month: '2-digit', year: 'numeric'}
+  date = date.toLocaleDateString('en-IN', options)
+
   let dept_and_their_ranges = {};
   Object.keys(ranges).forEach((k) => {
     console.log("ROOMIE", k);
@@ -146,7 +150,7 @@ const NoticeBoardCopy = ({ ranges, exam }) => {
             <b className="text-lg">
               {Object.entries(dept_and_their_ranges[deptRange][i])[0][1][0][0]}{", "}
               {Object.entries(dept_and_their_ranges[deptRange][i])[0][1][1][0]}{", "}
-              {Object.entries(dept_and_their_ranges[deptRange][i])[0][1][2][0]} 
+              
             </b>
           </td>
         );
@@ -302,7 +306,7 @@ const NoticeBoardCopy = ({ ranges, exam }) => {
                   <th colSpan={5}>
                     {" "}
                     <h1 className="text-2xl font-semibold p-1">
-                      Hall Arrangement - 23/02/2023 (AN)
+                      Hall Arrangement - {date} (AN)
                     </h1>{" "}
                   </th>
                 </tr>
@@ -365,8 +369,8 @@ const NoticeBoardCopy = ({ ranges, exam }) => {
                     <tbody className={styles.unbreak}>{roomRanges(dept)}</tbody>
                   );
                 }
-              })}
-              <tbody>
+              })} */}
+              {/* <tbody>
                 <tr>
                   <td colSpan={5} className="border-2 p-2 text-center text-2xl">
                     <b>Ph.D Students</b>
