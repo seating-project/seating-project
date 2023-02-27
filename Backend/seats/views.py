@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework import generics, status
-from .models import Cseii, Mechii, ExamTemplate, Students, RoomData, Exam, Departments
-from .serializers import CseiiSerializer, MechiiSerializer, ExamTemplateSerializer, CreateExamTemplateSerializer, RoomDataSerializer, StudentsSerializer, ExamSerializer, CreateExamSerializer, DepartmentsSerializer
+from .models import *
+from .serializers import *
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from asgiref.sync import async_to_sync, sync_to_async
@@ -29,11 +29,9 @@ class CseiiList(generics.ListAPIView):
     queryset = Cseii.objects.all()
     serializer_class = CseiiSerializer
 
-
 class MechiiList(generics.ListAPIView):
     queryset = Mechii.objects.all()
     serializer_class = MechiiSerializer
-
 
 class ExamTemplateList(generics.ListAPIView):
     queryset = ExamTemplate.objects.all()
@@ -55,7 +53,6 @@ class DeptList(generics.ListAPIView):
     queryset = Departments.objects.all()
     serializer_class = DepartmentsSerializer
 
-
 class RoomDataList(generics.ListAPIView):
     serializer_class = RoomDataSerializer
     queryset = RoomData.objects.all()
@@ -67,6 +64,19 @@ class StudentsList(generics.ListAPIView):
 class ExamList(generics.ListAPIView):
     queryset = Exam.objects.all()
     serializer_class = ExamSerializer
+
+class RoomList(generics.ListAPIView):
+    queryset = Rooms.objects.all()
+    serializer_class = RoomSerializer
+
+class YearList(generics.ListAPIView):
+    queryset = Years.objects.all()
+    serializer_class = YearSerializer
+
+class BuildingList(generics.ListAPIView):
+    queryset = Buildings.objects.all()
+    serializer_class = BuildingSerializer
+
 
 class CreateExamView(APIView):
     serializer_class=CreateExamSerializer

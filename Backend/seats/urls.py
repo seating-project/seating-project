@@ -14,4 +14,7 @@ urlpatterns = [
     path("exams/", ExamList.as_view(), name="seats_home"),
     path("createexam/", CreateExamView.as_view(), name="seats_home"),
     path("dept/", DeptList.as_view(), name="seats_home"), 
+    path("room/", RoomList.as_view(), name="seats_home"),
+    path("year/", YearList.as_view(), name="seats_home"),
+    path("building/", BuildingList.as_view(), name="seats_home"),
 ]

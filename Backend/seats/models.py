@@ -160,15 +160,16 @@ class NeededDocuments(models.Model):
 
 class ExamTemplate(models.Model):
     id = models.CharField(primary_key=True, max_length=200, null=False)
-    template_name = models.CharField(max_length=200)
+    template_name = models.CharField(max_length=200, null=False)
     # template_exam_name = models.CharField(max_length=200, default='exam')
-    num_rows = models.IntegerField(default=5)
-    num_columns = models.IntegerField(default=6)
-    room_strength = models.IntegerField(default=60)
+    num_rows = models.IntegerField(default=5, null=False)
+    num_columns = models.IntegerField(default=6, null=False)
+    room_strength = models.IntegerField(default=60, null = False)
     # count_in_bench = models                                                                                           .IntegerField(default=2)
-    rooms = models.JSONField()
-    single_seater = models.BooleanField(default=False)
-    boys_girls_separation = models.BooleanField(default=False)
+    rooms = models.JSONField(default=dict, null=False)
+    buildings = models.JSONField(default=dict, null=False)
+    single_seater = models.BooleanField(default=False, null=False)
+    boys_girls_separation = models.BooleanField(default=False, null=False)
     # needed_documents = models.ForeignKey(NeededDocuments, models.CASCADE)
 
     class Meta:
@@ -180,7 +181,6 @@ class ExamTemplate(models.Model):
 
 
 class Students(models.Model):
-
     registerno = models.CharField(
         max_length=20, primary_key=True, blank=True, null=False)
     name = models.TextField(blank=True, null=True)
@@ -198,9 +198,7 @@ class Students(models.Model):
     def __str__(self):
         return self.name
 
-
 # class Timetable(models.Model):
-
 #     name = models.TextField(blank=True, null=True)
 #     date=models.DateField(blank=True, null=False, primary_key=True)
 #     civil=models.TextField(blank=True, null=True)
@@ -221,11 +219,21 @@ class Students(models.Model):
 #     def __str__(self):
 #         return (self.date + " " + self.name)
 
+class Years(models.Model):
+    year = models.CharField(primary_key=True, null=False, max_length=200)
+    class Meta:
+        verbose_name = 'Year'
+        verbose_name_plural = 'Years'
+
+    def __str__(self):
+        return str(self.year)
+
 class Exam(models.Model):
     id = models.BigAutoField(primary_key=True)
     name = models.CharField(max_length=200)
     fromdate = models.DateField()
     todate = models.DateField()
+    years = models.ForeignKey(Years, on_delete=models.DO_NOTHING, default="1 UG")
     template = models.ForeignKey(ExamTemplate, models.CASCADE)
     depts = models.JSONField()
     timetable = models.JSONField(null=True)
@@ -308,11 +316,3 @@ class Rooms(models.Model):
         return self.room_no
 
 
-class Years(models.Model):
-    year = models.CharField(primary_key=True, null=False, max_length=200)
-    class Meta:
-        verbose_name = 'Year'
-        verbose_name_plural = 'Years'
-
-    def __str__(self):
-        return str(self.year)

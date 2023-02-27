@@ -14,7 +14,7 @@ class DepartmentsAdmin(admin.ModelAdmin):
     list_display = ("branch", "branch_code")
 
 class RoomsAdmin(admin.ModelAdmin):
-    list_display = ("room_no", "room_block", "room_floor", "room_strength")
+    list_display = ("room_no", "room_block", "room_floor", "room_strength", "room_building")
     
 class BuildingAdmin(admin.ModelAdmin):
     list_display = ("building_name", )
