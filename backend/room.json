@@ -1,0 +1,632 @@
+[
+  {
+    "model": "seats.rooms",
+    "pk": "F1",
+    "fields": {
+      "room_floor": 1,
+      "room_building": "Main Building",
+      "room_strength": 60,
+      "room_block": "Block Main"
+    }
+  },
+  {
+    "model": "seats.rooms",
+    "pk": "F2",
+    "fields": {
+      "room_floor": 1,
+      "room_building": "Main Building",
+      "room_strength": 60,
+      "room_block": "Block Main"
+    }
+  },
+  {
+    "model": "seats.rooms",
+    "pk": "F3",
+    "fields": {
+      "room_floor": 1,
+      "room_building": "Main Building",
+      "room_strength": 60,
+      "room_block": "Block Main"
+    }
+  },
+  {
+    "model": "seats.rooms",
+    "pk": "F4",
+    "fields": {
+      "room_floor": 1,
+      "room_building": "Main Building",
+      "room_strength": 60,
+      "room_block": "Block Main"
+    }
+  },
+  {
+    "model": "seats.rooms",
+    "pk": "F5",
+    "fields": {
+      "room_floor": 1,
+      "room_building": "Main Building",
+      "room_strength": 60,
+      "room_block": "Block Main"
+    }
+  },
+  {
+    "model": "seats.rooms",
+    "pk": "F6",
+    "fields": {
+      "room_floor": 1,
+      "room_building": "Main Building",
+      "room_strength": 60,
+      "room_block": "Block Main"
+    }
+  },
+  {
+    "model": "seats.rooms",
+    "pk": "F7",
+    "fields": {
+      "room_floor": 1,
+      "room_building": "Main Building",
+      "room_strength": 60,
+      "room_block": "Block Main"
+    }
+  },
+  {
+    "model": "seats.rooms",
+    "pk": "F8",
+    "fields": {
+      "room_floor": 1,
+      "room_building": "Main Building",
+      "room_strength": 60,
+      "room_block": "Block Main"
+    }
+  },
+  {
+    "model": "seats.rooms",
+    "pk": "F9",
+    "fields": {
+      "room_floor": 1,
+      "room_building": "Main Building",
+      "room_strength": 60,
+      "room_block": "Block Main"
+    }
+  },
+  {
+    "model": "seats.rooms",
+    "pk": "F10",
+    "fields": {
+      "room_floor": 1,
+      "room_building": "Main Building",
+      "room_strength": 60,
+      "room_block": "Block Main"
+    }
+  },
+  {
+    "model": "seats.rooms",
+    "pk": "F11",
+    "fields": {
+      "room_floor": 1,
+      "room_building": "Main Building",
+      "room_strength": 60,
+      "room_block": "Block Main"
+    }
+  },
+  {
+    "model": "seats.rooms",
+    "pk": "F12",
+    "fields": {
+      "room_floor": 1,
+      "room_building": "Main Building",
+      "room_strength": 60,
+      "room_block": "Block Main"
+    }
+  },
+  {
+    "model": "seats.rooms",
+    "pk": "F13",
+    "fields": {
+      "room_floor": 1,
+      "room_building": "Main Building",
+      "room_strength": 60,
+      "room_block": "Block Main"
+    }
+  },
+  {
+    "model": "seats.rooms",
+    "pk": "F14",
+    "fields": {
+      "room_floor": 1,
+      "room_building": "Main Building",
+      "room_strength": 60,
+      "room_block": "Block Main"
+    }
+  },
+  {
+    "model": "seats.rooms",
+    "pk": "F15",
+    "fields": {
+      "room_floor": 1,
+      "room_building": "Main Building",
+      "room_strength": 60,
+      "room_block": "Block Main"
+    }
+  },
+  {
+    "model": "seats.rooms",
+    "pk": "F16",
+    "fields": {
+      "room_floor": 1,
+      "room_building": "Main Building",
+      "room_strength": 60,
+      "room_block": "Block Main"
+    }
+  },
+  {
+    "model": "seats.rooms",
+    "pk": "F17",
+    "fields": {
+      "room_floor": 1,
+      "room_building": "Main Building",
+      "room_strength": 60,
+      "room_block": "Block Main"
+    }
+  },
+  {
+    "model": "seats.rooms",
+    "pk": "F18",
+    "fields": {
+      "room_floor": 1,
+      "room_building": "Main Building",
+      "room_strength": 60,
+      "room_block": "Block Main"
+    }
+  },
+  {
+    "model": "seats.rooms",
+    "pk": "F19",
+    "fields": {
+      "room_floor": 1,
+      "room_building": "Main Building",
+      "room_strength": 60,
+      "room_block": "Block Main"
+    }
+  },
+  {
+    "model": "seats.rooms",
+    "pk": "F20",
+    "fields": {
+      "room_floor": 1,
+      "room_building": "Main Building",
+      "room_strength": 60,
+      "room_block": "Block Main"
+    }
+  },
+  {
+    "model": "seats.rooms",
+    "pk": "F21",
+    "fields": {
+      "room_floor": 1,
+      "room_building": "Main Building",
+      "room_strength": 60,
+      "room_block": "Block Main"
+    }
+  },
+  {
+    "model": "seats.rooms",
+    "pk": "T3",
+    "fields": {
+      "room_floor": 3,
+      "room_building": "Main Building",
+      "room_strength": 60,
+      "room_block": "Block Main"
+    }
+  },
+  {
+    "model": "seats.rooms",
+    "pk": "T4",
+    "fields": {
+      "room_floor": 3,
+      "room_building": "Main Building",
+      "room_strength": 60,
+      "room_block": "Block Main"
+    }
+  },
+  {
+    "model": "seats.rooms",
+    "pk": "T6",
+    "fields": {
+      "room_floor": 3,
+      "room_building": "Main Building",
+      "room_strength": 60,
+      "room_block": "Block Main"
+    }
+  },
+  {
+    "model": "seats.rooms",
+    "pk": "T7",
+    "fields": {
+      "room_floor": 3,
+      "room_building": "Main Building",
+      "room_strength": 60,
+      "room_block": "Block Main"
+    }
+  },
+  {
+    "model": "seats.rooms",
+    "pk": "T8",
+    "fields": {
+      "room_floor": 3,
+      "room_building": "Main Building",
+      "room_strength": 60,
+      "room_block": "Block Main"
+    }
+  },
+  {
+    "model": "seats.rooms",
+    "pk": "T9",
+    "fields": {
+      "room_floor": 3,
+      "room_building": "Main Building",
+      "room_strength": 60,
+      "room_block": "Block Main"
+    }
+  },
+  {
+    "model": "seats.rooms",
+    "pk": "T10",
+    "fields": {
+      "room_floor": 3,
+      "room_building": "Main Building",
+      "room_strength": 60,
+      "room_block": "Block Main"
+    }
+  },
+  {
+    "model": "seats.rooms",
+    "pk": "T14",
+    "fields": {
+      "room_floor": 3,
+      "room_building": "Main Building",
+      "room_strength": 60,
+      "room_block": "Block Main"
+    }
+  },
+  {
+    "model": "seats.rooms",
+    "pk": "T15",
+    "fields": {
+      "room_floor": 3,
+      "room_building": "Main Building",
+      "room_strength": 60,
+      "room_block": "Block Main"
+    }
+  },
+  {
+    "model": "seats.rooms",
+    "pk": "T16",
+    "fields": {
+      "room_floor": 3,
+      "room_building": "Main Building",
+      "room_strength": 60,
+      "room_block": "Block Main"
+    }
+  },
+  {
+    "model": "seats.rooms",
+    "pk": "T17",
+    "fields": {
+      "room_floor": 3,
+      "room_building": "Main Building",
+      "room_strength": 60,
+      "room_block": "Block Main"
+    }
+  },
+  {
+    "model": "seats.rooms",
+    "pk": "T18",
+    "fields": {
+      "room_floor": 3,
+      "room_building": "Main Building",
+      "room_strength": 60,
+      "room_block": "Block Main"
+    }
+  },
+  {
+    "model": "seats.rooms",
+    "pk": "T19",
+    "fields": {
+      "room_floor": 3,
+      "room_building": "Main Building",
+      "room_strength": 60,
+      "room_block": "Block Main"
+    }
+  },
+  {
+    "model": "seats.rooms",
+    "pk": "T20",
+    "fields": {
+      "room_floor": 3,
+      "room_building": "Main Building",
+      "room_strength": 60,
+      "room_block": "Block Main"
+    }
+  },
+  {
+    "model": "seats.rooms",
+    "pk": "T21",
+    "fields": {
+      "room_floor": 3,
+      "room_building": "Main Building",
+      "room_strength": 60,
+      "room_block": "Block Main"
+    }
+  },
+  {
+    "model": "seats.rooms",
+    "pk": "EH1",
+    "fields": {
+      "room_floor": 1,
+      "room_building": "New Building",
+      "room_strength": 60,
+      "room_block": "Block A"
+    }
+  },
+  {
+    "model": "seats.rooms",
+    "pk": "EH2",
+    "fields": {
+      "room_floor": 1,
+      "room_building": "New Building",
+      "room_strength": 60,
+      "room_block": "Block A"
+    }
+  },
+  {
+    "model": "seats.rooms",
+    "pk": "EH3",
+    "fields": {
+      "room_floor": 1,
+      "room_building": "New Building",
+      "room_strength": 60,
+      "room_block": 1
+    }
+  },
+  {
+    "model": "seats.rooms",
+    "pk": "EH4",
+    "fields": {
+      "room_floor": 1,
+      "room_building": "New Building",
+      "room_strength": 60,
+      "room_block": "Block A"
+    }
+  },
+  {
+    "model": "seats.rooms",
+    "pk": "EH5",
+    "fields": {
+      "room_floor": 1,
+      "room_building": "New Building",
+      "room_strength": 60,
+      "room_block": "Block A"
+    }
+  },
+  {
+    "model": "seats.rooms",
+    "pk": "EH6",
+    "fields": {
+      "room_floor": 1,
+      "room_building": "New Building",
+      "room_strength": 60,
+      "room_block": "Block A"
+    }
+  },
+  {
+    "model": "seats.rooms",
+    "pk": "EH7",
+    "fields": {
+      "room_floor": 1,
+      "room_building": "New Building",
+      "room_strength": 60,
+      "room_block": "Block A"
+    }
+  },
+  {
+    "model": "seats.rooms",
+    "pk": "EH8",
+    "fields": {
+      "room_floor": 1,
+      "room_building": "New Building",
+      "room_strength": 60,
+      "room_block": "Block A"
+    }
+  },
+  {
+    "model": "seats.rooms",
+    "pk": "EH9",
+    "fields": {
+      "room_floor": 1,
+      "room_building": "New Building",
+      "room_strength": 60,
+      "room_block": "Block A"
+    }
+  },
+  {
+    "model": "seats.rooms",
+    "pk": "EH10",
+    "fields": {
+      "room_floor": 1,
+      "room_building": "New Building",
+      "room_strength": 60,
+      "room_block": "Block A"
+    }
+  },
+  {
+    "model": "seats.rooms",
+    "pk": "EH11",
+    "fields": {
+      "room_floor": 0,
+      "room_building": "New Building",
+      "room_strength": 60,
+      "room_block": "Block A"
+    }
+  },
+  {
+    "model": "seats.rooms",
+    "pk": "EH12",
+    "fields": {
+      "room_floor": 0,
+      "room_building": "New Building",
+      "room_strength": 60,
+      "room_block": "Block A"
+    }
+  },
+  {
+    "model": "seats.rooms",
+    "pk": "EH13",
+    "fields": {
+      "room_floor": 0,
+      "room_building": "New Building",
+      "room_strength": 60,
+      "room_block": "Block A"
+    }
+  },
+  {
+    "model": "seats.rooms",
+    "pk": "EH14",
+    "fields": {
+      "room_floor": 0,
+      "room_building": "New Building",
+      "room_strength": 60,
+      "room_block": "Block A"
+    }
+  },
+  {
+    "model": "seats.rooms",
+    "pk": "EH15",
+    "fields": {
+      "room_floor": 0,
+      "room_building": "New Building",
+      "room_strength": 60,
+      "room_block": "Block A"
+    }
+  },
+  {
+    "model": "seats.rooms",
+    "pk": "EH16",
+    "fields": {
+      "room_floor": 0,
+      "room_building": "New Building",
+      "room_strength": 60,
+      "room_block": "Block A"
+    }
+  },
+  {
+    "model": "seats.rooms",
+    "pk": "EH17",
+    "fields": {
+      "room_floor": 0,
+      "room_building": "New Building",
+      "room_strength": 60,
+      "room_block": "Block A"
+    }
+  },
+  {
+    "model": "seats.rooms",
+    "pk": "EH18",
+    "fields": {
+      "room_floor": 0,
+      "room_building": "New Building",
+      "room_strength": 60,
+      "room_block": "Block A"
+    }
+  },
+  {
+    "model": "seats.rooms",
+    "pk": "EH19",
+    "fields": {
+      "room_floor": 0,
+      "room_building": "New Building",
+      "room_strength": 60,
+      "room_block": "Block A"
+    }
+  },
+  {
+    "model": "seats.rooms",
+    "pk": "EH20",
+    "fields": {
+      "room_floor": 0,
+      "room_building": "New Building",
+      "room_strength": 60,
+      "room_block": "Block A"
+    }
+  },
+  {
+    "model": "seats.rooms",
+    "pk": "EH21",
+    "fields": {
+      "room_floor": 1,
+      "room_building": "New Building",
+      "room_strength": 60,
+      "room_block": "Block B"
+    }
+  },
+  {
+    "model": "seats.rooms",
+    "pk": "EH22",
+    "fields": {
+      "room_floor": 1,
+      "room_building": "New Building",
+      "room_strength": 60,
+      "room_block": "Block B"
+    }
+  },
+  {
+    "model": "seats.rooms",
+    "pk": "EH23",
+    "fields": {
+      "room_floor": 1,
+      "room_building": "New Building",
+      "room_strength": 60,
+      "room_block": "Block B"
+    }
+  },
+  {
+    "model": "seats.rooms",
+    "pk": "EH24",
+    "fields": {
+      "room_floor": 1,
+      "room_building": "New Building",
+      "room_strength": 60,
+      "room_block": "Block B"
+    }
+  },
+  {
+    "model": "seats.rooms",
+    "pk": "EH25",
+    "fields": {
+      "room_floor": 1,
+      "room_building": "New Building",
+      "room_strength": 60,
+      "room_block": "Block B"
+    }
+  },
+  {
+    "model": "seats.rooms",
+    "pk": "EH26",
+    "fields": {
+      "room_floor": 1,
+      "room_building": "New Building",
+      "room_strength": 60,
+      "room_block": "Block B"
+    }
+  },
+  {
+    "model": "seats.rooms",
+    "pk": "EH27",
+    "fields": {
+      "room_floor": 1,
+      "room_building": "New Building",
+      "room_strength": 60,
+      "room_block": "Block B"
+    }
+  }
+]
