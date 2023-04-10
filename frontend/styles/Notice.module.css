@@ -1,0 +1,14 @@
+@media print {
+    .unbreak {
+       break-inside: avoid !important;
+       page-break-inside: avoid !important;
+
+    }
+  }
+
+.unbreak {
+    border-width: 2px;
+    padding: 0.5rem;
+    text-align: center;
+    page-break-inside: avoid !important;
+}

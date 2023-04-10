@@ -1,0 +1,34 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* styles/global.css */
+
+html {
+  -webkit-print-color-adjust: exact; /* This makes sure that the PDF is rendered exactly like our layout. */
+}
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  background: #f1f5f9; /* Light gray background */
+  width: 100%;
+  height: 100%;
+}
+
+/* Next.js mounting point. Create a full width/height container for our page. */
+#__next {
+  height: 100vh;
+  display: grid;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* Important to keep absolute as you don't want this to be rendered by the PDF. */
+.downloadBtn {
+  position: absolute;
+  top: 0;
+}

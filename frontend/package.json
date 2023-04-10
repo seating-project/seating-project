@@ -1,0 +1,46 @@
+{
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "@babel/core": "^7.20.12",
+    "@babel/plugin-syntax-flow": "7.14.5",
+    "@babel/plugin-transform-react-jsx": "7.14.9",
+    "@emotion/react": "^11.10.6",
+    "@emotion/styled": "^11.10.6",
+    "@headlessui/react": "^1.7.8",
+    "@heroicons/react": "v1",
+    "@material-ui/core": "^4.12.4",
+    "@mui/material": "^5.11.13",
+    "@mui/x-date-pickers": "^6.0.2",
+    "@splinetool/react-spline": "^2.2.5",
+    "@splinetool/runtime": "^0.9.211",
+    "@tailwindcss/forms": "^0.5.3",
+    "@types/babel-core": "^6.25.7",
+    "@types/jspdf": "^2.0.0",
+    "axios": "^1.3.4",
+    "cors": "^2.8.5",
+    "dayjs": "^1.11.7",
+    "encoding": "^0.1.13",
+    "formik": "^2.2.9",
+    "formik-material-ui": "^4.0.0-alpha.2",
+    "next": "latest",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-scripts": "^5.0.1",
+    "three": "^0.149.0",
+    "yup": "^1.0.2"
+  },
+  "devDependencies": {
+    "@types/node": "18.11.3",
+    "@types/react": "18.0.21",
+    "@types/react-dom": "18.0.6",
+    "autoprefixer": "^10.4.12",
+    "postcss": "^8.4.18",
+    "tailwindcss": "^3.2.4",
+    "typescript": "4.9.4"
+  }
+}
