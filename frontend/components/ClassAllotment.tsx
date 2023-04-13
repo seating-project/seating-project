@@ -903,7 +903,7 @@ function ClassAllotment(params: ClassAllotmentParams) {
               <h1 className=" text-2xl text-center ">
                 {" "}
                 Hall: <br />
-                <b className="text-4xl">{room}</b>{" "}
+                <b className="text-4xl">{room=="EH11" ? "S11" : room}</b>{" "}
               </h1>
               {/* <p className="italic">{FLOORS[room.split(REG)[0]]} </p> */}
               {/* {room.includes("EH") ? (

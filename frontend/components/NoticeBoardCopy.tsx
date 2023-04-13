@@ -109,32 +109,51 @@ function getDates(timeTable) {
     // temp.push(<tr></tr>);
     // total.push(<tbody>{temp}</tbody>)
 
-    {Object.keys(ranges).map((key) => {
-        return Object.keys(ranges[key]).map((dept) => {
-            console.log("ROOM", dept);
-            return Object.keys(ranges[key][dept]).map((student) => {
-            console.log("STUDENT", ranges[key][dept][student]);
-            temp.push(
-                // <div>   
-                //     <h1>{student}</h1>
-                // </div>
-                <tr>
-                    <td className="border-2 border-black text-xs p-1">{++tableCount}</td>
-                    <td className="border-2 border-black text-xs p-1">{ranges[key][dept][student][0]}</td>
-                    <td className="border-2 border-black text-xs p-1">{ranges[key][dept][student][4]}</td>
-                    <td className="border-2 border-black text-xs p-1">{ranges[key][dept][student][1].toUpperCase()}</td>
-                    {dates.map((date) => {
-                        return <td className="border-2 border-black text-xs p-1" width={100}></td>;
-                    })
-                    }
-                </tr>
-            );
-            });
+    // {Object.keys(ranges).map((key) => {
+    //     return Object.keys(ranges[key]).map((dept) => {
+    //         console.log("ROOM", dept);
+    //         return Object.keys(ranges[key][dept]).map((student) => {
+    //         console.log("STUDENT", ranges[key][dept][student]);
+    //         temp.push(
+    //             // <div>   
+    //             //     <h1>{student}</h1>
+    //             // </div>
+                // <tr>
+                //     <td className="border-2 border-black text-xs p-1">{++tableCount}</td>
+                //     <td className="border-2 border-black text-xs p-1">{ranges[key][dept][student][0]}</td>
+                //     <td className="border-2 border-black text-xs p-1">{ranges[key][dept][student][4]}</td>
+                //     <td className="border-2 border-black text-xs p-1">{ranges[key][dept][student][1].toUpperCase()}</td>
+                //     {dates.map((date) => {
+                //         return <td className="border-2 border-black text-xs p-1" width={100}></td>;
+                //     })
+                //     }
+                // </tr>
+    //         );
+    //         });
 
             
-        });
-        })
-    }
+    //     });
+    //     })
+    // }
+
+    Object.keys(ranges).map((dept)=>{
+      return Object.keys(ranges[dept]).map((student)=>{
+        console.log("STUDENT", ranges[dept][student]);
+        temp.push(
+          <tr>
+          <td className="border-2 border-black text-xs p-1">{++tableCount}</td>
+          <td className="border-2 border-black text-xs p-1">{ranges[dept][student][0]}</td>
+          <td className="border-2 border-black text-xs p-1">{ranges[dept][student][4]}</td>
+          <td className="border-2 border-black text-xs p-1">{ranges[dept][student][1].toUpperCase()}</td>
+          {dates.map((date) => {
+              return <td className="border-2 border-black text-xs p-1" width={100}></td>;
+          })
+          }
+      </tr>
+          
+        )
+      })
+    })
 
     table.push(
         <table className={`border-2 border-black text-md p-2 `}>

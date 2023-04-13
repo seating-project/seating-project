@@ -98,7 +98,7 @@ export default async function HallPlanPage({params}: any) {
       const roomsCurrent = rooms[dateObject.toISOString().slice(0, 10)];
     //   console.log(roomsCurrent);
       const rangesCurrent = ranges[dateObject.toISOString().slice(0, 10)];
-    console.log("RANGES", rangesCurrent);
+      console.log("RANGES", rangesCurrent);
     //   console.log("RANGES CURRENT", rangesCurrent["Main Building"]["F1"]);
 
     return (
@@ -113,7 +113,7 @@ export default async function HallPlanPage({params}: any) {
         })
         } */}
         {/* <NoticeBoardCopy ranges={rangesCurrent["Main Building"]["MT5"]} exam={exam} date={date} room={"MT5"} logoUrl={logoUrl} /> */}
-            <OldNotice gender="girls" building="Main Building" exam={name} date={date} ranges={rangesCurrent} logoUrl={logoUrl} />
+            <OldNotice gender="boys" building="New Building" exam={name} date={date} ranges={rangesCurrent} logoUrl={logoUrl} />
         </>
     )
 }   

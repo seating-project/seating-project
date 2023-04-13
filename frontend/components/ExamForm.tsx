@@ -186,6 +186,7 @@ const UserForm = ({template_opt, years_opt, department_opt, rooms_opt, phdstuden
   const [next, setNext] = useState(false);
   const [deptanddate, setDeptanddate] = useState({});
   const [postdata, setPostdata] = useState({});
+  const [sides, setSides] = useState({})
 
   const phdChange = (event: MouseEvent<HTMLInputElement>) => {
     const target = event.target as HTMLInputElement;
@@ -255,6 +256,8 @@ const UserForm = ({template_opt, years_opt, department_opt, rooms_opt, phdstuden
       departments: getDepartments(departments),
       dates: getDates(fromdate?.toISOString().slice(0, 10) as string, todate?.toISOString().slice(0, 10) as string)
     })
+
+    
 
     console.log("DEPT AND DATE", deptanddate);
 
@@ -594,6 +597,54 @@ const UserForm = ({template_opt, years_opt, department_opt, rooms_opt, phdstuden
                           />
                         </FormGroup>
                       </Grid>
+                      {/* <Grid item xs={12} sm={6} md={12}>
+                            <FormControl fullWidth variant="outlined">
+                              <InputLabel id="demo-simple-select-outlined-label">
+                                Departments in left row
+                              </InputLabel>
+                              <Select
+                                labelId="demo-simple-select-outlined-label"
+                                id="demo-simple-select-outlined"
+                                multiple
+                                label="Departments"
+                                onChange={(event) =>
+                                  setSides((prevState) => ({
+                                    ...prevState,
+                                    [left]: event.target.value
+                                  }))
+                                }
+                                onBlur={handleBlur}
+                                value={sides[left]}
+                                name="years"
+                                input={
+                                  <OutlinedInput
+                                    id="select-multiple-chip"
+                                    label="Chip"
+                                  />
+                                }
+                                renderValue={(years) => (
+                                  <Box
+                                    sx={{
+                                      display: "flex",
+                                      flexWrap: "wrap",
+                                      gap: 0.5
+                                    }}
+                                  >
+                                    {departments["left"].map((value) => {
+                                      console.log(departments);
+                                      return <Chip key={value} label={value} />;
+                                    })}
+                                  </Box>
+                                )}
+                              >
+                                {department_opt.map((item) => (
+                                  <MenuItem key={item.value} value={item.value}>
+                                    {item.label}
+                                  </MenuItem>
+                                ))}
+                              </Select>
+                            </FormControl>
+                          </Grid> */}
                       <Grid>
                         <FormGroup>
                           <FormControlLabel
@@ -606,6 +657,7 @@ const UserForm = ({template_opt, years_opt, department_opt, rooms_opt, phdstuden
                           />
                         </FormGroup>
                       </Grid>
+
                       {sendWAMessage ? (
                         <Grid>
                           <LocalizationProvider dateAdapter={AdapterDayjs}>

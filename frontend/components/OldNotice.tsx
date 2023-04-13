@@ -68,32 +68,53 @@ for (let i = 21; i <= 27; i++) {
 const REG = new RegExp("(?<=\\D)(?=\\d)|(?<=\\d)(?=\\D)");
 
 const OldNotice = (props: Props) => {
-  console.log(props.ranges[props.building]);
+  console.log("please brudha please",props.ranges["New Building"]);
 
   let dept_and_their_ranges = {};
+  // Object.keys(props.ranges[props.building]).forEach((room) => {
+  //   console.log("ROOM", room);
+  //   Object.keys(props.ranges[props.building][room]).forEach((g) => {
+  //     console.log("Gender", g);
+  //     Object.keys(props.ranges[props.building][room][g]).forEach((dept) => {
+  //       console.log(dept);
+  //       if (g == props.gender) {
+  //         if (dept_and_their_ranges[dept]) {
+  //           let obj = {};
+
+  //           obj[room] = props.ranges[props.building][room][g][dept];
+  //           console.log("OBJ", obj);
+  //           dept_and_their_ranges[dept].push(obj);
+  //         } else {
+  //           let obj = {};
+  //           obj[room] = props.ranges[props.building][room][g][dept];
+  //           console.log("O BJ 2", obj);
+  //           dept_and_their_ranges[dept] = [obj];
+  //         }
+  //       }
+  //     });
+  //   });
+  // });
+
   Object.keys(props.ranges[props.building]).forEach((room) => {
     console.log("ROOM", room);
-    Object.keys(props.ranges[props.building][room]).forEach((g) => {
-      console.log("Gender", g);
-      Object.keys(props.ranges[props.building][room][g]).forEach((dept) => {
-        console.log(dept);
-        if (g == props.gender) {
-          if (dept_and_their_ranges[dept]) {
-            let obj = {};
+    Object.keys(props.ranges[props.building][room]).forEach((dept) => {
+      console.log("DEPT", dept);
+      if (dept_and_their_ranges[dept]) {
+        let obj = {};
 
-            obj[room] = props.ranges[props.building][room][g][dept];
-            console.log("OBJ", obj);
-            dept_and_their_ranges[dept].push(obj);
-          } else {
-            let obj = {};
-            obj[room] = props.ranges[props.building][room][g][dept];
-            console.log("O BJ 2", obj);
-            dept_and_their_ranges[dept] = [obj];
-          }
-        }
-      });
+        obj[room] = props.ranges[props.building][room][dept];
+        console.log("OBJ", obj);
+        dept_and_their_ranges[dept].push(obj);
+      }
+      else {
+        let obj = {};
+        obj[room] = props.ranges[props.building][room][dept];
+        console.log("O BJ 2", obj);
+        dept_and_their_ranges[dept] = [obj];
+      }
     });
   });
+  
 
   //
   console.log("DEPT AND THEIR RANGES", dept_and_their_ranges);
@@ -312,7 +333,7 @@ const OldNotice = (props: Props) => {
                   <th colSpan={5}>
                     {" "}
                     <h1 className="text-2xl font-semibold p-1">
-                      Hall Arrangement - {props.date} (FN) {props.gender}
+                      Hall Arrangement - {props.date} (FN) 
                     </h1>{" "}
                   </th>
                 </tr>

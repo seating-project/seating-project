@@ -183,6 +183,9 @@ class Exams(models.Model):
     sets_for_which_subjects = models.ManyToManyField(Subjects, blank=True )
     no_of_sets = models.IntegerField(blank=True, null=True)
     second_column_options = models.CharField(max_length=20, choices=SecondColumnOptions.choices, default=SecondColumnOptions.SEAT_NUMBER)
+    departments_left = models.JSONField(default=dict)
+    departments_right = models.JSONField(default=dict)
+
 
     class Meta:
         verbose_name = 'Exam'

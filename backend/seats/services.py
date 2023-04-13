@@ -213,7 +213,8 @@ def Allotments(data):
                     # ckt_array = list(Students.objects.filter(ctype="C", department__in=ckt_dept).values_list("register_number", "department", "year", "gender", "name"))
                     # nckt_array = list(Students.objects.filter(ctype="N", department__in=nckt_dept).values_list("register_number", "department", "year", "gender", "name"))
 
-                    c1 = 0
+                    c1c = 0
+                    c1nc = 0
                     f1 = 0
 
                     for r in ROOMS:
@@ -256,39 +257,40 @@ def Allotments(data):
 
                         alternation = 0
                         for i in range(curr_template.room_strength):
-                            
-                            if c1 >= len(ckt_array) and c1 >= len(nckt_array):
+
+                            if c1c >= len(ckt_array) and c1nc >= len(nckt_array):
                                 f1 = 1
                                 break
                             try:
                                 if alternation == 0:
-                                    curr_room.append([ckt_array[c1], 0])
-                                    c1 += 1
+                                    curr_room.append([ckt_array[c1c], 0])
+                                    c1c += 1
                                     alternation = 1
                                 else:
-                                    curr_room.append([nckt_array[c1], 0])
-                                    c1 += 1
+                                    curr_room.append([nckt_array[c1nc], 0])
+                                    c1nc += 1
                                     alternation = 0
                             except:
                                 try:
-                                    if alternation == 0 and c1 > len(nckt_array):
-                                        curr_room.append([ckt_array[c1], 0])
-                                        c1 += 1
+                                    if alternation == 0 and c1nc > len(nckt_array):
+                                        curr_room.append([ckt_array[c1c], 0])
+                                        c1c += 1
                                     else:
-                                        curr_room.append([nckt_array[c1], 0])
-                                        c1 += 1
+                                        curr_room.append([nckt_array[c1nc], 0])
+                                        c1nc += 1
                                         alternation = 0
                                 except:
-                                    if alternation == 0 and c1 > len(ckt_array):
-                                        curr_room.append([nckt_array[c1], 0])
-                                        c1 += 1
+                                    if alternation == 0 and c1c > len(ckt_array):
+                                        curr_room.append([nckt_array[c1nc], 0])
+                                        c1nc += 1
                                     else:
-                                        curr_room.append([ckt_array[c1], 0])
-                                        c1 += 1
+                                        curr_room.append([ckt_array[c1c], 0])
+                                        c1c += 1
                                         alternation = 1
-                        
+
                         room_dict[r.room_number] = curr_room
-                        print("room dict of ", r.room_number, room_dict[r.room_number])
+                        print("room dict of ", r.room_number,
+                              room_dict[r.room_number])
                         curr_room = []
                     master_room_dict[date] = room_dict
                 else:
@@ -320,10 +322,10 @@ def Allotments(data):
                         years = list(exam_curr.years.all(
                         ).values_list("year", flat=True))
                         for y in years:
-                            years_students[str(y)+"M"] = Students.objects.filter(
-                                year=y, gender="M").values_list("register_number", "department", "year", "gender")
-                            years_students[str(y)+"F"] = Students.objects.filter(
-                                year=y, gender="F").values_list("register_number", "department", "year", "gender")
+                            years_students[str(y)+"M"] = list(Students.objects.filter(
+                                year=y, gender="M").values_list("register_number", "department", "year", "gender"))
+                            years_students[str(y)+"F"] = list(Students.objects.filter(
+                                year=y, gender="F").values_list("register_number", "department", "year", "gender"))
 
                         print("YEARS STUDENTS", years_students)
 
@@ -331,7 +333,8 @@ def Allotments(data):
                         f3b = 0
                         c3g = 0
                         f3g = 0
-                        for r in curr_template.rooms:
+                        for r in ROOMS:
+                            # strength = r.room_strength//2
                             strength = curr_template.room_strength//2
                             for j in range(strength):
                                 if c3g >= len(years_students["2F"]) and c3g >= len(years_students["3F"]):
@@ -349,41 +352,52 @@ def Allotments(data):
                                             [years_students["3F"][c3g], 0])
                                     else:
                                         break
+                                    # print("C3G",c3g)
                                     c3g += 1
                                 except IndexError:
                                     try:
                                         if years_students["2F"][c3g]:
                                             curr_room.append(
-                                                [years_students["3F"][c3g], 0])
+                                                [years_students["2F"][c3g], 0])
+                                        c3g += 1
                                     except:
                                         if years_students["3F"][c3g]:
                                             curr_room.append(
                                                 [years_students["3F"][c3g], 0])
-
                                         c3g += 1
-
-                                if c3g >= len(years_students["2F"]) and c3g >= len(years_students["3F"]):
-                                    f3g = 1
-                                    break
-                            if len(years_students["2F"][c3g:]) < 3:
-                                print("LEFT OVER", c3g)
-                                print("YAYYY WE FOUND IT")
-                                print("Length", len(years_students[c3g:]))
-                                count = 0
-                                for k in range(len(years_students[c3g:])):
-                                    curr_room.append(
-                                        [years_students[c3g+k], 0])
-                                    count += 1
-                                c3g += count
-                                # break
-                                f3g = 1
-
+                                        # print("C3G", c3g)
+                            # if len(years_students["2F"][c3g:]) < 3:
+                            #     if c3g >= len(years_students["2F"]) and c3g >= len(years_students["3F"]):
+                            #         f3g = 1
+                            #         break
+                            # if len(years_students["2F"][c3g:]) < 3:
+                            #     print("LEFT OVER", c3g)
+                            #     print("YAYYY WE FOUND IT")
+                            #     print("Length", len(years_students[c3g:]))
+                            #     count = 0
+                            #     for k in range(len(years_students[c3g:])):
+                            #         curr_room.append(
+                            #             [years_students[c3g+k], 0])
+                            #         count += 1
+                            #     c3g += count
+                            #     # break
+                            #     f3g = 1
+                            
                             room_dict[r.room_number] = curr_room
                             curr_room = []
                             # room.remove(i)
                             girls_room.append(r)
+
+                            if c3g >= len(years_students["2F"]) and c3g >= len(years_students["3F"]):
+                                f3g = 1
+                                break
+
+                            
+
                             if f3g == 1:
                                 break
+                        master_room_dict[date] = room_dict
+                        
                         for gr in girls_room:
                             ROOMS.remove(gr)
                         for r in ROOMS:
@@ -409,7 +423,8 @@ def Allotments(data):
                                     try:
                                         if years_students["2M"][c3b]:
                                             curr_room.append(
-                                                [years_students["3M"][c3b], 0])
+                                                [years_students["2M"][c3b], 0])
+                                        c3b += 1
                                     except:
                                         if years_students["3M"][c3b]:
                                             curr_room.append(
@@ -420,24 +435,25 @@ def Allotments(data):
                                 if c3b >= len(years_students["2M"]) and c3b >= len(years_students["3M"]):
                                     f3b = 1
                                     break
-                            if len(years_students["2M"][c3b:]) < 3:
-                                print("LEFT OVER", c3b)
-                                print("YAYYY WE FOUND IT")
-                                print("Length", len(years_students[c3b:]))
-                                count = 0
-                                for k in range(len(years_students[c3b:])):
-                                    curr_room.append(
-                                        [years_students[c3b+k], 0])
-                                    count += 1
-                                c3b += count
-                                # break
-                                f3b = 1
+                            # if len(years_students["2M"][c3b:]) < 3:
+                            #     print("LEFT OVER", c3b)
+                            #     print("YAYYY WE FOUND IT")
+                            #     print("Length", len(years_students[c3b:]))
+                            #     count = 0
+                            #     for k in range(len(years_students[c3b:])):
+                            #         curr_room.append(
+                            #             [years_students[c3b+k], 0])
+                            #         count += 1
+                            #     c3b += count
+                            #     # break
+                            #     f3b = 1
 
                             room_dict[r.room_number] = curr_room
                             curr_room = []
                             # room.remove(i)
                             if f3b == 1:
                                 break
+                        master_room_dict[date] = room_dict
                     else:
                         # years_students = {}
                         students_to_be_put = {
@@ -450,8 +466,7 @@ def Allotments(data):
                         years = list(exam_curr.years.all(
                         ).values_list("year", flat=True))
                         for y in years:
-                            # ckt_array.extend(list(Students.objects.filter(ctype="C", department__in=ckt_dept, year=year).values_list("register_number", "department", "year", "gender", "name")))
-                            # nckt_array.extend(list(Students.objects.filter(ctype="N", department__in=nckt_dept, year=year).values_list("register_number", "department", "year", "gender", "name")))
+
                             # students_to_be_put["M-CKT"].extend(list(Students.objects.filter(
                             #     year=y, gender="M", ctype="C", department="aiml").values_list("register_number", "department", "year", "gender", "name")))
                             # students_to_be_put["M-CKT"].extend(list(Students.objects.filter(
@@ -473,13 +488,13 @@ def Allotments(data):
                             #     year=y, gender="F", ctype="N", department__in=nckt_dept).values_list("register_number", "department", "year", "gender", "name").exclude(department__in=["aiml", "csbs"])))
 
                             students_to_be_put["M-NCKT"].extend(list(Students.objects.filter(
-                                year=y, gender="M", ctype="N", department__in=["mech", "mct", "civil", ]).values_list("register_number", "department", "year", "gender", "name")))
+                                year=y, gender="M", ctype="N", department__in=["mech" ]).values_list("register_number", "department", "year", "gender", "name")))
                             students_to_be_put["F-NCKT"].extend(list(Students.objects.filter(
-                                year=y, gender="F", ctype="N", department__in =["mech", "civil", "mct"]).values_list("register_number", "department", "year", "gender", "name")))
+                                year=y, gender="F", ctype="N", department__in=["mech"]).values_list("register_number", "department", "year", "gender", "name")))
                             students_to_be_put["M-CKT"].extend(list(Students.objects.filter(
-                                year=y, gender="M", ctype="N", department__in=["ece", "bme"]).values_list("register_number", "department", "year", "gender", "name")))
+                                year=y, gender="M", ctype="N", department__in=["mct", "civil"]).values_list("register_number", "department", "year", "gender", "name")))
                             students_to_be_put["F-CKT"].extend(list(Students.objects.filter(
-                                year=y, gender="F", ctype="N", department__in=["ece", "bme"]).values_list("register_number", "department", "year", "gender", "name")))
+                                year=y, gender="F", ctype="N", department__in=["mct", "civil"]).values_list("register_number", "department", "year", "gender", "name")))
 
                         print("STUDENTS TO BE PUT", students_to_be_put, )
                         print("TOTAL ROOMS", ROOMS)
@@ -488,6 +503,8 @@ def Allotments(data):
                         c4g = 0
                         f4g = 0
                         # girls_room = []
+                        room_numbers_temp=["T2", "T3", "T4", "T6", "T1"]
+                        ROOMS = list(Rooms.objects.filter(room_number__in=room_numbers_temp))
                         for r in ROOMS:
                             strength = 0
                             print("ROOM STRENGTH of",
@@ -575,12 +592,13 @@ def Allotments(data):
                             strength = r.room_strength//2
                             print("STRENGTH", strength)
                             for i in range(strength):
-                                
+
                                 # print("C4G", c4g)
                                 if c4b >= len(students_to_be_put["M-CKT"]) and c4b >= len(students_to_be_put["M-NCKT"]):
                                     f4b = 1
                                     break
-                                print("C4B", c4b, len(students_to_be_put["M-CKT"]), len(students_to_be_put["M-NCKT"]))
+                                print("C4B", c4b, len(
+                                    students_to_be_put["M-CKT"]), len(students_to_be_put["M-NCKT"]))
                                 try:
                                     if students_to_be_put["M-CKT"][c4b] and students_to_be_put["M-NCKT"][c4b]:
                                         curr_room.append(
