@@ -4,6 +4,7 @@ import Image from "next/image";
 import React, { useRef, useEffect, useState } from "react";
 import Page from "../components/LandscapePage";
 
+
 interface Template {
   template_name: string;
   number_of_rows: number;
@@ -58,6 +59,7 @@ type RangeArray = {
   [gender: string]: any;
 };
 
+
 interface ClassAllotmentParams {
   room: string;
   date: string;
@@ -77,6 +79,23 @@ interface ClassAllotmentParams {
 //   exam,
 //   logoUrl,
 // }: any)
+
+const ROMAN = {
+  "1": "I",
+  "2": "II",
+  "3": "III",
+  "4": "IV",
+}
+
+const SUFFIX = {
+  "1": "st",
+  "2": "nd",
+  "3": "rd",
+  "4": "th",
+}
+
+
+
 function ClassAllotment(params: ClassAllotmentParams) {
   const { room, date, roomArray, rangeArray, template, exam, logoUrl } = params;
 
@@ -86,7 +105,7 @@ function ClassAllotment(params: ClassAllotmentParams) {
   // console.log("TEMPLATE", template);
   // console.log("EXAM", exam);
   // console.log("LOGO URL", logoUrl);
-  // console.log("RANGE ARRAY", rangeArray);
+  console.log("RANGE ARRAY", rangeArray);
   // console.log("ROOM ARRAY", roomArray);
 
   let dateNew: Date = new Date(date);
@@ -110,6 +129,41 @@ function ClassAllotment(params: ClassAllotmentParams) {
       // console.log("SINGLE SEATER");
       if (template.is_boys_girls_separation) {
       } else {
+        let count = 0;
+        Object.keys(rangeArray).map((dept) => {
+          r.push(
+            <div key={dept + "div"} className="">
+            <p key={dept} className="border-2 border-black p-2 text-lg px-4 ">
+              {" . "}
+              {" . "}
+              {" . "}
+              {/* ____________________ */}
+              <b>{dept.split(" ")[0].toUpperCase() + " " + dept.split(" ")[1] + SUFFIX[dept.split(" ")[1]] + " " + "Year"}</b>{" "}
+              <b> - {rangeArray[dept].length}</b>
+              {" . "}
+              {" . "}
+              {" . "}
+            </p>
+            <div className="flex">
+              <p key={dept + 1} className="border border-black p-2 w-full font-bold text-lg">
+                P
+              </p>
+              <p key={dept + 2} className="border border-black p-2 w-full font-bold text-lg">
+                {" "}
+                A{" "}
+              </p>
+            </div>
+          </div>              
+          )
+        })
+        rangesDiv.push(
+          <div
+            key={count}
+            className="flex flex-row justify-center items-center  pt-4 text-xs "
+          >
+            {r}
+          </div>
+        );
       }
     } else {
       if (template.is_boys_girls_separation) {
@@ -122,21 +176,22 @@ function ClassAllotment(params: ClassAllotmentParams) {
               console.log("DEPT", dept);
               r.push(
                 <div key={dept + "div"} className="">
-                  <p key={dept} className="border-2 p-2 text-lg px-4">
+                  <p key={dept} className="border-2 border-black p-2 text-lg px-4 ">
                     {" . "}
                     {" . "}
                     {" . "}
-                    <b>{dept.split(" ")[0].toUpperCase() + " "}</b>{" "}
+                    {/* ____________________ */}
+                    <b>{dept.split(" ")[0].toUpperCase() + " " + dept.split(" ")[1] + SUFFIX[dept.split(" ")[1]] + " " + "Year"}</b>{" "}
                     <b> - {rangeArray[gender][dept].length}</b>
                     {" . "}
                     {" . "}
                     {" . "}
                   </p>
                   <div className="flex">
-                    <p key={dept + 1} className="border p-2 w-full">
+                    <p key={dept + 1} className="border border-black p-2 w-full font-bold text-lg">
                       P
                     </p>
-                    <p key={dept + 2} className="border p-2 w-full">
+                    <p key={dept + 2} className="border border-black p-2 w-full font-bold text-lg">
                       {" "}
                       A{" "}
                     </p>
@@ -189,6 +244,11 @@ function ClassAllotment(params: ClassAllotmentParams) {
     // Pseudocode for the create of the table
     //
     //
+
+    // console.log("ROOM ARRAY NOW CHECKING", roomArray);
+
+  
+
     let room_strength = template.room_strength;
     if (!template.is_single_seater) {
       room_strength = template.room_strength / 2;
@@ -200,10 +260,10 @@ function ClassAllotment(params: ClassAllotmentParams) {
         String(roomArray[i][0]) !== "0" &&
         String(roomArray[i][1]) !== "0"
       ) {
-        if (room_strength === 25 && oneTableLeave === 0) {
+        if (Object.keys(roomArray).length === 25 && oneTableLeave === 0) {
           if (tableIndex != 3 && snakeRow === 0) {
             row.push(
-              <tr className="h-4" key={i}>
+              <tr className="h-4" key={`i-{}`}>
                 <td className="border-2 border-black h-4 p-2" height={66} width={190}></td>
               </tr>
             );
@@ -225,9 +285,9 @@ function ClassAllotment(params: ClassAllotmentParams) {
           row.push(
             <tr className="max-h-6" key={i}>
               <td
-                className="border-2 border-black text-center p-2 text-sm "
-                // width={220}
-                // height={40}
+                className="border-2 border-black text-center py-3 text-xs "
+                width={220}
+                height={40}
               >
                 <b>{String(roomArray[i][0][1]).toUpperCase()}</b>{" "}
                 {" " + roomArray[i][0][0]} <br />{" "}
@@ -236,10 +296,11 @@ function ClassAllotment(params: ClassAllotmentParams) {
                 {" " + roomArray[i][1][0]}
               </td>
               <td
-                className="border-2 border-black text-center text-sm"
-                // width={20}
+                className="border-2 border-black text-center text-xs"
+                width={10}
               >
-                <hr className="w-full text-black" />
+                {/* <hr className="w-full text-black" /> */}
+                {totalTables++}
               </td>
             </tr>
           );
@@ -248,9 +309,11 @@ function ClassAllotment(params: ClassAllotmentParams) {
           row.unshift(
             <tr className="" key={i}>
               <td
-                className="border-2 border-black text-center p-2 py-2  text-sm"
+                className="border-2 border-black text-center py-3  text-xs"
                 // width={220}
                 // height={40}
+                width={220}
+                height={40}
               >
                 <b>{String(roomArray[i][0][1]).toUpperCase()}</b>{" "}
                 {" " + roomArray[i][0][0]} <br /> <hr className="w-full" />
@@ -258,8 +321,8 @@ function ClassAllotment(params: ClassAllotmentParams) {
                 {" " + roomArray[i][1][0]}
               </td>
               <td
-                className="border-2 border-black  text-center text-sm"
-                width={20}
+                className="border-2 border-black  text-center text-xs"
+                width={10}
               >
                 <hr className="w-full text-black" />
               </td>
@@ -268,7 +331,7 @@ function ClassAllotment(params: ClassAllotmentParams) {
           tableCounter++;
         }
       } else {
-        if (room_strength === 25 && oneTableLeave === 0) {
+        if (Object.keys(roomArray).length === 25 && oneTableLeave === 0) {
           if (tableIndex != 3 && snakeRow === 0) {
             console.log("WORKING@");
             row.push(
@@ -276,9 +339,11 @@ function ClassAllotment(params: ClassAllotmentParams) {
                 <td
                   className="border-2 border-black h-4 p-2 text-center"
                   // width={200}
-                  height={50}
+                  // height={50}
                 ></td>
-                <td className="border-2 border-black h-4 p-2 text-center"></td>
+                <td className="border-2 border-black h-4 p-2 text-center">
+                  {/* {tableCounter} */}
+                </td>
               </tr>
             );
             tableCounter++;
@@ -289,7 +354,7 @@ function ClassAllotment(params: ClassAllotmentParams) {
                 <td
                   className="border-2 border-black h-4 p-2 text-center"
                   // width={200}
-                  height={50}
+                  // height={50}
                 ></td>
                 <td className="border-2 border-black h-4 p-2 text-center"> </td>
               </tr>
@@ -307,9 +372,9 @@ function ClassAllotment(params: ClassAllotmentParams) {
                 {/* <td className="border-2 border-black  text-center" >{totalTables++}</td> */}
 
                 <td
-                  className="border-2 border-black text-sm   text-center"
+                  className="border-2 border-black text-sm p-4  text-center"
                   // width={190}
-                  height={50}
+                  // height={50}
                 >
                   <b>{String(roomArray[i][0][1]).toUpperCase()}</b>{" "}
                   {" " + roomArray[i][0][0]}
@@ -320,10 +385,11 @@ function ClassAllotment(params: ClassAllotmentParams) {
                 <td className="border-2 border-black text-center" width={50}>{totalTables++}</td>}
                  */}
                 <td
-                  className="border-2 border-black  text-center text-xs"
-                  width={20}
+                  className="border-2 border-black  text-center text-sm"
+                  // width={20}
                 >
                   {/* <hr className="w-full"/> */}
+                  {totalTables++}
                 </td>
               </tr>
             );
@@ -334,9 +400,9 @@ function ClassAllotment(params: ClassAllotmentParams) {
                 {/* <td className="border-2 border-black  text-center" >{totalTables++}</td> */}
 
                 <td
-                  className="border-2 border-black text-sm text-center"
+                  className="border-2 border-black text-sm p-4 text-center"
                   // width={190}
-                  height={50}
+                  // height={50}
                 >
                   <b>{String(roomArray[i][0][1]).toUpperCase()}</b>{" "}
                   {" " + roomArray[i][0][0]}
@@ -347,10 +413,11 @@ function ClassAllotment(params: ClassAllotmentParams) {
                 <td className="border-2 border-black text-center" width={50}>{totalTables++}</td>} */}
 
                 <td
-                  className="border-2 border-black  text-center text-xs"
-                  width={20}
+                  className="border-2 border-black  text-center text-sm"
+                  // width={20}
                 >
                   {/* <hr className="w-full"/> */}
+                  {totalTables++}
                 </td>
               </tr>
             );
@@ -362,12 +429,12 @@ function ClassAllotment(params: ClassAllotmentParams) {
               <tr className="h-4" key={i}>
                 <td
                   className="border-2 border-black h-4 p-2 text-center"
-                  width={50}
+                  // width={50}
                 ></td>
                 <td
                   className="border-2 border-black h-4 p-2 text-center"
-                  width={190}
-                  height={50}
+                  // width={190}
+                  // height={50}
                 >
                   {" "}
                 </td>
@@ -397,44 +464,44 @@ function ClassAllotment(params: ClassAllotmentParams) {
           }
         }
       }
-
-      if (row.length === template.number_of_columns) {
+      const cols = Object.keys(roomArray).length === 25 ? 7 : template.number_of_columns;
+      if (row.length === cols) {
         // Columns Variable
-        if (snakeRow === 1 && tableIndex != 3 && room_strength != 25) {
+        if (snakeRow === 1 && tableIndex != 3 && Object.keys(roomArray).length != 25) {
           // console.log("ROW", row)
           row.reverse();
           // row.unshift(row[row.length - 1]);
 
           // row.pop();
-        } else if (snakeRow === 0 && tableIndex != 3 && room_strength != 25) {
+        } else if (snakeRow === 0 && tableIndex != 3 && Object.keys(roomArray).length != 25) {
           row.reverse();
-        } else if (snakeRow === 1 && tableIndex != 3 && room_strength == 25) {
+        } else if (snakeRow === 1 && tableIndex != 3 && Object.keys(roomArray).length == 25) {
           row.unshift(row[row.length - 1]);
           // row.reverse();
           row.pop();
         }
-        if (tableIndex == 3 && room_strength == 25) {
+        if (tableIndex == 3 && Object.keys(roomArray).length == 25) {
           // row.reverse()
         }
 
-        if (tableIndex == 3 && room_strength != 25) {
+        if (tableIndex == 3 && Object.keys(roomArray).length != 25) {
           row.reverse();
         }
         console.log("Here coming");
         console.log("ROOM ACTUAL LENGTH", room, Object.keys(roomArray).length);
-        console.log(template.is_single_seater, room_strength, tableCounter);
-        if (room_strength != 25) {
+        console.log(template.is_single_seater, Object.keys(roomArray).length, tableCounter);
+        if (Object.keys(roomArray).length != 25) {
           row.reverse();
         }
 
         if (
-          Object.keys(roomArray).length > room_strength &&
+          Object.keys(roomArray).length > Object.keys(roomArray).length &&
           tableCounter == template.number_of_columns &&
-          room_strength == 25
+          Object.keys(roomArray).length == 25
         ) {
           console.log("caa");
 
-          if (Object.keys(roomArray).length - room_strength === 2) {
+          if (Object.keys(roomArray).length - Object.keys(roomArray).length === 2) {
             console.log("MAAMA");
             if (tableIndex === 2) {
               row.shift();
@@ -514,7 +581,7 @@ function ClassAllotment(params: ClassAllotmentParams) {
               }
             }
           }
-          if (Object.keys(roomArray).length - room_strength === 1) {
+          if (Object.keys(roomArray).length - Object.keys(roomArray).length === 1) {
             console.log("Here caaaaa");
             if (tableIndex === 2) {
               row.shift();
@@ -552,12 +619,13 @@ function ClassAllotment(params: ClassAllotmentParams) {
         }
 
         if (
-          Object.keys(roomArray).length > room_strength &&
+          template.room_strength < Object.keys(roomArray).length &&
           tableCounter == template.number_of_columns &&
-          room_strength == 30
+          // Object.keys(roomArray).length == 30
+          template.room_strength == 30
         ) {
           console.log("caa");
-          if (Object.keys(roomArray).length - room_strength === 2) {
+          if (Object.keys(roomArray).length - Object.keys(roomArray).length === 2) {
             //
 
 
@@ -661,7 +729,7 @@ function ClassAllotment(params: ClassAllotmentParams) {
               tableCounter++;
             }
           }
-          if (Object.keys(roomArray).length - room_strength === 1) {
+          if (Object.keys(roomArray).length - Object.keys(roomArray).length === 1) {
             console.log("Here caaaaa");
 
             console.log(
@@ -732,7 +800,8 @@ function ClassAllotment(params: ClassAllotmentParams) {
                   Register No
                 </th>
                 <th className="border-2 border-black text-lg  p-2">
-                  {/* Seat No */} P/A
+                  Seat No 
+                  {/* P/A */}
                 </th>
                 {/* <th className="border-2 border-black text-xs ">
                   P/A
@@ -758,7 +827,7 @@ function ClassAllotment(params: ClassAllotmentParams) {
       }
     }
     console.log("PLEASE WORK HERE", row.length);
-    if (row.length >= 3 && room != "S4") {
+    if (row.length >= 1) {
       for (let o = 0; o < template.number_of_columns - row.length + 1; o++) {
         row.unshift(
           <tr className="" key={o + "1"}>
@@ -785,8 +854,8 @@ function ClassAllotment(params: ClassAllotmentParams) {
               </th>
               <th className="border-2 border-solid border-black ">
                 {/* {"Row " + (tableIndex + 1)} */}
-                {/* Seat No */}
-                P/A
+                Seat No
+                {/* P/A */}
               </th>
             </tr>
           </thead>
@@ -823,8 +892,8 @@ function ClassAllotment(params: ClassAllotmentParams) {
               </th>
               <th className="border-2 border-solid border-black ">
                 {/* {"Row " + (tableIndex + 1)} */}
-                {/* Seat No */}
-                P/A
+                Seat No
+                {/* P/A */}
               </th>
             </tr>
           </thead>
@@ -877,23 +946,29 @@ function ClassAllotment(params: ClassAllotmentParams) {
                   <tr>
                     <th className="border-2 border-black text-sm p-2">
                       {" "}
-                      Date: {formattedDate}{" "}
+                      Date: 
+                      {/* {formattedDate}{" "} */}
+                      {"_________________ "}
                     </th>
                     <th className="border-2 border-black text-sm p-2">
                       {" "}
                       Session:{" "}
-                      {parseInt(template.start_time.split(":")[0]) >= 8 &&
+                      {/* {parseInt(template.start_time.split(":")[0]) >= 8 &&
                       parseInt(template.start_time.split(":")[0]) < 12
                         ? "FN"
                         : parseInt(template.end_time.split(":")[0]) >= 12 &&
                           parseInt(template.end_time.split(":")[0]) < 17
                         ? "AN"
-                        : null}
+                        : null} */}
+                        {/* AN */}
+                        _____
                     </th>
                     <th className="border-2 border-black text-sm p-2">
                       {" "}
-                      Time: {template.start_time.slice(0, 5)} AM to{" "}
-                      {template.end_time.slice(0, 5)} AM{" "}
+                      Time: {" "}
+                      {"__________________________"}
+                      {/* {template.start_time.slice(0, 5)} Noon to{" "}
+                      {template.end_time.slice(0, 5)} PM {" "} */}
                     </th>
                   </tr>
                 </tbody>
@@ -903,7 +978,9 @@ function ClassAllotment(params: ClassAllotmentParams) {
               <h1 className=" text-2xl text-center ">
                 {" "}
                 Hall: <br />
-                <b className="text-4xl">{room=="EH11" ? "S11" : room}</b>{" "}
+                {/* <b className="text-4xl">{room=="EH11" ? "S11" : room}</b>{" "} */}
+                <b className="text-4xl">{room}</b>{" "}
+                {/* <b className="text-4xl">____</b>{" "} */}
               </h1>
               {/* <p className="italic">{FLOORS[room.split(REG)[0]]} </p> */}
               {/* {room.includes("EH") ? (
@@ -914,7 +991,7 @@ function ClassAllotment(params: ClassAllotmentParams) {
           <div className="flex flex-col mt-4 justify-center w-full items-center">
             {create(roomArray, room, template, exam)}
             {/* <GeneratePDF html={componentRef} /> */}
-            <div className="flex flex-row w-full">
+            <div className="flex flex-row w-full items-center justify-center">
               {rangesCreate(rangeArray)}
               {/* <div className="mx-4">{createSET(master_set, room)}</div> */}
             </div>

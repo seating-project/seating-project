@@ -1,8 +1,8 @@
 
-import NoticeBoardCopy from "../../../../../components/NoticeBoardCopy";
-import OldNotice from "../../../../../components/OldNotice";
-import drf from "../../../../../pages/api/axiosConfig";
-import '../../../../../styles/globals.css';
+import NoticeBoardCopy from "../../../../../../components/NoticeBoardCopy";
+import OldNotice from "../../../../../../components/OldNotice";
+import drf from "../../../../../../pages/api/axiosConfig";
+import '../../../../../../styles/globals.css';
 
 
 
@@ -67,6 +67,8 @@ export default async function HallPlanPage({params}: any) {
       const name = decodeURIComponent(nameGot);
       const dateGot = params.date;
       const date = decodeURIComponent(dateGot);
+      const genderGot = params.gender;
+      const gender = decodeURIComponent(genderGot);
     
       const edata = await getExamData();
       const rdata = await getRoomData();
@@ -118,7 +120,7 @@ export default async function HallPlanPage({params}: any) {
         })
         } */}
         {/* <NoticeBoardCopy ranges={rangesCurrent["Main Building"]["EH13"]} exam={exam} date={date} room={"EH13"} logoUrl={logoUrl} /> */}
-            <OldNotice gender="boys" building="Main Building" exam={name} date={date} ranges={rangesCurrent} logoUrl={logoUrl} bgsep={template.is_boys_girls_separation} />
+            <OldNotice gender={gender} building="Main Building" exam={name} date={date} ranges={rangesCurrent} logoUrl={logoUrl} bgsep={template.is_boys_girls_separation} />
         </>
     )
 }   

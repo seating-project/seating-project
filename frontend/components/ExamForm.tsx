@@ -44,7 +44,9 @@ const useStyle = makeStyles((theme) => ({
 const getDates = (startDate: string, endDate: string) => {
   let dates = [];
   let currentDate = new Date(startDate);
+  currentDate.setDate(currentDate.getDate() + 1);
   let end = new Date(endDate);
+  end.setDate(end.getDate() + 1);
   while (currentDate <= end) {
     dates.push(new Date(currentDate));
     currentDate.setDate(currentDate.getDate() + 1);

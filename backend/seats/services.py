@@ -16,9 +16,11 @@ def Allotments(data):
     for i in data["time_table"]:
         for j in data["time_table"][i]:
             if j not in dates:
-                dates[j] = [{i: data["time_table"][i][j]}]
+                if data["time_table"][i][j] != "":
+                    dates[j] = [{i: data["time_table"][i][j]}]
             else:
-                dates[j].append({i: data["time_table"][i][j]})
+                if data["time_table"][i][j] != "":
+                    dates[j].append({i: data["time_table"][i][j]})
     print("Dates", dates)
     master_room_dict = {}
 
@@ -153,8 +155,27 @@ def Allotments(data):
             re.search(r'\d+', x.room_number).group(0))))
 
         # ROOMS = MainBuildingRooms + NewBuildingRooms
-        rooms_list_temp = ["F1", "F3", "F4", "F7", "F8", "F9", "F22", "S11", "F23", "S1", "S2", "S3", "S4", "S5", "S6", "S7", "S8", "S12", "S15", "S16", "S17", "S18", "S20", "S21", "S22", "S23","S24", "S26", "T21", "T22" ]
+        # rooms_list_temp = ["F1", "F3", "F4", "F7", "F8", "F9", "F22", "S12", "F23", "S1", "S2", "S3", "S4", "S5", "S6", "S7", "S8", "S10", "S15", "S16", "S17", "S18", "S20", "S21", "S22", "S23","S24", "S26", "T21", "T22" ]
         
+        # room_numbers_temp = ["EH1", "EH2", "EH3", ]
+        # rooms_list_temp = ["EH1", "EH2", "EH3", "EH4", "EH5", "EH6", "EH7", "EH8", "EH9", "EH10", "EH11", "EH12", "EH13", "EH14", "EH15", "EH16", "EH17", "EH18", "EH19", "EH20", "EH21", "EH22", "EH23", "EH24", "EH25", "EH26", "EH27", "EH28","S10", "S11"]
+
+        rooms_list_temp = ["EH1", "EH2", "EH3", "EH4", "EH5", "EH6", "EH7", "EH8", "EH9", "EH10", "EH11","S1", "S2", "S3", "S4", "S5", "S6", "S7", "S8", "S10", "S15", "S16", "S17", "S18", "S20", "S21", "S22", "S23","S24", "S26","F1", "F3", "F4", "F7", "F8",] # "F9", "F22","F23"
+
+        
+        # Divide the array into 4 parts
+        part_size = len(rooms_list_temp) // 9
+        parts = [rooms_list_temp[i:i+part_size] for i in range(0, len(rooms_list_temp), part_size)]
+        # Randomize each part separately
+        for i in range(len(parts)):
+            parts[i] = random.sample(parts[i], len(parts[i]))
+        # Flatten the parts back into a single array
+        rooms_list_temp = [item for part in parts for item in part]
+        # Print the randomized array
+        print(rooms_list_temp)
+
+
+        # rooms_list_temp = ["MT1", "MT2", "MT3", "MT4", "MT5", "T2", "T3", "T4", "T6", "T7", "T8", "T9", "T10", "T14", "T15", "T16", "T17", "T18", "T20", "T21", ]
         ROOMS = []
         for room in rooms_list_temp:
             ROOMS.append(Rooms.objects.get(room_number=room))
@@ -192,6 +213,11 @@ def Allotments(data):
         for building in buildings_in_exam:
 
             departments_currently = list(buildings_in_exam[building])
+            dept_temp = []
+            for dept in departments_currently:
+                if dept in [list(sub_dict.keys())[0] for sub_dict in dates[date]]:
+                    dept_temp.append(dept)
+            departments_currently = dept_temp
             if departments_currently == []:
                 continue
 
@@ -215,9 +241,9 @@ def Allotments(data):
                     nckt_array = []
                     for year in years:
                         ckt_array.extend(list(Students.objects.filter(ctype="C", department__in=ckt_dept, year=year).values_list(
-                            "register_number", "department", "year", "gender")))
+                            "register_number", "department", "year", "gender", "name")))
                         nckt_array.extend(list(Students.objects.filter(ctype="N", department__in=nckt_dept, year=year).values_list(
-                            "register_number", "department", "year", "gender")))
+                            "register_number", "department", "year", "gender", "name")))
                     # ckt_array = list(Students.objects.filter(ctype="C", department__in=ckt_dept).values_list("register_number", "department", "year", "gender", "name"))
                     # nckt_array = list(Students.objects.filter(ctype="N", department__in=nckt_dept).values_list("register_number", "department", "year", "gender", "name"))
 
@@ -555,34 +581,37 @@ def Allotments(data):
                         ).values_list("year", flat=True))
                         for y in years:
 
-                            # students_to_be_put["M-CKT"].extend(list(Students.objects.filter(
-                            #     year=y, gender="M", ctype="C", department="aiml").values_list("register_number", "department", "year", "gender", "name")))
-                            # students_to_be_put["M-CKT"].extend(list(Students.objects.filter(
-                            #     year=y, gender="M", ctype="C", department__in=ckt_dept).values_list("register_number", "department", "year", "gender", "name").exclude(department__in=["aiml", "csbs"])))
+                            students_to_be_put["M-CKT"].extend(list(Students.objects.filter(
+                                year=y, gender="M", ctype="C", department="aiml").values_list("register_number", "department", "year", "gender", "name")))
+                            students_to_be_put["M-CKT"].extend(list(Students.objects.filter(
+                                year=y, gender="M", ctype="C", department__in=ckt_dept).values_list("register_number", "department", "year", "gender", "name").exclude(department__in=["aiml", "csbs"])))
 
-                            # students_to_be_put["F-CKT"].extend(list(Students.objects.filter(
-                            #     year=y, gender="F", ctype="C", department="aiml").values_list("register_number", "department", "year", "gender", "name")))
-                            # students_to_be_put["F-CKT"].extend(list(Students.objects.filter(
-                            #     year=y, gender="F", ctype="C", department__in=ckt_dept).values_list("register_number", "department", "year", "gender", "name").exclude(department__in=["aiml", "csbs"])))
-
-                            # students_to_be_put["M-NCKT"].extend(list(Students.objects.filter(
-                            #     year=y, gender="M", ctype="C", department="csbs").values_list("register_number", "department", "year", "gender", "name")))
-                            # students_to_be_put["M-NCKT"].extend(list(Students.objects.filter(
-                            #     year=y, gender="M", ctype="N", department__in=nckt_dept).values_list("register_number", "department", "year", "gender", "name").exclude(department__in=["aiml", "csbs"])))
-
-                            # students_to_be_put["F-NCKT"].extend(list(Students.objects.filter(
-                            #     year=y, gender="F", ctype="C", department="csbs").values_list("register_number", "department", "year", "gender", "name")))
-                            # students_to_be_put["F-NCKT"].extend(list(Students.objects.filter(
-                            #     year=y, gender="F", ctype="N", department__in=nckt_dept).values_list("register_number", "department", "year", "gender", "name").exclude(department__in=["aiml", "csbs"])))
+                            students_to_be_put["F-CKT"].extend(list(Students.objects.filter(
+                                year=y, gender="F", ctype="C", department="aiml").values_list("register_number", "department", "year", "gender", "name")))
+                            students_to_be_put["F-CKT"].extend(list(Students.objects.filter(
+                                year=y, gender="F", ctype="C", department__in=ckt_dept).values_list("register_number", "department", "year", "gender", "name").exclude(department__in=["aiml", "csbs"])))
 
                             students_to_be_put["M-NCKT"].extend(list(Students.objects.filter(
-                                year=y, gender="M", ctype="N", department__in=["mech" ]).values_list("register_number", "department", "year", "gender", "name")))
+                                year=y, gender="M", ctype="C", department="csbs").values_list("register_number", "department", "year", "gender", "name")))
+                            students_to_be_put["M-NCKT"].extend(list(Students.objects.filter(
+                                year=y, gender="M", ctype="N", department__in=nckt_dept).values_list("register_number", "department", "year", "gender", "name").exclude(department__in=["aiml", "csbs"])))
+
                             students_to_be_put["F-NCKT"].extend(list(Students.objects.filter(
-                                year=y, gender="F", ctype="N", department__in=["mech"]).values_list("register_number", "department", "year", "gender", "name")))
-                            students_to_be_put["M-CKT"].extend(list(Students.objects.filter(
-                                year=y, gender="M", ctype="N", department__in=["mct", "civil"]).values_list("register_number", "department", "year", "gender", "name")))
-                            students_to_be_put["F-CKT"].extend(list(Students.objects.filter(
-                                year=y, gender="F", ctype="N", department__in=["mct", "civil"]).values_list("register_number", "department", "year", "gender", "name")))
+                                year=y, gender="F", ctype="C", department="csbs").values_list("register_number", "department", "year", "gender", "name")))
+                            students_to_be_put["F-NCKT"].extend(list(Students.objects.filter(
+                                year=y, gender="F", ctype="N", department__in=nckt_dept).values_list("register_number", "department", "year", "gender", "name").exclude(department__in=["aiml", "csbs"])))
+                            
+                            # students_to_be_put["M-CKT"].extend(list(Students.objects.filter(
+                            #     year=y, 
+
+                            # students_to_be_put["M-NCKT"].extend(list(Students.objects.filter(
+                            #     year=y, gender="M", ctype="N", department__in=["mech" ]).values_list("register_number", "department", "year", "gender", "name")))
+                            # students_to_be_put["F-NCKT"].extend(list(Students.objects.filter(
+                            #     year=y, gender="F", ctype="N", department__in=["mech"]).values_list("register_number", "department", "year", "gender", "name")))
+                            # students_to_be_put["M-CKT"].extend(list(Students.objects.filter(
+                            #     year=y, gender="M", ctype="N", department__in=["mct", "civil"]).values_list("register_number", "department", "year", "gender", "name")))
+                            # students_to_be_put["F-CKT"].extend(list(Students.objects.filter(
+                            #     year=y, gender="F", ctype="N", department__in=["mct", "civil"]).values_list("register_number", "department", "year", "gender", "name")))
 
                         print("STUDENTS TO BE PUT", students_to_be_put, )
                         print("TOTAL ROOMS", ROOMS)
@@ -591,8 +620,8 @@ def Allotments(data):
                         c4g = 0
                         f4g = 0
                         # girls_room = []
-                        room_numbers_temp=["T2", "T3", "T4", "T6", "T1"]
-                        ROOMS = list(Rooms.objects.filter(room_number__in=room_numbers_temp))
+                        # room_numbers_temp=["T2", "T3", "T4", "T6", "T1"]
+                        # ROOMS = list(Rooms.objects.filter(room_number__in=room_numbers_temp))
                         for r in ROOMS:
                             strength = 0
                             print("ROOM STRENGTH of",
@@ -880,13 +909,16 @@ def Allotments(data):
                 "New Building": {}
             }
 
-        # print("MASTER ROOM RANGES")
-        # print(master_room_ranges)
+        print("MASTER ROOM RANGES BEFORE EVERYTHING")
+        print(master_room_ranges)
 
     for date in master_room_dict:
-        for i in room_dict:
+
+        print("DATE ______  📅", date)
+        for i in master_room_dict[date]:
             # print("ROOM DICT", i)
             # print("GIRLSSS ROOMS", girls_room)
+
             if Rooms.objects.get(room_number=i).room_building.building_name == "Main Building":
                 if curr_template.is_boys_girls_separation:
 
@@ -942,13 +974,17 @@ def Allotments(data):
 
                 else:
                     ranges_dict[i] = {}
-                    for j in room_dict[i]:
+                    print("WORKING IN MAIN BUILDING 😭")
+                    for j in master_room_dict[date][i]:
                         if j[0] == 0:
                             continue
                         if (j[0][1] + " " + str(j[0][2])) not in ranges_dict[i]:
                             ranges_dict[i][j[0][1] + " " + str(j[0][2])] = []
+                            print("NEW THING ADDED MAIN", j[0][1] + " " + str(j[0][2]))
+                        print("THE HEAD", j[0][1] + " " + str(j[0][2]))
                         ranges_dict[i][j[0][1] + " " +
                                        str(j[0][2])].append(j[0])
+                    # print("RANGES DICT", ranges_dict)
                 master_room_ranges[date]["Main Building"] = ranges_dict
             else:
                 if curr_template.is_boys_girls_separation:
@@ -982,14 +1018,28 @@ def Allotments(data):
                                                         " " + str(j[1][2])].append(j[1])
                 else:
                     ranges_dict[i] = {}
-                    for j in room_dict[i]:
+                    print("WORKING HERE WORKING HERE ✨")
+                    for j in master_room_dict[date][i]:
+                        print("WHATS HAPPENEING HERE", j)
+                        
                         if j[0] == 0:
                             continue
                         if (j[0][1] + " " + str(j[0][2])) not in ranges_dict[i]:
                             ranges_dict[i][j[0][1] + " " + str(j[0][2])] = []
+                            print("NEW THING ADDED", j[0][1] + " " + str(j[0][2]))
                         ranges_dict[i][j[0][1] + " " +
                                        str(j[0][2])].append(j[0])
-                master_room_ranges[date]["New Building"] = ranges_dict
+                    # print("RANGES DICT BEFORE MASTER 💀", ranges_dict)
+                    master_room_ranges[date]["New Building"] = ranges_dict
+                    print("MASTER ROOM RANGES Currently")
+                    for i in master_room_ranges:
+                        print(i)
+                        for j in master_room_ranges[i]:
+                            print(j)
+                            for k in master_room_ranges[i][j]:
+                                print(k)
+                                # print(master_room_ranges[i][j][k])
+                                # print("Length", len(master_room_ranges[i][j][k]))
 
     print("MASTER ROOM RANGES")
     # print(master_room_ranges)
@@ -1000,7 +1050,12 @@ def Allotments(data):
     #     print(i)
     #     for j in master_room_ranges[i]:
     #         print()
-    #         print(j, "           ", master_room_ranges[i][j])
+    #         if master_room_ranges[i][j] == []:
+    #             continue
+    #         else:
+    #             print(j, "           ",)
+    #             for k in master_room_ranges[i][j]:
+    #                 print(k, "           ", master_room_ranges[i][j][k])
     #         print("Length", len(master_room_ranges[i][j]))
 
     # print(exam_curr)

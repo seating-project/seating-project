@@ -3,6 +3,7 @@
 import Page from "./PotraitPage";
 import styles from "../styles/Notice.module.css";
 import Image from "next/image";
+import { template } from "babel-core";
 
 interface Floor {
   boys: Object;
@@ -30,6 +31,7 @@ type Props = {
   date: string;
   ranges: College;
   logoUrl: string;
+  bgsep: boolean;
 };
 
 const YEARSUFFIX = {
@@ -69,31 +71,37 @@ const REG = new RegExp("(?<=\\D)(?=\\d)|(?<=\\d)(?=\\D)");
 
 const OldNotice = (props: Props) => {
   console.log("please brudha please",props.ranges["New Building"]);
-
+  console.log("TRUE AH", props.bgsep);
   let dept_and_their_ranges = {};
-  // Object.keys(props.ranges[props.building]).forEach((room) => {
-  //   console.log("ROOM", room);
-  //   Object.keys(props.ranges[props.building][room]).forEach((g) => {
-  //     console.log("Gender", g);
-  //     Object.keys(props.ranges[props.building][room][g]).forEach((dept) => {
-  //       console.log(dept);
-  //       if (g == props.gender) {
-  //         if (dept_and_their_ranges[dept]) {
-  //           let obj = {};
 
-  //           obj[room] = props.ranges[props.building][room][g][dept];
-  //           console.log("OBJ", obj);
-  //           dept_and_their_ranges[dept].push(obj);
-  //         } else {
-  //           let obj = {};
-  //           obj[room] = props.ranges[props.building][room][g][dept];
-  //           console.log("O BJ 2", obj);
-  //           dept_and_their_ranges[dept] = [obj];
-  //         }
-  //       }
-  //     });
-  //   });
-  // });
+  
+  if (props.bgsep == true) {
+
+  
+  Object.keys(props.ranges[props.building]).forEach((room) => {
+    console.log("ROOM", room);
+    Object.keys(props.ranges[props.building][room]).forEach((g) => {
+      console.log("Gender", g);
+      Object.keys(props.ranges[props.building][room][g]).forEach((dept) => {
+        console.log(dept);
+        if (g == props.gender) {
+          if (dept_and_their_ranges[dept]) {
+            let obj = {};
+
+            obj[room] = props.ranges[props.building][room][g][dept];
+            console.log("OBJ", obj);
+            dept_and_their_ranges[dept].push(obj);
+          } else {
+            let obj = {};
+            obj[room] = props.ranges[props.building][room][g][dept];
+            console.log("O BJ 2", obj);
+            dept_and_their_ranges[dept] = [obj];
+          }
+        }
+      });
+    });
+  });
+  } else {
 
   Object.keys(props.ranges[props.building]).forEach((room) => {
     console.log("ROOM", room);
@@ -114,6 +122,9 @@ const OldNotice = (props: Props) => {
       }
     });
   });
+
+}
+
   
 
   //
@@ -145,19 +156,22 @@ const OldNotice = (props: Props) => {
     console.log("DEPT", deptRange);
     console.log("FULL STUFF", dept_and_their_ranges[deptRange]);
     // Sort the array of objects
-    dept_and_their_ranges[deptRange].sort((a, b) => {
-      // console.log("A", a)
-      // console.log("B", b)
-      let a1 = Object.entries(a)[0][1][0][0];
-      let b1 = Object.entries(b)[0][1][0][0];
-      // console.log("A1", a1.slice(-3))
-      // console.log("B1", b1)
-      return parseInt(a1.slice(-3)) - parseInt(b1.slice(-3));
-    });
+    // dept_and_their_ranges[deptRange].sort((a, b) => {
+    //   // console.log("A", a)
+    //   // console.log("B", b)
+    //   let a1 = Object.entries(a)[0][1][0][0];
+    //   let b1 = Object.entries(b)[0][1][0][0];
+    //   // console.log("A1", a1.slice(-3))
+    //   // console.log("B1", b1)
+    //   return parseInt(a1.slice(-3)) - parseInt(b1.slice(-3));
+    // });
     console.log("SORTED", dept_and_their_ranges[deptRange]);
     sed.push(
       <tr className="font-bold text-xl p-2">
-        <td colSpan={3} className="p-2 text-center bg-light-blue border-black border-2  ">
+        {props.bgsep == true ? (
+          <td 
+          colSpan={3} 
+          className="p-2 text-center bg-light-blue border-black border-2  ">
           Branch:{" "}
           {deptRange.includes("ae") ||
           deptRange.includes("cad/cam") ||
@@ -169,6 +183,22 @@ const OldNotice = (props: Props) => {
             : deptRange.toUpperCase() + YEARSUFFIX[deptRange.slice(-1)]}{" "}
           Year
         </td>
+        ) : (
+        <td 
+          colSpan={5} 
+          className="p-2 text-center bg-light-blue border-black border-2  ">
+          Branch:{" "}
+          {deptRange.includes("ae") ||
+          deptRange.includes("cad/cam") ||
+          deptRange.includes("csem")
+            ? PGDEPT[deptRange] +
+              " " +
+              deptRange.slice(-1) +
+              YEARSUFFIX[deptRange.slice(-1)]
+            : deptRange.toUpperCase() + YEARSUFFIX[deptRange.slice(-1)]}{" "}
+          Year
+        </td>
+        )}
       </tr>
     );
     // console.log("MAAME", dept_and_their_ranges[deptRange])
@@ -258,26 +288,29 @@ const OldNotice = (props: Props) => {
                 ]}
           </td>
         );
-        // r.push(
-        //   <td key={"3" + c} className="border-2 p-2 text-center">
-        //     {Object.entries(dept_and_their_ranges[deptRange][i])[0][1][0][0]}
-        //   </td>
-        // );
-        // r.push(
-        //   <td key={"4" + c} className="border-2 p-2 text-center">
-        //     {
-        //       Object.entries(dept_and_their_ranges[deptRange][i])[0][1][
-        //         Object.entries(dept_and_their_ranges[deptRange][i])[0][1].length -
-        //           1
-        //       ][0]
-        //     }
-        //   </td>
-        // );
+        if (!props.bgsep) {
+        r.push(
+          <td key={"3" + c} className="border-2 p-2 text-center border-black">
+            {Object.entries(dept_and_their_ranges[deptRange][i])[0][1][0][0]}
+          </td>
+        );
+        r.push(
+          <td key={"4" + c} className="border-2 p-2 text-center border-black">
+            {
+              Object.entries(dept_and_their_ranges[deptRange][i])[0][1][
+                Object.entries(dept_and_their_ranges[deptRange][i])[0][1].length -
+                  1
+              ][0]
+            }
+          </td>
+        );
+        }
         r.push(
           <td key={"5" + c} className="border-2 p-2 text-center  border-black ">
             {Object.entries(dept_and_their_ranges[deptRange][i])[0][1].length}
           </td>
         );
+        
       }
 
       totalCount += Object.entries(dept_and_their_ranges[deptRange][i])[0][1]
@@ -293,9 +326,15 @@ const OldNotice = (props: Props) => {
     }
     sed.push(
       <tr key={c + 1} className={styles.unbreak}>
-        <td colSpan={2} className="border-2 p-2 text-center  border-black ">
+        {props.bgsep ? (
+          <td colSpan={2} className="border-2 p-2 text-center  border-black ">
           <b>Total Students</b>
         </td>
+        ) : (
+          <td colSpan={4} className="border-2 p-2 text-center  border-black ">
+          <b>Total Students</b>
+        </td>)}
+        
         <td className="border-2 p-2 text-center  border-black ">
           <b>{totalCount}</b>
         </td>
@@ -333,17 +372,24 @@ const OldNotice = (props: Props) => {
                   <th colSpan={5}>
                     {" "}
                     <h1 className="text-2xl font-semibold p-1">
-                      Hall Arrangement - {props.date} (FN) 
+                      Hall Arrangement - { " "}
+                      {/* {props.date}  {" "} */}
+                      {/* to {"2023-04-21" }  */}
+                      {/* (FN)  {" "} */}
+                      ___
+                      {props.bgsep && (
+                      props.gender.toUpperCase())}
                     </h1>{" "}
                   </th>
                 </tr>
                 <tr className="border-2 border-black">
-                  <th colSpan={5}>
-                    {/* <h1 className="text-2xl font-semibold p-1">New Building (Block A and B)</h1> */}
+                  {/* <th colSpan={5}>
+                    <h1 className="text-2xl font-semibold p-1">New Building (Block A and B)</h1>
                     <h1 className="text-2xl font-semibold p-1">
                       {props.building}
+                      Main Building
                     </h1>
-                  </th>
+                  </th> */}
                 </tr>
                 <tr className="border-2 border-black">
                   <th className="border-2 p-4 border-black" rowSpan={2}>
@@ -352,14 +398,21 @@ const OldNotice = (props: Props) => {
                   <th className="border-2 p-4 border-black" rowSpan={2}>
                     Hall No
                   </th>
-                  {/* <th className="border-2 p-4" colSpan={2}>
+                  {!props.bgsep ? (
+                  <th className="border-2 p-4 border-black" colSpan={2}>
                     Register No
-                  </th> */}
+                  </th>
+                  ) : null}
                   <th className="border-2 p-4 border-black" rowSpan={2}>
                     Total
                   </th>
                 </tr>
+                <tr>
+                  <th className="border-2 p-4 border-black">From</th>
+                  <th className="border-2 p-4 border-black">To</th>
+                </tr>
               </thead>
+              
               <tbody>
                 <tr>
                   <td colSpan={5} className="border-2 p-2 text-center text-2xl border-black">
@@ -374,9 +427,14 @@ const OldNotice = (props: Props) => {
               })}
               <tbody className={styles.unbreak}>
                 <tr>
-                  <td colSpan={2} className="border-2 p-2 text-center text-2xl  border-black  ">
+                  {props.bgsep ? (
+                    <td colSpan={2} className="border-2 p-2 text-center text-2xl  border-black  ">
                     <b>Overall Students</b>
-                  </td>
+                  </td>) : (
+                    <td colSpan={4} className="border-2 p-2 text-center text-2xl  border-black  ">
+                    <b>Overall Students</b>
+                  </td>)}
+                  
                   <td className="border-2 p-2 text-center text-2xl  border-black  ">
                     <b>{totalTotalCount}</b>
                   </td>

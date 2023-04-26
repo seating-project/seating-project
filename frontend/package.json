@@ -27,20 +27,30 @@
     "encoding": "^0.1.13",
     "formik": "^2.2.9",
     "formik-material-ui": "^4.0.0-alpha.2",
+    "fs": "^0.0.1-security",
+    "mkdirp": "^3.0.0",
     "next": "latest",
+    "path": "^0.12.7",
+    "puppeteer": "^19.9.0",
+    "puppeteer-core": "^19.9.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-scripts": "^5.0.1",
     "three": "^0.149.0",
+    "uuid": "^9.0.0",
     "yup": "^1.0.2"
   },
   "devDependencies": {
     "@types/node": "18.11.3",
     "@types/react": "18.0.21",
     "@types/react-dom": "18.0.6",
+    "@types/uuid": "^9.0.1",
     "autoprefixer": "^10.4.12",
     "postcss": "^8.4.18",
     "tailwindcss": "^3.2.4",
-    "typescript": "4.9.4"
+    "ts-loader": "^9.4.2",
+    "typescript": "4.9.4",
+    "webpack": "^5.79.0",
+    "webpack-cli": "^5.0.1"
   }
 }

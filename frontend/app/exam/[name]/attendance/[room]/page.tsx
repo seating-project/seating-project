@@ -9,7 +9,7 @@ import '../../../../../styles/globals.css';
 
 
 
-export default async function HallPlanPage({params}: any) {
+export default async function AttendancePage({params}: any) {
 
     async function getExamData() {
         try {
@@ -65,13 +65,15 @@ export default async function HallPlanPage({params}: any) {
     
       const nameGot = params.name;
       const name = decodeURIComponent(nameGot);
-      const dateGot = params.date;
-      const date = decodeURIComponent(dateGot);
+      const roomGot = params.room;
+      const roomNoice = decodeURIComponent(roomGot);
     
       const edata = await getExamData();
       const rdata = await getRoomData();
       const tdata = await getTemplateData();
     
+      console.log("NAME", name)
+
       let exam = edata.filter(
         (item: { exam_name: any }) => item.exam_name == name
       )[0];
@@ -99,11 +101,13 @@ export default async function HallPlanPage({params}: any) {
       let dateNow = new Date();
     
     //   console.log("DATE", date);
-      const dateObject = new Date(date);
+    const date = "2023-04-22"
+      const dateObject = new Date("2023-04-18");
       const roomsCurrent = rooms[dateObject.toISOString().slice(0, 10)];
     //   console.log(roomsCurrent);
       const rangesCurrent = ranges[dateObject.toISOString().slice(0, 10)];
-      console.log("RANGES", rangesCurrent);
+      console.log("RANGES", ranges);
+      console.log("ROOM", roomNoice);
     //   console.log("RANGES CURRENT", rangesCurrent["Main Building"]["F1"]);
 
     return (
@@ -117,8 +121,9 @@ export default async function HallPlanPage({params}: any) {
             })
         })
         } */}
-        {/* <NoticeBoardCopy ranges={rangesCurrent["Main Building"]["EH13"]} exam={exam} date={date} room={"EH13"} logoUrl={logoUrl} /> */}
-            <OldNotice gender="boys" building="Main Building" exam={name} date={date} ranges={rangesCurrent} logoUrl={logoUrl} bgsep={template.is_boys_girls_separation} />
+        <NoticeBoardCopy ranges={rangesCurrent["Main Building"][roomNoice]} exam={exam} date={date} room={roomNoice} logoUrl={logoUrl} isbg={template.is_boys_girls_separation} />
+            {/* <OldNotice gender="boys" building="Main Building" exam={name} date={date} ranges={rangesCurrent} logoUrl={logoUrl} /> */}
         </>
     )
-}   
+}  
+
