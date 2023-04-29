@@ -779,7 +779,12 @@ const UserForm = ({template_opt, years_opt, department_opt, rooms_opt, phdstuden
             }}
           </Formik>
         </Card>
-        {next ? <MyTable deptanddate={deptanddate} post_data={postdata}/> : null }
+        {next ? 
+          
+            <MyTable deptanddate={deptanddate} post_data={postdata} years={years}/> 
+           
+          : null }
+        
         
 
       </Grid>

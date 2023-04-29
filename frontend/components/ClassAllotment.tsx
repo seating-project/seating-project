@@ -947,26 +947,33 @@ function ClassAllotment(params: ClassAllotmentParams) {
                     <th className="border-2 border-black text-sm p-2">
                       {" "}
                       Date: 
-                      {/* {formattedDate}{" "} */}
-                      {"_________________ "}
+                      {formattedDate}{" "}
+                      
                     </th>
                     <th className="border-2 border-black text-sm p-2">
                       {" "}
                       Session:{" "}
-                      {/* {parseInt(template.start_time.split(":")[0]) >= 8 &&
+                      {parseInt(template.start_time.split(":")[0]) >= 8 &&
                       parseInt(template.start_time.split(":")[0]) < 12
                         ? "FN"
                         : parseInt(template.end_time.split(":")[0]) >= 12 &&
                           parseInt(template.end_time.split(":")[0]) < 17
                         ? "AN"
-                        : null} */}
-                        {/* AN */}
-                        _____
+                        : null}
+                        {/* _____ */}
                     </th>
                     <th className="border-2 border-black text-sm p-2">
                       {" "}
                       Time: {" "}
-                      {"__________________________"}
+                      {template.start_time.slice(0, 5)} {" "}
+                      {(parseInt(template.start_time.split(":")[0]) >= 8 && parseInt(template.start_time.split(":")[0]) < 12) && "AM"} 
+                      {(parseInt(template.start_time.split(":")[0]) == 12) && "Noon"}
+                      {(parseInt(template.start_time.split(":")[0]) >= 12 && parseInt(template.start_time.split(":")[0]) < 4) && "PM"} 
+                      {" "}to{" "}
+                      {template.end_time.slice(0, 5)} {" "}
+                      {(parseInt(template.end_time.split(":")[0]) >= 8 && parseInt(template.end_time.split(":")[0]) < 12) && "AM"} 
+                      {(parseInt(template.end_time.split(":")[0]) == 12) && "Noon"}
+                      {(parseInt(template.end_time.split(":")[0]) >= 12 && parseInt(template.end_time.split(":")[0]) < 4) && "PM"} 
                       {/* {template.start_time.slice(0, 5)} Noon to{" "}
                       {template.end_time.slice(0, 5)} PM {" "} */}
                     </th>

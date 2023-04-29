@@ -373,10 +373,10 @@ const OldNotice = (props: Props) => {
                     {" "}
                     <h1 className="text-2xl font-semibold p-1">
                       Hall Arrangement - { " "}
-                      {/* {props.date}  {" "} */}
+                      {props.date}  {" "}
                       {/* to {"2023-04-21" }  */}
-                      {/* (FN)  {" "} */}
-                      ___
+                      (FN)  {" "}
+                      {/* ___ */}
                       {props.bgsep && (
                       props.gender.toUpperCase())}
                     </h1>{" "}

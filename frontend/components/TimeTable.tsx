@@ -3,21 +3,42 @@ import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper
 import drf from "../pages/api/axiosConfig";
 import { useRouter } from "next/navigation";
 
-type InputValues = { [department: string]: { [date: string]: string } };
+type InputValues = { [year: number]: { [department: string]: { [date: string]: string } } };
 type DeptAndDate = { departments : string[], dates : Date[]}
 
-const MyTable = ({deptanddate, post_data} ) => {
+const MyTable = ({deptanddate, post_data, years} ) => {
   const dates: Date[] = deptanddate.dates;
   const departments: string[] = deptanddate.departments;
-  const [inputValues, setInputValues] = useState<InputValues>({});
+
+  const initialInputValues: InputValues = {};
+  // years.forEach((year: number) => {
+  //   initialInputValues[year] = {};
+  //   departments.forEach((department) => {
+  //     initialInputValues[year][department] = {};
+  //     dates.forEach((date) => {
+  //       initialInputValues[year][department][date.toISOString().slice(0,10)] = "";
+  //     });
+  //   });
+  // });
+  // console.log("INTIAL INPUT VALUES",initialInputValues)
+  const [inputValues, setInputValues] = useState<InputValues>(initialInputValues);
   const router = useRouter();
+
+  console.log("inputValues", inputValues);
   
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>, department: string, date: Date) => {
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>, department: string, date: Date, year: number) => {
+    console.log("YEAR", year);
+    console.log("DEPARTMENT", department);
+    console.log("DATE", date.toISOString().slice(0,10));
+    console.log("VALUE", event.target.value);
     setInputValues({
       ...inputValues,
-      [department]: {
-        ...inputValues[department],
-        [date.toISOString().slice(0,10)]: event.target.value,
+      [year]: {
+        ...inputValues?.[year],
+        [department]: {
+          ...inputValues?.[year]?.[department],
+          [date.toISOString().slice(0,10)]: event.target.value,
+        },
       },
     });
   };
@@ -44,41 +65,47 @@ const MyTable = ({deptanddate, post_data} ) => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <TableContainer component={Paper}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Departments / Dates</TableCell>
-              {dates.map((date) => (
-                <TableCell key={date.toISOString()}>{date.toISOString().slice(0, 10)}</TableCell>
-              ))}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {departments.map((department) => (
-              <TableRow key={department}>
-                <TableCell>{department}</TableCell>
-                {dates.map((date) => (
-                  <TableCell key={`${department}-${date.toISOString().slice(0,10)}`}>
-                    <TextField
-                      value={inputValues?.[department]?.[date.toISOString().slice(0,10)] ?? ""}
-                      onChange={(event) => handleInputChange(event, department, date)}
-                    />
-                  </TableCell>
-                ))}
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-        <button type="submit">Submit</button>
-      </TableContainer>
-    </form>
+    <>
+      {years.map((year: number) => (
+        <div key={year}>
+          <h2>Year {year} Timetable</h2>
+          <form onSubmit={handleSubmit}>
+            <TableContainer component={Paper}>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Departments / Dates</TableCell>
+                    {dates.map((date) => (
+                      <TableCell key={date.toISOString()}>{date.toISOString().slice(0, 10)}</TableCell>
+                    ))}
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {departments.map((department) => (
+                    <TableRow key={department}>
+                      <TableCell>{department}</TableCell>
+                      {dates.map((datey) => (
+                        <TableCell key={`${department}-${datey.toISOString().slice(0,10)}`}>
+                          <TextField
+                            value={inputValues?.[year]?.[department]?.[datey.toISOString().slice(0,10)] ?? ""}
+                            onChange={(event) => handleInputChange(event, department, datey, year)}
+                          />
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+              <button type="submit">Submit</button>
+            </TableContainer>
+          </form>
+        </div>
+      ))}
+    </>
   );
 };
 
 export default MyTable;
-
 
 // {
 //   "exam_name": "Form Test",

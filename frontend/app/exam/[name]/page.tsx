@@ -58,6 +58,8 @@ export default async function ExamPage({ params }: any) {
   const edata = await getExamData();
   const rdata = await getRoomData();
 
+  let links = [];
+
   let exam = edata.filter(
     (item: { exam_name: string }) => item.exam_name == name
   )[0];
@@ -97,6 +99,7 @@ export default async function ExamPage({ params }: any) {
             let dateObj: Date = new Date(date);
             dateNow = dateObj.toDateString();
             dateObj = new Date(date);
+            links.push(`http://localhost:3000/exam/${encodeURIComponent(name)}/allotments/${dateObj.toISOString().substring(0, 10)}`);
 
             return (
               <Link
@@ -118,6 +121,7 @@ export default async function ExamPage({ params }: any) {
             let dateObj: Date = new Date(date);
             dateNow = dateObj.toDateString();
             dateObj = new Date(date);
+            links.push(`http://localhost:3000/exam/${encodeURIComponent(name)}/hallplan/${dateObj.toISOString().substring(0, 10)}`);
             return (
               <Link
                 href={`/exam/${name}/hallplan/${dateObj
@@ -158,7 +162,7 @@ export default async function ExamPage({ params }: any) {
 
         <div>
           <div className="flex flex-col  border-2 p-4">
-            <DownloadButton />
+            <DownloadButton links={links}/>
           </div>
         </div>
       </div>

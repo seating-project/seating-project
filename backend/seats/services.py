@@ -11,19 +11,22 @@ def Allotments(data):
 
     curr_template = data["exam_template"]
     print(data)
-
     dates = {}
-    for i in data["time_table"]:
-        for j in data["time_table"][i]:
-            if j not in dates:
-                if data["time_table"][i][j] != "":
-                    dates[j] = [{i: data["time_table"][i][j]}]
-            else:
-                if data["time_table"][i][j] != "":
-                    dates[j].append({i: data["time_table"][i][j]})
+    for year in data["time_table"]:
+        for department in data["time_table"][year]:
+            for date in data["time_table"][year][department]:
+                if date not in dates:
+                    if data["time_table"][year][department][date] != "":
+                        dates[date] = [
+                            {f"{department} {year}": data["time_table"][year][department][date]}]
+                else:
+                    if data["time_table"][year][department][date] != "":
+                        dates[date].append(
+                            {f"{department} {year}": data["time_table"][year][department][date]})
     print("Dates", dates)
-    master_room_dict = {}
 
+    master_room_dict = {}
+    master_room_ranges = {}
     exam_curr = Exams.objects.filter(exam_name=data["exam_name"])
     exam_curr = exam_curr[0]
 
@@ -156,16 +159,17 @@ def Allotments(data):
 
         # ROOMS = MainBuildingRooms + NewBuildingRooms
         # rooms_list_temp = ["F1", "F3", "F4", "F7", "F8", "F9", "F22", "S12", "F23", "S1", "S2", "S3", "S4", "S5", "S6", "S7", "S8", "S10", "S15", "S16", "S17", "S18", "S20", "S21", "S22", "S23","S24", "S26", "T21", "T22" ]
-        
+
         # room_numbers_temp = ["EH1", "EH2", "EH3", ]
         # rooms_list_temp = ["EH1", "EH2", "EH3", "EH4", "EH5", "EH6", "EH7", "EH8", "EH9", "EH10", "EH11", "EH12", "EH13", "EH14", "EH15", "EH16", "EH17", "EH18", "EH19", "EH20", "EH21", "EH22", "EH23", "EH24", "EH25", "EH26", "EH27", "EH28","S10", "S11"]
 
-        rooms_list_temp = ["EH1", "EH2", "EH3", "EH4", "EH5", "EH6", "EH7", "EH8", "EH9", "EH10", "EH11","S1", "S2", "S3", "S4", "S5", "S6", "S7", "S8", "S10", "S15", "S16", "S17", "S18", "S20", "S21", "S22", "S23","S24", "S26","F1", "F3", "F4", "F7", "F8",] # "F9", "F22","F23"
+        rooms_list_temp = ["EH1", "EH2", "EH3", "EH4", "EH5", "EH6", "EH7", "EH8", "EH9", "EH10", "EH11","EH12","EH13","EH14","EH15","EH16","EH17","EH18","EH19","EH20","S1", "S2", "S3", "S4", "S5", "S6", "S7",
+                           "S8", "S10", "S15", "S16", "S17", "S18", "S20", "S21", "S22", "S23", "S24", "S26", "F1", "F3", "F4", "F7", "F8", "F9", "F22","F23"]
 
-        
         # Divide the array into 4 parts
-        part_size = len(rooms_list_temp) // 9
-        parts = [rooms_list_temp[i:i+part_size] for i in range(0, len(rooms_list_temp), part_size)]
+        part_size = len(rooms_list_temp) // 12
+        parts = [rooms_list_temp[i:i+part_size]
+                 for i in range(0, len(rooms_list_temp), part_size)]
         # Randomize each part separately
         for i in range(len(parts)):
             parts[i] = random.sample(parts[i], len(parts[i]))
@@ -174,13 +178,11 @@ def Allotments(data):
         # Print the randomized array
         print(rooms_list_temp)
 
-
         # rooms_list_temp = ["MT1", "MT2", "MT3", "MT4", "MT5", "T2", "T3", "T4", "T6", "T7", "T8", "T9", "T10", "T14", "T15", "T16", "T17", "T18", "T20", "T21", ]
         ROOMS = []
         for room in rooms_list_temp:
             ROOMS.append(Rooms.objects.get(room_number=room))
         print("ROOMS", ROOMS)
-
 
         girls_room = []
         print("ROOMS", ROOMS)
@@ -215,18 +217,20 @@ def Allotments(data):
             departments_currently = list(buildings_in_exam[building])
             dept_temp = []
             for dept in departments_currently:
-                if dept in [list(sub_dict.keys())[0] for sub_dict in dates[date]]:
-                    dept_temp.append(dept)
+                for sub_dict in dates[date]:
+                    sub_dict_key = list(sub_dict.keys())[0]
+                    if dept == sub_dict_key.split()[0]: #and year == sub_dict_key.split()[1]
+                        dept_temp.append(sub_dict_key)
             departments_currently = dept_temp
             if departments_currently == []:
                 continue
-
+            print("DEPARTMENTS CURRENTLY", departments_currently)
             ckt_dept = []
             nckt_dept = []
             for dept in departments_currently:
-                if Departments.objects.get(branch_short_name=dept) in ckt_departments:
+                if Departments.objects.get(branch_short_name=dept.split()[0]) in ckt_departments:
                     ckt_dept.append(dept)
-                elif Departments.objects.get(branch_short_name=dept) in nckt_departments:
+                elif Departments.objects.get(branch_short_name=dept.split()[0]) in nckt_departments:
                     nckt_dept.append(dept)
             print("CKT DEPT", ckt_dept)
             print("NCKT DEPT", nckt_dept)
@@ -235,15 +239,28 @@ def Allotments(data):
 
                 if curr_template.is_alternate_dept_seated:
 
-                    years = list(
-                        exam_curr.years.values_list("year", flat=True))
+                    # years = list(
+                    #     exam_curr.years.values_list("year", flat=True))
                     ckt_array = []
                     nckt_array = []
-                    for year in years:
-                        ckt_array.extend(list(Students.objects.filter(ctype="C", department__in=ckt_dept, year=year).values_list(
+                    # for year in years:
+                    #     ckt_array.extend(list(Students.objects.filter(ctype="C", department__in=ckt_dept, year=year).values_list(
+                    #         "register_number", "department", "year", "gender", "name")))
+                    #     nckt_array.extend(list(Students.objects.filter(ctype="N", department__in=nckt_dept, year=year).values_list(
+                    #         "register_number", "department", "year", "gender", "name")))
+                    for dept_year in ckt_dept:
+                        dept = dept_year.split()[0]
+                        year = dept_year.split()[1]
+                        print(dept, year)
+                        ckt_array.extend(list(Students.objects.filter(ctype="C", department=dept, year=year).values_list(
                             "register_number", "department", "year", "gender", "name")))
-                        nckt_array.extend(list(Students.objects.filter(ctype="N", department__in=nckt_dept, year=year).values_list(
+                    for dept_year in nckt_dept:
+                        dept = dept_year.split()[0]
+                        year = dept_year.split()[1]
+                        print(dept, year)
+                        nckt_array.extend(list(Students.objects.filter(ctype="N", department=dept, year=year).values_list(
                             "register_number", "department", "year", "gender", "name")))
+
                     # ckt_array = list(Students.objects.filter(ctype="C", department__in=ckt_dept).values_list("register_number", "department", "year", "gender", "name"))
                     # nckt_array = list(Students.objects.filter(ctype="N", department__in=nckt_dept).values_list("register_number", "department", "year", "gender", "name"))
 
@@ -252,7 +269,7 @@ def Allotments(data):
                     f1 = 0
 
                     for r in ROOMS:
-                        print("ROOM", r)
+                        # print("ROOM", r)
                         # strength = curr_template.room_strength//2
                         # for i in range(strength):
                         #     if c1 >= len(ckt_array) and c1 >= len(nckt_array):
@@ -356,17 +373,16 @@ def Allotments(data):
                         years = list(exam_curr.years.all(
                         ).values_list("year", flat=True))
                         for y in years:
-                            if y==2:
+                            if y == 2:
                                 years_students[str(y)+"M"] = list(Students.objects.filter(
                                     year=y, gender="M").values_list("register_number", "department", "year", "gender", "name"))
                                 years_students[str(y)+"F"] = list(Students.objects.filter(
                                     year=y, gender="F").values_list("register_number", "department", "year", "gender", "name"))
-                            if y==3:
+                            if y == 3:
                                 years_students[str(y)+"M"] = list(Students.objects.filter(
                                     year=y, gender="M").exclude(department__in=["aids", "eee"]).values_list("register_number", "department", "year", "gender", "name"))
                                 years_students[str(y)+"F"] = list(Students.objects.filter(
                                     year=y, gender="F").exclude(department__in=["aids", "eee"]).values_list("register_number", "department", "year", "gender", "name"))
-
 
                         # ckt_arrayREPEAT = []
                         # nckt_arrayREPEAT = []
@@ -375,7 +391,6 @@ def Allotments(data):
                         #         "register_number", "department", "year", "gender")))
                         #     nckt_arrayREPEAT.extend(list(Students.objects.filter(ctype="N", department__in=nckt_dept, year=year, gender="M").values_list(
                         #         "register_number", "department", "year", "gender")))
-
 
                         # print("YEARS STUDENTS", years_students)
 
@@ -391,7 +406,7 @@ def Allotments(data):
                             # if r.room_number == "F23":
                             #     changeDone = 1
                             #     r = Rooms.objects.get(room_number="S11")
-                            
+
                             strength = r.room_strength//2
                             # strength = curr_template.room_strength//2
                             for j in range(strength):
@@ -440,7 +455,7 @@ def Allotments(data):
                             #     c3g += count
                             #     # break
                             #     f3g = 1
-                            
+
                             room_dict[r.room_number] = curr_room
                             curr_room = []
                             # room.remove(i)
@@ -451,14 +466,12 @@ def Allotments(data):
                                 f3g = 1
                                 break
 
-                            
-
                             if f3g == 1:
                                 break
                         master_room_dict[date] = room_dict
-                        
+
                         for gr in girls_room:
-                        
+
                             ROOMS.remove(gr)
 
                         c1cREPEAT = c3b
@@ -467,8 +480,6 @@ def Allotments(data):
 
                         for r in ROOMS:
 
-                            
-                            
                             if r.room_strength == 25:
 
                                 if flagForOnce == 0:
@@ -484,33 +495,38 @@ def Allotments(data):
                                         break
                                     try:
                                         if alternationRepeat == 0:
-                                            curr_room.append([years_students["2M"][c1cREPEAT], 0])
+                                            curr_room.append(
+                                                [years_students["2M"][c1cREPEAT], 0])
                                             c1cREPEAT += 1
                                             alternationRepeat = 1
                                         else:
-                                            curr_room.append([years_students["3M"][c1ncREPEAT], 0])
+                                            curr_room.append(
+                                                [years_students["3M"][c1ncREPEAT], 0])
                                             c1ncREPEAT += 1
                                             alternationRepeat = 0
                                     except:
                                         try:
                                             if alternationRepeat == 0 and c1ncREPEAT > len(years_students["3M"]):
-                                                curr_room.append([years_students["2M"][c1cREPEAT], 0])
+                                                curr_room.append(
+                                                    [years_students["2M"][c1cREPEAT], 0])
                                                 c1cREPEAT += 1
                                             else:
-                                                curr_room.append([years_students["3M"][c1ncREPEAT], 0])
+                                                curr_room.append(
+                                                    [years_students["3M"][c1ncREPEAT], 0])
                                                 c1ncREPEAT += 1
                                                 alternationRepeat = 0
                                         except:
                                             if alternationRepeat == 0 and c1cREPEAT > len(years_students["2M"]):
-                                                curr_room.append([years_students["3M"][c1ncREPEAT], 0])
+                                                curr_room.append(
+                                                    [years_students["3M"][c1ncREPEAT], 0])
                                                 c1ncREPEAT += 1
                                             else:
-                                                curr_room.append([years_students["2M"][c1cREPEAT], 0])
+                                                curr_room.append(
+                                                    [years_students["2M"][c1cREPEAT], 0])
                                                 c1cREPEAT += 1
                                                 alternationRepeat = 1
 
-
-                            else:    
+                            else:
 
                                 # if r.room_number == "S13":
                                 #     r = Rooms.objects.get(room_number="F23")
@@ -600,9 +616,9 @@ def Allotments(data):
                                 year=y, gender="F", ctype="C", department="csbs").values_list("register_number", "department", "year", "gender", "name")))
                             students_to_be_put["F-NCKT"].extend(list(Students.objects.filter(
                                 year=y, gender="F", ctype="N", department__in=nckt_dept).values_list("register_number", "department", "year", "gender", "name").exclude(department__in=["aiml", "csbs"])))
-                            
+
                             # students_to_be_put["M-CKT"].extend(list(Students.objects.filter(
-                            #     year=y, 
+                            #     year=y,
 
                             # students_to_be_put["M-NCKT"].extend(list(Students.objects.filter(
                             #     year=y, gender="M", ctype="N", department__in=["mech" ]).values_list("register_number", "department", "year", "gender", "name")))
@@ -889,31 +905,36 @@ def Allotments(data):
             print(j, "           ", master_room_dict[i][j])
             print("Length", len(master_room_dict[i][j]))
 
-    master_room_ranges = {}
-    if curr_template.is_boys_girls_separation:
-        for date in dates:
-            master_room_ranges[date] = {
-                "Main Building": {
-                    # "boys": {},
-                    # "girls": {}
-                },
-                "New Building": {
-                    # "boys": {},
-                    # "girls": {}
-                }
-            }
-    else:
-        for date in dates:
-            master_room_ranges[date] = {
-                "Main Building": {},
-                "New Building": {}
-            }
+    master_room_ranges_2 = {}
+    # if curr_template.is_boys_girls_separation:
+    #     for date in dates:
+    #         master_room_ranges[date] = {
+    #             "Main Building": {
+    #                 # "boys": {},
+    #                 # "girls": {}
+    #             },
+    #             "New Building": {
+    #                 # "boys": {},
+    #                 # "girls": {}
+    #             }
+    #         }
+    # else:
+    #     for date in dates:
+    #         master_room_ranges[date] = {
+    #             "Main Building": {},
+    #             "New Building": {}
+    #         }
 
-        print("MASTER ROOM RANGES BEFORE EVERYTHING")
-        print(master_room_ranges)
+    print("MASTER ROOM RANGES BEFORE EVERYTHING")
+    print(master_room_ranges)
 
     for date in master_room_dict:
 
+        master_room_ranges[date] = {
+            "Main Building": {},
+            "New Building": {}
+        }
+        ranges_dict = {}
         print("DATE ______  📅", date)
         for i in master_room_dict[date]:
             # print("ROOM DICT", i)
@@ -928,7 +949,7 @@ def Allotments(data):
                     }
                     if Rooms.objects.get(room_number=i) in girls_room:
                         for j in room_dict[i]:
-                            
+
                             if curr_template.is_single_seater:
                                 if j[0] != 0:
                                     if (j[0][1] + " " + str(j[0][2])) not in ranges_dict[i]["girls"]:
@@ -974,17 +995,19 @@ def Allotments(data):
 
                 else:
                     ranges_dict[i] = {}
-                    print("WORKING IN MAIN BUILDING 😭")
+                    # print("WORKING IN MAIN BUILDING 😭")
                     for j in master_room_dict[date][i]:
                         if j[0] == 0:
                             continue
                         if (j[0][1] + " " + str(j[0][2])) not in ranges_dict[i]:
                             ranges_dict[i][j[0][1] + " " + str(j[0][2])] = []
-                            print("NEW THING ADDED MAIN", j[0][1] + " " + str(j[0][2]))
-                        print("THE HEAD", j[0][1] + " " + str(j[0][2]))
+                            # print("NEW THING ADDED MAIN", j[0][1] + " " + str(j[0][2]))
+                        # print("THE HEAD", j[0][1] + " " + str(j[0][2]))
                         ranges_dict[i][j[0][1] + " " +
                                        str(j[0][2])].append(j[0])
                     # print("RANGES DICT", ranges_dict)
+                print("CURRENT DATE", date, "BUT ALLOTMENT",
+                      master_room_ranges[date]["New Building"][i])
                 master_room_ranges[date]["Main Building"] = ranges_dict
             else:
                 if curr_template.is_boys_girls_separation:
@@ -1009,39 +1032,64 @@ def Allotments(data):
                                     ranges_dict[i]["boys"][j[0]
                                                             [1] + " " + str(j[0][2])] = []
                                 ranges_dict[i]["boys"][j[0][1] +
-                                                        " " + str(j[0][2])].append(j[0])
+                                                       " " + str(j[0][2])].append(j[0])
                             if j[1] != 0:
                                 if (j[1][1] + " " + str(j[1][2])) not in ranges_dict[i]["boys"]:
                                     ranges_dict[i]["boys"][j[1]
                                                             [1] + " " + str(j[1][2])] = []
                                 ranges_dict[i]["boys"][j[1][1] +
-                                                        " " + str(j[1][2])].append(j[1])
+                                                       " " + str(j[1][2])].append(j[1])
                 else:
                     ranges_dict[i] = {}
-                    print("WORKING HERE WORKING HERE ✨")
+                    # print("WORKING HERE WORKING HERE ✨")
                     for j in master_room_dict[date][i]:
-                        print("WHATS HAPPENEING HERE", j)
-                        
+                        # print("WHATS HAPPENEING HERE", j)
+
                         if j[0] == 0:
                             continue
                         if (j[0][1] + " " + str(j[0][2])) not in ranges_dict[i]:
                             ranges_dict[i][j[0][1] + " " + str(j[0][2])] = []
-                            print("NEW THING ADDED", j[0][1] + " " + str(j[0][2]))
+                            # print("NEW THING ADDED", j[0][1] + " " + str(j[0][2]))
                         ranges_dict[i][j[0][1] + " " +
                                        str(j[0][2])].append(j[0])
                     # print("RANGES DICT BEFORE MASTER 💀", ranges_dict)
-                    master_room_ranges[date]["New Building"] = ranges_dict
-                    print("MASTER ROOM RANGES Currently")
-                    for i in master_room_ranges:
-                        print(i)
-                        for j in master_room_ranges[i]:
-                            print(j)
-                            for k in master_room_ranges[i][j]:
-                                print(k)
-                                # print(master_room_ranges[i][j][k])
-                                # print("Length", len(master_room_ranges[i][j][k]))
+                master_room_ranges[date]["New Building"] = ranges_dict
+            #     print("CURRENT DATE", date, "BUT ALLOTMENT", master_room_ranges[date]["New Building"][i])
+            # print("MASTER ROOM RANGES Currently")
+            # print(master_room_ranges.keys())
+            # print(master_room_ranges[date]["Main Building"].keys())
+            # print(master_room_ranges[date]["New Building"].keys())
+
+            # Retying the logic so that the ranges are not overwritten
+
+        #     print(master_room_dict[date][i])
+        #     ranges_dict[i] = {}
+        #     for j in master_room_dict[date][i]:
+        #         if j[0] == 0:
+        #             continue
+        #         if (j[0][1] + " " + str(j[0][2])) not in ranges_dict[i]:
+        #             ranges_dict[i][j[0][1] + " " + str(j[0][2])] = []
+        #             # print("NEW THING ADDED", j[0][1] + " " + str(j[0][2]))
+        #         ranges_dict[i][j[0][1] + " " +
+        #                         str(j[0][2])].append(j[0])
+        #     # print("RANGES DICT BEFORE MASTER 💀", ranges_dict)
+        # print("CURRENT DATE", date)
+        # master_room_ranges[date] = ranges_dict
 
     print("MASTER ROOM RANGES")
+    print(master_room_ranges)
+
+    for i in master_room_ranges:
+        print(i)
+        for j in master_room_ranges[i]:
+            print(j)
+            for k in master_room_ranges[i][j]:
+                print(k)
+                print(master_room_ranges[i][j][k])
+                print("Length", len(master_room_ranges[i][j][k]))
+
+    # print(master_room_ranges_2)
+    # print("MASTER ROOM RANGES")
     # print(master_room_ranges)
     # print("MASTER ROOM DICT")
     # print(master_room_dict)
