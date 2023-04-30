@@ -16,7 +16,8 @@ import {
   Box,
   FormGroup,
   FormControlLabel,
-  Checkbox
+  Checkbox,
+  Typography,
 } from "@material-ui/core";
 import Chip from "@mui/material/Chip";
 import { Formik, Form, Field } from "formik";
@@ -30,15 +31,15 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { useState } from "react";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import MyTable from "./TimeTable";
-import '../styles/globals.css';
+import "../styles/globals.css";
 
 const useStyle = makeStyles((theme) => ({
   padding: {
-    padding: theme.spacing(3)
+    padding: theme.spacing(3),
   },
   button: {
-    margin: theme.spacing(1)
-  }
+    margin: theme.spacing(1),
+  },
 }));
 
 const getDates = (startDate: string, endDate: string) => {
@@ -52,17 +53,16 @@ const getDates = (startDate: string, endDate: string) => {
     currentDate.setDate(currentDate.getDate() + 1);
   }
   return dates;
-}
+};
 
 type DepartmentsType = {
-  [key: string]: string[]
-}
+  [key: string]: string[];
+};
 
 const getDepartments = (departments: DepartmentsType) => {
   const dept = Object.values(departments);
   return dept.flat();
-}
-
+};
 
 //Data
 const initialValues = {
@@ -70,80 +70,29 @@ const initialValues = {
   fromDate: "",
   toDate: "",
   template: "",
-  years: []
+  years: [],
   // departments: []
 };
 
-const options = [
-  { label: "Computer Programmer", value: "Computer_programmer" },
-  { label: "Web Developer", value: "web_developer" },
-  { label: "User Experience Designer", value: "user_experience_designer" },
-  { label: "Systems Analyst", value: "systems_analyst" },
-  { label: "Quality Assurance Tester", value: "quality_assurance_tester" }
-];
-
 const sc_opt = [
   { label: "Seat Number", value: "Seat Number" },
-  { label: "P/A", value: "P/A" },
-  { label: "Set Code", value: "Set Code" }
-];
-
-const temp_opt = [
-  { label: "Model", value: "Model" },
-  { label: "Assessment", value: "Assessment" }
-];
-
-const phd_opt = [
-  { label: "Student1", value: "Student1" },
-  { label: "Student2", value: "Student2" },
-  { label: "Student3", value: "Student3" }
-];
-
-const year_opt = [
-  { label: "1", value: 1 },
-  { label: "2", value: 2 },
-  { label: "3", value: 3 },
-  { label: "4", value: 4 }
-];
-
-const dept_options = [
-  { label: "CSE", value: "cse" },
-  { label: "AIDS", value: "aids" },
-  { label: "IT", value: "it" },
-  { label: "CSBS", value: "csbs" },
-  { label: "EEE", value: "eee" },
-  { label: "ECE", value: "ece" },
-  { label: "MECH", value: "mech" },
-  { label: "MCT", value: "mct" },
-  { label: "CIVIL", value: "civil" },
-  { label: "BME", value: "bme" }
+  { label: "Present/Absent", value: "Present/Absent" },
+  { label: "Set Code", value: "Set Code" },
 ];
 
 const buildings = ["Main Building", "New Building"];
-
-const room_opt = [
-  { label: "F1", value: "F1" },
-  { label: "F2", value: "F2" },
-  { label: "F3", value: "F3" },
-  { label: "F4", value: "F4" }
-];
 
 const sub_opt = [
   { label: "TOC", value: "TOC" },
   { label: "ESS", value: "ESS" },
   { label: "DBMS", value: "DBMS" },
   { label: "APT", value: "APT" },
-  { label: "OS", value: "OS" }
+  { label: "OS", value: "OS" },
 ];
-//password validation
-// const lowercaseRegEx = /(?=.*[a-z])/
-// const uppercaseRegEx = /(?=.*[A-Z])/
-// const numericRegEx = /(?=.*[0-9])/
-// const lengthRegEx = /(?=.{6,})/
 
 //validation schema
 let validationSchema = Yup.object().shape({
-  examName: Yup.string().required("Required")
+  examName: Yup.string().required("Required"),
   // lastName: Yup.string().required("Required"),
   // email: Yup.string().email("Invalid email").required("Required"),
   // password: Yup.string()
@@ -160,55 +109,97 @@ let validationSchema = Yup.object().shape({
   //   .required("Required!"),
 });
 
-const UserForm = ({template_opt, years_opt, department_opt, rooms_opt, phdstudents_opt}) => {
+const UserForm = ({
+  templates,
+  template_opt,
+  years_opt,
+  department_opt,
+  rooms_opt,
+  phdstudents_opt,
+}) => {
   const classes = useStyle();
 
   const [examName, setExamName] = useState("");
   const [years, setYears] = useState<number[]>([]);
   const [departments, setDepartments] = useState({
     "Main Building": [],
-    "New Building": []
+    "New Building": [],
   });
-  const [fromdate, setFromDate] = useState<Date | null>(null);
-  const [todate, setToDate] = useState<Date | null>(null);
-  const [phdchecked, setphdChecked] = useState(false);
-  const [phdRoom, setphdRoom] = useState(null);
-  const [phdStudents, setphdStudents] = useState([]);
-  const [mechecked, setmeChecked] = useState(false);
-  const [meRoom, setmeRoom] = useState(null);
-  const [yearsTogether, setyearsTogether] = useState(false);
-  const [departmentsTogether, setdepartmentsTogether] = useState(false);
-  const [sendWAMessage, setsendWAMessage] = useState(false);
-  const [timetosend, setTimetosend] = useState(null);
-  const [sets, setSets] = useState([]);
-  const [numberofsets, setNumberofsets] = useState(null);
-  const [secondColumnOptions, setSecondColumnOptions] = useState("");
-  const [template, setTemplate] = useState("");
+  // const [fromdate, setFromDate] = useState<Date | null>(null);
+  // const [todate, setToDate] = useState<Date | null>(null);
+  // const [phdchecked, setphdChecked] = useState(false);
+  // const [phdRoom, setphdRoom] = useState(null);
+  // const [phdStudents, setphdStudents] = useState([]);
+  // const [mechecked, setmeChecked] = useState(false);
+  // const [meRoom, setmeRoom] = useState(null);
+  // const [yearsTogether, setyearsTogether] = useState(false);
+  // const [departmentsTogether, setdepartmentsTogether] = useState(false);
+  // const [sendWAMessage, setsendWAMessage] = useState(false);
+  // const [timetosend, setTimetosend] = useState(null);
+  // const [sets, setSets] = useState([]);
+  // const [numberofsets, setNumberofsets] = useState(null);
+  // const [secondColumnOptions, setSecondColumnOptions] = useState("");
+  // const [template, setTemplate] = useState("");
+  // const [departmentsLeft, setDepartmentsLeft] = useState<string[]>([]);
+  // const [departmentsRight, setDepartmentsRight] = useState<string[]>([]);
+  // const [minStudents, setMinStudents] = useState(60);
 
   const [next, setNext] = useState(false);
   const [deptanddate, setDeptanddate] = useState({});
   const [postdata, setPostdata] = useState({});
-  const [sides, setSides] = useState({})
+  // const [sides, setSides] = useState({});
+
+  const [formData, setFormData] = useState({
+    examName: "",
+    years: [],
+    departments: {
+      "Main Building": [],
+      "New Building": [],
+    },
+    fromdate: null,
+    todate: null,
+    phdchecked: false,
+    phdRoom: null,
+    phdStudents: [],
+    mechecked: false,
+    meRoom: null,
+    yearsTogether: false,
+    departmentsTogether: false,
+    sendWAMessage: false,
+    timetosend: null,
+    sets: [],
+    numberofsets: null,
+    secondColumnOptions: "",
+    template: "",
+    departmentsLeft: [],
+    departmentsRight: [],
+    minStudents: 60,
+    randomizeEveryNRooms: 0,
+    roomsOrder: [],
+    girlsRooms: [],
+  });
 
   const phdChange = (event: MouseEvent<HTMLInputElement>) => {
     const target = event.target as HTMLInputElement;
-    setphdChecked(target.checked);
-    console.log("CHECKED", phdchecked);
+    // setphdChecked(target.checked);
+    setFormData({ ...formData, phdchecked: target.checked });
   };
   const meChange = (event: MouseEvent<HTMLInputElement>) => {
     const target = event.target as HTMLInputElement;
-    setmeChecked(target.checked);
-    console.log("CHECKED ME", mechecked);
+    // setmeChecked(target.checked);
+    setFormData({ ...formData, mechecked: target.checked });
   };
 
-  const answer = {}
-  const handleClick = () => {
+  // const template = templates.find((t) => t.template_name === formData.template);
+  // console.log(template);
 
-    console.log("ROSHAN");
-    console.log(fromdate);
-    console.log(todate);
-    console.log(phdchecked);
-    console.log(secondColumnOptions);
+  const answer = {};
+  const handleClick = () => {
+    // console.log("ROSHAN");
+    // console.log(fromdate);
+    // console.log(todate);
+    // console.log(phdchecked);
+    // console.log(secondColumnOptions);
 
     // const post_data = {
     //   exam_name: examName,
@@ -232,49 +223,57 @@ const UserForm = ({template_opt, years_opt, department_opt, rooms_opt, phdstuden
     // }
 
     setPostdata({
-      exam_name: examName,
-      from_date: fromdate?.toISOString().slice(0, 10),
-      to_date: todate?.toISOString().slice(0, 10),
-      is_phd: phdchecked,
-      phd_room: phdRoom,
-      phd_students: phdStudents,
-      is_me: mechecked,
-      me_room: meRoom,
-      is_years_together: yearsTogether,
-      is_departments_together: departmentsTogether,
-      is_send_whatsapp_message: sendWAMessage,
-      time_to_send_whatsapp_message: timetosend,
-      sets_for_which_subjects: sets,
-      no_of_sets: numberofsets,
-      second_column_options: secondColumnOptions,
-      exam_template: template,
-      years: years,
-      departments: departments
-    })
+      exam_name: formData.examName,
+      from_date: formData.fromdate?.toISOString().slice(0, 10),
+      to_date: formData.todate?.toISOString().slice(0, 10),
+      is_phd: formData.phdchecked,
+      phd_room: formData.phdRoom,
+      phd_students: formData.phdStudents,
+      is_me: formData.mechecked,
+      me_room: formData.meRoom,
+      is_years_together: formData.yearsTogether,
+      is_departments_together: formData.departmentsTogether,
+      is_send_whatsapp_message: formData.sendWAMessage,
+      time_to_send_whatsapp_message: formData.timetosend,
+      sets_for_which_subjects: formData.sets,
+      no_of_sets: formData.numberofsets,
+      second_column_options: formData.secondColumnOptions,
+      exam_template: formData.template,
+      years: formData.years,
+      departments: formData.departments,
+      departments_left: formData.departmentsLeft,
+      departments_right: formData.departmentsRight,
+      minimum_students_in_room: formData.minStudents,
+      randomize_every_n_rooms: formData.randomizeEveryNRooms,
+      rooms_order: formData.roomsOrder,
+      girls_rooms: formData.girlsRooms,
+    });
 
     console.log("POST DATA", postdata);
-    
-    setDeptanddate({
-      departments: getDepartments(departments),
-      dates: getDates(fromdate?.toISOString().slice(0, 10) as string, todate?.toISOString().slice(0, 10) as string)
-    })
 
-    
+    // console.log("FORM DATA", formData);
+
+    setDeptanddate({
+      departments: getDepartments(formData.departments),
+      dates: getDates(
+        formData.fromdate?.toISOString().slice(0, 10) as string,
+        formData.todate?.toISOString().slice(0, 10) as string
+      ),
+    });
 
     console.log("DEPT AND DATE", deptanddate);
 
     setNext(true);
-
-    
-    
-
   };
 
   return (
-    <Grid container justify="center" spacing={1}>
+    <Grid container justifyContent="center" spacing={1}>
       <Grid item md={6}>
         <Card className={classes.padding}>
-          <CardHeader title="EXAM FORM"></CardHeader>
+          <CardHeader
+            style={{ textAlign: "center", fontSize: "1.5rem" }}
+            title="Exam Form"
+          ></CardHeader>
           <Formik
             initialValues={initialValues}
             validationSchema={validationSchema}
@@ -284,39 +283,93 @@ const UserForm = ({template_opt, years_opt, department_opt, rooms_opt, phdstuden
               return (
                 <Form>
                   <CardContent>
-                    <Grid item container spacing={1} justify="center">
-                      <Grid item xs={12} sm={6} md={6}>
+                    <Grid item container spacing={4} justifyContent="center">
+                      <Grid
+                        item
+                        xs={12}
+                        sm={6}
+                        md={6}
+                        style={{ minWidth: "100%" }}
+                      >
+                        <Typography variant="h6" gutterBottom>
+                          Enter the exam name
+                        </Typography>
                         <Field
                           label="Exam Name"
                           variant="outlined"
                           fullWidth
                           name="Exam Name"
-                          value={examName}
+                          value={formData.examName}
                           component={TextField}
-                          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setExamName(e.target.value)}
+                          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                            // setExamName(e.target.value)
+                            setFormData((prevState) => ({
+                              ...prevState,
+                              examName: e.target.value,
+                            }))
+                          }
                         />
                       </Grid>
-                      <Grid>
-                        <LocalizationProvider dateAdapter={AdapterDayjs}>
-                          <DemoContainer components={["DatePicker"]}>
-                            <DatePicker
-                              label="From date"
-                              value={fromdate}
-                              onChange={(newVal) => setFromDate(newVal)}
-                            />
-                          </DemoContainer>
-                        </LocalizationProvider>
-                      </Grid>
-                      <Grid>
-                        <LocalizationProvider dateAdapter={AdapterDayjs}>
-                          <DemoContainer components={["DatePicker"]}>
-                            <DatePicker
-                              label="To date"
-                              value={todate}
-                              onChange={(newVal) => setToDate(newVal)}
-                            />
-                          </DemoContainer>
-                        </LocalizationProvider>
+                      <Grid
+                        item
+                        container
+                        justifyContent="space-between"
+                        spacing={2}
+                      >
+                        <Typography variant="h6" gutterBottom>
+                          Select the date range
+                        </Typography>
+                        <Grid
+                          item
+                          container
+                          justifyContent="space-between"
+                          spacing={2}
+                        >
+                          <Grid>
+                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                              <DemoContainer components={["DatePicker"]}>
+                                <DatePicker
+                                  label="From Date"
+                                  value={formData.fromdate}
+                                  onChange={(newVal) =>
+                                    //  setFromDate(newVal)
+                                    setFormData((prevState) => ({
+                                      ...prevState,
+                                      fromdate: newVal,
+                                    }))
+                                  }
+                                  slotProps={{
+                                    textField: {
+                                      helperText: "MM/DD/YYYY",
+                                    },
+                                  }}
+                                />
+                              </DemoContainer>
+                            </LocalizationProvider>
+                          </Grid>
+                          <Grid>
+                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                              <DemoContainer components={["DatePicker"]}>
+                                <DatePicker
+                                  label="To Date"
+                                  value={formData.todate}
+                                  onChange={(newVal) =>
+                                    // setToDate(newVal)
+                                    setFormData((prevState) => ({
+                                      ...prevState,
+                                      todate: newVal,
+                                    }))
+                                  }
+                                  slotProps={{
+                                    textField: {
+                                      helperText: "MM/DD/YYYY",
+                                    },
+                                  }}
+                                />
+                              </DemoContainer>
+                            </LocalizationProvider>
+                          </Grid>
+                        </Grid>
                       </Grid>
                       {/* <Grid item xs={12} sm={6} md={6}>
                         <Field
@@ -339,10 +392,14 @@ const UserForm = ({template_opt, years_opt, department_opt, rooms_opt, phdstuden
                             id="demo-simple-select-outlined"
                             label="Template"
                             onChange={(event) =>
-                              setTemplate(event.target.value as string)
+                              // setTemplate(event.target.value as string)
+                              setFormData((prevState) => ({
+                                ...prevState,
+                                template: event.target.value,
+                              }))
                             }
                             onBlur={handleBlur}
-                            value={template}
+                            value={formData.template}
                             name="occupation"
                           >
                             <MenuItem>None</MenuItem>
@@ -364,9 +421,15 @@ const UserForm = ({template_opt, years_opt, department_opt, rooms_opt, phdstuden
                             id="demo-simple-select-outlined"
                             multiple
                             label="Years"
-                            onChange={(event) => setYears(event.target.value as number[])}
+                            onChange={(event) =>
+                              // setYears(event.target.value as number[])
+                              setFormData((prevState) => ({
+                                ...prevState,
+                                years: event.target.value,
+                              }))
+                            }
                             onBlur={handleBlur}
-                            value={years}
+                            value={formData.years}
                             name="years"
                             input={
                               <OutlinedInput
@@ -379,12 +442,14 @@ const UserForm = ({template_opt, years_opt, department_opt, rooms_opt, phdstuden
                                 sx={{
                                   display: "flex",
                                   flexWrap: "wrap",
-                                  gridGap: 0.5
+                                  gridGap: 0.5,
                                 }}
                               >
-                                  {(years as number[]).map((value: number) => (
+                                {(formData.years as number[]).map(
+                                  (value: number) => (
                                     <Chip key={value} label={value} />
-                                  ))}
+                                  )
+                                )}
                               </Box>
                             )}
                           >
@@ -410,13 +475,20 @@ const UserForm = ({template_opt, years_opt, department_opt, rooms_opt, phdstuden
                                 multiple
                                 label="Departments"
                                 onChange={(event) =>
-                                  setDepartments((prevState) => ({
+                                  // setDepartments((prevState) => ({
+                                  //   ...prevState,
+                                  //   [building]: event.target.value,
+                                  // }))
+                                  setFormData((prevState) => ({
                                     ...prevState,
-                                    [building]: event.target.value
+                                    departments: {
+                                      ...prevState.departments,
+                                      [building]: event.target.value,
+                                    },
                                   }))
                                 }
                                 onBlur={handleBlur}
-                                value={departments[building]}
+                                value={formData.departments[building]}
                                 name="years"
                                 input={
                                   <OutlinedInput
@@ -429,13 +501,17 @@ const UserForm = ({template_opt, years_opt, department_opt, rooms_opt, phdstuden
                                     sx={{
                                       display: "flex",
                                       flexWrap: "wrap",
-                                      gap: 0.5
+                                      gap: 0.5,
                                     }}
                                   >
-                                    {departments[building].map((value) => {
-                                      console.log(departments);
-                                      return <Chip key={value} label={value} />;
-                                    })}
+                                    {formData.departments[building].map(
+                                      (value) => {
+                                        // console.log(departments);
+                                        return (
+                                          <Chip key={value} label={value} />
+                                        );
+                                      }
+                                    )}
                                   </Box>
                                 )}
                               >
@@ -454,12 +530,15 @@ const UserForm = ({template_opt, years_opt, department_opt, rooms_opt, phdstuden
                           <FormControlLabel
                             control={<Checkbox />}
                             label="Are Phd Students writing exam?"
-                            checked={phdchecked}
+                            checked={
+                              // phdchecked
+                              formData.phdchecked
+                            }
                             onChange={phdChange}
                           />
                         </FormGroup>
                       </Grid>
-                      {phdchecked ? (
+                      {formData.phdchecked ? (
                         <Grid item xs={12} sm={6} md={12}>
                           <FormControl fullWidth variant="outlined">
                             <InputLabel id="demo-simple-select-outlined-label">
@@ -471,10 +550,14 @@ const UserForm = ({template_opt, years_opt, department_opt, rooms_opt, phdstuden
                               multiple
                               label="Ph.D Students"
                               onChange={(event) =>
-                                setphdStudents(event.target.value)
+                                // setphdStudents(event.target.value)
+                                setFormData((prevState) => ({
+                                  ...prevState,
+                                  phdStudents: event.target.value,
+                                }))
                               }
                               onBlur={handleBlur}
-                              value={phdStudents}
+                              value={formData.phdStudents}
                               name="phdstudents"
                               input={
                                 <OutlinedInput
@@ -487,7 +570,7 @@ const UserForm = ({template_opt, years_opt, department_opt, rooms_opt, phdstuden
                                   sx={{
                                     display: "flex",
                                     flexWrap: "wrap",
-                                    gap: 0.5
+                                    gap: 0.5,
                                   }}
                                 >
                                   {phdStudents.map((value) => {
@@ -506,7 +589,7 @@ const UserForm = ({template_opt, years_opt, department_opt, rooms_opt, phdstuden
                           </FormControl>
                         </Grid>
                       ) : null}
-                      {phdchecked ? (
+                      {formData.phdchecked ? (
                         <Grid item xs={12} sm={6} md={12}>
                           <FormControl fullWidth variant="outlined">
                             <InputLabel id="demo-simple-select-outlined-label">
@@ -517,10 +600,14 @@ const UserForm = ({template_opt, years_opt, department_opt, rooms_opt, phdstuden
                               id="demo-simple-select-outlined"
                               label="Ph.D Room"
                               onChange={(event) =>
-                                setphdRoom(event.target.value)
+                                // setphdRoom(event.target.value)
+                                setFormData((prevState) => ({
+                                  ...prevState,
+                                  phdRoom: event.target.value,
+                                }))
                               }
                               onBlur={handleBlur}
-                              value={phdRoom}
+                              value={formData.phdRoom}
                               name="phdroom"
                             >
                               <MenuItem>None</MenuItem>
@@ -538,12 +625,13 @@ const UserForm = ({template_opt, years_opt, department_opt, rooms_opt, phdstuden
                           <FormControlLabel
                             control={<Checkbox />}
                             label="Are M.E. Students writing exam?"
-                            checked={mechecked}
+                            // checked={mechecked}
+                            checked={formData.mechecked}
                             onChange={meChange}
                           />
                         </FormGroup>
                       </Grid>
-                      {mechecked ? (
+                      {formData.mechecked ? (
                         <Grid item xs={12} sm={6} md={12}>
                           <FormControl fullWidth variant="outlined">
                             <InputLabel id="demo-simple-select-outlined-label">
@@ -554,10 +642,14 @@ const UserForm = ({template_opt, years_opt, department_opt, rooms_opt, phdstuden
                               id="demo-simple-select-outlined"
                               label="M.E Room"
                               onChange={(event) =>
-                                setmeRoom(event.target.value)
+                                // setmeRoom(event.target.value)
+                                setFormData((prevState) => ({
+                                  ...prevState,
+                                  meRoom: event.target.value,
+                                }))
                               }
                               onBlur={handleBlur}
-                              value={meRoom}
+                              value={formData.meRoom}
                               name="M.E Room"
                             >
                               <MenuItem>None</MenuItem>
@@ -580,9 +672,13 @@ const UserForm = ({template_opt, years_opt, department_opt, rooms_opt, phdstuden
                           <FormControlLabel
                             control={<Checkbox />}
                             label="Are years seated together?"
-                            checked={yearsTogether}
+                            checked={formData.yearsTogether}
                             onChange={(event) =>
-                              setyearsTogether(event.target.checked)
+                              // setyearsTogether(event.target.checked)
+                              setFormData((prevState) => ({
+                                ...prevState,
+                                yearsTogether: event.target.checked,
+                              }))
                             }
                           />
                         </FormGroup>
@@ -592,14 +688,21 @@ const UserForm = ({template_opt, years_opt, department_opt, rooms_opt, phdstuden
                           <FormControlLabel
                             control={<Checkbox />}
                             label="Are departments seated together?"
-                            checked={departmentsTogether}
+                            checked={formData.departmentsTogether}
                             onChange={(event) =>
-                              setdepartmentsTogether(event.target.checked)
+                              // setdepartmentsTogether(event.target.checked)
+                              setFormData((prevState) => ({
+                                ...prevState,
+                                departmentsTogether: event.target.checked,
+                              }))
                             }
                           />
                         </FormGroup>
                       </Grid>
-                      {/* <Grid item xs={12} sm={6} md={12}>
+
+                      {formData.departmentsTogether ? (
+                        <Grid item xs={12} sm={6} md={12}>
+                          <Grid item xs={12} sm={6} md={12} spacing={4}>
                             <FormControl fullWidth variant="outlined">
                               <InputLabel id="demo-simple-select-outlined-label">
                                 Departments in left row
@@ -610,30 +713,31 @@ const UserForm = ({template_opt, years_opt, department_opt, rooms_opt, phdstuden
                                 multiple
                                 label="Departments"
                                 onChange={(event) =>
-                                  setSides((prevState) => ({
+                                  // setDepartmentsLeft(event.target.value as string[])
+                                  setFormData((prevState) => ({
                                     ...prevState,
-                                    [left]: event.target.value
+                                    departmentsLeft: event.target.value,
                                   }))
                                 }
                                 onBlur={handleBlur}
-                                value={sides[left]}
-                                name="years"
+                                value={formData.departmentsLeft}
+                                name="departmentsLeft"
                                 input={
                                   <OutlinedInput
                                     id="select-multiple-chip"
                                     label="Chip"
                                   />
                                 }
-                                renderValue={(years) => (
+                                renderValue={(year) => (
                                   <Box
                                     sx={{
                                       display: "flex",
                                       flexWrap: "wrap",
-                                      gap: 0.5
+                                      gap: 0.5,
                                     }}
                                   >
-                                    {departments["left"].map((value) => {
-                                      console.log(departments);
+                                    {formData.departmentsLeft.map((value) => {
+                                      // console.log(departments);
                                       return <Chip key={value} label={value} />;
                                     })}
                                   </Box>
@@ -646,33 +750,95 @@ const UserForm = ({template_opt, years_opt, department_opt, rooms_opt, phdstuden
                                 ))}
                               </Select>
                             </FormControl>
-                          </Grid> */}
+                          </Grid>
+                          <Grid item xs={12} sm={6} md={12}>
+                            <FormControl fullWidth variant="outlined">
+                              <InputLabel id="demo-simple-select-outlined-label">
+                                Departments in right row
+                              </InputLabel>
+                              <Select
+                                labelId="demo-simple-select-outlined-label"
+                                id="demo-simple-select-outlined"
+                                multiple
+                                label="Departments"
+                                onChange={(event) =>
+                                  // setDepartmentsRight(event.target.value as string[])
+                                  setFormData((prevState) => ({
+                                    ...prevState,
+                                    departmentsRight: event.target.value,
+                                  }))
+                                }
+                                onBlur={handleBlur}
+                                value={formData.departmentsRight}
+                                name="departmentsRight"
+                                input={
+                                  <OutlinedInput
+                                    id="select-multiple-chip"
+                                    label="Chip"
+                                  />
+                                }
+                                renderValue={(year) => (
+                                  <Box
+                                    sx={{
+                                      display: "flex",
+                                      flexWrap: "wrap",
+                                      gap: 0.5,
+                                    }}
+                                  >
+                                    {formData.departmentsRight.map((value) => {
+                                      // console.log(departments);
+                                      return <Chip key={value} label={value} />;
+                                    })}
+                                  </Box>
+                                )}
+                              >
+                                {department_opt.map((item) => (
+                                  <MenuItem key={item.value} value={item.value}>
+                                    {item.label}
+                                  </MenuItem>
+                                ))}
+                              </Select>
+                            </FormControl>
+                          </Grid>
+                        </Grid>
+                      ) : null}
                       <Grid>
                         <FormGroup>
                           <FormControlLabel
                             control={<Checkbox />}
                             label="Send Whatsapp messages?"
-                            checked={sendWAMessage}
+                            checked={formData.sendWAMessage}
                             onChange={(event) =>
-                              setsendWAMessage(event.target.checked)
+                              // setsendWAMessage(event.target.checked)
+                              setFormData((prevState) => ({
+                                ...prevState,
+                                sendWAMessage: event.target.checked,
+                              }))
                             }
                           />
                         </FormGroup>
                       </Grid>
 
-                      {sendWAMessage ? (
+                      {formData.sendWAMessage ? (
                         <Grid>
                           <LocalizationProvider dateAdapter={AdapterDayjs}>
                             <DemoContainer components={["TimePicker"]}>
                               <TimePicker
                                 label="Set the time"
-                                value={timetosend}
-                                onChange={(event, time) => setTimetosend(time)}
+                                value={formData.timetosend}
+                                onChange={(event, time) =>
+                                  // setTimetosend(time)
+                                  setFormData((prevState) => ({
+                                    ...prevState,
+                                    timetosend: time,
+                                  }))
+                                }
                               />
                             </DemoContainer>
                           </LocalizationProvider>
                         </Grid>
                       ) : null}
+
                       <Grid item xs={12} sm={6} md={12}>
                         <FormControl fullWidth variant="outlined">
                           <InputLabel id="demo-simple-select-outlined-label">
@@ -683,9 +849,15 @@ const UserForm = ({template_opt, years_opt, department_opt, rooms_opt, phdstuden
                             id="demo-simple-select-outlined"
                             multiple
                             label="Ph.D Students"
-                            onChange={(event) => setSets(event.target.value)}
+                            onChange={(event) =>
+                              // setSets(event.target.value)
+                              setFormData((prevState) => ({
+                                ...prevState,
+                                sets: event.target.value,
+                              }))
+                            }
                             onBlur={handleBlur}
-                            value={sets}
+                            value={formData.sets}
                             name="sets"
                             input={
                               <OutlinedInput
@@ -698,7 +870,7 @@ const UserForm = ({template_opt, years_opt, department_opt, rooms_opt, phdstuden
                                 sx={{
                                   display: "flex",
                                   flexWrap: "wrap",
-                                  gap: 0.5
+                                  gap: 0.5,
                                 }}
                               >
                                 {sets.map((value) => {
@@ -720,17 +892,21 @@ const UserForm = ({template_opt, years_opt, department_opt, rooms_opt, phdstuden
                           </Select>
                         </FormControl>
                       </Grid>
-                      {sets[0] !== "None" ? (
+                      {formData.sets[0] !== "None" ? (
                         <Grid item xs={12} sm={6} md={6}>
                           <Field
                             label="Number of Sets"
                             variant="outlined"
                             fullWidth
                             name="noOfSets"
-                            value={numberofsets}
+                            value={formData.numberofsets}
                             component={TextField}
                             onChange={(event) =>
-                              setNumberofsets(event.target.value)
+                              // setNumberofsets(event.target.value)
+                              setFormData((prevState) => ({
+                                ...prevState,
+                                numberofsets: event.target.value,
+                              }))
                             }
                             type="number"
                           />
@@ -746,10 +922,14 @@ const UserForm = ({template_opt, years_opt, department_opt, rooms_opt, phdstuden
                             id="demo-simple-select-outlined"
                             label="Second Column Options"
                             onChange={(event) =>
-                              setSecondColumnOptions(event.target.value)
+                              // setSecondColumnOptions(event.target.value)
+                              setFormData((prevState) => ({
+                                ...prevState,
+                                secondColumnOptions: event.target.value,
+                              }))
                             }
                             onBlur={handleBlur}
-                            value={secondColumnOptions}
+                            value={formData.secondColumnOptions}
                             name="Second Column Options"
                           >
                             {sc_opt.map((item) => (
@@ -757,6 +937,142 @@ const UserForm = ({template_opt, years_opt, department_opt, rooms_opt, phdstuden
                                 {item.label}
                               </MenuItem>
                             ))}
+                          </Select>
+                        </FormControl>
+                      </Grid>
+                      <Grid item xs={12} sm={6} md={6}>
+                        <Field
+                          label="Minimum Students in a room"
+                          variant="outlined"
+                          fullWidth
+                          name="Minimum Students in a room"
+                          value={formData.minStudents}
+                          component={TextField}
+                          onChange={(event) =>
+                            // setMinStudents(event.target.value)
+                            setFormData((prevState) => ({
+                              ...prevState,
+                              minStudents: event.target.value,
+                            }))
+                          }
+                          type="number"
+                        />
+                      </Grid>
+                      <Grid item xs={12} sm={6} md={6}>
+                        <Field
+                          label="Randomize every n rooms"
+                          variant="outlined"
+                          fullWidth
+                          name="Randomize every n rooms"
+                          value={formData.randomizeEveryNRooms}
+                          component={TextField}
+                          onChange={(event) =>
+                            // setMinStudents(event.target.value)
+                            setFormData((prevState) => ({
+                              ...prevState,
+                              minStudents: event.target.value,
+                            }))
+                          }
+                          type="number"
+                        />
+                      </Grid>
+                      <Grid item xs={12} sm={6} md={12}>
+                        <FormControl fullWidth variant="outlined">
+                          <InputLabel id="demo-simple-select-outlined-label">
+                            Room Order
+                          </InputLabel>
+                          <Select
+                            labelId="demo-simple-select-outlined-label"
+                            id="demo-simple-select-outlined"
+                            multiple
+                            label="Departments"
+                            onChange={(event) =>
+                              // setDepartmentsRight(event.target.value as string[])
+                              setFormData((prevState) => ({
+                                ...prevState,
+                                roomsOrder: event.target.value,
+                              }))
+                            }
+                            onBlur={handleBlur}
+                            value={formData.roomsOrder}
+                            name="departmentsRight"
+                            input={
+                              <OutlinedInput
+                                id="select-multiple-chip"
+                                label="Chip"
+                              />
+                            }
+                            renderValue={(year) => (
+                              <Box
+                                sx={{
+                                  display: "flex",
+                                  flexWrap: "wrap",
+                                  gap: 0.5,
+                                }}
+                              >
+                                {formData.roomsOrder.map((value) => {
+                                  // console.log(departments);
+                                  return <Chip key={value} label={value} />;
+                                })}
+                              </Box>
+                            )}
+                          >
+                            {templates.filter((template) => { return template.template_name === formData.template }).map((template) => {
+                              console.log(template)
+                              return template.rooms.map((room) => {
+                                return <MenuItem key={room} value={room}>{room}</MenuItem>
+                              })
+                            })}
+                          </Select>
+                        </FormControl>
+                      </Grid>
+                      <Grid item xs={12} sm={6} md={12}>
+                        <FormControl fullWidth variant="outlined">
+                          <InputLabel id="demo-simple-select-outlined-label">
+                            Girls Rooms
+                          </InputLabel>
+                          <Select
+                            labelId="demo-simple-select-outlined-label"
+                            id="demo-simple-select-outlined"
+                            multiple
+                            label="Departments"
+                            onChange={(event) =>
+                              // setDepartmentsRight(event.target.value as string[])
+                              setFormData((prevState) => ({
+                                ...prevState,
+                                girlsRooms: event.target.value,
+                              }))
+                            }
+                            onBlur={handleBlur}
+                            value={formData.girlsRooms}
+                            name="departmentsRight"
+                            input={
+                              <OutlinedInput
+                                id="select-multiple-chip"
+                                label="Chip"
+                              />
+                            }
+                            renderValue={(year) => (
+                              <Box
+                                sx={{
+                                  display: "flex",
+                                  flexWrap: "wrap",
+                                  gap: 0.5,
+                                }}
+                              >
+                                {formData.girlsRooms.map((value) => {
+                                  // console.log(departments);
+                                  return <Chip key={value} label={value} />;
+                                })}
+                              </Box>
+                            )}
+                          >
+                            {templates.filter((template) => { return template.template_name === formData.template }).map((template) => {
+                              console.log(template)
+                              return template.rooms.map((room) => {
+                                return <MenuItem key={room} value={room}>{room}</MenuItem>
+                              })
+                            })}
                           </Select>
                         </FormControl>
                       </Grid>
@@ -779,75 +1095,16 @@ const UserForm = ({template_opt, years_opt, department_opt, rooms_opt, phdstuden
             }}
           </Formik>
         </Card>
-        {next ? 
-          
-            <MyTable deptanddate={deptanddate} post_data={postdata} years={years}/> 
-           
-          : null }
-        
-        
-
+        {next ? (
+          <MyTable
+            deptanddate={deptanddate}
+            post_data={postdata}
+            years={formData.years}
+          />
+        ) : null}
       </Grid>
     </Grid>
   );
 };
 
 export default UserForm;
-
-// import React from "react";
-// import {
-//   TextField,
-//   FormControl,
-//   InputLabel,
-//   Select,
-//   MenuItem,
-//   Checkbox,
-//   FormGroup,
-//   FormControlLabel,
-// } from "@mui/material";
-
-// const ExamForm = () => {
-//   const [isPhd, setIsPhd] = React.useState(false);
-
-//   const handlePhdChange = (event) => {
-//     setIsPhd(event.target.checked);
-//   };
-
-//   return (
-//     <FormControl>
-//       <TextField label="Exam Name" required />
-//       <br />
-//       <TextField label="From Date" type="date" required />
-//       <br />
-//       <TextField label="To Date" type="date" required />
-//       <br />
-//       <FormControl required>
-//         <InputLabel>Exam Template</InputLabel>
-//         <Select>
-//           <MenuItem value="template1">Template 1</MenuItem>
-//           <MenuItem value="template2">Template 2</MenuItem>
-//           <MenuItem value="template3">Template 3</MenuItem>
-//         </Select>
-//       </FormControl>
-//       <br />
-//       <TextField label="Departments" required />
-//       <br />
-//       <TextField label="Time Table" multiline rows={4} required />
-//       <br />
-//       <FormGroup>
-//         <FormControlLabel
-//           control={
-//             <Checkbox
-//               checked={isPhd}
-//               onChange={handlePhdChange}
-//               name="isPhd"
-//             />
-//           }
-//           label="Is PhD?"
-//         />
-//       </FormGroup>
-//     </FormControl>
-//   );
-// };
-
-// export default ExamForm;

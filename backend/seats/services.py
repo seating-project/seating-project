@@ -156,27 +156,43 @@ def Allotments(data):
             curr_template.rooms.filter(room_building="New Building"))
         NewBuildingRooms.sort(key=lambda x: (x.room_number[0], int(
             re.search(r'\d+', x.room_number).group(0))))
-
+        
         # ROOMS = MainBuildingRooms + NewBuildingRooms
         # rooms_list_temp = ["F1", "F3", "F4", "F7", "F8", "F9", "F22", "S12", "F23", "S1", "S2", "S3", "S4", "S5", "S6", "S7", "S8", "S10", "S15", "S16", "S17", "S18", "S20", "S21", "S22", "S23","S24", "S26", "T21", "T22" ]
 
         # room_numbers_temp = ["EH1", "EH2", "EH3", ]
         # rooms_list_temp = ["EH1", "EH2", "EH3", "EH4", "EH5", "EH6", "EH7", "EH8", "EH9", "EH10", "EH11", "EH12", "EH13", "EH14", "EH15", "EH16", "EH17", "EH18", "EH19", "EH20", "EH21", "EH22", "EH23", "EH24", "EH25", "EH26", "EH27", "EH28","S10", "S11"]
 
-        rooms_list_temp = ["EH1", "EH2", "EH3", "EH4", "EH5", "EH6", "EH7", "EH8", "EH9", "EH10", "EH11","EH12","EH13","EH14","EH15","EH16","EH17","EH18","EH19","EH20","S1", "S2", "S3", "S4", "S5", "S6", "S7",
-                           "S8", "S10", "S15", "S16", "S17", "S18", "S20", "S21", "S22", "S23", "S24", "S26", "F1", "F3", "F4", "F7", "F8", "F9", "F22","F23"]
+        # rooms_list_temp = ["EH1", "EH2", "EH3", "EH4", "EH5", "EH6", "EH7", "EH8", "EH9", "EH10", "EH11","EH12","EH13","EH14","EH15","EH16","EH17","EH18","EH19","EH20","S1", "S2", "S3", "S4", "S5", "S6", "S7",
+        #                    "S8", "S10", "S15", "S16", "S17", "S18", "S20", "S21", "S22", "S23", "S24", "S26", "F1", "F3", "F4", "F7", "F8", "F9", "F22","F23"]
+
+        rooms_list_temp = data["rooms_order"]
+        print("ROOMS list TEMP       ",   rooms_list_temp)
 
         # Divide the array into 4 parts
-        part_size = len(rooms_list_temp) // 12
-        parts = [rooms_list_temp[i:i+part_size]
-                 for i in range(0, len(rooms_list_temp), part_size)]
-        # Randomize each part separately
-        for i in range(len(parts)):
-            parts[i] = random.sample(parts[i], len(parts[i]))
-        # Flatten the parts back into a single array
-        rooms_list_temp = [item for part in parts for item in part]
-        # Print the randomized array
-        print(rooms_list_temp)
+        # part_size = len(rooms_list_temp) // 12
+        # parts = [rooms_list_temp[i:i+part_size]
+        #          for i in range(0, len(rooms_list_temp), part_size)]
+        # # Randomize each part separately
+        # for i in range(len(parts)):
+        #     parts[i] = random.sample(parts[i], len(parts[i]))
+        # # Flatten the parts back into a single array
+        # rooms_list_temp = [item for part in parts for item in part]
+        # # Print the randomized array
+        # print(rooms_list_temp)
+        
+        if data["randomize_every_n_rooms"] != 0:
+            # Divide the array into 4 parts
+            part_size = data["randomize_every_n_rooms"]
+            parts = [rooms_list_temp[i:i+part_size]
+                     for i in range(0, len(rooms_list_temp), part_size)]
+            # Randomize each part separately
+            for i in range(len(parts)):
+                parts[i] = random.sample(parts[i], len(parts[i]))
+            # Flatten the parts back into a single array
+            rooms_list_temp = [item for part in parts for item in part]
+            # Print the randomized array
+            print(rooms_list_temp)
 
         # rooms_list_temp = ["MT1", "MT2", "MT3", "MT4", "MT5", "T2", "T3", "T4", "T6", "T7", "T8", "T9", "T10", "T14", "T15", "T16", "T17", "T18", "T20", "T21", ]
         ROOMS = []

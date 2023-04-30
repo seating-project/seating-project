@@ -48,9 +48,9 @@ async function Homepage() {
             </div>
           </div>
         </div>
-        <div className="">
+        {/* <div className="">
           <SplineBackground />
-        </div>
+        </div> */}
       </div>
     </>
   );

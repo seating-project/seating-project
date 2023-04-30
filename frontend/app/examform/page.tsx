@@ -1,6 +1,7 @@
 import drf from "../../pages/api/axiosConfig";
 import UserForm from "../../components/ExamForm";
 import "../../styles/globals.css";
+import Navbar from "../../components/Navbar";
 
 const ExamFormPage = async () => {
   const getTemplateData = async () => {
@@ -93,14 +94,21 @@ const ExamFormPage = async () => {
     };
   });
 
+
   return (
+    <div className="">
+      <div className="pb-10">
+      <Navbar />
+      </div>
     <UserForm
+      templates = {templates}
       template_opt={template_options}
       rooms_opt={room_options}
       years_opt={year_options}
       department_opt={department_options}
       phdstudents_opt={phdStudent_options}
     />
+    </div>
   );
 };
 

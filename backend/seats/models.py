@@ -185,6 +185,11 @@ class Exams(models.Model):
     second_column_options = models.CharField(max_length=20, choices=SecondColumnOptions.choices, default=SecondColumnOptions.SEAT_NUMBER)
     departments_left = models.JSONField(default=dict)
     departments_right = models.JSONField(default=dict)
+    minimum_students_in_room = models.IntegerField(default=60)
+    randomize_every_n_rooms = models.IntegerField(default=0)
+    rooms_order = models.JSONField(default=dict)
+    girls_rooms = models.JSONField(default=dict)
+    
 
 
     class Meta:
