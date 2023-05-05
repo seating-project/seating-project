@@ -613,25 +613,25 @@ def Allotments(data):
                         ).values_list("year", flat=True))
                         for y in years:
 
-                            students_to_be_put["M-CKT"].extend(list(Students.objects.filter(
-                                year=y, gender="M", ctype="C", department="aiml").values_list("register_number", "department", "year", "gender", "name")))
-                            students_to_be_put["M-CKT"].extend(list(Students.objects.filter(
-                                year=y, gender="M", ctype="C", department__in=ckt_dept).values_list("register_number", "department", "year", "gender", "name").exclude(department__in=["aiml", "csbs"])))
+                            # students_to_be_put["M-CKT"].extend(list(Students.objects.filter(
+                            #     year=y, gender="M", ctype="C", department="aiml").values_list("register_number", "department", "year", "gender", "name")))
+                            # students_to_be_put["M-CKT"].extend(list(Students.objects.filter(
+                            #     year=y, gender="M", ctype="C", department__in=ckt_dept).values_list("register_number", "department", "year", "gender", "name").exclude(department__in=["aiml", "csbs"])))
 
-                            students_to_be_put["F-CKT"].extend(list(Students.objects.filter(
-                                year=y, gender="F", ctype="C", department="aiml").values_list("register_number", "department", "year", "gender", "name")))
-                            students_to_be_put["F-CKT"].extend(list(Students.objects.filter(
-                                year=y, gender="F", ctype="C", department__in=ckt_dept).values_list("register_number", "department", "year", "gender", "name").exclude(department__in=["aiml", "csbs"])))
+                            # students_to_be_put["F-CKT"].extend(list(Students.objects.filter(
+                            #     year=y, gender="F", ctype="C", department="aiml").values_list("register_number", "department", "year", "gender", "name")))
+                            # students_to_be_put["F-CKT"].extend(list(Students.objects.filter(
+                            #     year=y, gender="F", ctype="C", department__in=ckt_dept).values_list("register_number", "department", "year", "gender", "name").exclude(department__in=["aiml", "csbs"])))
 
-                            students_to_be_put["M-NCKT"].extend(list(Students.objects.filter(
-                                year=y, gender="M", ctype="C", department="csbs").values_list("register_number", "department", "year", "gender", "name")))
-                            students_to_be_put["M-NCKT"].extend(list(Students.objects.filter(
-                                year=y, gender="M", ctype="N", department__in=nckt_dept).values_list("register_number", "department", "year", "gender", "name").exclude(department__in=["aiml", "csbs"])))
+                            # students_to_be_put["M-NCKT"].extend(list(Students.objects.filter(
+                            #     year=y, gender="M", ctype="C", department="csbs").values_list("register_number", "department", "year", "gender", "name")))
+                            # students_to_be_put["M-NCKT"].extend(list(Students.objects.filter(
+                            #     year=y, gender="M", ctype="N", department__in=nckt_dept).values_list("register_number", "department", "year", "gender", "name").exclude(department__in=["aiml", "csbs"])))
 
-                            students_to_be_put["F-NCKT"].extend(list(Students.objects.filter(
-                                year=y, gender="F", ctype="C", department="csbs").values_list("register_number", "department", "year", "gender", "name")))
-                            students_to_be_put["F-NCKT"].extend(list(Students.objects.filter(
-                                year=y, gender="F", ctype="N", department__in=nckt_dept).values_list("register_number", "department", "year", "gender", "name").exclude(department__in=["aiml", "csbs"])))
+                            # students_to_be_put["F-NCKT"].extend(list(Students.objects.filter(
+                            #     year=y, gender="F", ctype="C", department="csbs").values_list("register_number", "department", "year", "gender", "name")))
+                            # students_to_be_put["F-NCKT"].extend(list(Students.objects.filter(
+                            #     year=y, gender="F", ctype="N", department__in=nckt_dept).values_list("register_number", "department", "year", "gender", "name").exclude(department__in=["aiml", "csbs"])))
 
                             # students_to_be_put["M-CKT"].extend(list(Students.objects.filter(
                             #     year=y,
@@ -644,6 +644,33 @@ def Allotments(data):
                             #     year=y, gender="M", ctype="N", department__in=["mct", "civil"]).values_list("register_number", "department", "year", "gender", "name")))
                             # students_to_be_put["F-CKT"].extend(list(Students.objects.filter(
                             #     year=y, gender="F", ctype="N", department__in=["mct", "civil"]).values_list("register_number", "department", "year", "gender", "name")))
+                            print("Departments Left", data["departments_left"])
+                            print("Departments Right", data["departments_right"])
+                            if data["departments_left"] == {} or data["departments_right"] == {}:
+
+                                for dept_year in ckt_dept:
+                                    dept = dept_year.split()[0]
+                                    students_to_be_put["M-CKT"].extend(list(Students.objects.filter(year=y, gender='M', department=dept).values_list("register_number", "department", "year", "gender", "name")))
+                                    students_to_be_put["F-CKT"].extend(list(Students.objects.filter(year=y, gender='F', department=dept).values_list("register_number", "department", "year", "gender", "name")))
+                                
+                                for dept_year in nckt_dept:
+                                    dept = dept_year.split()[0]
+
+                                    students_to_be_put["M-NCKT"].extend(list(Students.objects.filter(year=y, gender='M', department=dept).values_list("register_number", "department", "year", "gender", "name")))
+                                    students_to_be_put["F-NCKT"].extend(list(Students.objects.filter(year=y, gender='F', department=dept).values_list("register_number", "department", "year", "gender", "name")))
+
+                                
+                                print("Students to be put", students_to_be_put)
+                            else:
+                                
+
+                                students_to_be_put["M-CKT"].extend(list(Students.objects.filter(year=y, gender='M', department__in = data["departments_left"]).values_list("register_number", "department", "year", "gender", "name")))
+                                students_to_be_put["F-CKT"].extend(list(Students.objects.filter(year=y, gender='F', department__in = data["departments_left"]).values_list("register_number", "department", "year", "gender", "name")))
+                                students_to_be_put["M-NCKT"].extend(list(Students.objects.filter(year=y, gender='M', department__in = data["departments_right"]).values_list("register_number", "department", "year", "gender", "name")))
+                                students_to_be_put["F-NCKT"].extend(list(Students.objects.filter(year=y, gender='F', department__in = data["departments_right"]).values_list("register_number", "department", "year", "gender", "name")))
+                                
+                            
+                            
 
                         print("STUDENTS TO BE PUT", students_to_be_put, )
                         print("TOTAL ROOMS", ROOMS)
@@ -1022,8 +1049,8 @@ def Allotments(data):
                         ranges_dict[i][j[0][1] + " " +
                                        str(j[0][2])].append(j[0])
                     # print("RANGES DICT", ranges_dict)
-                print("CURRENT DATE", date, "BUT ALLOTMENT",
-                      master_room_ranges[date]["New Building"][i])
+                # print("CURRENT DATE", date, "BUT ALLOTMENT",
+                #       master_room_ranges[date]["Main Building"][i])
                 master_room_ranges[date]["Main Building"] = ranges_dict
             else:
                 if curr_template.is_boys_girls_separation:

@@ -352,7 +352,7 @@ const OldNotice = (props: Props) => {
           <div className="ml-4">
             <table width={700} className="border-black">
               <thead>
-                <tr>
+                <tr >
                   <th colSpan={5}>
                     <Image
                       src={`data:image/png;base64,${props.logoUrl}`}
@@ -407,10 +407,13 @@ const OldNotice = (props: Props) => {
                     Total
                   </th>
                 </tr>
+                {!props.bgsep ? (
+                  
+                
                 <tr>
                   <th className="border-2 p-4 border-black">From</th>
                   <th className="border-2 p-4 border-black">To</th>
-                </tr>
+                </tr>) : null }
               </thead>
               
               <tbody>

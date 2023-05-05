@@ -43,14 +43,17 @@ async function downloadPDFs(links: string[]): Promise<string> {
       const dateObj = new Date(date);
       const month = dateObj.toLocaleString('default', { month: 'long' });
       const numDate = dateObj.getDate();
-      // const gender= url.split('/')[url.split('/').length - 1];
-      // const pdfPath = `${pdfsDir}/${docName}_${date}_${gender}.pdf`;
 
-      // const pdfPath = `${pdfsDir}/${docName}_${month}_${numDate}_${gender}_${i}.pdf`
       const pdfPath = `${pdfsDir}/${docName}_${month}_${numDate}.pdf`
+      if (url.split('/')[url.split('/').length - 1] === 'boys' || url.split('/')[url.split('/').length - 1] === 'girls') {
+        const gender= url.split('/')[url.split('/').length - 1];
+        const pdfPath = `${pdfsDir}/${docName}_${date}_${numDate}_${gender}.pdf`;
+      }
+      
+      
       await page.goto(url, { waitUntil: 'networkidle0' });
       await page.pdf({ path: pdfPath, format: 'A4' });
-    } 
+     
     
     
 

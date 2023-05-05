@@ -121,6 +121,38 @@ export default async function ExamPage({ params }: any) {
             let dateObj: Date = new Date(date);
             dateNow = dateObj.toDateString();
             dateObj = new Date(date);
+            if (template.is_boys_girls_separation) {
+              links.push(`http://localhost:3000/exam/${encodeURIComponent(name)}/separation/${dateObj.toISOString().substring(0, 10)}/boys`);
+              links.push(`http://localhost:3000/exam/${encodeURIComponent(name)}/separation/${dateObj.toISOString().substring(0, 10)}/girls`)
+              return (
+                <div>
+                <Link
+                  href={`/exam/${name}/hallplan/${dateObj
+                    .toISOString()
+                    .substring(0, 10)}/boys`}
+                  className="text-3xl py-2 font-mono justify-between items-center inline-block relative text-blue after:content-[''] after:absolute after:w-full
+              after:scale-x-0 after:h-[2px] after:bottom-0 after:left-0 after:bg-dark-blue after:origin-bottom-right after:transition-transform
+           after:duration-300 ease-out hover:after:scale-x-100 hover:after:origin-bottom-left"
+                >
+                  {" "}
+                  Notice Board Copies - {dateNow}{" "} Boys
+                </Link>
+                <Link
+                  href={`/exam/${name}/hallplan/${dateObj
+                    .toISOString()
+                    .substring(0, 10)}/girls`}
+                  className="text-3xl py-2 font-mono justify-between items-center inline-block relative text-blue after:content-[''] after:absolute after:w-full
+              after:scale-x-0 after:h-[2px] after:bottom-0 after:left-0 after:bg-dark-blue after:origin-bottom-right after:transition-transform
+           after:duration-300 ease-out hover:after:scale-x-100 hover:after:origin-bottom-left"
+                >
+                  {" "}
+                  Notice Board Copies - {dateNow}{" "} Girls
+                </Link>
+                
+                </div>
+              );
+
+            } else {
             links.push(`http://localhost:3000/exam/${encodeURIComponent(name)}/hallplan/${dateObj.toISOString().substring(0, 10)}`);
             return (
               <Link
@@ -135,6 +167,7 @@ export default async function ExamPage({ params }: any) {
                 Notice Board Copies - {dateNow}{" "}
               </Link>
             );
+                }
           })}
         </div>
         <div className="flex flex-col  border-2 p-4">

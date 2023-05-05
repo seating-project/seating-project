@@ -300,7 +300,8 @@ function ClassAllotment(params: ClassAllotmentParams) {
                 width={10}
               >
                 {/* <hr className="w-full text-black" /> */}
-                {totalTables++}
+                {exam.second_column_options == "Seat Number" && totalTables++ }
+                {exam.second_column_options == "Present Absent" &&  <hr className="w-full text-black" />}
               </td>
             </tr>
           );
@@ -324,7 +325,9 @@ function ClassAllotment(params: ClassAllotmentParams) {
                 className="border-2 border-black  text-center text-xs"
                 width={10}
               >
-                <hr className="w-full text-black" />
+                {/* <hr className="w-full text-black" /> */}
+                {exam.second_column_options == "Seat Number" && totalTables++ }
+                {exam.second_column_options == "Present Absent" &&  <hr className="w-full text-black" />}
               </td>
             </tr>
           );
@@ -389,7 +392,9 @@ function ClassAllotment(params: ClassAllotmentParams) {
                   // width={20}
                 >
                   {/* <hr className="w-full"/> */}
-                  {totalTables++}
+                  {/* {totalTables++} */}
+                  {exam.second_column_options == "Seat Number" && totalTables++ }
+                {exam.second_column_options == "Present Absent" &&  <hr className="w-full text-black" />}
                 </td>
               </tr>
             );
@@ -417,7 +422,9 @@ function ClassAllotment(params: ClassAllotmentParams) {
                   // width={20}
                 >
                   {/* <hr className="w-full"/> */}
-                  {totalTables++}
+                  {/* {totalTables++} */}
+                  {exam.second_column_options == "Seat Number" && totalTables++ }
+                {exam.second_column_options == "Present Absent" &&  <hr className="w-full text-black" />}
                 </td>
               </tr>
             );
@@ -527,8 +534,10 @@ function ClassAllotment(params: ClassAllotmentParams) {
                     width={30}
                     height={50}
                   >
-                    {26}-<b>B</b>
-                  </td>
+                    {/* {26} */}
+                    {exam.second_column_options == "Seat Number" && 26 }
+                {exam.second_column_options == "Present Absent" &&  <hr className="w-full text-black" />}
+                                      </td>
                 </tr>
               );
               // setCount[set[temp++]] += 1
@@ -566,7 +575,9 @@ function ClassAllotment(params: ClassAllotmentParams) {
                     width={30}
                     height={50}
                   >
-                    {27}-<b>C</b>
+                    {/* {27} */}
+                    {exam.second_column_options == "Seat Number" && 27 }
+                {exam.second_column_options == "Present Absent" &&  <hr className="w-full text-black" />}
                   </td>
                 </tr>
               );
@@ -606,7 +617,9 @@ function ClassAllotment(params: ClassAllotmentParams) {
                     height={50}
                   >
                     {/* {26}-<b>{set[temp]}</b> */}
-                    {26}
+                    {/* {26} */}
+                    {exam.second_column_options == "Seat Number" && 26 }
+                {exam.second_column_options == "Present Absent" &&  <hr className="w-full text-black" />}
                   </td>
                 </tr>
               );
@@ -800,7 +813,9 @@ function ClassAllotment(params: ClassAllotmentParams) {
                   Register No
                 </th>
                 <th className="border-2 border-black text-lg  p-2">
-                  Seat No 
+                  {exam.second_column_options == "Seat Number" && "Seat No"}
+                  {exam.second_column_options == "Present/Absent" && "P/A"}
+                  {/* Seat No  */}
                   {/* P/A */}
                 </th>
                 {/* <th className="border-2 border-black text-xs ">
@@ -854,7 +869,9 @@ function ClassAllotment(params: ClassAllotmentParams) {
               </th>
               <th className="border-2 border-solid border-black ">
                 {/* {"Row " + (tableIndex + 1)} */}
-                Seat No
+                {/* Seat No */}
+                {exam.second_column_options == "Seat Number" && "Seat No"}
+                {exam.second_column_options == "Present/Absent" && "P/A"}
                 {/* P/A */}
               </th>
             </tr>
@@ -892,7 +909,9 @@ function ClassAllotment(params: ClassAllotmentParams) {
               </th>
               <th className="border-2 border-solid border-black ">
                 {/* {"Row " + (tableIndex + 1)} */}
-                Seat No
+                {/* Seat No */}
+                {exam.second_column_options == "Seat Number" && "Seat No"}
+                {exam.second_column_options == "Present/Absent" && "P/A"}
                 {/* P/A */}
               </th>
             </tr>
