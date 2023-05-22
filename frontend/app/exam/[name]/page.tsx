@@ -77,7 +77,8 @@ export default async function ExamPage({ params }: any) {
   )[0];
   
   console.log("TEMPLATE", template);
-    const ROOMS = template.rooms;
+    // const ROOMS = template.rooms;
+  const ROOMS = exam.rooms_order
 
   // let dateNow: Date = new Date();
   let dateNow: string = new Date().toDateString();

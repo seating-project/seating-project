@@ -102,7 +102,7 @@ export default async function AttendancePage({params}: any) {
     
     //   console.log("DATE", date);
     const date = "2023-04-22"
-      const dateObject = new Date("2023-04-18");
+      const dateObject = new Date("2023-05-12");
       const roomsCurrent = rooms[dateObject.toISOString().slice(0, 10)];
     //   console.log(roomsCurrent);
       const rangesCurrent = ranges[dateObject.toISOString().slice(0, 10)];

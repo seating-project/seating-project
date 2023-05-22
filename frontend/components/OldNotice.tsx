@@ -32,6 +32,7 @@ type Props = {
   ranges: College;
   logoUrl: string;
   bgsep: boolean;
+  strictDivide: boolean;
 };
 
 const YEARSUFFIX = {
@@ -374,8 +375,9 @@ const OldNotice = (props: Props) => {
                     <h1 className="text-2xl font-semibold p-1">
                       Hall Arrangement - { " "}
                       {props.date}  {" "}
+                      {/* {"2023-05-15"} */}
                       {/* to {"2023-04-21" }  */}
-                      (FN)  {" "}
+                      {/* (AN)  {" "} */}
                       {/* ___ */}
                       {props.bgsep && (
                       props.gender.toUpperCase())}

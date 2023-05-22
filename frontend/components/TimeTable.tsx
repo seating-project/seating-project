@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 type InputValues = { [year: number]: { [department: string]: { [date: string]: string } } };
 type DeptAndDate = { departments : string[], dates : Date[]}
 
-const MyTable = ({deptanddate, post_data, years} ) => {
+const   MyTable = ({deptanddate, post_data, years} ) => {
   const dates: Date[] = deptanddate.dates;
   const departments: string[] = deptanddate.departments;
 
@@ -43,7 +43,7 @@ const MyTable = ({deptanddate, post_data, years} ) => {
     });
   };
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     // console.log("POST DATA", post_data);
     console.log(inputValues);
@@ -67,23 +67,29 @@ const MyTable = ({deptanddate, post_data, years} ) => {
   return (
     <>
       {years.map((year: number) => (
-        <div key={year}>
-          <h2>Year {year} Timetable</h2>
+        <div key={year} className="w-2/3 bg-white rounded-xl p-6 shadow-xl">
+          <h2 className="text-xl font-bold  mb-4">Year {year} Timetable</h2>
           <form onSubmit={handleSubmit}>
-            <TableContainer component={Paper}>
-              <Table>
+            <TableContainer component={Paper} className="flex flex-col items-center justify-center" >
+              <Table 
+                border={1}
+                align="center"
+              >
                 <TableHead>
                   <TableRow>
-                    <TableCell>Departments / Dates</TableCell>
+                    <TableCell
+                      align="center"
+                      className="font-bold text-lg"
+                    >Departments / Dates</TableCell>
                     {dates.map((date) => (
-                      <TableCell key={date.toISOString()}>{date.toISOString().slice(0, 10)}</TableCell>
+                      <TableCell align="center" className="text-lg" key={date.toISOString()}>{date.toISOString().slice(0, 10)}</TableCell>
                     ))}
                   </TableRow>
                 </TableHead>
                 <TableBody>
                   {departments.map((department) => (
                     <TableRow key={department}>
-                      <TableCell>{department}</TableCell>
+                      <TableCell align="center"className="text-lg" >{department.toUpperCase()}</TableCell>
                       {dates.map((datey) => (
                         <TableCell key={`${department}-${datey.toISOString().slice(0,10)}`}>
                           <TextField
@@ -96,11 +102,15 @@ const MyTable = ({deptanddate, post_data, years} ) => {
                   ))}
                 </TableBody>
               </Table>
-              <button type="submit">Submit</button>
+              
             </TableContainer>
           </form>
         </div>
       ))}
+      <button type="submit" onClick={handleSubmit} className="mt-2  items-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-lg px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Submit</button>
+      <div className="h-8">
+
+      </div>
     </>
   );
 };

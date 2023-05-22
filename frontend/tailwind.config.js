@@ -4,6 +4,7 @@ const plugin = require('tailwindcss/plugin');
 module.exports = {
   content: [
     './pages/**/*.{js,ts,jsx,tsx}',
+    "./node_modules/flowbite-react/**/*.js",
     './components/**/*.{js,ts,jsx,tsx}',
     './app/**/*.{js,ts,jsx,tsx}',
   ],
@@ -32,6 +33,7 @@ module.exports = {
           borderWidth: '2px',
         },
       })
-    })
+    }),
+    require('flowbite/plugin'),
   ],
 }

@@ -6,10 +6,10 @@ import { NextApiResponse, NextApiRequest } from 'next';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'POST') {
-    const { links, folderPath } = req.body;
+    const { links } = req.body;
     console.log(links);
     try {
-      const message = await downloadPDFs(links, folderPath);
+      const message = await downloadPDFs(links);
       res.status(200).json({ message });
     } catch (error) {
       console.error(error);

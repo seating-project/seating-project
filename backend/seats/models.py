@@ -189,6 +189,7 @@ class Exams(models.Model):
     randomize_every_n_rooms = models.IntegerField(default=0)
     rooms_order = models.JSONField(default=dict)
     girls_rooms = models.JSONField(default=dict)
+    strictly_divide_buildings = models.BooleanField(default=False)
     
 
 

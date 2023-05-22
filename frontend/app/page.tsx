@@ -35,7 +35,7 @@ async function Homepage() {
               {edata.map((item: { exam_name: any }) => (
                 <ExamCard name={item.exam_name} />
               ))}
-              <div className="flex flex-col items-center justify-center w-1/4 h-1/4 m-4 p-4 min-h-[200px] rounded-2xl  bg-white bg-opacity-40 backdrop-blur-md drop-shadow-lg">
+              <div className="flex flex-col items-center justify-center w-1/4 h-1/4 m-4 p-4 min-h-[200px] rounded-2xl  bg-gray-300 bg-opacity-40 backdrop-blur-md drop-shadow-lg">
                 <div className="flex flex-col items-center justify-center">
                   <Link href="/examform" className="flex flex-col items-center justify-center">
                     <PlusCircleIcon className="h-20 w-20 text-black cursor-pointer hover:text-dark-blue transition duration-400 ease-out scale-105" />
@@ -48,9 +48,9 @@ async function Homepage() {
             </div>
           </div>
         </div>
-        {/* <div className="">
-          <SplineBackground />
-        </div> */}
+          {/* <div className="">
+            <SplineBackground />
+          </div> */}
       </div>
     </>
   );

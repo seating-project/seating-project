@@ -262,6 +262,7 @@ const UserForm = ({
     });
 
     console.log("DEPT AND DATE", deptanddate);
+    console.log("YEARS", formData.years);
 
     setNext(true);
   };

@@ -169,7 +169,7 @@ const NoticeBoardCopy = ({
                       }
                     })
                     } */}
-                <th className="border-2 border-black text-xs p-2">
+                {/* <th className="border-2 border-black text-xs p-2">
                   __________
                 </th>
                 <th className="border-2 border-black text-xs p-2">
@@ -183,7 +183,7 @@ const NoticeBoardCopy = ({
                 </th>
                 <th className="border-2 border-black text-xs p-2">
                   __________
-                </th>
+                </th> */}
                 <th className="border-2 border-black text-xs p-2">
                   __________
                 </th>
