@@ -564,7 +564,7 @@ const UserForm = ({
                 defaultValue={formData.phdRoom as any}
                 className="mt-4"
               >
-                {rooms_opt.map((option: RoomsType) => (
+                {customRoomOptions().map((option: RoomsType) => (
                   <Dropdown.Item
                     key={option.value}
                     value={option.value}
@@ -616,7 +616,7 @@ const UserForm = ({
                 defaultValue={formData.meRoom as any}
                 className="mt-4"
               >
-                {rooms_opt.map((option: RoomsType) => (
+                {customRoomOptions().map((option: RoomsType) => (
                   <Dropdown.Item
                     key={option.value}
                     value={option.value}
@@ -879,12 +879,13 @@ const UserForm = ({
                     sendWAMessage: e.target.checked,
                   })
                 }
+                disabled={true}
               />
               <label
                 htmlFor="isSendWAMessage"
                 className="ml-2 text-xl font-medium text-gray-900 dark:text-gray-300"
               >
-                Send WhatsApp Message?
+                Send WhatsApp Message? <span className="text-[#8080FF]">(Coming Soon)</span>
               </label>
             </div>
           </div>
@@ -920,7 +921,7 @@ const UserForm = ({
                 htmlFor="sets"
                 className=" text-xl font-medium text-gray-900 dark:text-gray-300 mr-4"
               >
-                Subjects for which sets
+                Subjects for which sets  <span className="text-[#8080FF]">(Coming Soon)</span>
               </label>
               <Select
                 defaultValue={formData.sets}
@@ -945,7 +946,7 @@ const UserForm = ({
                 htmlFor="sets"
                 className=" text-xl font-medium text-gray-900 dark:text-gray-300 mr-4"
               >
-                Number of Sets
+                Number of Sets <span className="text-[#8080FF]">(Coming Soon)</span>
               </label>
               <Dropdown
                 label={
@@ -1116,6 +1117,7 @@ const UserForm = ({
         >
           Next
         </button>
+        <div className="h-6" />
       </form>
       {next && (
         <MyTable

@@ -85,3 +85,32 @@ class GetImageView(View):
     def get(self, request, image_path, *args, **kwargs):
         image_full_path = f"{settings.MEDIA_ROOT}/{image_path}"
         return serve(request, image_full_path, document_root=settings.MEDIA_ROOT)
+    
+class DeleteExams(APIView):
+    serializer_class = ExamsSerializer
+    
+    def delete(self, request, format=None):
+        serializer = ExamsSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.delete()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response({
+            'status': 'Bad request',
+            'message': 'Exam could not be deleted with received data.'
+        }, status=status.HTTP_400_BAD_REQUEST
+        )
+    
+class DeleteTemplates(APIView):
+    
+    serializer_class = TemplatesSerializer
+
+    def delete(self, request, format=None):
+        serializer = TemplatesSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.delete()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response({
+            'status': 'Bad request',
+            'message': 'Template could not be deleted with received data.'
+        }, status=status.HTTP_400_BAD_REQUEST
+        )

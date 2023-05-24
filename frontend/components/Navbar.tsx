@@ -29,13 +29,12 @@ const Navbar = () => {
           Templates
         </Link>
       </div>
+      
       <div className="flex pb-2 mr-8">
-        <Link href="/test" className="text-xl font-semibold py-3 px-3 font-mono">
-          Test
+        <Link href="http://localhost:8000/admin/" className="text-xl font-semibold py-3 px-3 font-mono">
+          Admin Panel
         </Link>
-        <Link href="/signup" className="text-xl font-semibold py-3 px-3 font-mono">
-          Sign Up
-        </Link>
+        
       </div>
     </div>
   );

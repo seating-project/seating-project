@@ -1,9 +1,10 @@
 import drf from "../../pages/api/axiosConfig";
-import UserForm from "../../components/ExamForm";
+// import UserForm from "../../components/ExamForm";
+import UserForm from "../../components/ExamForm2";
 import "../../styles/globals.css";
 import Navbar from "../../components/Navbar";
 
-const ExamFormPage = async () => {
+const ExamForm2Page = async () => {
   const getTemplateData = async () => {
     try {
       const res = await drf.get("/templates/");
@@ -94,6 +95,7 @@ const ExamFormPage = async () => {
     };
   });
 
+  
 
   return (
     <div className="">
@@ -112,4 +114,4 @@ const ExamFormPage = async () => {
   );
 };
 
-export default ExamFormPage;
+export default ExamForm2Page;

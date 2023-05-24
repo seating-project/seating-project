@@ -56,10 +56,9 @@ const DownloadButton = ({ links }) => {
 
   return (
     <button
-      className="text-3xl py-2 font-mono justify-between items-center inline-block relative text-blue after:content-[''] after:absolute after:w-full
-            after:scale-x-0 after:h-[2px] after:bottom-0 after:left-0 after:bg-dark-blue after:origin-bottom-right after:transition-transform
-          after:duration-300 ease-out hover:after:scale-x-100 hover:after:origin-bottom-left"
+      // className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-xl px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
       // onClick={downloadAllPages(["http://localhost:3000/exam/Internal%20Assessment%20III"])}
+      className="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 transition hover:bg-gradient-to-br hover:ease-in-out focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-xl px-5 py-2.5 text-center mr-2 mb-2"
       onClick={handleDownloadClick}
     >
       Download All
