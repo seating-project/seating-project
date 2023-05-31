@@ -78,11 +78,11 @@ const subjects_opt = ["TOC", "ESS", "DBMS", "APT", "OS"];
 
 type UserFormProps = {
   templates: Templates[];
-  template_opt: TemplateType;
+  template_opt: TemplateType[];
   years_opt: YearsType;
-  department_opt: DepartmentsType;
+  department_opt: DepartmentsType[];
   rooms_opt: RoomsType;
-  phdstudents_opt: PHDStudentsType;
+  phdstudents_opt: PHDStudentsType[];
 };
 
 type BuildingDepartments = {
@@ -102,9 +102,9 @@ const UserForm = ({
 
 
   // console.log("templates", templates);
-  // console.log("template_opt", template_opt);
+  console.log("template_opt", template_opt);
   // console.log("phdstudents_opt", phdstudents_opt);
-
+  console.log("departments_opt", department_opt);
   // console.log("ROOOMS", rooms_opt);
   const DropdownStyles: StylesConfig = {
     control: (provided) => ({
@@ -179,7 +179,7 @@ const UserForm = ({
   const [diffLeftRightBG, setDiffLeftRightBG] = useState<boolean>(false);
   const [formData, setFormData] = useState({
     examName: "",
-    years: [],
+    years: [] as any[],
     departments: {
       "Main Building": [],
       "New Building": [],
@@ -188,14 +188,14 @@ const UserForm = ({
     todate: new Date(),
     phdchecked: false,
     phdRoom: null,
-    phdStudents: [],
+    phdStudents: [] as any[],
     mechecked: false,
     meRoom: null,
     yearsTogether: false,
     departmentsTogether: false,
     sendWAMessage: false,
     timetosend: null,
-    sets: [],
+    sets: [] as any[],
     numberofsets: null,
     secondColumnOptions: "",
     template: "",
@@ -209,8 +209,8 @@ const UserForm = ({
     },
     minStudents: 60,
     randomizeEveryNRooms: 0,
-    roomsOrder: [],
-    girlsRooms: [],
+    roomsOrder: [] as any[],
+    girlsRooms: [] as any[],
     strictlyDivide: false,
   });
 
@@ -441,7 +441,7 @@ const UserForm = ({
               <Select
                 defaultValue={formData.departments}
                 onChange={(e) =>
-                  setFormData({ ...formData, departments: e.map((x) => x.value) as any })
+                  setFormData({ ...formData, departments: e.map((x: any) => x.value) as any })
                 }
                 className=""
                 placeholder="Select Departments"
@@ -462,11 +462,11 @@ const UserForm = ({
                 <Select
                   defaultValue={formData.departments["Main Building"]}
                   onChange={(e) =>
-                    setFormData((prevState) => ({
+                    setFormData((prevState: any) => ({
                       ...prevState,
                       departments: {
                         ...prevState.departments,
-                        "Main Building": e.map((x) => x.value),
+                        "Main Building": e.map((x: any) => x.value),
                       },
                     }))
                   }
@@ -487,11 +487,11 @@ const UserForm = ({
                 <Select
                   defaultValue={formData.departments["New Building"]}
                   onChange={(e) =>
-                    setFormData((prevState) => ({
+                    setFormData((prevState: any) => ({
                       ...prevState,
                       departments: {
                         ...prevState.departments,
-                        "New Building": e.map((x) => x.value),
+                        "New Building": e.map((x: any) => x.value),
                       },
                     }))
                   }
@@ -535,7 +535,7 @@ const UserForm = ({
               <Select
                 defaultValue={formData.phdStudents}
                 onChange={(e) =>
-                  setFormData({ ...formData, phdStudents: e.map((x) => x.value) })
+                  setFormData({ ...formData, phdStudents: e.map((x: any) => x.value) })
                 }
                 className=""
                 placeholder="Select the PhD Students"
@@ -711,11 +711,11 @@ const UserForm = ({
                   <Select
                     defaultValue={formData.departmentsLeft["boys"]}
                     onChange={(e) =>
-                      setFormData((prevState)=>({
+                      setFormData((prevState: any)=>({
                         ...prevState,
                         departmentsLeft: {
                           ...prevState.departmentsLeft,
-                          "boys": e.map((x) => x.value),
+                          "boys": e.map((x: any) => x.value),
                         }
                       })
 
@@ -738,11 +738,11 @@ const UserForm = ({
                   <Select
                     defaultValue={formData.departmentsRight["boys"]}
                     onChange={(e) =>
-                      setFormData((prevState)=>({
+                      setFormData((prevState: any)=>({
                         ...prevState,
                         departmentsRight: {
                           ...prevState.departmentsRight,
-                          "boys": e.map((x) => x.value),
+                          "boys": e.map((x: any) => x.value),
                         }
                       })
 
@@ -764,11 +764,11 @@ const UserForm = ({
                   <Select
                     defaultValue={formData.departmentsLeft["girls"]}
                     onChange={(e) =>
-                      setFormData((prevState)=>({
+                      setFormData((prevState: any)=>({
                         ...prevState,
                         departmentsLeft: {
                           ...prevState.departmentsLeft,
-                          "girls": e.map((x) => x.value),
+                          "girls": e.map((x: any) => x.value),
                         }
                       })
 
@@ -793,11 +793,11 @@ const UserForm = ({
 
                     defaultValue={formData.departmentsRight["girls"]}
                     onChange={(e) =>
-                      setFormData((prevState)=>({
+                      setFormData((prevState: any)=>({
                         ...prevState,
                         departmentsRight: {
                           ...prevState.departmentsRight,
-                          "girls": e.map((x) => x.value),
+                          "girls": e.map((x: any) => x.value),
                         }
                       })
 
@@ -830,7 +830,7 @@ const UserForm = ({
                   onChange={(e) =>
                     setFormData({
                       ...formData,
-                      departmentsLeft: e.map((x) => x.value),
+                      departmentsLeft: e.map((x: any) => x.value) as any,
                     })
                   }
                   className=""
@@ -852,7 +852,7 @@ const UserForm = ({
                   onChange={(e) =>
                     setFormData({
                       ...formData,
-                      departmentsRight: e.map((x) => x.value),
+                      departmentsRight: e.map((x: any) => x.value) as any,
                     })
                   }
                   className=""

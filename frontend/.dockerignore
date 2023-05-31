@@ -1,0 +1,22 @@
+# Ignore development and build-related files
+node_modules
+.cache
+.next
+out
+build
+dist
+
+# Ignore Next.js development server files
+.next/
+public/
+
+# Ignore temporary files
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Ignore version control directories
+.git
+.svn

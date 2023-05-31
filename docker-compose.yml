@@ -1,0 +1,91 @@
+version: "3"
+
+services:
+  # nginx:
+  #   build: ./Nginx
+  #   container_name: qpgen-nginx
+  #   ports:
+  #     - 80:80
+  #   restart: always
+  #   volumes:
+  #     - static:/app/static
+  #     - media:/app/media
+  #   depends_on:
+  #     - django
+  #     - nextjs
+  #     - db
+
+
+  # django:
+  #   build: ./backend
+  #   container_name: qpgen-django
+  #   # command: uvicorn config.asgi:application --host 0.0.0.0 --port 8000 --reload
+  #   command: python manage.py runserver
+  #   ports:
+  #     - 8001:8000
+  #   env_file:
+  #     - ./.env.dev
+  #   volumes:
+  #     - ./Backend/:/app
+  #     - ./Backend/static:/app/static
+  #     - ./Backend/media:/app/media
+  #   depends_on:
+  #     - db
+
+  backend:
+    container_name: seating-backend
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    volumes:
+      - media:/app/media
+
+  # nextjs:
+  #   build: ./Frontend
+  #   container_name: qpgen-nextjs
+  #   command: yarn dev
+  #   ports:
+  #     - 3001:3000
+  #   env_file:
+  #     - ./.env.dev
+  #   tty: true
+  #   environment:
+  #     - CHOKIDAR_USEPOLLING=true
+  #   volumes:
+  #     - ./Frontend/:/app
+  #     - /app/node_modules
+  #   depends_on:
+  #     - django
+
+  frontend:
+    container_name: seating-frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+
+  db:
+    image: postgres:12-alpine
+    container_name: seating-db
+    ports:
+      - 5432:5432
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_HOST_AUTH_METHOD: "trust"
+      POSTGRES_DB: seating
+      POSTGRES_USER: seatingadmin
+      POSTGRES_PASSWORD: root
+
+
+volumes:
+  postgres_data:
+  media: 
+  static:

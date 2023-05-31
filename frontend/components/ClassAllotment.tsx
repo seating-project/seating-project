@@ -80,14 +80,22 @@ interface ClassAllotmentParams {
 //   logoUrl,
 // }: any)
 
-const ROMAN = {
+interface RomanType  {
+  [key: string]: string;
+}
+
+interface SuffixType  {
+  [key: string]: string;
+}
+
+const ROMAN: RomanType = {
   "1": "I",
   "2": "II",
   "3": "III",
   "4": "IV",
 }
 
-const SUFFIX = {
+const SUFFIX: SuffixType = {
   "1": "st",
   "2": "nd",
   "3": "rd",

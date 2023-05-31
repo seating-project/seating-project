@@ -26,7 +26,7 @@ SECRET_KEY = "django-insecure-y^5a-8&vv1hn_4rh*k*$z9hlt)q#w88#$*ok24uq3e9f-y%rd0
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["localhost", "0.0.0.0", "127.0.0.1", "backend"]
 
 
 # Application definition
@@ -91,12 +91,12 @@ WSGI_APPLICATION = "backend.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.mysql",
+        "ENGINE": "django.db.backends.postgresql_psycopg2",
         "NAME": "seating",
-        "USER": "root",
+        "USER": "seatingadmin",
         "PASSWORD": "root",
-        "HOST": "localhost",
-        "PORT": "3306",
+        "HOST": "db",
+        "PORT": "5432",
     }
 }
 

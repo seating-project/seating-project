@@ -118,7 +118,7 @@ export default async function HallPlanPage({params}: any) {
         })
         } */}
         {/* <NoticeBoardCopy ranges={rangesCurrent["Main Building"]["EH13"]} exam={exam} date={date} room={"EH13"} logoUrl={logoUrl} /> */}
-            <OldNotice gender="boys" building="Main Building" exam={name} date={date} ranges={rangesCurrent} logoUrl={logoUrl} bgsep={template.is_boys_girls_separation} strictDivide={exam.strictly_divide_buildings} />
+            <OldNotice gender="boys" building="Main Building" exam={name} date={date} ranges={rangesCurrent} logoUrl={logoUrl as string} bgsep={template.is_boys_girls_separation} strictDivide={exam.strictly_divide_buildings} />
         </>
     )
 }   

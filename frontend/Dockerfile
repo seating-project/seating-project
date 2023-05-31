@@ -16,3 +16,5 @@ RUN yarn install --frozen-lockfile
 
 # add app
 COPY . ./
+
+CMD [ "yarn", "run", "dev" ]

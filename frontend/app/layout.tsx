@@ -1,13 +1,11 @@
-import Navbar from '../components/Navbar'
-
-// export const metadata = {
-//   title: 'Seats',
-//   description: 'Allocating Seats for Exams',
-//   icons: {
-//     icon: 'favicon.ico',
-//     alt: 'seats',
-//   }
-// }
+export const metadata = {
+  title: 'Seats',
+  description: 'Allocating Seats for Exams',
+  icons: {
+    icon: 'favicon.ico',
+    alt: 'seats',
+  }
+}
 
 export default function RootLayout({
   children,

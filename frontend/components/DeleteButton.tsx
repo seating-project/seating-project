@@ -13,3 +13,4 @@ const DeleteButton = (props: Props) => {
 };
 
 export default DeleteButton;
+  

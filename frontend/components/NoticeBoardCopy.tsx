@@ -53,8 +53,12 @@ interface Ranges {
   };
 }
 
+interface Ranges2 {
+  [key: string]: Array<Array<any>> | any;
+}
+
 type Props = {
-  ranges: Ranges;
+  ranges: Ranges | Ranges2;
   exam: Exam;
   date: string;
   room: string;
@@ -62,7 +66,11 @@ type Props = {
   isbg: boolean;
 };
 
-const SUFFIX = {
+interface SuffixType  {
+  [key: string]: string;
+}
+
+const SUFFIX: SuffixType = {
   "1": "st",
   "2": "nd",
   "3": "rd",
@@ -98,8 +106,8 @@ const NoticeBoardCopy = ({
   //     });
   //   });
 
-  function getDates(timeTable) {
-    const dates = [];
+  function getDates(timeTable: any) {
+    const dates: string[] = [];
     for (const course in timeTable) {
       for (const date in timeTable[course]) {
         if (!dates.includes(date)) {
@@ -110,7 +118,7 @@ const NoticeBoardCopy = ({
     return dates;
   }
 
-  const createRange = (ranges) => {
+  const createRange = (ranges: Ranges | Ranges2) => {
     console.log("RANGES at Create Ranges", ranges);
     const dates = getDates(exam.time_table);
     let total = [];
@@ -183,7 +191,7 @@ const NoticeBoardCopy = ({
                 </th>
                 <th className="border-2 border-black text-xs p-2">
                   __________
-                </th> */}
+                </th> */} 
                 <th className="border-2 border-black text-xs p-2">
                   __________
                 </th>

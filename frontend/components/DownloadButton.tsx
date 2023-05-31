@@ -5,9 +5,11 @@ import React from "react";
 import drf from "../pages/api/axiosConfig";
 
 
-type Props = {};
+type Props = {
+  links: string[];
+};
 
-const DownloadButton = ({ links }) => {
+const DownloadButton = ({ links }: Props) => {
 
   const [folderPath, setFolderPath] = React.useState("");
 
