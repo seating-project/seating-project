@@ -998,6 +998,7 @@ def Allotments(data):
                     if dept == sub_dict_key.split()[0]: #and year == sub_dict_key.split()[1]
                         dept_temp.append(sub_dict_key)
             departments_currently = dept_temp
+            print("DEPARTMENTS CURRENTLY", departments_currently)
             if departments_currently == []:
                 continue
             ckt_dept = []
@@ -1445,16 +1446,28 @@ def Allotments(data):
                             else:
                                 
                                 if "boys" in data["departments_left"] and "girls" in data["departments_left"] and "boys" in data["departments_right"] and "girls" in data["departments_right"]:
-                                    students_to_be_put["M-CKT"].extend(list(Students.objects.filter(year=y, gender="M", department__in = data["departments_left"]["boys"]).values_list("register_number", "department", "year", "gender", "name")))
-                                    students_to_be_put["M-NCKT"].extend(list(Students.objects.filter(year=y, gender="M", department__in=data["departments_right"]["boys"]).values_list("register_number", "department", "year", "gender", "name")))
-                                    students_to_be_put["F-CKT"].extend(list(Students.objects.filter(year=y, gender="F", department__in=data["departments_left"]["girls"]).values_list("register_number", "department", "year", "gender", "name")))
-                                    students_to_be_put["F-NCKT"].extend(list(Students.objects.filter(year=y, gender="F", department__in=data["departments_right"]["girls"]).values_list("register_number", "department", "year", "gender", "name")))
+                                    for dep in data["departments_left"]["boys"]:
+                                        if dep in [x.split()[0] for x in departments_currently]:
+                                            students_to_be_put["M-CKT"].extend(list(Students.objects.filter(year=y, gender="M", department=dep).values_list("register_number", "department", "year", "gender", "name")))
+                                    for dep in data["departments_right"]["boys"]:
+                                        if dep in [x.split()[0] for x in departments_currently]:
+                                            students_to_be_put["M-NCKT"].extend(list(Students.objects.filter(year=y, gender="M", department=dep).values_list("register_number", "department", "year", "gender", "name")))
+                                    for dep in data["departments_left"]["girls"]:
+                                        if dep in [x.split()[0] for x in departments_currently]:
+                                            students_to_be_put["F-CKT"].extend(list(Students.objects.filter(year=y, gender="F", department=dep).values_list("register_number", "department", "year", "gender", "name")))
+                                    for dep in data["departments_right"]["girls"]:
+                                        if dep in [x.split()[0] for x in departments_currently]:
+                                            students_to_be_put["F-NCKT"].extend(list(Students.objects.filter(year=y, gender="F", department=dep).values_list("register_number", "department", "year", "gender", "name")))
                                 else:
                                         
-                                    students_to_be_put["M-CKT"].extend(list(Students.objects.filter(year=y, gender='M', department__in = data["departments_left"]).values_list("register_number", "department", "year", "gender", "name")))
-                                    students_to_be_put["F-CKT"].extend(list(Students.objects.filter(year=y, gender='F', department__in = data["departments_left"]).values_list("register_number", "department", "year", "gender", "name")))
-                                    students_to_be_put["M-NCKT"].extend(list(Students.objects.filter(year=y, gender='M', department__in = data["departments_right"]).values_list("register_number", "department", "year", "gender", "name")))
-                                    students_to_be_put["F-NCKT"].extend(list(Students.objects.filter(year=y, gender='F', department__in = data["departments_right"]).values_list("register_number", "department", "year", "gender", "name")))
+                                    for dep in data["departments_left"]:
+                                        if dep in [x.split()[0] for x in departments_currently]:
+                                            students_to_be_put["M-CKT"].extend(list(Students.objects.filter(year=y, gender='M', department=dep).values_list("register_number", "department", "year", "gender", "name")))
+                                            students_to_be_put["F-CKT"].extend(list(Students.objects.filter(year=y, gender='F', department=dep).values_list("register_number", "department", "year", "gender", "name")))
+                                    for dep in data["departments_right"]:
+                                        if dep in [x.split()[0] for x in departments_currently]:
+                                            students_to_be_put["M-NCKT"].extend(list(Students.objects.filter(year=y, gender='M', department=dep).values_list("register_number", "department", "year", "gender", "name")))
+                                            students_to_be_put["F-NCKT"].extend(list(Students.objects.filter(year=y, gender='F', department=dep).values_list("register_number", "department", "year", "gender", "name")))
                                 
                             
                             
@@ -1825,6 +1838,15 @@ def Allotments(data):
     print("MASTER ROOM RANGES BEFORE EVERYTHING")
     print(master_room_ranges)
 
+    print("MASTER ROOM DICT")
+    for i in master_room_dict:
+        print()
+        print(i)
+        for j in master_room_dict[i]:
+            print()
+            print(j, "           ", master_room_dict[i][j])
+            print("Length", len(master_room_dict[i][j]))
+
     for date in master_room_dict:
 
         master_room_ranges[date] = {
@@ -1845,7 +1867,9 @@ def Allotments(data):
                         "girls": {}
                     }
                     if Rooms.objects.get(room_number=i) in girls_room:
-                        for j in room_dict[i]:
+                        print(i)
+                        print(girls_room)
+                        for j in master_room_dict[date][i]:
 
                             if curr_template.is_single_seater:
                                 if j[0] != 0:
@@ -1868,7 +1892,7 @@ def Allotments(data):
                                     ranges_dict[i]["girls"][j[1][1] +
                                                             " " + str(j[1][2])].append(j[1])
                     else:
-                        for j in room_dict[i]:
+                        for j in master_room_dict[date][i]:
                             if curr_template.is_single_seater:
                                 if j[0] != 0:
                                     if (j[0][1] + " " + str(j[0][2])) not in ranges_dict[i]["boys"]:
@@ -1938,7 +1962,7 @@ def Allotments(data):
                     #                                    " " + str(j[1][2])].append(j[1])
 
                     if Rooms.objects.get(room_number=i) in girls_room:
-                        for j in room_dict[i]:
+                        for j in master_room_dict[date][i]:
 
                             if curr_template.is_single_seater:
                                 if j[0] != 0:
@@ -1961,7 +1985,7 @@ def Allotments(data):
                                     ranges_dict[i]["girls"][j[1][1] +
                                                             " " + str(j[1][2])].append(j[1])
                     else:
-                        for j in room_dict[i]:
+                        for j in master_room_dict[date][i]:
                             if curr_template.is_single_seater:
                                 if j[0] != 0:
                                     if (j[0][1] + " " + str(j[0][2])) not in ranges_dict[i]["boys"]:

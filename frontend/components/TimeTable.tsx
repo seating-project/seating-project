@@ -63,7 +63,7 @@ const   MyTable = ({deptanddate, post_data, years} ) => {
     .then((response) => {
       console.log("RESPONSE", response);
       toast("Exam Created Successfully", {"icon": "✅"});
-      router.push("/");
+      // router.push("/");
     })
     .catch((error: any) => {
       console.log("ERROR", error);
