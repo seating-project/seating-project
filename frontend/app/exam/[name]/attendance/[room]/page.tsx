@@ -121,7 +121,7 @@ export default async function AttendancePage({params}: any) {
             })
         })
         } */}
-        <NoticeBoardCopy ranges={rangesCurrent["Main Building"][roomNoice]} exam={exam} date={date} room={roomNoice} logoUrl={logoUrl as string} isbg={template.is_boys_girls_separation} />
+          <NoticeBoardCopy ranges={rangesCurrent["Main Building"][roomNoice]} exam={exam} date={date} room={roomNoice} logoUrl={logoUrl as string} isbg={template.is_boys_girls_separation} />
             {/* <OldNotice gender="boys" building="Main Building" exam={name} date={date} ranges={rangesCurrent} logoUrl={logoUrl} /> */}
         </>
     )

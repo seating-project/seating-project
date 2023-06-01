@@ -3,6 +3,7 @@ import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper
 import drf from "../pages/api/axiosConfig";
 import { useRouter } from "next/navigation";
 import axios from "axios";
+import toast, { Toaster } from "react-hot-toast"; 
 
 type InputValues = { [year: number]: { [department: string]: { [date: string]: string } } };
 type DeptAndDate = { departments : string[], dates : Date[]}
@@ -59,6 +60,15 @@ const   MyTable = ({deptanddate, post_data, years} ) => {
     post_data["time_table"] = inputValues;
     console.log("POST DATA", post_data);
     axios.post("http://127.0.0.1:8000/createexams/", post_data)
+    .then((response) => {
+      console.log("RESPONSE", response);
+      toast("Exam Created Successfully", {"icon": "✅"});
+      router.push("/");
+    })
+    .catch((error: any) => {
+      console.log("ERROR", error);
+      toast("Error in creating exam", {"icon": "❌"});
+    });
     // redirect to home page
     // router.push("/"); 
 

@@ -35,6 +35,7 @@
   },
   "devDependencies": {
     "@types/node": "18.11.3",
+    "@types/puppeteer": "^7.0.4",
     "@types/react": "18.0.21",
     "@types/react-dom": "18.0.6",
     "@types/uuid": "^9.0.1",

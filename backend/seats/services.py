@@ -219,6 +219,7 @@ def Allotments(data):
                 SEPARATE_ROOMS["New Building"].append(room)
         print("SEPARATE_ROOMS", SEPARATE_ROOMS) 
             
+        
 
         ckt_departments = []
         nckt_departments = []
@@ -297,7 +298,12 @@ def Allotments(data):
                         for r in SEPARATE_ROOMS[building]:
                             print("ROOM", r)
                             alternation = 0
-                            for i in range(curr_template.room_strength):
+                            STRENGTH = r.room_strength
+                            if exam_curr.is_common_room_strength:
+                                STRENGTH = curr_template.room_strength
+                            else:
+                                STRENGTH = r.room_strength
+                            for i in range(STRENGTH):
 
                                 if c1c >= len(ckt_array) and c1nc >= len(nckt_array):
                                     f1 = 1
@@ -347,7 +353,12 @@ def Allotments(data):
                         f2 = 0
 
                         for r in ROOMS:
-                            for i in range(curr_template.room_strength):
+                            STRENGTH = r.room_strength
+                            if exam_curr.is_common_room_strength:
+                                STRENGTH = curr_template.room_strength
+                            else:
+                                STRENGTH = r.room_strength
+                            for i in range(STRENGTH):
                                 if c2 >= len(all_students):
                                     f2 = 1
                                     break
@@ -402,10 +413,15 @@ def Allotments(data):
                                 # if r.room_number == "F23":
                                 #     changeDone = 1
                                 #     r = Rooms.objects.get(room_number="S11")
+                                STRENGTH = r.room_strength
+                                if exam_curr.is_common_room_strength:
+                                    STRENGTH = curr_template.room_strength
+                                else:
+                                    STRENGTH = r.room_strength
 
-                                strength = r.room_strength//2
+                                STRENGTH = STRENGTH//2
                                 # strength = curr_template.room_strength//2
-                                for j in range(strength):
+                                for j in range(STRENGTH):
                                     if c3g >= len(years_students["2F"]) and c3g >= len(years_students["3F"]):
                                         f3g = 1
                                         break
@@ -529,9 +545,14 @@ def Allotments(data):
 
                                     # if r.room_number == "S13":
                                     #     r = Rooms.objects.get(room_number="F23")
-                                    strength = r.room_strength//2
+                                    STRENGTH = r.room_strength
+                                    if exam_curr.is_common_room_strength:
+                                        STRENGTH = curr_template.room_strength
+                                    else:
+                                        STRENGTH = r.room_strength
+                                    STRENGTH = STRENGTH//2
                                     # strength = curr_template.room_strength//2
-                                    for i in range(strength):
+                                    for i in range(STRENGTH):
                                         if c3b >= len(years_students["2M"]) and c3b >= len(years_students["3M"]):
                                             f3b = 1
                                             break
@@ -682,7 +703,13 @@ def Allotments(data):
                             # room_numbers_temp=["T2", "T3", "T4", "T6", "T1"]
                             # ROOMS = list(Rooms.objects.filter(room_number__in=room_numbers_temp))
                             for r in ROOMS:
-                                strength = 0
+
+                                STRENGTH = r.room_strength
+                                if exam_curr.is_common_room_strength:
+                                    STRENGTH = curr_template.room_strength
+                                else:
+                                    STRENGTH = r.room_strength
+                                STRENGTH = STRENGTH//2
                                 print("ROOM STRENGTH of",
                                     r.room_number, r.room_strength)
                                 # if r.room_strength//2 < 30:
@@ -691,8 +718,8 @@ def Allotments(data):
                                 # else:
                                 #     strength = curr_template.room_strength//2
                                 #     print("Strength", strength)
-                                strength = r.room_strength//2
-                                for j in range(strength):
+                                
+                                for j in range(STRENGTH):
                                     if c4g >= len(students_to_be_put["F-CKT"]) and c4g >= len(students_to_be_put["F-NCKT"]):
                                         f4g = 1
                                         break
@@ -765,9 +792,15 @@ def Allotments(data):
                                 #     strength = r.room_strength//2
                                 # else:
                                 #     strength = curr_template.room_strength//2
-                                strength = r.room_strength//2
-                                print("STRENGTH", strength)
-                                for i in range(strength):
+                                # strength = r.room_strength//2
+                                # print("STRENGTH", strength)
+                                STRENGTH = r.room_strength
+                                if exam_curr.is_common_room_strength:
+                                    STRENGTH = curr_template.room_strength
+                                else:
+                                    STRENGTH = r.room_strength
+                                STRENGTH = STRENGTH//2
+                                for i in range(STRENGTH):
 
                                     # print("C4G", c4g)
                                     if c4b >= len(students_to_be_put["M-CKT"]) and c4b >= len(students_to_be_put["M-NCKT"]):
@@ -837,8 +870,13 @@ def Allotments(data):
                             c5 = 0
                             f5 = 0
                             for r in curr_template.rooms:
-                                strength = curr_template.room_strength//2
-                                for i in range(strength):
+                                STRENGTH = r.room_strength
+                                if exam_curr.is_common_room_strength:
+                                    STRENGTH = curr_template.room_strength
+                                else:
+                                    STRENGTH = r.room_strength
+                                STRENGTH = STRENGTH//2
+                                for i in range(STRENGTH):
                                     if c5 >= len(years_students[2]) and c5 >= len(years_students[3]):
                                         f5 = 1
                                         break
@@ -889,8 +927,12 @@ def Allotments(data):
                             c6 = 0
                             f6 = 0
                             for r in curr_template.rooms:
-                                strength = curr_template.room_strength//2
-                                for i in range(strength):
+                                STRENGTH = r.room_strength
+                                if exam_curr.is_common_room_strength:
+                                    STRENGTH = curr_template.room_strength
+                                else:
+                                    STRENGTH = r.room_strength
+                                for i in range(STRENGTH):
                                     if c6 >= len(students_to_be_put["CKT"]) and c6 >= len(students_to_be_put["NCKT"]):
                                         f6 = 1
                                         break
@@ -930,7 +972,12 @@ def Allotments(data):
                     "register_number", "department", "year", "gender"))
 
                 # for i in range(exam_curr.me_room)
-                for i in range(curr_template.room_strength):
+                STRENGTH = r.room_strength
+                if exam_curr.is_common_room_strength:
+                    STRENGTH = curr_template.room_strength
+                else:
+                    STRENGTH = r.room_strength
+                for i in range(STRENGTH):
                     if cp >= len(phd_guys):
                         fp = 1
                         break
@@ -986,7 +1033,12 @@ def Allotments(data):
 
                     for r in ROOMS:
                         alternation = 0
-                        for i in range(curr_template.room_strength):
+                        STRENGTH = r.room_strength
+                        if exam_curr.is_common_room_strength:
+                            STRENGTH = curr_template.room_strength
+                        else:
+                            STRENGTH = r.room_strength
+                        for i in range(STRENGTH):
                             if c1c >= len(ckt_array) and c1nc >= len(nckt_array):
                                 f1 = 1
                                 break
@@ -1032,7 +1084,12 @@ def Allotments(data):
                     f2 = 0
 
                     for r in ROOMS:
-                        for i in range(curr_template.room_strength):
+                        STRENGTH = r.room_strength
+                        if exam_curr.is_common_room_strength:
+                            STRENGTH = curr_template.room_strength
+                        else:
+                            STRENGTH = r.room_strength
+                        for i in range(STRENGTH):
                             if c2 >= len(all_students):
                                 f2 = 1
                                 break
@@ -1101,9 +1158,14 @@ def Allotments(data):
                             #     changeDone = 1
                             #     r = Rooms.objects.get(room_number="S11")
 
-                            strength = r.room_strength//2
+                            STRENGTH = r.room_strength
+                            if exam_curr.is_common_room_strength:
+                                STRENGTH = curr_template.room_strength
+                            else:
+                                STRENGTH = r.room_strength
+                            STRENGTH = STRENGTH//2
                             # strength = curr_template.room_strength//2
-                            for j in range(strength):
+                            for j in range(STRENGTH):
                                 if c3g >= len(years_students["2F"]) and c3g >= len(years_students["3F"]):
                                     f3g = 1
                                     break
@@ -1227,9 +1289,14 @@ def Allotments(data):
 
                                 # if r.room_number == "S13":
                                 #     r = Rooms.objects.get(room_number="F23")
-                                strength = r.room_strength//2
+                                STRENGTH = r.room_strength
+                                if exam_curr.is_common_room_strength:
+                                    STRENGTH = curr_template.room_strength
+                                else:
+                                    STRENGTH = r.room_strength
+                                STRENGTH = STRENGTH//2
                                 # strength = curr_template.room_strength//2
-                                for i in range(strength):
+                                for i in range(STRENGTH):
                                     if c3b >= len(years_students["2M"]) and c3b >= len(years_students["3M"]):
                                         f3b = 1
                                         break
@@ -1411,8 +1478,13 @@ def Allotments(data):
                             # else:
                             #     strength = curr_template.room_strength//2
                             #     print("Strength", strength)
-                            strength = r.room_strength//2
-                            for j in range(strength):
+                            STRENGTH = r.room_strength
+                            if exam_curr.is_common_room_strength:
+                                STRENGTH = curr_template.room_strength
+                            else:
+                                STRENGTH = r.room_strength
+                            STRENGTH = STRENGTH//2
+                            for j in range(STRENGTH):
                                 if c4g >= len(students_to_be_put["F-CKT"]) and c4g >= len(students_to_be_put["F-NCKT"]):
                                     f4g = 1
                                     break
@@ -1485,9 +1557,15 @@ def Allotments(data):
                             #     strength = r.room_strength//2
                             # else:
                             #     strength = curr_template.room_strength//2
-                            strength = r.room_strength//2
-                            print("STRENGTH", strength)
-                            for i in range(strength):
+
+                            STRENGTH = r.room_strength
+                            if exam_curr.is_common_room_strength:
+                                STRENGTH = curr_template.room_strength
+                            else:
+                                STRENGTH = r.room_strength
+                            STRENGTH = STRENGTH//2
+                            print("STRENGTH", STRENGTH)
+                            for i in range(STRENGTH):
 
                                 # print("C4G", c4g)
                                 if c4b >= len(students_to_be_put["M-CKT"]) and c4b >= len(students_to_be_put["M-NCKT"]):
@@ -1578,7 +1656,12 @@ def Allotments(data):
                         c5 = 0
                         f5 = 0
                         for r in ROOMS:
-                            strength = curr_template.room_strength//2
+                            STRENGTH = r.room_strength
+                            if exam_curr.is_common_room_strength:
+                                STRENGTH = curr_template.room_strength
+                            else:
+                                STRENGTH = r.room_strength
+                            STRENGTH = STRENGTH//2
                             for i in range(strength):
                                 if c5 >= len(years_students[2]) and c5 >= len(years_students[3]):
                                     f5 = 1
@@ -1644,8 +1727,13 @@ def Allotments(data):
                         c6 = 0
                         f6 = 0
                         for r in curr_template.rooms:
-                            strength = curr_template.room_strength//2
-                            for i in range(strength):
+                            STRENGTH = r.room_strength
+                            if exam_curr.is_common_room_strength:
+                                STRENGTH = curr_template.room_strength
+                            else:
+                                STRENGTH = r.room_strength
+                            STRENGTH = STRENGTH//2
+                            for i in range(STRENGTH):
                                 if c6 >= len(students_to_be_put["CKT"]) and c6 >= len(students_to_be_put["NCKT"]):
                                     f6 = 1
                                     break
@@ -1685,7 +1773,12 @@ def Allotments(data):
                     "register_number", "department", "year", "gender"))
 
                 # for i in range(exam_curr.me_room)
-                for i in range(curr_template.room_strength):
+                STRENGTH = r.room_strength
+                if exam_curr.is_common_room_strength:
+                    STRENGTH = curr_template.room_strength
+                else:
+                    STRENGTH = r.room_strength
+                for i in range(STRENGTH):
                     if cp >= len(phd_guys):
                         fp = 1
                         break

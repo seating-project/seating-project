@@ -153,12 +153,12 @@ export default async function ExamPage({ params }: any) {
                 links.push(
                   `http://localhost:3000/exam/${encodeURIComponent(
                     name
-                  )}/separation/${dateObj.toISOString().substring(0, 10)}/boys`
+                  )}/hallplan/${dateObj.toISOString().substring(0, 10)}/boys`
                 );
                 links.push(
                   `http://localhost:3000/exam/${encodeURIComponent(
                     name
-                  )}/separation/${dateObj.toISOString().substring(0, 10)}/girls`
+                  )}/hallplan/${dateObj.toISOString().substring(0, 10)}/girls`
                 );
                 return (
                   <div>
