@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TextField } from "@material-ui/core";
 import drf from "../pages/api/axiosConfig";
 import { useRouter } from "next/navigation";
+import axios from "axios";
 
 type InputValues = { [year: number]: { [department: string]: { [date: string]: string } } };
 type DeptAndDate = { departments : string[], dates : Date[]}
@@ -57,7 +58,7 @@ const   MyTable = ({deptanddate, post_data, years} ) => {
 
     post_data["time_table"] = inputValues;
     console.log("POST DATA", post_data);
-    drf.post("/createexams/", post_data)
+    axios.post("http://127.0.0.1:8000/createexams/", post_data)
     // redirect to home page
     // router.push("/"); 
 

@@ -190,7 +190,7 @@ class Exams(models.Model):
     rooms_order = models.JSONField(default=dict)
     girls_rooms = models.JSONField(default=dict)
     strictly_divide_buildings = models.BooleanField(default=False)
-    
+    is_common_room_strength = models.BooleanField(default=False)
 
 
     class Meta:

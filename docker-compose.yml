@@ -1,19 +1,19 @@
 version: "3"
 
 services:
-  # nginx:
-  #   build: ./Nginx
-  #   container_name: qpgen-nginx
-  #   ports:
-  #     - 80:80
-  #   restart: always
-  #   volumes:
-  #     - static:/app/static
-  #     - media:/app/media
-  #   depends_on:
-  #     - django
-  #     - nextjs
-  #     - db
+  nginx:
+    build: ./Nginx
+    container_name: seating-nginx
+    ports:
+      - 80:80
+    restart: always
+    volumes:
+      - static:/app/static
+      - media:/app/media
+    depends_on:
+      - backend
+      - frontend
+      - db
 
 
   # django:
@@ -42,6 +42,8 @@ services:
     depends_on:
       - db
     volumes:
+      # - ./backend/:/app
+      - static:/app/static
       - media:/app/media
 
   # nextjs:

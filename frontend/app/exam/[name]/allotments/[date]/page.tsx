@@ -36,7 +36,9 @@ export default async function AllotmentPage({ params }: any) {
   async function getLogoData() {
     try {
       const res = await drf.get("/logos/");
+      console.log(res.data)
       return res.data;
+      
     } catch (error) {
       console.error(error);
       return null;
@@ -80,8 +82,10 @@ export default async function AllotmentPage({ params }: any) {
 
   const ldata = await getLogoData();
   let logo = ldata.filter((item: { id: any }) => item.id == template.logo)[0];
+
   // console.log("LOGO", logo);
   const wholeImagePath = logo.image;
+  console.log(wholeImagePath)
   const imagePath = wholeImagePath.split("media/")[1];
   console.log("IMAGE PATH", imagePath);
 

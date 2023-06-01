@@ -11,10 +11,10 @@ from django.http import HttpResponse
 from django.conf import settings
 from django.views.static import serve
 
+
 class TemplatesList(generics.ListAPIView):
     queryset = Templates.objects.all()
     serializer_class = TemplatesSerializer
-
 
 
 class CreateTemplates(APIView):
@@ -25,38 +25,49 @@ class CreateTemplates(APIView):
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response({
-            'status': 'Bad request',
-            'message': 'Template could not be created with received data.'
-        }, status=status.HTTP_400_BAD_REQUEST)
-    
+        return Response(
+            {
+                "status": "Bad request",
+                "message": "Template could not be created with received data.",
+            },
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+
+
 class DepartmentList(generics.ListAPIView):
     queryset = Departments.objects.all()
     serializer_class = DepartmentsSerializer
+
 
 class RoomsList(generics.ListAPIView):
     queryset = Rooms.objects.all()
     serializer_class = RoomsSerializer
 
+
 class RoomData(generics.ListAPIView):
     queryset = RoomData.objects.all()
     serializer_class = RoomDataSerializer
+
 
 class YearsList(generics.ListAPIView):
     queryset = Years.objects.all()
     serializer_class = YearsSerializer
 
+
 class BuildingsList(generics.ListAPIView):
     queryset = Buildings.objects.all()
     serializer_class = BuildingsSerializer
+
 
 class DegreesList(generics.ListAPIView):
     queryset = Degrees.objects.all()
     serializer_class = DegreesSerializer
 
+
 class StudentsList(generics.ListAPIView):
     queryset = Students.objects.all()
     serializer_class = StudentsSerializer
+
 
 class CreateExams(APIView):
     serializer_class = ExamsSerializer
@@ -67,41 +78,45 @@ class CreateExams(APIView):
             serializer.save()
             Allotments(serializer.validated_data)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response({
-            'status': 'Bad request',
-            'message': 'Exam could not be created with received data.'
-        }, status=status.HTTP_400_BAD_REQUEST)
+        return Response(
+            {
+                "status": "Bad request",
+                "message": "Exam could not be created with received data.",
+            },
+            status=status.HTTP_400_BAD_REQUEST,
+        )
 
 
 class ExamsList(generics.ListAPIView):
     queryset = Exams.objects.all()
     serializer_class = ExamsSerializer
 
+
 class LogoList(generics.ListAPIView):
     queryset = Logos.objects.all()
     serializer_class = LogoSerializer
 
+
 class GetImageView(View):
     def get(self, request, image_path, *args, **kwargs):
-        image_full_path = f"{settings.MEDIA_ROOT}/{image_path}"
+        image_full_path = f"/{image_path}"
+        print(image_full_path)
         return serve(request, image_full_path, document_root=settings.MEDIA_ROOT)
-    
+
+
 class DeleteExams(APIView):
+
+    http_method_names = ["delete"]
+
     serializer_class = ExamsSerializer
-    
-    def delete(self, request, format=None):
-        serializer = ExamsSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.delete()
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        return Response({
-            'status': 'Bad request',
-            'message': 'Exam could not be deleted with received data.'
-        }, status=status.HTTP_400_BAD_REQUEST
-        )
-    
+    def delete(self, request, exam_name, format=None):
+        exam = Exams.objects.filter(exam_name=exam_name)
+        if exam:
+            exam.delete()
+            return Response({"status":"ok"}, status=status.HTTP_200_OK)
+        return Response( status=status.HTTP_400_BAD_REQUEST)
+
 class DeleteTemplates(APIView):
-    
     serializer_class = TemplatesSerializer
 
     def delete(self, request, format=None):
@@ -109,8 +124,10 @@ class DeleteTemplates(APIView):
         if serializer.is_valid():
             serializer.delete()
             return Response(serializer.data, status=status.HTTP_200_OK)
-        return Response({
-            'status': 'Bad request',
-            'message': 'Template could not be deleted with received data.'
-        }, status=status.HTTP_400_BAD_REQUEST
+        return Response(
+            {
+                "status": "Bad request",
+                "message": "Template could not be deleted with received data.",
+            },
+            status=status.HTTP_400_BAD_REQUEST,
         )

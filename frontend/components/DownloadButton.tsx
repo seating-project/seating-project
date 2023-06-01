@@ -7,6 +7,7 @@ import drf from "../pages/api/axiosConfig";
 
 type Props = {
   links: string[];
+  
 };
 
 const DownloadButton = ({ links }: Props) => {

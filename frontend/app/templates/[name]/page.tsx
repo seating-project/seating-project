@@ -51,6 +51,7 @@ const TemplateNamePage = async ({ params }: any) => {
   const ldata = await getLogoData();
   let logo = ldata.filter((item: { id: any }) => item.id == template.logo)[0];
   const wholeImagePath = logo.image;
+  console.log(wholeImagePath);
   const imagePath = wholeImagePath.split("media/")[1];
   const logoUrl = await getImageUrl(imagePath);
 

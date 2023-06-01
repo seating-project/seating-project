@@ -48,16 +48,7 @@ export default async function ExamPage({ params }: any) {
     }
   }
 
-  const deleteExam = async () => {
-    try {
-      const res = await drf.delete(`/exams/${name}`);
-      console.log(res);
-      // window.location.href = "/";
-    } catch (error) {
-      console.error(error);
-      // return null;
-    }
-  };
+  
 
   const nameGot = params.name;
   const name = decodeURIComponent(nameGot);
@@ -104,13 +95,13 @@ export default async function ExamPage({ params }: any) {
           </div>
         </div>
         <div>
-          <DeleteButton />
+          <DeleteButton name={name} />
         </div>
       </div>
       <div className="flex flex-col justify-center px-10 mt-6 gap-6 ">
         <div>
           <div className="flex flex-col  ">
-            <DownloadButton links={links} />
+            <DownloadButton links={links}  />
           </div>
         </div>
 

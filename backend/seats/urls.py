@@ -15,8 +15,8 @@ urlpatterns = [
     path("degrees/", DegreesList.as_view(), name="seats_home"),
     path("createtemplates/", CreateTemplates.as_view(), name="seats_home"),
     path("createexams/", CreateExams.as_view(), name="seats_home"),
-    path("deleteexams/", DeleteExams.as_view(), name="seats_home"),
-    path('get-image/<path:image_path>/',
+    path("deleteexams/<str:exam_name>", DeleteExams.as_view(), name="seats_home"),
+    path('get-image/<path:image_path>',
          GetImageView.as_view(), name='get_image'),
     path('logos/', LogoList.as_view(), name='logos'),
 ]

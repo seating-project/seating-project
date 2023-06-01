@@ -2,7 +2,7 @@
 FROM python:3.10.6-alpine
 
 # set work directory
-WORKDIR /code
+WORKDIR /app
 
 # RUN apk add --no-cache gcc musl-dev linux-headers
 
