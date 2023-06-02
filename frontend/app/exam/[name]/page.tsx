@@ -7,6 +7,7 @@ import Link from "next/link";
 import Navbar from "../../../components/Navbar";
 import DownloadButton from "../../../components/DownloadButton";
 import DeleteButton from "../../../components/DeleteButton";
+import { isEqual } from "lodash";
 
 export default async function ExamPage({ params }: any) {
   async function getExamData() {
@@ -48,8 +49,6 @@ export default async function ExamPage({ params }: any) {
     }
   }
 
-  
-
   const nameGot = params.name;
   const name = decodeURIComponent(nameGot);
 
@@ -68,6 +67,8 @@ export default async function ExamPage({ params }: any) {
 
   const rooms = roomdata.rooms;
   const ranges = roomdata.ranges;
+
+  let startDate = new Date().toDateString();
 
   const tdata = await getTemplateData();
   const template = tdata.filter(
@@ -101,7 +102,7 @@ export default async function ExamPage({ params }: any) {
       <div className="flex flex-col justify-center px-10 mt-6 gap-6 ">
         <div>
           <div className="flex flex-col  ">
-            <DownloadButton links={links}  />
+            <DownloadButton links={links} />
           </div>
         </div>
 
@@ -139,12 +140,12 @@ export default async function ExamPage({ params }: any) {
           </div>
         </div>
         <div className="p-6 flex justify-around items-center  bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
-          <div className="flex flex-col">
-            <p className="mb-2 text-4xl font-bold tracking-tight text-gray-900 dark:text-white">
+          <div className="flex flex-col w-1/3">
+            <p className="mb-2 text-4xl font-bold tracking-tight text-gray-900 pl-10 dark:text-white">
               Notice Board Copies
             </p>
           </div>
-          <div className="flex flex-col p-4">
+          <div className="flex flex-col p-4 w-2/3">
             {Object.keys(rooms).map((date: string) => {
               let dateObj: Date = new Date(date);
               dateNow = dateObj.toDateString();
@@ -209,31 +210,98 @@ export default async function ExamPage({ params }: any) {
             })}
           </div>
         </div>
-        <div className="p-6 flex gap-x-12  max-h-1/2 items-center  bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
-          <div className="flex flex-col">
-            <p className="mb-2 text-4xl font-bold tracking-tight text-gray-900 dark:text-white">
+        <div className="p-6 flex gap-x-12  justify-around  items-center  bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
+          <div className="flex flex-col w-1/3 ">
+            <p className="mb-2  text-4xl font-bold tracking-tight pl-10 text-gray-900 dark:text-white">
               Attendance Copies
             </p>
           </div>
-          <div className="flex flex-col flex-wrap max-h-80 gap-x-8">
-            {ROOMS.map((room: string) => {
-              // let dateObj: Date = new Date(date);
-              // dateNow = dateObj.toDateString();
-              // dateObj = new Date(date);
-              return (
-                <Link
-                  // href={`/exam/${name}/hallplan/${dateObj
-                  //   .toISOString()
-                  //   .substring(0, 10)}`}
-                  href={`/exam/${name}/attendance/${room}`}
-                  className="text-xl py-2 font-mono justify-between items-center inline-block relative text-blue after:content-[''] after:absolute after:w-full
-            after:scale-x-0 after:h-[2px] after:bottom-0 after:left-0 after:bg-dark-blue after:origin-bottom-right after:transition-transform
-         after:duration-300 ease-out hover:after:scale-x-100 hover:after:origin-bottom-left"
-                >
-                  {" "}
-                  Attendance - {room}{" "}
-                </Link>
+          <div className="flex flex-col w-2/3 flex-wrap gap-y-8 gap-x-8">
+            
+            {Object.keys(ranges).map((date: string) => {
+              let equalRanges: string[][] = [];
+              let startDate2 = new Date().toDateString();
+              let temp: string[] = [];
+              Object.keys(ranges).map((date) => {
+                if (isEqual(ranges[date], ranges[startDate2])) {
+                  temp.push(date);
+                } else {
+                  if (temp.length > 0) {
+                    equalRanges.push(temp);
+                  }
+                  temp = [];
+                  temp.push(date);
+                  startDate2 = date;
+
+                  if (
+                    date ==
+                      Object.keys(ranges)[Object.keys(ranges).length - 1] &&
+                    temp.length > 0
+                  ) {
+                    equalRanges.push(temp);
+                  }
+                }
+              });
+
+              let dateRange: string[] = [];
+              equalRanges.map((item) => {
+                if (item.includes(date)) {
+                  dateRange = item;
+                }
+              });
+
+              let isEqualResult: boolean = isEqual(
+                ranges[date],
+                ranges[startDate]
               );
+              if (!isEqualResult) {
+                console.log("start date and date", startDate, date);
+                console.log(ranges[startDate], ranges[date]);
+                if (startDate != "") {
+                  startDate = date;
+                }
+                let roomsForDay: string[] = [];
+                Object.keys(ranges[date]).map((building: string) => {
+                  Object.keys(ranges[date][building]).map((room: string) => {
+                    if (!roomsForDay.includes(room)) {
+                      roomsForDay.push(room);
+                    }
+                  });
+                });
+                return (
+                  <div>
+                    {dateRange.length > 1 ? (
+                      <p className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+                        {dateRange[0]} - {dateRange[dateRange.length - 1]}
+                      </p>
+                    ) : (
+                      <p className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+                        {dateRange[0]}
+                      </p>
+                    )}
+
+                    {roomsForDay.map((room: string) => {
+                      links.push(
+                        `http://localhost:3000/exam/${encodeURIComponent(
+                          name
+                        )}/attendance/${date}/${room}`
+                      )
+                      return (
+                        <Link
+                          href={`/exam/${name}/attendance/${date}/${room}`}
+                          className="text-xl py-2 font-mono justify-between items-center inline-block relative text-blue after:content-[''] after:absolute after:w-full
+              after:scale-x-0 after:h-[2px] after:bottom-0 after:left-0 after:bg-dark-blue after:origin-bottom-right after:transition-transform
+            after:duration-300 ease-out hover:after:scale-x-100 hover:after:origin-bottom-left"
+                        >
+                          {" "}
+                          Attendance - {room} &nbsp;
+                        </Link>
+                      );
+                    })}
+                  </div>
+                );
+              } else {
+              }
             })}
           </div>
         </div>

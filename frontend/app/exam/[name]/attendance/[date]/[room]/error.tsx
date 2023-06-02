@@ -1,5 +1,5 @@
 'use client'; // Error components must be Client components
-import '../../../../../styles/globals.css';
+import '../../../../../../styles/globals.css';
 
 import { useEffect } from 'react';
 

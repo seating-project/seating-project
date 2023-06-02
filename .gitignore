@@ -1,5 +1,7 @@
 /backend/core/creds.py
 /__pycache__/
+/backend/backend/__pycache__/
+/backend/seats/__pycache__/
 /frontend/node_modules/
 /.pnp
 .pnp.js

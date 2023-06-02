@@ -4,6 +4,7 @@ import "../../../styles/globals.css";
 import { NextPage } from "next";
 import drf from "../../../pages/api/axiosConfig";
 import Image from "next/image";
+import DeleteButton from "../../../components/DeleteButtonTemplate";
 
 const TemplateNamePage = async ({ params }: any) => {
   const nameGot = params.name;
@@ -63,10 +64,13 @@ const TemplateNamePage = async ({ params }: any) => {
       <div className="bg-cover bg-light-blue flex">
         <div className="flex flex-col m-24 w-screen p-6 bg-white border border-gray-200 rounded-lg shadow hover:shadow-xl dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
           {/* <Navbar /> */}
-          <div className="flex pl-2 py-4 flex-wrap flex-row items-center ">
+          <div className="flex pl-2 py-4 flex-wrap flex-row items-center justify-between">
             <h1 className="text-4xl font-bold text-centermb-2 tracking-tight text-gray-900 dark:text-white">
               {name}
             </h1>
+            <div className="flex flex-row items-center">
+              <DeleteButton name={name} />
+            </div>
           </div>
           <div className="flex  text-2xl w-full">
             <div className="flex flex-col text-2xl w-1/3">

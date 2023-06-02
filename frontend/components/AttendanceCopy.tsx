@@ -1,5 +1,5 @@
 // import React from 'react'
-import Page from "../components/PotraitPage";
+import Page from "./PotraitPage";
 import Image from "next/image";
 import styles from "../styles/Notice.module.css";
 
@@ -60,13 +60,13 @@ interface Ranges2 {
 type Props = {
   ranges: Ranges | Ranges2;
   exam: Exam;
-  date: string;
+  date: string[];
   room: string;
   logoUrl: string;
   isbg: boolean;
 };
 
-interface SuffixType  {
+interface SuffixType {
   [key: string]: string;
 }
 
@@ -77,16 +77,11 @@ const SUFFIX: SuffixType = {
   "4": "th",
 };
 
-const NoticeBoardCopy = ({
-  ranges,
-  exam,
-  date,
-  room,
-  logoUrl,
-  isbg,
-}: Props) => {
+const AttendanceCopy = ({ ranges, exam, date, room, logoUrl, isbg }: Props) => {
   console.log("RANGES WE GOT", ranges);
   console.log("CURRENT ROOM", room);
+
+  console.log("DATE", date);
 
   //   let dept_and_their_ranges = {};
   //   Object.keys(ranges[]).forEach((k) => {
@@ -191,10 +186,14 @@ const NoticeBoardCopy = ({
                 </th>
                 <th className="border-2 border-black text-xs p-2">
                   __________
-                </th> */} 
-                <th className="border-2 border-black text-xs p-2">
-                  __________
-                </th>
+                </th> */}
+                {date.map((d) => {
+                return (
+                  <td className="border-2 border-black text-xs p-1">
+                    __________
+                  </td>
+                );
+              })}
               </tr>
             );
           });
@@ -234,12 +233,21 @@ const NoticeBoardCopy = ({
                 return <td className="border-2 border-black text-xs p-1" width={100}></td>;
             })
             } */}
+              {/* <td className="border-2 border-black text-xs p-1">__________</td>
               <td className="border-2 border-black text-xs p-1">__________</td>
               <td className="border-2 border-black text-xs p-1">__________</td>
               <td className="border-2 border-black text-xs p-1">__________</td>
               <td className="border-2 border-black text-xs p-1">__________</td>
-              <td className="border-2 border-black text-xs p-1">__________</td>
-              <td className="border-2 border-black text-xs p-1">__________</td>
+              <td className="border-2 border-black text-xs p-1">__________</td> */}
+
+              {date.map((d) => {
+                return (
+                  <td className="border-2 border-black text-xs p-1">
+                    __________
+                  </td>
+                );
+              })}
+
             </tr>
           );
         });
@@ -272,21 +280,12 @@ const NoticeBoardCopy = ({
             <th className="border-2 border-black text-xs p-2">Reg. No</th>
             <th className="border-2 border-black text-xs p-2">Name</th>
             <th className="border-2 border-black text-xs p-2">Dept</th>
-            {/* {dates.map((date) => {
-                      // if (date=="2023-04-27" || date=="2023-04-28" || date=="2023-04-29" || date=="2023-04-20" || date=="2023-04-22" ) {
-                      //   return <th className="border-2 border-black text-xs p-2" >{date}</th>;
-                      // }
-                      if (date=="2023-04-28") {
-                        return <th className="border-2 border-black text-xs p-2" >{date}</th>;
-                      }
-                    })
-                    } */}
-            <th className="border-2 border-black text-xs p-2">__________</th>
-            <th className="border-2 border-black text-xs p-2">__________</th>
-            <th className="border-2 border-black text-xs p-2">__________</th>
-            <th className="border-2 border-black text-xs p-2">__________</th>
-            <th className="border-2 border-black text-xs p-2">__________</th>
-            <th className="border-2 border-black text-xs p-2">__________</th>
+            
+            
+            {date.map((d) => {
+              return <th className="border-2 border-black text-xs p-2">{d}</th>;
+            })}
+
           </tr>
         </thead>
         <tbody>{temp}</tbody>
@@ -322,4 +321,4 @@ const NoticeBoardCopy = ({
   );
 };
 
-export default NoticeBoardCopy;
+export default AttendanceCopy;

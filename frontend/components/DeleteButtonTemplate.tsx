@@ -22,7 +22,7 @@ const DeleteButton = (props: Props) => {
 
   const router = useRouter();
 
-  const notify = () => toast(`Exam ${props.name} has been deleted`, {icon: '❌'});
+  const notify = () => toast(`Template ${props.name} has been deleted`, {icon: '❌'});
 
   const [deleted, setDeleted] = React.useState(false);
 
@@ -30,7 +30,7 @@ const DeleteButton = (props: Props) => {
     try {
       
       console.log("delete")
-      const res = await axios.delete(`http://127.0.0.1:8000/deleteexams/${props.name}`);
+      const res = await axios.delete(`http://127.0.0.1:8000/deletetemplates/${props.name}`);
       console.log(res);
       // alert("Exam deleted successfully");
       
@@ -41,7 +41,7 @@ const DeleteButton = (props: Props) => {
       
     } catch (error) {
       console.log(error);
-      alert("Failed to delete exam");
+      alert("Failed to delete template");
       // return null;
     }
   };
@@ -51,7 +51,7 @@ const DeleteButton = (props: Props) => {
       <button 
       onClick={handleDeleteClick} 
       className="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-xl px-5 py-2.5 mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">
-        Delete Exam
+        Delete Template
       </button>
       <Toaster />
     </div>

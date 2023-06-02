@@ -1,9 +1,10 @@
-import NoticeBoardCopy from "../../../../../../components/AttendanceCopy";
+import AttendanceCopy from "../../../../../../components/AttendanceCopy";
 import OldNotice from "../../../../../../components/OldNotice";
 import drf from "../../../../../../pages/api/axiosConfig";
 import "../../../../../../styles/globals.css";
+import { isEqual } from "lodash";
 
-export default async function HallPlanPage({ params }: any) {
+export default async function AttendancePage({ params }: any) {
   async function getExamData() {
     try {
       const res = await drf.get("/exams/");
@@ -58,14 +59,16 @@ export default async function HallPlanPage({ params }: any) {
 
   const nameGot = params.name;
   const name = decodeURIComponent(nameGot);
+  const roomGot = params.room;
+  const roomNoice = decodeURIComponent(roomGot);
   const dateGot = params.date;
   const date = decodeURIComponent(dateGot);
-  const genderGot = params.gender;
-  const gender = decodeURIComponent(genderGot);
 
   const edata = await getExamData();
   const rdata = await getRoomData();
   const tdata = await getTemplateData();
+
+  console.log("NAME", name);
 
   let exam = edata.filter(
     (item: { exam_name: any }) => item.exam_name == name
@@ -94,12 +97,47 @@ export default async function HallPlanPage({ params }: any) {
   let dateNow = new Date();
 
   //   console.log("DATE", date);
+  // const date = "2023-04-22";
+  // const dateObject = new Date("2023-05-12");
+
+  let equalRanges: string[][] = []
+  let startDate = new Date().toDateString()
+  let temp: string[] = []
+  Object.keys(ranges).map((date) => {
+    if (isEqual(ranges[date], ranges[startDate])) {
+      temp.push(date)
+    } else {
+      if (temp.length > 0) {
+        equalRanges.push(temp)
+      }
+      temp = []
+      temp.push(date)
+      startDate = date
+
+      if (date == Object.keys(ranges)[Object.keys(ranges).length - 1] && temp.length > 0) {
+        equalRanges.push(temp)
+      }
+    }
+
+  })
+
+  console.log("EQUAL RANGES", equalRanges)
+
+
   const dateObject = new Date(date);
   const roomsCurrent = rooms[dateObject.toISOString().slice(0, 10)];
   //   console.log(roomsCurrent);
   const rangesCurrent = ranges[dateObject.toISOString().slice(0, 10)];
-  console.log("RANGES", rangesCurrent);
+  console.log("RANGES", ranges);
+  console.log("ROOM", roomNoice);
   //   console.log("RANGES CURRENT", rangesCurrent["Main Building"]["F1"]);
+
+    let dateRange:string[] = []
+    equalRanges.map((item) => {
+      if (item.includes(date)) {
+        dateRange = item
+      }
+    })
 
   return (
     <>
@@ -112,17 +150,15 @@ export default async function HallPlanPage({ params }: any) {
             })
         })
         } */}
-      {/* <NoticeBoardCopy ranges={rangesCurrent["Main Building"]["EH13"]} exam={exam} date={date} room={"EH13"} logoUrl={logoUrl} /> */}
-      <OldNotice
-        gender={gender}
-        building="Main Building"
-        exam={name}
-        date={date}
-        ranges={rangesCurrent}
+      <AttendanceCopy
+        ranges={rangesCurrent["Main Building"][roomNoice]}
+        exam={exam}
+        date={dateRange}
+        room={roomNoice}
         logoUrl={logoUrl as string}
-        bgsep={template.is_boys_girls_separation}
-        strictDivide={exam.strictly_divide_buildings}
+        isbg={template.is_boys_girls_separation}
       />
+      {/* <OldNotice gender="boys" building="Main Building" exam={name} date={date} ranges={rangesCurrent} logoUrl={logoUrl} /> */}
     </>
   );
 }

@@ -14,12 +14,15 @@ export async function downloadPDFs(links: string[]) {
 
   // create pdf folder in root directory
   const pdfsDir = path.join(process.cwd(), "pdfs", examName);
+
+  const attendanceDir = path.join(pdfsDir, "attendance");
   console.log("PDF", pdfsDir);
 
   let message = "";
 
   try {
     await fs.mkdir(pdfsDir, { recursive: true });
+    await fs.mkdir(attendanceDir, { recursive: true });
   } catch (error: any) {
     if (error.code !== "EEXIST") {
       throw error;
@@ -43,7 +46,8 @@ export async function downloadPDFs(links: string[]) {
 
     if (docName === "attendance") {
       const room = url.split("/")[url.split("/").length - 1];
-      const pdfPath = `${pdfsDir}/${docName}_${room}_${i}.pdf`;
+      const date = url.split("/")[url.split("/").length - 2];
+      const pdfPath = `${attendanceDir}/${docName}_${room}_${date}.pdf`;
       await page.goto(url, { waitUntil: "networkidle0" });
       await page.pdf({ path: pdfPath, format: "A4" });
     } else if (docName === "allotments") {

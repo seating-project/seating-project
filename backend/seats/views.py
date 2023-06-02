@@ -117,17 +117,13 @@ class DeleteExams(APIView):
         return Response( status=status.HTTP_400_BAD_REQUEST)
 
 class DeleteTemplates(APIView):
-    serializer_class = TemplatesSerializer
+    
+    http_method_names = ["delete"]
 
-    def delete(self, request, format=None):
-        serializer = TemplatesSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.delete()
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        return Response(
-            {
-                "status": "Bad request",
-                "message": "Template could not be deleted with received data.",
-            },
-            status=status.HTTP_400_BAD_REQUEST,
-        )
+    serializer_class = TemplatesSerializer
+    def delete(self, request, template_name, format=None):
+        template = Templates.objects.filter(template_name=template_name)
+        if template:
+            template.delete()
+            return Response({"status":"ok"}, status=status.HTTP_200_OK)
+        return Response( status=status.HTTP_400_BAD_REQUEST)

@@ -974,27 +974,28 @@ function ClassAllotment(params: ClassAllotmentParams) {
                     <th className="border-2 border-black text-sm p-2">
                       {" "}
                       Date: 
-                      {/* {formattedDate}{" "} */}
-                      {"15/05/2023"}
+                      &nbsp;
+                      {formattedDate}{" "}
+                      {/* {"15/05/2023"} */}
                       
                     </th>
                     <th className="border-2 border-black text-sm p-2">
                       {" "}
                       Session:{" "}
-                      {/* {parseInt(template.start_time.split(":")[0]) >= 8 &&
+                      {parseInt(template.start_time.split(":")[0]) >= 8 &&
                       parseInt(template.start_time.split(":")[0]) < 12
                         ? "FN"
                         : parseInt(template.end_time.split(":")[0]) >= 12 &&
                           parseInt(template.end_time.split(":")[0]) < 17
                         ? "AN"
-                        : null} */}
-                        {"AN"}
+                        : null}
+                        {/* {"AN"} */}
                         {/* _____ */}
                     </th>
                     <th className="border-2 border-black text-sm p-2">
                       {" "}
                       Time: {" "}
-                      {/* {template.start_time.slice(0, 5)} {" "}
+                      {template.start_time.slice(0, 5)} {" "}
                       {(parseInt(template.start_time.split(":")[0]) >= 8 && parseInt(template.start_time.split(":")[0]) < 12) && "AM"} 
                       {(parseInt(template.start_time.split(":")[0]) == 12) && "Noon"}
                       {(parseInt(template.start_time.split(":")[0]) >= 12 && parseInt(template.start_time.split(":")[0]) < 4) && "PM"} 
@@ -1002,8 +1003,8 @@ function ClassAllotment(params: ClassAllotmentParams) {
                       {template.end_time.slice(0, 5)} {" "}
                       {(parseInt(template.end_time.split(":")[0]) >= 8 && parseInt(template.end_time.split(":")[0]) < 12) && "AM"} 
                       {(parseInt(template.end_time.split(":")[0]) == 12) && "Noon"}
-                      {(parseInt(template.end_time.split(":")[0]) >= 12 && parseInt(template.end_time.split(":")[0]) < 4) && "PM"}  */}
-                      {"12:00 Noon to 3:00 PM"}
+                      {(parseInt(template.end_time.split(":")[0]) >= 12 && parseInt(template.end_time.split(":")[0]) < 4) && "PM"} 
+                      {/* {"12:00 Noon to 3:00 PM"} */}
                       {/* {template.start_time.slice(0, 5)} Noon to{" "}
                       {template.end_time.slice(0, 5)} PM {" "} */}
                     </th>
