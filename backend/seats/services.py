@@ -1013,8 +1013,10 @@ def Allotments(data):
 
             if curr_template.is_single_seater:
 
-                if exam_curr.is_alternate_dept_seated:
-
+                if curr_template.is_alternate_dept_seated:
+                    
+                    ckt_array = []
+                    nckt_array = []
                     for dept_year in ckt_dept:
                         dept = dept_year.split()[0]
                         year = dept_year.split()[1]
