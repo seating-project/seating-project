@@ -48,6 +48,8 @@ const FLOORS = {
   T: "Third Floor",
   MT: "Third Floor",
   EH: "New Building",
+  LH: "New Building",
+  DH: "New Building",
 };
 
 const PGDEPT = {
@@ -72,6 +74,21 @@ for (let i = 21; i <= 27; i++) {
   ROOMNO[i] = "Block B - First Floor";
 }
 
+const ROOMNO_NEW_LH: RoomNo = {};
+
+for (let i = 1; i <= 5; i++) {
+  ROOMNO_NEW_LH[i] = "Block B - Ground Floor";
+}
+for (let i = 6; i <= 10; i++) {
+  ROOMNO_NEW_LH[i] = "Block C - Ground Floor";
+}
+
+const ROOMNO_NEW_DH: RoomNo = {};
+
+for (let i = 1; i <= 5; i++) {
+  ROOMNO_NEW_DH[i] = "Block B - First Floor";
+}
+
 const REG = new RegExp("(?<=\\D)(?=\\d)|(?<=\\d)(?=\\D)");
 
 const OldNotice = (props: Props) => {
@@ -80,6 +97,7 @@ const OldNotice = (props: Props) => {
   let dept_and_their_ranges = {};
 
   if (props.bgsep == true) {
+    console.log("BGSEP TRUE");
     Object.keys(props.ranges[props.building]).forEach((room) => {
       console.log("ROOM", room);
       Object.keys(props.ranges[props.building][room]).forEach((g) => {
@@ -104,6 +122,7 @@ const OldNotice = (props: Props) => {
       });
     });
   } else {
+    console.log(props.ranges["New Building"]);
     Object.keys(props.ranges[props.building]).forEach((room) => {
       console.log("ROOM", room);
       Object.keys(props.ranges[props.building][room]).forEach((dept) => {
@@ -280,17 +299,46 @@ const OldNotice = (props: Props) => {
             </b>
             <br />
             {/* {FLOORS[Object.keys(dept_and_their_ranges[deptRange][i])[0].split(REG)[0]]} */}
-            {Object.keys(dept_and_their_ranges[deptRange][i])[0].includes("EH")
-              ? ROOMNO[
-                  Object.keys(dept_and_their_ranges[deptRange][i])[0].split(
-                    REG
-                  )[1]
-                ]
-              : FLOORS[
-                  Object.keys(dept_and_their_ranges[deptRange][i])[0].split(
-                    REG
-                  )[0]
-                ]}
+            {Object.keys(dept_and_their_ranges[deptRange][i])[0].includes(
+              "EH"
+            ) &&
+              ROOMNO[
+                Object.keys(dept_and_their_ranges[deptRange][i])[0].split(
+                  REG
+                )[1]
+              ]}
+            {Object.keys(dept_and_their_ranges[deptRange][i])[0].includes(
+              "LH"
+            ) &&
+              ROOMNO_NEW_LH[
+                Object.keys(dept_and_their_ranges[deptRange][i])[0].split(
+                  REG
+                )[1]
+              ]}
+
+            {Object.keys(dept_and_their_ranges[deptRange][i])[0].includes(
+              "DH"
+            ) &&
+              ROOMNO_NEW_DH[
+                Object.keys(dept_and_their_ranges[deptRange][i])[0].split(
+                  REG
+                )[1]
+              ]}
+
+            {(Object.keys(dept_and_their_ranges[deptRange][i])[0].includes(
+              "F"
+            ) ||
+              Object.keys(dept_and_their_ranges[deptRange][i])[0].includes(
+                "S"
+              ) ||
+              Object.keys(dept_and_their_ranges[deptRange][i])[0].includes(
+                "T"
+              )) &&
+              FLOORS[
+                Object.keys(dept_and_their_ranges[deptRange][i])[0].split(
+                  REG
+                )[0]
+              ]}
           </td>
         );
         if (!props.bgsep) {

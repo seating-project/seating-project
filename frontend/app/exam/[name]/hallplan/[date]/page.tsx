@@ -1,3 +1,4 @@
+import { isEmpty } from "lodash";
 import NoticeBoardCopy from "../../../../../components/AttendanceCopy";
 import OldNotice from "../../../../../components/OldNotice";
 import drf from "../../../../../pages/api/axiosConfig";
@@ -99,6 +100,11 @@ export default async function HallPlanPage({ params }: any) {
   console.log("RANGES", rangesCurrent);
   //   console.log("RANGES CURRENT", rangesCurrent["Main Building"]["F1"]);
 
+  let building = "Main Building"
+  if (isEmpty(rangesCurrent[building])) {
+    building = "New Building"
+  }
+
   return (
     <>
       {/* {Object.keys(rangesCurrent).map((building) => {
@@ -113,7 +119,7 @@ export default async function HallPlanPage({ params }: any) {
       {/* <NoticeBoardCopy ranges={rangesCurrent["Main Building"]["EH13"]} exam={exam} date={date} room={"EH13"} logoUrl={logoUrl} /> */}
       <OldNotice
         gender="boys"
-        building="Main Building"
+        building={building}
         exam={name}
         date={date}
         ranges={rangesCurrent}
