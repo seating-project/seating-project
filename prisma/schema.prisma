@@ -67,10 +67,10 @@ model Student {
   id             Int        @id @default(autoincrement())
   name           String
   registerNumber String     @unique
-  gender         String
-  department     Department @relation(fields: [departmentId], references: [id])
-  year           Year       @relation(fields: [yearId], references: [id])
-  degree         Degree     @relation(fields: [degreeId], references: [id])
+  gender         Gender
+  Department     Department @relation(fields: [departmentId], references: [id])
+  Year           Year       @relation(fields: [yearId], references: [id])
+  Degree         Degree     @relation(fields: [degreeId], references: [id])
   departmentId   Int
   yearId         Int
   degreeId       Int
@@ -80,7 +80,7 @@ model Student {
 model Year {
   id       Int       @id @default(autoincrement())
   year     Int       @unique
-  students Student[]
+  Students Student[]
 }
 
 model Degree {
@@ -89,30 +89,30 @@ model Degree {
   fullName    String
   duration    Int
   type        DegreeType
-  departments Department[]
-  students    Student[]
+  Departments Department[]
+  Students    Student[]
 }
 
 model Department {
   id               Int            @id @default(autoincrement())
   branch           String         @unique
-  shortName        String
+  shortName        String         @unique
   code             String
   Degree           Degree         @relation(fields: [degreeId], references: [id])
   type             DepartmentType
-  students         Student[]
+  Students         Student[]
   degreeId         Int
-  subjects         Subject[]
-  departmentsLeft  Exam[]         @relation("departmentsLeft")
-  departmentsRight Exam[]         @relation("departmentsRight")
-  departments      Template[]     @relation("departments")
+  Subjects         Subject[]
+  DepartmentsLeft  Exam[]         @relation("DepartmentsLeft")
+  DepartmentsRight Exam[]         @relation("DepartmentsRight")
+  Departments      Template[]     @relation("Departments")
 }
 
 model Building {
   id         Int       @id @default(autoincrement())
   name       String    @unique
-  rooms      Room[]
-  blocks     Block[]
+  Rooms      Room[]
+  Blocks     Block[]
   Template   Template? @relation(fields: [templateId], references: [id])
   templateId Int?
 }
@@ -120,13 +120,14 @@ model Building {
 model Room {
   id         Int       @id @default(autoincrement())
   number     String    @unique
+  floor      Int
   strength   Int
-  building   Building  @relation(fields: [buildingId], references: [id])
+  Building   Building  @relation(fields: [buildingId], references: [id])
   buildingId Int
-  block      Block     @relation(fields: [blockId], references: [id])
+  Block      Block     @relation(fields: [blockId], references: [id])
   blockId    Int
-  roomOrder  Exam[]    @relation("roomsOrder")
-  girlsRoom  Exam[]    @relation("girlsRooms")
+  RoomOrder  Exam[]    @relation("RoomsOrder")
+  GirlsRoom  Exam[]    @relation("GirlsRooms")
   Template   Template? @relation(fields: [templateId], references: [id])
   templateId Int?
 }
@@ -134,8 +135,8 @@ model Room {
 model Block {
   id         Int      @id @default(autoincrement())
   name       String   @unique
-  rooms      Room[]
-  building   Building @relation(fields: [buildingId], references: [id])
+  Rooms      Room[]
+  Building   Building @relation(fields: [buildingId], references: [id])
   buildingId Int
 }
 
@@ -143,7 +144,7 @@ model Subject {
   id          Int          @id @default(autoincrement())
   name        String
   code        String       @unique
-  departments Department[]
+  Departments Department[]
 }
 
 model Exam {
@@ -158,12 +159,12 @@ model Exam {
   // setsForWhichSubjects      Subject[]
   // noOfSets                  Int?
   secondColumnOptions       SecondColumnOptions
-  departmentsLeft           Department[]        @relation("departmentsLeft")
-  departmentsRight          Department[]        @relation("departmentsRight")
+  DepartmentsLeft           Department[]        @relation("DepartmentsLeft")
+  DepartmentsRight          Department[]        @relation("DepartmentsRight")
   minimumStudentsInRoom     Int                 @default(60)
   randomizeEveryNRooms      Int                 @default(0)
-  roomsOrder                Room[]              @relation("roomsOrder")
-  girlsRooms                Room[]              @relation("girlsRooms")
+  RoomsOrder                Room[]              @relation("RoomsOrder")
+  GirlsRooms                Room[]              @relation("GirlsRooms")
   strictlyDivideBuildings   Boolean             @default(false)
   isCommonRoomStrength      Boolean             @default(false)
 }
@@ -173,12 +174,12 @@ model Template {
   name                        String       @unique
   numberOfRows                Int
   numberOfColumns             Int
-  departments                 Department[] @relation("departments")
+  Departments                 Department[] @relation("Departments")
   roomStrength                Int
-  rooms                       Room[]
+  Rooms                       Room[]
   isSingleSeater              Boolean
   isBoysGirlsSeparate         Boolean
-  buildings                   Building[]
+  Buildings                   Building[]
   startTime                   DateTime
   endTime                     DateTime
   isAlternateDepartmentSeated Boolean
@@ -202,4 +203,9 @@ enum DegreeType {
 enum SecondColumnOptions {
   PresentAbsent
   SeatNumber
+}
+
+enum Gender {
+  Male
+  Female
 }

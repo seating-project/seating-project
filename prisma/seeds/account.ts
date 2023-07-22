@@ -1,5 +1,5 @@
 import * as argon2 from "argon2";
-import { type Prisma, type PrismaClient } from "@prisma/client";
+import { type PrismaClient } from "@prisma/client";
 
 export default async function seedAccounts(prisma: PrismaClient) {
   const password = await argon2.hash("seats@123");

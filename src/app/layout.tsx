@@ -1,5 +1,4 @@
 import "@/app/globals.css";
-import MainNav from "@/components/client/MainNav";
 import { getServerAuthSession } from "@/server/auth";
 import { Inter } from "next/font/google";
 import { twMerge } from "tailwind-merge";
@@ -30,9 +29,6 @@ export default async function RootLayout({
           inter.variable
         )}
       >
-        {/* <div className="sticky top-0">
-          <MainNav session={session} />
-        </div> */}
         {children}
         <Toaster />
       </body>

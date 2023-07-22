@@ -8,9 +8,12 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   const session = await getServerAuthSession();
-  return <div>
-        <div className="sticky top-0">
+  return (
+    <div>
+      <div className="sticky top-0">
         <MainNav session={session} />
-        </div>
-    {children}</div>;
+      </div>
+      {children}
+    </div>
+  );
 }
