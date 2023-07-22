@@ -9,14 +9,14 @@ export default async function Home() {
     redirect("/login");
   }
 
-  const exams = await api.exam.getLatestExams.query();
+  // const exams = await api.exam.getLatestExams.query();
 
   return (
     <div className="w-full ">
       <div className="p-8">
         <p className="text-2xl font-bold">Current Exams</p>
         <div className="">
-          {exams.length === 0 ? (
+          {/* {exams.length === 0 ? (
             <div>
               <p>No exams</p> 
             </div>
@@ -24,7 +24,7 @@ export default async function Home() {
             <div>
               <p>length {exams.length}</p>
             </div>
-          )}
+          )} */}
         </div>
       </div>
     </div>

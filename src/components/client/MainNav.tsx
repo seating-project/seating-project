@@ -10,7 +10,7 @@ type Props = {
 
 const MainNav = ({ session }: Props) => {
   return (
-    <div className="flex w-full items-center justify-between space-x-4 border-b p-4">
+    <div className="flex w-full items-center justify-between space-x-4 border-b p-4 darK:bg-primary">
       <div className="flex space-x-4">
         <div className="rounded-md bg-black p-2 font-mono text-2xl dark:bg-white">
           <Link href="/" passHref>

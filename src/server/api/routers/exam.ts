@@ -7,6 +7,6 @@ import {
 
 export const examRouter = createTRPCRouter({
   getLatestExams: protectedProcedure.query(async ({ ctx }) => {
-    return ctx.prisma.exam.findMany({});
+    return ctx.prisma.exam.findMany();
   }),
 });
