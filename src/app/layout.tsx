@@ -1,5 +1,5 @@
 import "@/app/globals.css";
-import { getServerAuthSession } from "@/server/auth";
+// import { getServerAuthSession } from "@/server/auth";
 import { Inter } from "next/font/google";
 import { twMerge } from "tailwind-merge";
 import { Toaster } from "@/components/ui/toaster"
@@ -15,12 +15,12 @@ export const metadata = {
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const session = await getServerAuthSession();
+  // const session = await getServerAuthSession();
   return (
     <html lang="en">
       <body

@@ -6,7 +6,9 @@ type Props = {
   session: Session | null;
 };
 
-const RootNav = ({ session }: Props) => {
+const RootNav = (
+  { session }: Props
+  ) => {
   return (
     <div className=" flex items-center border-b p-4">
       <div className="rounded-md bg-black p-2 font-mono text-2xl dark:bg-white">
