@@ -54,34 +54,34 @@ import {
   // View,
   Trash2,
   Download,
+  PlusCircle,
+  View,
 } from "lucide-react";
 import toast from "react-hot-toast";
 import { api } from "@/trpc/client";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 
-type RequiredStudentData = {
+type RequiredTemplateData = {
   id: number;
   name: string;
-  registerNumber: string;
-  gender: string;
-  department: string;
-  year: number;
-  degree: string;
+  roomStrength: number;
+  startTime: Date;
+  endTime: Date;
 };
 
 type Props = {
-  data: RequiredStudentData[];
+  data: RequiredTemplateData[];
   pageCount?: number;
 };
 
-const StudentTable = (props: Props) => {
+const TemplateTable = (props: Props) => {
   const router = useRouter();
   // const pathname = usePathname();
 
   const [isPending, startTransition] = React.useTransition();
 
-  const columns: ColumnDef<RequiredStudentData>[] = [
+  const columns: ColumnDef<RequiredTemplateData>[] = [
     {
       id: "select",
       header: ({ table }) => (
@@ -116,45 +116,23 @@ const StudentTable = (props: Props) => {
       accessorKey: "name",
     },
     {
-      accessorKey: "registerNumber",
-      header: "Register Number",
+      accessorKey: "roomStrength",
+      header: "Room Strength",
     },
     {
-      header: "Gender",
-      accessorKey: "gender",
+      header: "Start Time",
+      accessorKey: "startTime",
     },
     {
-      header: "Department",
-      accessorKey: "department",
+      header: "End Time",
+      accessorKey: "endTime",
     },
-    {
-      header: "Year",
-      accessorKey: "year",
-    },
-    {
-      header: "Degree",
-      accessorKey: "degree",
-    },
-    // {
-    //   accessorKey: "createdAt",
-    //   header: "Created At",
-    //   cell: ({ cell }) => {
-    //     const date = cell.getValue() as Date;
-    //     const formatted = new Intl.DateTimeFormat("en-IN")
-    //       .format(date)
-    //       .replace(/\//g, "-");
-    //     return <span>{formatted}</span>;
-    //   },
-
-    //   enableColumnFilter: false,
-
-    // },
     {
       // Column for row actions
       id: "actions",
       enableHiding: false,
       cell: ({ row }) => {
-        const student = row.original;
+        const template = row.original;
 
         return (
           <DropdownMenu>
@@ -169,7 +147,7 @@ const StudentTable = (props: Props) => {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-[150px]">
               <DropdownMenuItem asChild>
-                <Link href={`/students/${student.id}`}>
+                <Link href={`/templates/${template.id}`}>
                   <Edit
                     className="mr-2 h-3.5 w-3.5 text-muted-foreground/70"
                     aria-hidden="true"
@@ -177,20 +155,20 @@ const StudentTable = (props: Props) => {
                   Edit
                 </Link>
               </DropdownMenuItem>
-              {/* <DropdownMenuItem asChild>
-                <Link href={`/profile/${customer.id}`}>
+              <DropdownMenuItem asChild>
+                <Link href={`/profile/${template.id}`}>
                   <View
                     className="mr-2 h-3.5 w-3.5 text-muted-foreground/70"
                     aria-hidden="true"
                   />
                   View
                 </Link>
-              </DropdownMenuItem> */}
+              </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem
                 onClick={() => {
                   startTransition(async () => {
-                    await api.template.delete.mutate({ id: student.id });
+                    await api.template.delete.mutate({ id: template.id });
                     toast.success("Customer deleted");
                   });
                 }}
@@ -310,7 +288,12 @@ const StudentTable = (props: Props) => {
               Delete ({table.getSelectedRowModel().rows.length})
             </Button>
           )}
-
+          <Button>
+            <Link href="/students/new" className="flex items-center gap-x-2">
+              <PlusCircle className="h-4 w-4" />
+              <p>New</p>
+            </Link>
+          </Button>
           <Button
             variant="outline"
             onClick={() => {
@@ -360,12 +343,9 @@ const StudentTable = (props: Props) => {
                       return [
                         row.original.id,
                         row.original.name,
-                        row.original.registerNumber,
-                        row.original.gender,
-                        row.original.department,
-                        row.original.year,
-                        row.original.degree,
-                        // row.original.createdAt.toLocaleString(),
+                        row.original.roomStrength,
+                        row.original.startTime.toISOString(),
+                        row.original.endTime.toISOString(),
                       ];
                     }),
                   });
@@ -614,4 +594,4 @@ const StudentTable = (props: Props) => {
   );
 };
 
-export default StudentTable;
+export default TemplateTable;

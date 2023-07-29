@@ -1,5 +1,5 @@
 import HeroSection from "@/components/client/HeroSection";
-import RootNav from "@/components/client/RootNav";
+import RootNav from "@/components/navbar/RootNav";
 import { getServerAuthSession } from "@/server/auth";
 
 export default async function Home() {

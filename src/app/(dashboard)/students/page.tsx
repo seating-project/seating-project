@@ -1,4 +1,4 @@
-import StudentTable from "@/components/client/StudentsTable";
+import StudentTable from "@/components/tables/StudentsTable";
 import { api } from "@/trpc/server";
 
 export default async function StudentsPage() {

@@ -1,5 +1,4 @@
-import DepartmentTable from "@/components/client/DepartmentsTable";
-import { getServerAuthSession } from "@/server/auth";
+import DepartmentTable from "@/components/tables/DepartmentsTable";
 import { api } from "@/trpc/server";
 
 export default async function DepartmentPage() {

@@ -34,7 +34,10 @@ export function DataTableLoading({
           ) : isNewRowCreatable ? (
             <Skeleton className="h-7 w-[70px]" />
           ) : null}
-          <Skeleton className="ml-auto hidden h-7 w-[70px] lg:flex" />
+          <Skeleton className="ml-auto hidden h-10 w-[70px] lg:flex" />
+          <Skeleton className="ml-auto hidden h-10 w-[70px] lg:flex" />
+          <Skeleton className="ml-auto hidden h-10 w-[85px] lg:flex" />
+          <Skeleton className="ml-auto hidden h-10 w-[80px] lg:flex" />
         </div>
       </div>
       <div className="rounded-md border">

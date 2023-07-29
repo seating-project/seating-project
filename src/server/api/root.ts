@@ -3,6 +3,8 @@ import { examRouter } from "./routers/exam";
 import { templateRouter } from "./routers/template";
 import { studentRouter } from "./routers/student";
 import { departmentRouter } from "./routers/department";
+import { yearRouter } from "./routers/year";
+import { degreeRouter } from "./routers/degree";
 
 /**
  * This is the primary router for your server.
@@ -13,7 +15,9 @@ export const appRouter = createTRPCRouter({
   exam: examRouter,
   template: templateRouter,
   student: studentRouter,
-  department: departmentRouter
+  department: departmentRouter,
+  year: yearRouter,
+  degree: degreeRouter,
 });
 
 // export type definition of API

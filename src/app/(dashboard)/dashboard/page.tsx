@@ -1,5 +1,7 @@
+import { Button } from "@/components/ui/button";
 import { getServerAuthSession } from "@/server/auth";
-import { api } from "@/trpc/server";
+import Link from "next/link";
+// import { api } from "@/trpc/server";
 import { redirect } from "next/navigation";
 
 export default async function Home() {
@@ -25,6 +27,9 @@ export default async function Home() {
               <p>length {exams.length}</p>
             </div>
           )} */}
+          <Button>
+            <Link href="/create-new">Create Exam</Link>
+          </Button>
         </div>
       </div>
     </div>

@@ -1,5 +1,5 @@
 import "@/app/globals.css";
-import MainNav from "@/components/client/MainNav";
+import MainNav from "@/components/navbar/MainNav";
 import { getServerAuthSession } from "@/server/auth";
 
 export default async function RootLayout({
