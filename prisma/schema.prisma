@@ -2,7 +2,7 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider        = "prisma-client-js"
+  provider = "prisma-client-js"
 }
 
 datasource db {
@@ -94,18 +94,20 @@ model Degree {
 }
 
 model Department {
-  id               Int            @id @default(autoincrement())
-  branch           String         @unique
-  shortName        String         @unique
-  code             String
-  Degree           Degree         @relation(fields: [degreeId], references: [id])
-  type             DepartmentType
-  Students         Student[]
-  degreeId         Int
-  Subjects         Subject[]
-  DepartmentsLeft  Exam[]         @relation("DepartmentsLeft")
-  DepartmentsRight Exam[]         @relation("DepartmentsRight")
-  Departments      Template[]     @relation("Departments")
+  id                    Int            @id @default(autoincrement())
+  branch                String         @unique
+  shortName             String         @unique
+  code                  String
+  Degree                Degree         @relation(fields: [degreeId], references: [id])
+  type                  DepartmentType
+  Students              Student[]
+  degreeId              Int
+  Subjects              Subject[]
+  DepartmentsLeftBoys   Exam[]         @relation("DepartmentsLeftBoys")
+  DepartmentsRightBoys  Exam[]         @relation("DepartmentsRightBoys")
+  DepartmentsLeftGirls  Exam[]         @relation("DepartmentsLeftGirls")
+  DepartmentsRightGirls Exam[]         @relation("DepartmentsRightGirls")
+  Departments           Exam[]         @relation("Departments")
 }
 
 model Building {
@@ -150,6 +152,8 @@ model Subject {
 model Exam {
   id                        Int                 @id @default(autoincrement())
   name                      String              @unique
+  startDate                 DateTime
+  endDate                   DateTime
   isPhD                     Boolean
   isMe                      Boolean
   isYearsTogether           Boolean
@@ -158,10 +162,15 @@ model Exam {
   timeToSendWhatsappMessage DateTime?
   // setsForWhichSubjects      Subject[]
   // noOfSets                  Int?
+  Template                  Template            @relation(fields: [templateId], references: [id])
+  templateId                Int
+  Departments               Department[]        @relation("Departments")
   secondColumnOptions       SecondColumnOptions
-  DepartmentsLeft           Department[]        @relation("DepartmentsLeft")
-  DepartmentsRight          Department[]        @relation("DepartmentsRight")
-  minimumStudentsInRoom     Int                 @default(60)
+  DepartmentsLeftBoys       Department[]        @relation("DepartmentsLeftBoys")
+  DepartmentsRightBoys      Department[]        @relation("DepartmentsRightBoys")
+  DepartmentsLeftGirls      Department[]        @relation("DepartmentsLeftGirls")
+  DepartmentsRightGirls     Department[]        @relation("DepartmentsRightGirls")
+  minimumStudentsInRoom     Int
   randomizeEveryNRooms      Int                 @default(0)
   RoomsOrder                Room[]              @relation("RoomsOrder")
   GirlsRooms                Room[]              @relation("GirlsRooms")
@@ -170,11 +179,11 @@ model Exam {
 }
 
 model Template {
-  id                          Int          @id @default(autoincrement())
-  name                        String       @unique
+  id                          Int        @id @default(autoincrement())
+  name                        String     @unique
   numberOfRows                Int
   numberOfColumns             Int
-  Departments                 Department[] @relation("Departments")
+  // Departments              Department[] @relation("Departments")
   roomStrength                Int
   Rooms                       Room[]
   isSingleSeater              Boolean
@@ -184,8 +193,9 @@ model Template {
   endTime                     DateTime
   isAlternateDepartmentSeated Boolean
   isRandomizedDepartments     Boolean
-  Logo                        Logo         @relation(fields: [logoId], references: [id])
+  Logo                        Logo       @relation(fields: [logoId], references: [id])
   logoId                      Int
+  Exams                       Exam[]
 }
 
 enum DepartmentType {
