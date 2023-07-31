@@ -165,7 +165,9 @@ model Exam {
   Template                  Template            @relation(fields: [templateId], references: [id])
   templateId                Int
   Departments               Department[]        @relation("Departments")
+  Timetable                 Json                @default("{}")
   secondColumnOptions       SecondColumnOptions
+  DepartmentsBuildingWise   Json                @default("{}")
   DepartmentsLeftBoys       Department[]        @relation("DepartmentsLeftBoys")
   DepartmentsRightBoys      Department[]        @relation("DepartmentsRightBoys")
   DepartmentsLeftGirls      Department[]        @relation("DepartmentsLeftGirls")

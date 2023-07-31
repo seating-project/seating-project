@@ -15,6 +15,11 @@ export default async function CreateNewExamPage() {
     label: template.name,
   }));
 
+  const years = await api.year.getYears.query()
+  const requiredYears = years.map((year) => ({
+    value: String(year.year),
+    label: String(year.year),
+  }));
 
 
   return (
@@ -24,7 +29,7 @@ export default async function CreateNewExamPage() {
           <p className="text-2xl font-bold">Create New Exam</p>
 
           <div className="my-4 w-full">
-            <CreateExamForm departments={requiredDepartments} templates={requiredTemplates} />
+            <CreateExamForm departments={requiredDepartments} templates={requiredTemplates} years={requiredYears} />
           </div>
           <div>{/* {Exam Sheet} */}</div>
         </div>

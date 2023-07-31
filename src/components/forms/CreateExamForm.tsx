@@ -38,6 +38,7 @@ import {
 type Props = {
   departments: { value: string; label: string }[];
   templates: { value: string; label: string }[];
+  years: { value: string; label: string }[];
 };
 
 const examFormSchema = z.object({
@@ -56,6 +57,7 @@ const examFormSchema = z.object({
   isSendWhatsappMessage: z.boolean(),
   timeToSendWhatsappMessage: z.date().optional(),
   secondColumnOptions: z.string(),
+  years: z.array(z.string()),
   departments: z.array(z.string()),
   departmentsLeftBoys: z.array(z.string()).optional(),
   departmentsRightBoys: z.array(z.string()).optional(),
@@ -68,7 +70,11 @@ const examFormSchema = z.object({
   isCommonRoomStrength: z.boolean(),
 });
 
-const CreateExamForm = ({ departments, templates }: Props) => {
+const CreateExamForm = ({ 
+  departments,
+  templates,
+  years
+ }: Props) => {
   const [isPending, startTransition] = useTransition();
   const form = useForm<z.infer<typeof examFormSchema>>({
     resolver: zodResolver(examFormSchema),
@@ -85,7 +91,7 @@ const CreateExamForm = ({ departments, templates }: Props) => {
     console.log(values);
   }
 
-  console.log(form.getValues("departments"))
+  console.log(form.getValues("departments"));
   return (
     <Form {...form}>
       <form
@@ -93,130 +99,159 @@ const CreateExamForm = ({ departments, templates }: Props) => {
         onSubmit={form.handleSubmit(onSubmit)}
       >
         <div className="w-full space-y-4">
-          <FormField
-            control={form.control}
-            name="name"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Exam Name</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="IA 1"
-                    {...field}
-                    disabled={isPending}
-                    className="w-full"
-                  />
-                </FormControl>
-                <FormDescription>This is the exam name</FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="template"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Template</FormLabel>
-                <FormControl>
-                  <Select value={field.value} onValueChange={field.onChange}>
-                    <SelectTrigger className="capitalize">
-                      <SelectValue placeholder={"Select Template..."} />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectGroup>
-                        {templates.map((template) => (
-                          <SelectItem
-                            key={template.value}
-                            value={String(template.value)}
-                          >
-                            {template.label}
-                          </SelectItem>
-                        ))}
-                      </SelectGroup>
-                    </SelectContent>
-                  </Select>
-                </FormControl>
-                <FormDescription>This is the exam template</FormDescription>
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="examDates"
-            render={({ field }) => (
-              <FormItem>
-                <div className="flex items-center justify-between">
-                  <FormLabel>Exam Dates</FormLabel>
+          <div className="space-y-4 py-4">
+            <p>
+              <span className="text-lg font-medium text-gray-900 dark:text-gray-100">
+                Basic Details
+              </span>
+            </p>
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Exam Name</FormLabel>
                   <FormControl>
-                    <Popover>
-                      <PopoverTrigger asChild>
-                        <Button
-                          id="date"
-                          variant={"outline"}
-                          className={cn(
-                            "w-[260px] justify-start text-left font-normal",
-                            !field.value && "text-muted-foreground"
-                          )}
-                        >
-                          <CalendarIcon className="mr-2 h-4 w-4" />
-                          {field.value?.from ? (
-                            field.value.to ? (
-                              <>
-                                {format(field.value.from, "LLL dd, y")} -{" "}
-                                {format(field.value.to, "LLL dd, y")}
-                              </>
-                            ) : (
-                              format(field.value.from, "LLL dd, y")
-                            )
-                          ) : (
-                            <span>Pick a date</span>
-                          )}
-                        </Button>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-auto p-0" align="end">
-                        <Calendar
-                          initialFocus
-                          mode="range"
-                          defaultMonth={field.value?.from}
-                          selected={field.value}
-                          onSelect={field.onChange}
-                          numberOfMonths={2}
-                        />
-                      </PopoverContent>
-                    </Popover>
+                    <Input
+                      placeholder="IA 1"
+                      {...field}
+                      disabled={isPending}
+                      className="w-full"
+                    />
                   </FormControl>
-                </div>
-                <FormDescription>
-                  This is the exam from and to date
-                </FormDescription>
-              </FormItem>
-            )}
-          />
+                  <FormDescription>This is the exam name</FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-          <FormField
-            control={form.control}
-            name="departments"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Departments</FormLabel>
-                <FormControl>
-                  <FancyMultiSelect
-                    onChange={(values) => {
-                      field.onChange(values.map(({ value }) => value));
-                    }}
-                    data={departments}
-                    name="departments"
-                  />
-                </FormControl>
-                <FormDescription>This is the exam departments</FormDescription>
-              </FormItem>
-            )}
-          />
+            <FormField
+              control={form.control}
+              name="template"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Template</FormLabel>
+                  <FormControl>
+                    <Select value={field.value} onValueChange={field.onChange}>
+                      <SelectTrigger className="capitalize">
+                        <SelectValue placeholder={"Select Template..."} />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectGroup>
+                          {templates.map((template) => (
+                            <SelectItem
+                              key={template.value}
+                              value={String(template.value)}
+                            >
+                              {template.label}
+                            </SelectItem>
+                          ))}
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
+                  </FormControl>
+                  <FormDescription>This is the exam template</FormDescription>
+                </FormItem>
+              )}
+            />
 
-          <div className="my-4 space-y-2">
+            <FormField
+              control={form.control}
+              name="examDates"
+              render={({ field }) => (
+                <FormItem>
+                  <div className="flex items-center justify-between">
+                    <FormLabel>Exam Dates</FormLabel>
+                    <FormControl>
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <Button
+                            id="date"
+                            variant={"outline"}
+                            className={cn(
+                              "w-[260px] justify-start text-left font-normal",
+                              !field.value && "text-muted-foreground"
+                            )}
+                          >
+                            <CalendarIcon className="mr-2 h-4 w-4" />
+                            {field.value?.from ? (
+                              field.value.to ? (
+                                <>
+                                  {format(field.value.from, "LLL dd, y")} -{" "}
+                                  {format(field.value.to, "LLL dd, y")}
+                                </>
+                              ) : (
+                                format(field.value.from, "LLL dd, y")
+                              )
+                            ) : (
+                              <span>Pick a date</span>
+                            )}
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto p-0" align="end">
+                          <Calendar
+                            initialFocus
+                            mode="range"
+                            defaultMonth={field.value?.from}
+                            selected={field.value}
+                            onSelect={field.onChange}
+                            numberOfMonths={2}
+                          />
+                        </PopoverContent>
+                      </Popover>
+                    </FormControl>
+                  </div>
+                  <FormDescription>
+                    This is the exam from and to date
+                  </FormDescription>
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="departments"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Departments</FormLabel>
+                  <FormControl>
+                    <FancyMultiSelect
+                      onChange={(values) => {
+                        field.onChange(values.map(({ value }) => value));
+                      }}
+                      data={departments}
+                      name="departments"
+                    />
+                  </FormControl>
+                  <FormDescription>
+                    This is the exam departments
+                  </FormDescription>
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="years"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Years</FormLabel>
+                  <FormControl>
+                    <FancyMultiSelect
+                      onChange={(values) => {
+                        field.onChange(values.map(({ value }) => value));
+                      }}
+                      data={years}
+                      name="years"
+                    />
+                  </FormControl>
+                  <FormDescription>This is the exam years</FormDescription>
+                </FormItem>
+              )}
+            />
+
+          </div>
+          <div className="space-y-2 py-4">
             <p>
               <span className="text-lg font-medium text-gray-900 dark:text-gray-100">
                 Exam Type
@@ -274,7 +309,7 @@ const CreateExamForm = ({ departments, templates }: Props) => {
             </div>
           </div>
 
-          <div className="my-4 space-y-2">
+          <div className="space-y-2 py-4">
             <p>
               <span className="text-lg font-medium text-gray-900 dark:text-gray-100">
                 Other Students
@@ -326,7 +361,7 @@ const CreateExamForm = ({ departments, templates }: Props) => {
 
           {form.getValues("isDepartmentsTogether") &&
           form.getValues("departments").length != 0 ? (
-            <div className="my-2 space-y-2">
+            <div className="space-y-2 py-2">
               <p>
                 <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
                   Departments Order and flow
@@ -436,14 +471,23 @@ const CreateExamForm = ({ departments, templates }: Props) => {
               </div>
             </div>
           ) : (
-            <div className="my-2 space-y-2">
+            <div className="space-y-2 py-4">
               <p>
-                <span className="text-ls font-medium text-gray-900 dark:text-gray-100">
+                <span className="text-lg font-medium text-gray-900 dark:text-gray-100">
                   Departments Order and Flow
+                </span>
+              </p>
+
+              <p>
+                <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                  Only available if departments are seated together
                 </span>
               </p>
             </div>
           )}
+
+          
+        
         </div>
         <Button
           type="submit"

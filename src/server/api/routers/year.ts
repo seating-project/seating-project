@@ -7,7 +7,13 @@ import {
 
 export const yearRouter = createTRPCRouter({
   getYears: protectedProcedure.query(async ({ ctx }) => {
-    return ctx.prisma.year.findMany({});
+    return ctx.prisma.year.findMany({
+      where: {
+        NOT: {
+          year: 5,
+        },
+      }
+    });
   }),
   getYear: protectedProcedure
     .input(z.object({ id: z.number() }))
