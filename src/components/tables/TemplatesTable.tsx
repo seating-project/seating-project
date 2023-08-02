@@ -289,7 +289,7 @@ const TemplateTable = (props: Props) => {
             </Button>
           )}
           <Button>
-            <Link href="/students/new" className="flex items-center gap-x-2">
+            <Link href="/templates/new" className="flex items-center gap-x-2">
               <PlusCircle className="h-4 w-4" />
               <p>New</p>
             </Link>
