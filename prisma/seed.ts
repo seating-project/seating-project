@@ -15,17 +15,17 @@ async function main() {
   // const count = faker.number.int({
   //   min: 17,
   //   max: 20,
-  // });
-  // await seedAccounts(prisma);
-  // await seedYears(prisma);
-  // await seedDegrees(prisma);  
-  // await seedDepartments(prisma);
-  // await seedStudents(prisma);
-  // await seedBuildings(prisma);
-  // seedBlocks(prisma);
-  // await seedRooms(prisma);
-  // await seedLogos(prisma);
-  // seedTemplates(prisma);
+  // });.
+  await seedAccounts(prisma);
+  await seedYears(prisma);
+  await seedDegrees(prisma);  
+  await seedDepartments(prisma);
+  await seedStudents(prisma);
+  await seedBuildings(prisma);
+  seedBlocks(prisma);
+  await seedRooms(prisma);
+  await seedLogos(prisma);
+  seedTemplates(prisma);
   
   await updateStudent(prisma);
 
