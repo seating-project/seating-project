@@ -198,9 +198,9 @@ const ExamTable = (props: Props) => {
       cell: ({ cell }) => {
         const departments = cell.getValue() as Department[];
         return (
-          <div>
+          <div className="w-96 flex flex-wrap space-x-1">
             {departments.map((department) => (
-              <Badge className="mx-0.5">{department.shortName}</Badge>
+              <Badge className="my-0.5" key={department.id}>{department.shortName}</Badge>
             ))}
           </div>
         );
@@ -440,7 +440,7 @@ const ExamTable = (props: Props) => {
                       ];
                     }),
                   });
-                  doc.save(`Customers-${new Date().toISOString()}.pdf`);
+                  doc.save(`Exams-${new Date().toISOString()}.pdf`);
                 }}
               >
                 PDF
