@@ -81,6 +81,7 @@ model Year {
   id       Int       @id @default(autoincrement())
   year     Int       @unique
   Students Student[]
+  Exams    Exam[]    @relation("Years")
 }
 
 model Degree {
@@ -120,18 +121,17 @@ model Building {
 }
 
 model Room {
-  id         Int       @id @default(autoincrement())
-  number     String    @unique
+  id         Int        @id @default(autoincrement())
+  number     String     @unique
   floor      Int
   strength   Int
-  Building   Building  @relation(fields: [buildingId], references: [id])
+  Building   Building   @relation(fields: [buildingId], references: [id])
   buildingId Int
-  Block      Block     @relation(fields: [blockId], references: [id])
+  Block      Block      @relation(fields: [blockId], references: [id])
   blockId    Int
-  RoomOrder  Exam[]    @relation("RoomsOrder")
-  GirlsRoom  Exam[]    @relation("GirlsRooms")
-  Template   Template? @relation(fields: [templateId], references: [id])
-  templateId Int?
+  RoomOrder  Exam[]     @relation("RoomsOrder")
+  GirlsRoom  Exam[]     @relation("GirlsRooms")
+  Template   Template[]
 }
 
 model Block {
@@ -165,6 +165,7 @@ model Exam {
   Template                  Template            @relation(fields: [templateId], references: [id])
   templateId                Int
   Departments               Department[]        @relation("Departments")
+  Years                  Year[]              @relation("Years")
   Timetable                 Json                @default("{}")
   secondColumnOptions       SecondColumnOptions
   DepartmentsBuildingWise   Json                @default("{}")

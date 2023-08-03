@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Command, CommandGroup, CommandItem } from "@/components/ui/command";
 import { Command as CommandPrimitive } from "cmdk";
 
-type Data = Record<"value" | "label", string>;
+export type Data = Record<"value" | "label", string>;
 
 // const FRAMEWORKS = [
 //   {

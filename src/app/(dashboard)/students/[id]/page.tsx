@@ -27,7 +27,7 @@ export default async function StudentPage({ params }: Props) {
     gender: studentCurrent?.gender as string,
     phoneNumber: studentCurrent?.phone_number as string,
     department: studentCurrent?.Department.branch as string,
-    year: studentCurrent?.Year.year as number,
+    year: String(studentCurrent?.Year.year),
     degree: studentCurrent?.Degree.degree as string,
   };
 
@@ -42,8 +42,8 @@ export default async function StudentPage({ params }: Props) {
   const years = await api.year.getYears.query();
   const requiredYears = years.map((year) => {
     return {
-      label: year.year,
-      value: year.year,
+      label: String(year.year),
+      value: String(year.year),
     };
   });
 

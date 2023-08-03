@@ -10,11 +10,10 @@ import {
   FormLabel,
   FormMessage,
   FormDescription,
-  //   UncontrolledFormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { type Student } from "@/types";
-import { z } from "zod";
+import { type Student, type Option } from "@/types";
+import { type z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Select,
@@ -26,40 +25,20 @@ import {
 import { Button } from "@/components/ui/button";
 import { api } from "@/trpc/client";
 import { Loader2 } from "lucide-react";
-// import toast from "react-hot-toast";
-import { toast } from "../ui/use-toast";
+import { toast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
-
-// type Props = {};
-
-const studentFormSchema = z.object({
-  name: z.string(),
-  registerNumber: z.string(),
-  gender: z.string(),
-  department: z.string(),
-  year: z.number(),
-  degree: z.string(),
-  phoneNumber: z.string().optional(),
-});
-
-type AnyOptions = {
-  label: string | number;
-  value: string | number;
-}[];
+import { studentFormSchema } from "@/lib/schema";
 
 type Props = {
   student: Student;
-  // id: number;
-  departments: AnyOptions;
-  years: AnyOptions;
-  degrees: AnyOptions;
+  departments: Option[];
+  years: Option[];
+  degrees: Option[];
 };
 
 const UpdateStudentForm = ({student, departments, years, degrees }: Props) => {
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
-
-  
 
   const form = useForm<z.infer<typeof studentFormSchema>>({
     resolver: zodResolver(studentFormSchema),
@@ -86,7 +65,7 @@ const UpdateStudentForm = ({student, departments, years, degrees }: Props) => {
         phoneNumber: values.phoneNumber as string,
         degree: values.degree,
         department: values.department,
-        year: values.year,
+        year: Number(values.year),
         gender: values.gender,
       });
 

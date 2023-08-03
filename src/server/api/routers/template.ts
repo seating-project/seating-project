@@ -6,8 +6,12 @@ import {
 } from "@/server/api/trpc";
 
 export const templateRouter = createTRPCRouter({
-  getTemplates: protectedProcedure.query(async ({ ctx }) => {
-    return ctx.prisma.template.findMany({});
+  getTemplatesIncludingRooms: protectedProcedure.query(async ({ ctx }) => {
+    return ctx.prisma.template.findMany({
+      include: {
+        Rooms: true,
+      },
+    });
   }),
 
   delete: protectedProcedure

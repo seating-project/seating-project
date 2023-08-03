@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useTransition } from "react";
+import React, { useEffect, useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import {
   Form,
@@ -12,7 +12,7 @@ import {
   FormDescription,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { z } from "zod";
+import { type z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { addDays, format } from "date-fns";
 import { Button } from "@/components/ui/button";
@@ -24,7 +24,7 @@ import {
 } from "@/components/ui/popover";
 import { Calendar as CalendarIcon, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { FancyMultiSelect } from "@/components/ui/multi-select";
+import { type Data, FancyMultiSelect } from "@/components/ui/multi-select";
 import { Checkbox } from "../ui/checkbox";
 import {
   Select,
@@ -34,48 +34,29 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { SecondColumnOptions } from "@prisma/client";
+import { type Option, type Template } from "@/types";
+import { examFormSchema } from "@/lib/schema";
+import { api } from "@/trpc/client";
+import { toast } from "../ui/use-toast";
 
 type Props = {
-  departments: { value: string; label: string }[];
-  templates: { value: string; label: string }[];
-  years: { value: string; label: string }[];
+  departments: Option[];
+  templates: Option[];
+  years: Option[];
+  rooms: Option[];
+  templateData: Template[];
 };
 
-const examFormSchema = z.object({
-  name: z.string(),
-  // startDate: z.date(),
-  // endDate: z.date(),
-  examDates: z.object({
-    from: z.date(),
-    to: z.date(),
-  }),
-  template: z.string(),
-  isPhd: z.boolean(),
-  isMe: z.boolean(),
-  isYearsTogether: z.boolean(),
-  isDepartmentsTogether: z.boolean(),
-  isSendWhatsappMessage: z.boolean(),
-  timeToSendWhatsappMessage: z.date().optional(),
-  secondColumnOptions: z.string(),
-  years: z.array(z.string()),
-  departments: z.array(z.string()),
-  departmentsLeftBoys: z.array(z.string()).optional(),
-  departmentsRightBoys: z.array(z.string()).optional(),
-  departmentsLeftGirls: z.array(z.string()).optional(),
-  departmentsRightGirls: z.array(z.string()).optional(),
-  minimumStudentsInRoom: z.number(),
-  randomizeEveryNRooms: z.number(),
-  roomsOrder: z.array(z.string()),
-  strictlyDivideBuildings: z.boolean(),
-  isCommonRoomStrength: z.boolean(),
-});
-
-const CreateExamForm = ({ 
+const CreateExamForm = ({
   departments,
   templates,
-  years
- }: Props) => {
+  years,
+  templateData,
+}: Props) => {
   const [isPending, startTransition] = useTransition();
+  const [rooms, setRooms] = useState<Data[]>([]);
+
   const form = useForm<z.infer<typeof examFormSchema>>({
     resolver: zodResolver(examFormSchema),
     defaultValues: {
@@ -84,14 +65,73 @@ const CreateExamForm = ({
         to: addDays(new Date(), 6),
       },
       departments: [],
+      template: "",
+      minimumStudentsInRoom: 0,
+      randomizeEveryNRooms: 0,
+      isCommonRoomStrength: false,
+      strictlyDivideBuildings: false,
+      isPhd: false,
+      isDepartmentsTogether: false,
+      isYearsTogether: false,
+      isSendWhatsappMessage: false,
+      isMe: false,
     },
   });
 
+  useEffect(
+    () => {
+      form.getValues("template") !== "" &&
+        setRooms(
+          templateData
+            .find((template) => form.getValues("template") === template.name)
+            ?.Rooms.map((room) => {
+              return {
+                label: room.number,
+                value: room.number,
+              };
+            }) as Data[]
+        );
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [form, form.getValues("template")]
+  );
+
   function onSubmit(values: z.infer<typeof examFormSchema>) {
-    console.log(values);
+    startTransition(async () => {
+      console.log(values);
+      const createExam = await api.exam.createExam.mutate({
+        name: values.name,
+        template: values.template,
+        departments: values.departments,
+        years: values.years,
+        examDates: values.examDates,
+        roomsOrder: values.roomsOrder,
+        minimumStudentsInRoom: values.minimumStudentsInRoom,
+        randomizeEveryNRooms: values.randomizeEveryNRooms,
+        isCommonRoomStrength: values.isCommonRoomStrength,
+        strictlyDivideBuildings: values.strictlyDivideBuildings,
+        isPhd: values.isPhd,
+        isDepartmentsTogether: values.isDepartmentsTogether,
+        isYearsTogether: values.isYearsTogether,
+        isSendWhatsappMessage: values.isSendWhatsappMessage,
+        isMe: values.isMe,
+        secondColumnOptions: values.secondColumnOptions,
+      });
+
+      createExam ? toast({
+        title: "Exam Created",
+        description: "Exam has been created successfully",
+        
+      }) : toast({
+        title: "Exam Creation Failed",
+        description: "Exam could not be created",
+      })
+
+      form.reset();
+      
+    });
   }
 
-  console.log(form.getValues("departments"));
   return (
     <Form {...form}>
       <form
@@ -249,7 +289,6 @@ const CreateExamForm = ({
                 </FormItem>
               )}
             />
-
           </div>
           <div className="space-y-2 py-4">
             <p>
@@ -486,17 +525,148 @@ const CreateExamForm = ({
             </div>
           )}
 
-          
-        
+          <div className="space-y-2 py-4">
+            <p>
+              <span className="text-lg font-medium text-gray-900 dark:text-gray-100">
+                Other Details
+              </span>
+            </p>
+            <div className="space-y-4">
+              <FormField
+                control={form.control}
+                name="secondColumnOptions"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Second Column Options</FormLabel>
+                    <FormControl>
+                      <Select
+                        value={field.value}
+                        onValueChange={field.onChange}
+                      >
+                        <SelectTrigger className="capitalize">
+                          <SelectValue
+                            placeholder={"Select column options..."}
+                          />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectGroup>
+                            {Object.keys(SecondColumnOptions).map((option) => (
+                              <SelectItem key={option} value={option}>
+                                {option}
+                              </SelectItem>
+                            ))}
+                          </SelectGroup>
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="isCommonRoomStrength"
+                render={({ field }) => (
+                  <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                    <FormControl>
+                      <Checkbox
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    </FormControl>
+                    <div className="space-y-2 leading-none">
+                      <FormLabel>Make Room Strength Common?</FormLabel>
+                      <FormDescription>
+                        If you want to make the room strength common for all the
+                        rooms, check this box.
+                      </FormDescription>
+                    </div>
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="minimumStudentsInRoom"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Minimum Students in Room</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="number"
+                        min={0}
+                        value={field.value}
+                        onChange={field.onChange}
+                        autoComplete="on"
+                        defaultValue={60}
+                      />
+                    </FormControl>
+                    <FormDescription>
+                      Minimum number of students in a room.
+                    </FormDescription>
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="randomizeEveryNRooms"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Randomize Every N Rooms</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="number"
+                        min={0}
+                        value={field.value}
+                        onChange={field.onChange}
+                        autoComplete="on"
+                        defaultValue={0}
+                      />
+                    </FormControl>
+                    <FormDescription>Randomize every N rooms.</FormDescription>
+                  </FormItem>
+                )}
+              />
+              {form.getValues("template") !== "" ? (
+                <FormField
+                  control={form.control}
+                  name="roomsOrder"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Rooms Order</FormLabel>
+                      <FormControl>
+                        <FancyMultiSelect
+                          onChange={(values) => {
+                            field.onChange(values.map(({ value }) => value));
+                          }}
+                          name="roomsOrder"
+                          data={rooms}
+                        />
+                      </FormControl>
+                      <FormDescription>The order of the rooms</FormDescription>
+                    </FormItem>
+                  )}
+                />
+              ) : (
+                <p>
+                  <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                    Please select Template to set Rooms Order
+                  </span>
+                </p>
+              )}
+            </div>
+          </div>
         </div>
         <Button
           type="submit"
           className="mt-4 w-full "
           variant="default"
           disabled={isPending}
-          onClick={() => {
-            console.log(form.getValues());
-          }}
+          // onClick={() => {
+          // console.log(form.getValues());
+          // }}
+          onSubmit={form.handleSubmit(onSubmit)}
         >
           {isPending && (
             <Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden="true" />

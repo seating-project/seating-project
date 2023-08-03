@@ -13,7 +13,7 @@ import {
   //   UncontrolledFormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { z } from "zod";
+import { type z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Select,
@@ -27,18 +27,8 @@ import { api } from "@/trpc/client";
 import { Loader2 } from "lucide-react";
 import { toast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
+import { studentFormSchema } from "@/lib/schema";
 
-// type Props = {};
-
-const studentFormSchema = z.object({
-  name: z.string(),
-  registerNumber: z.string(),
-  gender: z.string(),
-  department: z.string(),
-  year: z.string(),
-  degree: z.string(),
-  phoneNumber: z.string().optional(),
-});
 
 type AnyOptions = {
   label: string | number;
