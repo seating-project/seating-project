@@ -44,7 +44,6 @@ type Props = {
   departments: Option[];
   templates: Option[];
   years: Option[];
-  rooms: Option[];
   templateData: Template[];
 };
 
