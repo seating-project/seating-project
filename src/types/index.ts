@@ -33,6 +33,14 @@ export type Template = {
 };
 
 export type Option = {
-    value: string;
-    label: string;
-}
+  value: string;
+  label: string;
+};
+
+export type TimeTable = {
+  [key: string]: {
+    [key: string]: {
+      [key: string]: string;
+    };
+  };
+};

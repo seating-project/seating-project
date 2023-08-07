@@ -25,22 +25,13 @@ export default async function CreateNewExamPage() {
   }));
 
   return (
-    <div className="h-full w-full ">
-      <div className="h-full">
-        <div className="h-full w-1/3 border-r p-8">
-          <p className="text-2xl font-bold">Create New Exam</p>
-
-          <div className="my-4 w-full">
-            <CreateExamForm
-              departments={requiredDepartments}
-              templates={requiredTemplates}
-              templateData={templateData}
-              years={requiredYears}
-            />
-          </div>
-          <div>{/* {Exam Sheet} */}</div>
-        </div>
-      </div>
+    <div className="w-full">
+      <CreateExamForm
+        departments={requiredDepartments}
+        templates={requiredTemplates}
+        templateData={templateData}
+        years={requiredYears}
+      />
     </div>
   );
 }

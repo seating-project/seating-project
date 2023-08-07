@@ -3,6 +3,7 @@ import Navbar from "@/components/navbar/NavMenu";
 import UserProfile from "./UserProfile";
 import { type Session } from "next-auth";
 import Link from "next/link";
+import { ModeToggle } from "../theme/ModeToggle";
 
 type Props = {
   session: Session | null;
@@ -10,7 +11,7 @@ type Props = {
 
 const MainNav = ({ session }: Props) => {
   return (
-    <div className="flex w-full items-center justify-between space-x-4 border-b p-4 dark:bg-[#020817]">
+    <div className="flex w-full h-20 items-center justify-between space-x-4 border-b p-4 dark:bg-[#020817]">
       <div className="flex space-x-4">
         <div className="rounded-md bg-black p-2 font-mono text-2xl dark:bg-white">
           {session?.user.id ? (
@@ -25,7 +26,9 @@ const MainNav = ({ session }: Props) => {
         </div>
         <Navbar />
       </div>
-      <div>
+      
+      <div className="flex items-center space-x-4">
+        <ModeToggle />
         <UserProfile session={session} />
       </div>
     </div>

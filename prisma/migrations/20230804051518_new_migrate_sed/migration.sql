@@ -7,40 +7,16 @@ CREATE TYPE "DegreeType" AS ENUM ('Bachelors', 'Masters', 'PhD');
 -- CreateEnum
 CREATE TYPE "SecondColumnOptions" AS ENUM ('PresentAbsent', 'SeatNumber');
 
--- CreateTable
-CREATE TABLE "Account" (
-    "id" TEXT NOT NULL,
-    "userId" TEXT NOT NULL,
-    "type" TEXT NOT NULL,
-    "provider" TEXT NOT NULL,
-    "providerAccountId" TEXT NOT NULL,
-    "refresh_token" TEXT,
-    "access_token" TEXT,
-    "expires_at" INTEGER,
-    "token_type" TEXT,
-    "scope" TEXT,
-    "id_token" TEXT,
-    "session_state" TEXT,
-
-    CONSTRAINT "Account_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "Session" (
-    "id" TEXT NOT NULL,
-    "sessionToken" TEXT NOT NULL,
-    "userId" TEXT NOT NULL,
-    "expires" TIMESTAMP(3) NOT NULL,
-
-    CONSTRAINT "Session_pkey" PRIMARY KEY ("id")
-);
+-- CreateEnum
+CREATE TYPE "Gender" AS ENUM ('Male', 'Female');
 
 -- CreateTable
 CREATE TABLE "User" (
     "id" TEXT NOT NULL,
     "name" TEXT,
-    "email" TEXT,
+    "email" TEXT NOT NULL,
     "emailVerified" TIMESTAMP(3),
+    "password" TEXT,
     "image" TEXT,
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
@@ -67,7 +43,7 @@ CREATE TABLE "Student" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
     "registerNumber" TEXT NOT NULL,
-    "gender" TEXT NOT NULL,
+    "gender" "Gender" NOT NULL,
     "departmentId" INTEGER NOT NULL,
     "yearId" INTEGER NOT NULL,
     "degreeId" INTEGER NOT NULL,
@@ -120,10 +96,10 @@ CREATE TABLE "Building" (
 CREATE TABLE "Room" (
     "id" SERIAL NOT NULL,
     "number" TEXT NOT NULL,
+    "floor" INTEGER NOT NULL,
     "strength" INTEGER NOT NULL,
     "buildingId" INTEGER NOT NULL,
     "blockId" INTEGER NOT NULL,
-    "templateId" INTEGER,
 
     CONSTRAINT "Room_pkey" PRIMARY KEY ("id")
 );
@@ -150,14 +126,19 @@ CREATE TABLE "Subject" (
 CREATE TABLE "Exam" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
+    "startDate" TIMESTAMP(3) NOT NULL,
+    "endDate" TIMESTAMP(3) NOT NULL,
     "isPhD" BOOLEAN NOT NULL,
     "isMe" BOOLEAN NOT NULL,
     "isYearsTogether" BOOLEAN NOT NULL,
     "isDepartmentsTogether" BOOLEAN NOT NULL,
     "isSendWhatsappMessage" BOOLEAN NOT NULL,
     "timeToSendWhatsappMessage" TIMESTAMP(3),
+    "templateId" INTEGER NOT NULL,
+    "Timetable" JSONB NOT NULL DEFAULT '{}',
     "secondColumnOptions" "SecondColumnOptions" NOT NULL,
-    "minimumStudentsInRoom" INTEGER NOT NULL DEFAULT 60,
+    "DepartmentsBuildingWise" JSONB NOT NULL DEFAULT '{}',
+    "minimumStudentsInRoom" INTEGER NOT NULL,
     "randomizeEveryNRooms" INTEGER NOT NULL DEFAULT 0,
     "strictlyDivideBuildings" BOOLEAN NOT NULL DEFAULT false,
     "isCommonRoomStrength" BOOLEAN NOT NULL DEFAULT false,
@@ -190,40 +171,58 @@ CREATE TABLE "_DepartmentToSubject" (
 );
 
 -- CreateTable
-CREATE TABLE "_departmentsLeft" (
+CREATE TABLE "_DepartmentsLeftBoys" (
     "A" INTEGER NOT NULL,
     "B" INTEGER NOT NULL
 );
 
 -- CreateTable
-CREATE TABLE "_departmentsRight" (
+CREATE TABLE "_DepartmentsRightBoys" (
     "A" INTEGER NOT NULL,
     "B" INTEGER NOT NULL
 );
 
 -- CreateTable
-CREATE TABLE "_departments" (
+CREATE TABLE "_DepartmentsLeftGirls" (
     "A" INTEGER NOT NULL,
     "B" INTEGER NOT NULL
 );
 
 -- CreateTable
-CREATE TABLE "_roomsOrder" (
+CREATE TABLE "_DepartmentsRightGirls" (
     "A" INTEGER NOT NULL,
     "B" INTEGER NOT NULL
 );
 
 -- CreateTable
-CREATE TABLE "_girlsRooms" (
+CREATE TABLE "_Departments" (
     "A" INTEGER NOT NULL,
     "B" INTEGER NOT NULL
 );
 
--- CreateIndex
-CREATE UNIQUE INDEX "Account_provider_providerAccountId_key" ON "Account"("provider", "providerAccountId");
+-- CreateTable
+CREATE TABLE "_RoomToTemplate" (
+    "A" INTEGER NOT NULL,
+    "B" INTEGER NOT NULL
+);
 
--- CreateIndex
-CREATE UNIQUE INDEX "Session_sessionToken_key" ON "Session"("sessionToken");
+-- CreateTable
+CREATE TABLE "_Years" (
+    "A" INTEGER NOT NULL,
+    "B" INTEGER NOT NULL
+);
+
+-- CreateTable
+CREATE TABLE "_RoomsOrder" (
+    "A" INTEGER NOT NULL,
+    "B" INTEGER NOT NULL
+);
+
+-- CreateTable
+CREATE TABLE "_GirlsRooms" (
+    "A" INTEGER NOT NULL,
+    "B" INTEGER NOT NULL
+);
 
 -- CreateIndex
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
@@ -250,6 +249,9 @@ CREATE UNIQUE INDEX "Degree_degree_key" ON "Degree"("degree");
 CREATE UNIQUE INDEX "Department_branch_key" ON "Department"("branch");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "Department_shortName_key" ON "Department"("shortName");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "Building_name_key" ON "Building"("name");
 
 -- CreateIndex
@@ -274,40 +276,58 @@ CREATE UNIQUE INDEX "_DepartmentToSubject_AB_unique" ON "_DepartmentToSubject"("
 CREATE INDEX "_DepartmentToSubject_B_index" ON "_DepartmentToSubject"("B");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "_departmentsLeft_AB_unique" ON "_departmentsLeft"("A", "B");
+CREATE UNIQUE INDEX "_DepartmentsLeftBoys_AB_unique" ON "_DepartmentsLeftBoys"("A", "B");
 
 -- CreateIndex
-CREATE INDEX "_departmentsLeft_B_index" ON "_departmentsLeft"("B");
+CREATE INDEX "_DepartmentsLeftBoys_B_index" ON "_DepartmentsLeftBoys"("B");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "_departmentsRight_AB_unique" ON "_departmentsRight"("A", "B");
+CREATE UNIQUE INDEX "_DepartmentsRightBoys_AB_unique" ON "_DepartmentsRightBoys"("A", "B");
 
 -- CreateIndex
-CREATE INDEX "_departmentsRight_B_index" ON "_departmentsRight"("B");
+CREATE INDEX "_DepartmentsRightBoys_B_index" ON "_DepartmentsRightBoys"("B");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "_departments_AB_unique" ON "_departments"("A", "B");
+CREATE UNIQUE INDEX "_DepartmentsLeftGirls_AB_unique" ON "_DepartmentsLeftGirls"("A", "B");
 
 -- CreateIndex
-CREATE INDEX "_departments_B_index" ON "_departments"("B");
+CREATE INDEX "_DepartmentsLeftGirls_B_index" ON "_DepartmentsLeftGirls"("B");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "_roomsOrder_AB_unique" ON "_roomsOrder"("A", "B");
+CREATE UNIQUE INDEX "_DepartmentsRightGirls_AB_unique" ON "_DepartmentsRightGirls"("A", "B");
 
 -- CreateIndex
-CREATE INDEX "_roomsOrder_B_index" ON "_roomsOrder"("B");
+CREATE INDEX "_DepartmentsRightGirls_B_index" ON "_DepartmentsRightGirls"("B");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "_girlsRooms_AB_unique" ON "_girlsRooms"("A", "B");
+CREATE UNIQUE INDEX "_Departments_AB_unique" ON "_Departments"("A", "B");
 
 -- CreateIndex
-CREATE INDEX "_girlsRooms_B_index" ON "_girlsRooms"("B");
+CREATE INDEX "_Departments_B_index" ON "_Departments"("B");
 
--- AddForeignKey
-ALTER TABLE "Account" ADD CONSTRAINT "Account_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+-- CreateIndex
+CREATE UNIQUE INDEX "_RoomToTemplate_AB_unique" ON "_RoomToTemplate"("A", "B");
 
--- AddForeignKey
-ALTER TABLE "Session" ADD CONSTRAINT "Session_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+-- CreateIndex
+CREATE INDEX "_RoomToTemplate_B_index" ON "_RoomToTemplate"("B");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "_Years_AB_unique" ON "_Years"("A", "B");
+
+-- CreateIndex
+CREATE INDEX "_Years_B_index" ON "_Years"("B");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "_RoomsOrder_AB_unique" ON "_RoomsOrder"("A", "B");
+
+-- CreateIndex
+CREATE INDEX "_RoomsOrder_B_index" ON "_RoomsOrder"("B");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "_GirlsRooms_AB_unique" ON "_GirlsRooms"("A", "B");
+
+-- CreateIndex
+CREATE INDEX "_GirlsRooms_B_index" ON "_GirlsRooms"("B");
 
 -- AddForeignKey
 ALTER TABLE "Student" ADD CONSTRAINT "Student_departmentId_fkey" FOREIGN KEY ("departmentId") REFERENCES "Department"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -331,10 +351,10 @@ ALTER TABLE "Room" ADD CONSTRAINT "Room_buildingId_fkey" FOREIGN KEY ("buildingI
 ALTER TABLE "Room" ADD CONSTRAINT "Room_blockId_fkey" FOREIGN KEY ("blockId") REFERENCES "Block"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Room" ADD CONSTRAINT "Room_templateId_fkey" FOREIGN KEY ("templateId") REFERENCES "Template"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "Block" ADD CONSTRAINT "Block_buildingId_fkey" FOREIGN KEY ("buildingId") REFERENCES "Building"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Block" ADD CONSTRAINT "Block_buildingId_fkey" FOREIGN KEY ("buildingId") REFERENCES "Building"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Exam" ADD CONSTRAINT "Exam_templateId_fkey" FOREIGN KEY ("templateId") REFERENCES "Template"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Template" ADD CONSTRAINT "Template_logoId_fkey" FOREIGN KEY ("logoId") REFERENCES "Logo"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -346,31 +366,55 @@ ALTER TABLE "_DepartmentToSubject" ADD CONSTRAINT "_DepartmentToSubject_A_fkey" 
 ALTER TABLE "_DepartmentToSubject" ADD CONSTRAINT "_DepartmentToSubject_B_fkey" FOREIGN KEY ("B") REFERENCES "Subject"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "_departmentsLeft" ADD CONSTRAINT "_departmentsLeft_A_fkey" FOREIGN KEY ("A") REFERENCES "Department"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "_DepartmentsLeftBoys" ADD CONSTRAINT "_DepartmentsLeftBoys_A_fkey" FOREIGN KEY ("A") REFERENCES "Department"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "_departmentsLeft" ADD CONSTRAINT "_departmentsLeft_B_fkey" FOREIGN KEY ("B") REFERENCES "Exam"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "_DepartmentsLeftBoys" ADD CONSTRAINT "_DepartmentsLeftBoys_B_fkey" FOREIGN KEY ("B") REFERENCES "Exam"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "_departmentsRight" ADD CONSTRAINT "_departmentsRight_A_fkey" FOREIGN KEY ("A") REFERENCES "Department"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "_DepartmentsRightBoys" ADD CONSTRAINT "_DepartmentsRightBoys_A_fkey" FOREIGN KEY ("A") REFERENCES "Department"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "_departmentsRight" ADD CONSTRAINT "_departmentsRight_B_fkey" FOREIGN KEY ("B") REFERENCES "Exam"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "_DepartmentsRightBoys" ADD CONSTRAINT "_DepartmentsRightBoys_B_fkey" FOREIGN KEY ("B") REFERENCES "Exam"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "_departments" ADD CONSTRAINT "_departments_A_fkey" FOREIGN KEY ("A") REFERENCES "Department"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "_DepartmentsLeftGirls" ADD CONSTRAINT "_DepartmentsLeftGirls_A_fkey" FOREIGN KEY ("A") REFERENCES "Department"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "_departments" ADD CONSTRAINT "_departments_B_fkey" FOREIGN KEY ("B") REFERENCES "Template"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "_DepartmentsLeftGirls" ADD CONSTRAINT "_DepartmentsLeftGirls_B_fkey" FOREIGN KEY ("B") REFERENCES "Exam"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "_roomsOrder" ADD CONSTRAINT "_roomsOrder_A_fkey" FOREIGN KEY ("A") REFERENCES "Exam"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "_DepartmentsRightGirls" ADD CONSTRAINT "_DepartmentsRightGirls_A_fkey" FOREIGN KEY ("A") REFERENCES "Department"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "_roomsOrder" ADD CONSTRAINT "_roomsOrder_B_fkey" FOREIGN KEY ("B") REFERENCES "Room"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "_DepartmentsRightGirls" ADD CONSTRAINT "_DepartmentsRightGirls_B_fkey" FOREIGN KEY ("B") REFERENCES "Exam"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "_girlsRooms" ADD CONSTRAINT "_girlsRooms_A_fkey" FOREIGN KEY ("A") REFERENCES "Exam"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "_Departments" ADD CONSTRAINT "_Departments_A_fkey" FOREIGN KEY ("A") REFERENCES "Department"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "_girlsRooms" ADD CONSTRAINT "_girlsRooms_B_fkey" FOREIGN KEY ("B") REFERENCES "Room"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "_Departments" ADD CONSTRAINT "_Departments_B_fkey" FOREIGN KEY ("B") REFERENCES "Exam"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "_RoomToTemplate" ADD CONSTRAINT "_RoomToTemplate_A_fkey" FOREIGN KEY ("A") REFERENCES "Room"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "_RoomToTemplate" ADD CONSTRAINT "_RoomToTemplate_B_fkey" FOREIGN KEY ("B") REFERENCES "Template"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "_Years" ADD CONSTRAINT "_Years_A_fkey" FOREIGN KEY ("A") REFERENCES "Exam"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "_Years" ADD CONSTRAINT "_Years_B_fkey" FOREIGN KEY ("B") REFERENCES "Year"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "_RoomsOrder" ADD CONSTRAINT "_RoomsOrder_A_fkey" FOREIGN KEY ("A") REFERENCES "Exam"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "_RoomsOrder" ADD CONSTRAINT "_RoomsOrder_B_fkey" FOREIGN KEY ("B") REFERENCES "Room"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "_GirlsRooms" ADD CONSTRAINT "_GirlsRooms_A_fkey" FOREIGN KEY ("A") REFERENCES "Exam"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "_GirlsRooms" ADD CONSTRAINT "_GirlsRooms_B_fkey" FOREIGN KEY ("B") REFERENCES "Room"("id") ON DELETE CASCADE ON UPDATE CASCADE;

@@ -2,7 +2,6 @@
 
 import * as React from "react";
 import Link from "next/link";
-// import { writeFile, type WorkBook, utils } from "xlsx";
 import { useRouter } from "next/navigation";
 import {
   Table,
@@ -51,7 +50,6 @@ import {
   SlidersHorizontal,
   Edit,
   MoreVertical,
-  // View,
   Trash2,
   Download,
   PlusCircle,
@@ -61,16 +59,8 @@ import toast from "react-hot-toast";
 import { api } from "@/trpc/client";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
-import { Template, Department, Room } from "@prisma/client";
+import { type Template, type Department } from "@prisma/client";
 import { Badge } from "../ui/badge";
-
-// type RequiredTemplateData = {
-//   id: number;
-//   name: string;
-//   roomStrength: number;
-//   startTime: Date;
-//   endTime: Date;
-// };
 
 type RequiredExamData = {
   id: number;
@@ -79,7 +69,6 @@ type RequiredExamData = {
   startDate: Date;
   endDate: Date;
   departments: Department[];
-  // strictlyDivideBuildings: boolean;
 };
 
 type Props = {
@@ -89,38 +78,6 @@ type Props = {
 
 const ExamTable = (props: Props) => {
   const router = useRouter();
-
-  // props.data = async (props) => {
-  //   return props.data.map((exam) => {
-  //     const templateName = await api.template.getTemplateName(exam.templateId);
-  //     return {
-  //       id: exam.id,
-  //       name: exam.name,
-  //       template: templateName,
-  //       startDate: exam.startDate,
-  //       endDate: exam.endDate,
-  //       departments: exam.departments,
-  //     };
-  //   });
-  // };
-
-  // props.data = props.data.map((exam) => {
-  //   async function templatename(templateId: number) {
-  //     const data = await api.template.getTemplateName.query({ id: templateId });
-  //     return data;
-  //   }
-  //   return {
-  //     id: exam.id,
-  //     name: exam.name,
-  //     template: templatename(exam.template),
-  //     startDate: exam.startDate,
-  //     endDate: exam.endDate,
-  //     departments: exam.departments,
-  //   };
-  // }
-  // );
-
-  // const pathname = usePathname();
 
   const [isPending, startTransition] = React.useTransition();
 
@@ -165,16 +122,6 @@ const ExamTable = (props: Props) => {
         const mytemplate = cell.getValue() as Template;
         return <div>{mytemplate.name}</div>;
       },
-      // cell: ({ cell }) => {
-      //   function templatename(templateId: number) {
-      //     const data = api.template.getTemplateName.query({
-      //       id: templateId,
-      //     });
-      //     return data;
-      //   }
-      //   const templateName = templatename(cell.getValue() as number);
-      //   return <div>{templateName}</div>;
-      // },
     },
     {
       header: "Start Date",
@@ -206,10 +153,6 @@ const ExamTable = (props: Props) => {
         );
       }
     },
-    // {
-    //   header: "Rooms Order",
-    //   accessorKey: "roomsOrder",
-    // },
     {
       // Column for row actions
       id: "actions",
@@ -440,88 +383,6 @@ const ExamTable = (props: Props) => {
               >
                 PDF
               </DropdownMenuItem>
-              {/* <DropdownMenuItem
-                onClick={() => {
-                  const rows =
-                    table.getFilteredSelectedRowModel().rows.length > 0
-                      ? table.getFilteredSelectedRowModel().rows
-                      : table.getFilteredRowModel().rows;
-                  const csv = rows.map((row) => {
-                    return {
-                      id: row.original.id,
-                      firstName: row.original.firstName,
-                      lastName: row.original.lastName,
-                      email: row.original.email,
-                      phone: row.original.phone,
-                      createdAt: row.original.createdAt.toLocaleString(),
-                    };
-                  });
-                  console.log("CSV", csv);
-                  const workbook: WorkBook = { SheetNames: [], Sheets: {} };
-                  const worksheet = utils.json_to_sheet(csv, {
-                    cellStyles: true,
-                  });
-                  utils.sheet_add_aoa(
-                    worksheet,
-                    [
-                      [
-                        "ID",
-                        "First Name",
-                        "Last Name",
-                        "Email",
-                        "Phone",
-                        "Created At",
-                      ],
-                    ],
-                    { origin: "A1" }
-                  );
-                  const max_width_id = rows.reduce(
-                    (w, r) => Math.max(w, String(r.original.id).length),
-                    10
-                  );
-                  const max_width_firstName = rows.reduce(
-                    (w, r) => Math.max(w, r.original.firstName.length),
-                    10
-                  );
-                  const max_width_lastName = rows.reduce(
-                    (w, r) => Math.max(w, r.original.lastName.length),
-                    10
-                  );
-                  const max_width_email = rows.reduce(
-                    (w, r) => Math.max(w, r.original.email.length),
-                    10
-                  );
-                  const max_width_phone = rows.reduce(
-                    (w, r) => Math.max(w, r.original.phone.length),
-                    10
-                  );
-                  const max_width_createdAt = rows.reduce(
-                    (w, r) =>
-                      Math.max(w, r.original.createdAt.toLocaleString().length),
-                    10
-                  );
-
-                  const col_width = [
-                    { wch: max_width_id },
-                    { wch: max_width_firstName },
-                    { wch: max_width_lastName },
-                    { wch: max_width_email },
-                    { wch: max_width_phone },
-                    { wch: max_width_createdAt },
-                  ];
-
-                  worksheet["!cols"] = col_width;
-                  workbook.SheetNames.push("All Customers");
-                  workbook.Sheets["All Customers"] = worksheet;
-
-                  writeFile(
-                    workbook,
-                    `All Customers ${new Date().toISOString()}.xlsx`
-                  );
-                }}
-              >
-                Excel
-              </DropdownMenuItem> */}
             </DropdownMenuContent>
           </DropdownMenu>
 

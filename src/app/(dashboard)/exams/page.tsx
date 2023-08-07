@@ -5,15 +5,9 @@ import { api } from "@/trpc/server";
 export default async function ExamPage() {
 
   const exams = await api.exam.getLatestExams.query();
-
-  async function getTemplateName(templateId:number) {
-    const template = await api.template.getTemplateName.query({ id: templateId });
-    return template;
-  }
-
+  
   const requiredExamData = exams.map((exam) => {
     
-    const templateName = getTemplateName(exam.templateId); 
     return {
       id: exam.id,
       name: exam.name,

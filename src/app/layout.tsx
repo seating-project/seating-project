@@ -2,7 +2,8 @@ import "@/app/globals.css";
 // import { getServerAuthSession } from "@/server/auth";
 import { Inter } from "next/font/google";
 import { twMerge } from "tailwind-merge";
-import { Toaster } from "@/components/ui/toaster"
+import { Toaster } from "@/components/ui/toaster";
+import { ThemeProvider } from "@/components/theme/ThemeProvider";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -25,11 +26,13 @@ export default function RootLayout({
     <html lang="en">
       <body
         className={twMerge(
-          "dark bg-background font-sans text-foreground",
+          " bg-background font-sans text-foreground",
           inter.variable
         )}
       >
-        {children}
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          {children}
+        </ThemeProvider>
         <Toaster />
       </body>
     </html>

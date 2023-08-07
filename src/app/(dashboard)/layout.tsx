@@ -10,7 +10,7 @@ export default async function RootLayout({
   const session = await getServerAuthSession();
   return (
     <div>
-      <div className="sticky top-0">
+      <div className="sticky top-0 z-10">
         <MainNav session={session} />
       </div>
       {children}

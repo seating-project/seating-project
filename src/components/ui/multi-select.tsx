@@ -144,6 +144,7 @@ export const FancyMultiSelect = ({ onChange, data, name }: Props) => {
                       e.preventDefault();
                       e.stopPropagation();
                     }}
+                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
                     onSelect={(value) => {
                       setInputValue("");
                       setSelected((prev) => [...prev, item]);

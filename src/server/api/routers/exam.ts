@@ -8,21 +8,19 @@ import { type SecondColumnOptions } from "@prisma/client";
 
 export const examRouter = createTRPCRouter({
   getLatestExams: protectedProcedure.query(async ({ ctx }) => {
-    return ctx.prisma.exam.findMany(
-      {
-        include: { Departments: true, Template: true },
-      }
-    );
-  }),
-  
-  delete: protectedProcedure
-  .input(z.object({ id: z.number() }))
-  .mutation(async ({ ctx, input }) => {
-    return ctx.prisma.exam.delete({
-      where: { id: input.id },
-      include: { Template: true }
+    return ctx.prisma.exam.findMany({
+      include: { Departments: true, Template: true },
     });
   }),
+
+  delete: protectedProcedure
+    .input(z.object({ id: z.number() }))
+    .mutation(async ({ ctx, input }) => {
+      return ctx.prisma.exam.delete({
+        where: { id: input.id },
+        include: { Template: true },
+      });
+    }),
 
   createExam: protectedProcedure
     .input(
@@ -51,9 +49,15 @@ export const examRouter = createTRPCRouter({
         roomsOrder: z.array(z.string()),
         strictlyDivideBuildings: z.boolean(),
         isCommonRoomStrength: z.boolean(),
+        // timeTable: z.object(),
+        timeTable: z.record(
+          z.string(),
+          z.record(z.string(), z.record(z.string(), z.string()))
+        ),
       })
     )
     .mutation(async ({ ctx, input }) => {
+      console.log("TIMETABLE HERE", input.timeTable);
       return ctx.prisma.exam.create({
         data: {
           startDate: input.examDates.from,
@@ -87,7 +91,7 @@ export const examRouter = createTRPCRouter({
           },
           DepartmentsLeftBoys: {
             connect: input.departmentsLeftBoys?.map((department) => ({
-              branch: department, 
+              branch: department,
             })),
           },
           DepartmentsRightBoys: {
@@ -110,6 +114,7 @@ export const examRouter = createTRPCRouter({
               number: room,
             })),
           },
+          Timetable: input.timeTable,
         },
       });
     }),

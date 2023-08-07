@@ -77,6 +77,10 @@
   }
 }
 
+.form-area {
+  height: calc(100vh - 5rem);
+}
+
 ::-webkit-scrollbar {
   width: 7px;
   height: 7px;
