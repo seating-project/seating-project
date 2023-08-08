@@ -21,7 +21,7 @@ export default async function ExamPage() {
   return (
     <div className="w-full ">
       <div className="p-8">
-        <p className="text-2xl font-bold">Templates</p>
+        <p className="text-2xl font-bold">Exams</p>
         <div className="my-4">
           <ExamTable data={requiredExamData} />
         </div>
