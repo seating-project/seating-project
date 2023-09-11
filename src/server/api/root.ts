@@ -8,6 +8,7 @@ import { degreeRouter } from "./routers/degree";
 import { roomRouter } from "./routers/room";
 import { blockRouter } from "./routers/block";
 import { buildingRouter } from "./routers/building";
+import { messageRouter } from "./routers/message";
 
 /**
  * This is the primary router for your server.
@@ -24,6 +25,7 @@ export const appRouter = createTRPCRouter({
   room: roomRouter, 
   block: blockRouter,
   building: buildingRouter,
+  message: messageRouter, 
 });
 
 // export type definition of API
