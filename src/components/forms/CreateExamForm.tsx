@@ -25,7 +25,7 @@ import {
 import { Calendar as CalendarIcon, Loader2 } from "lucide-react";
 import { cn, generateDateRange } from "@/lib/utils";
 import { type Data, FancyMultiSelect } from "@/components/ui/multi-select";
-import { Checkbox } from "../ui/checkbox";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Select,
   SelectContent,
@@ -38,8 +38,8 @@ import { SecondColumnOptions } from "@prisma/client";
 import { type TimeTable, type Option, type Template } from "@/types";
 import { examFormSchema } from "@/lib/schema";
 import { api } from "@/trpc/client";
-import { toast } from "../ui/use-toast";
-import { ScrollArea } from "../ui/scroll-area";
+import { toast } from "@/components/ui/use-toast";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   Table,
   TableBody,

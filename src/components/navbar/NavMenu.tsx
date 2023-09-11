@@ -16,7 +16,7 @@ const Navbar = () => {
   console.log(pathname);
 
   return (
-    <NavigationMenu className=" w-full">
+    <NavigationMenu className="z-auto w-full">
       {/* {pathname != "/" && ( */}
       <NavigationMenuList className="w-full">
         <NavigationMenuItem>

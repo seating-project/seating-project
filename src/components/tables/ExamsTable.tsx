@@ -60,7 +60,7 @@ import { api } from "@/trpc/client";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import { type Template, type Department } from "@prisma/client";
-import { Badge } from "../ui/badge";
+import { Badge } from "@/components/ui/badge";
 
 type RequiredExamData = {
   id: number;

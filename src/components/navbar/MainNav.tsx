@@ -3,7 +3,7 @@ import Navbar from "@/components/navbar/NavMenu";
 import UserProfile from "./UserProfile";
 import { type Session } from "next-auth";
 import Link from "next/link";
-import { ModeToggle } from "../theme/ModeToggle";
+import { ModeToggle } from "@/components/theme/ModeToggle";
 
 type Props = {
   session: Session | null;

@@ -31,4 +31,16 @@ export const roomRouter = createTRPCRouter({
   getRooms: protectedProcedure.query(async ({ ctx }) => {
     return ctx.prisma.room.findMany({});
   }),
+
+  // getRoomsOrderForExam: protectedProcedure
+  //   .input(z.object({ examId: z.number() }))
+  //   .query(async ({ ctx, input }) => {
+  //     const exam = await ctx.prisma.exam.findUnique({
+  //       where: { id: input.examId },
+  //       include: { 
+  //         RoomsOrder: true
+  //        },
+  //     });
+  //     return exam?.RoomsOrder;
+  //   }),
 });

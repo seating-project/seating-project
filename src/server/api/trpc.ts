@@ -8,13 +8,14 @@
  */
 
 import { experimental_createServerActionHandler } from "@trpc/next/app-dir/server";
-import { initTRPC, TRPCError } from "@trpc/server";
+import { AnyRouter, initTRPC, TRPCError } from "@trpc/server";
 import { type FetchCreateContextFnOptions } from "@trpc/server/adapters/fetch";
 import { headers } from "next/headers";
 import superjson from "superjson";
 import { ZodError } from "zod";
 import { getServerAuthSession } from "@/server/auth";
 import { prisma } from "@/server/db";
+import { TRPCLink } from "@trpc/client";
 
 /**
  * 1. CONTEXT
@@ -40,6 +41,7 @@ type CreateContextOptions = {
  */
 export const createInnerTRPCContext = async (opts: CreateContextOptions) => {
   const session = await getServerAuthSession();
+
 
   return {
     session,

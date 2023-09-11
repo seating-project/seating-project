@@ -9,9 +9,27 @@ import { type SecondColumnOptions } from "@prisma/client";
 export const examRouter = createTRPCRouter({
   getLatestExams: protectedProcedure.query(async ({ ctx }) => {
     return ctx.prisma.exam.findMany({
-      include: { Departments: true, Template: true },
+      include: { Departments: true, Template: true, Years: true },
     });
   }),
+
+  getExamById: protectedProcedure
+    .input(z.object({ id: z.number() }))
+    .query(async ({ ctx, input }) => {
+      return ctx.prisma.exam.findUnique({
+        where: { id: input.id },
+        include: {
+          Departments: true,
+          Template: true,
+          Years: true,
+          DepartmentsLeftBoys: true,
+          DepartmentsLeftGirls: true,
+          DepartmentsRightBoys: true,
+          DepartmentsRightGirls: true,
+          RoomsOrder: true,
+        },
+      });
+    }),
 
   delete: protectedProcedure
     .input(z.object({ id: z.number() }))

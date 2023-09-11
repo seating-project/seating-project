@@ -4,7 +4,7 @@ import {
   // publicProcedure,
   protectedProcedure,
 } from "@/server/api/trpc";
-import { type Gender } from "@prisma/client";
+import { DepartmentType, type Gender } from "@prisma/client";
 
 export const studentRouter = createTRPCRouter({
   getStudents: protectedProcedure.query(async ({ ctx }) => {
@@ -21,6 +21,19 @@ export const studentRouter = createTRPCRouter({
     .query(async ({ ctx, input }) => {
       return ctx.prisma.student.findUnique({
         where: { id: input.id },
+        include: {
+          Degree: true,
+          Department: true,
+          Year: true,
+        },
+      });
+    }),
+
+  getStudentsByYear: protectedProcedure
+    .input(z.object({ year: z.number() }))
+    .query(async ({ ctx, input }) => {
+      return ctx.prisma.student.findMany({
+        where: { Year: { year: input.year } },
         include: {
           Degree: true,
           Department: true,
@@ -115,5 +128,87 @@ export const studentRouter = createTRPCRouter({
         where: { id: input.id },
       });
       return deleteStudent;
+    }),
+
+  getStudentsByYearAndDepartmentsAndGender: protectedProcedure
+    .input(
+      z.object({
+        year: z.number(),
+        department: z.array(z.number()),
+        gender: z.string(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const students = await ctx.prisma.student.findMany({
+        where: {
+          Year: {
+            year: input.year,
+          },
+          Department: {
+            id: {
+              in: input.department,
+            },
+          },
+          gender: input.gender as Gender,
+        },
+        include: {
+          Degree: true,
+          Department: true,
+          Year: true,
+        },
+      });
+      return students;
+    }),
+
+  getStudentsByYearAndGender: protectedProcedure
+    .input(
+      z.object({
+        year: z.number(),
+        gender: z.string(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const students = await ctx.prisma.student.findMany({
+        where: {
+          Year: {
+            year: input.year,
+          },
+          gender: input.gender as Gender,
+        },
+        include: {
+          Degree: true,
+          Department: true,
+          Year: true,
+        },
+      });
+      return students;
+    }),
+
+  getStudentsByYearAndDepartments: protectedProcedure
+    .input(
+      z.object({
+        year: z.number(),
+        department: z.array(z.number()),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const students = await ctx.prisma.student.findMany({
+        where: {
+          Year: {
+            year: input.year,
+          },
+          Department: {
+            id: {
+              in: input.department,
+            },
+          },
+        },
+        include: {
+          Degree: true,
+          Department: true,
+          Year: true,
+        },
+      });
+      return students;
     }),
 });

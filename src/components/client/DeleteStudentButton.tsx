@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useTransition } from "react";
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
 import { api } from "@/trpc/client";
-import { toast } from "../ui/use-toast";
+import { toast } from "@/components/ui/use-toast";
 
 type Props = {
   id: number;
