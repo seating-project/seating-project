@@ -29,15 +29,29 @@ export const roomRouter = createTRPCRouter({
     }),
 
   getRooms: protectedProcedure.query(async ({ ctx }) => {
-    return ctx.prisma.room.findMany({});
+    return ctx.prisma.room.findMany({
+      include: {
+        Block: true,
+        Building: true,
+      },
+    });
   }),
 
+  delete: protectedProcedure
+    .input(z.object({ id: z.number() }))
+    .mutation(async ({ ctx, input }) => {
+      return ctx.prisma.room.delete({
+        where: {
+          id: input.id,
+        },
+      });
+    }),
   // getRoomsOrderForExam: protectedProcedure
   //   .input(z.object({ examId: z.number() }))
   //   .query(async ({ ctx, input }) => {
   //     const exam = await ctx.prisma.exam.findUnique({
   //       where: { id: input.examId },
-  //       include: { 
+  //       include: {
   //         RoomsOrder: true
   //        },
   //     });
