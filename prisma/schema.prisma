@@ -1,0 +1,194 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgres"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  emailVerified DateTime?
+  password      String?
+  image         String?
+}
+
+model Logo {
+  id       Int        @id @default(autoincrement())
+  name     String     @unique
+  image    String
+  Template Template[]
+}
+
+model Student {
+  id             Int        @id @default(autoincrement())
+  name           String
+  registerNumber String     @unique
+  gender         Gender
+  Department     Department @relation(fields: [departmentId], references: [id])
+  Year           Year       @relation(fields: [yearId], references: [id])
+  Degree         Degree     @relation(fields: [degreeId], references: [id])
+  departmentId   Int
+  yearId         Int
+  degreeId       Int
+  phone_number   String?
+}
+
+model Year {
+  id       Int       @id @default(autoincrement())
+  year     Int       @unique
+  Students Student[]
+  Exams    Exam[]    @relation("Years")
+}
+
+model Degree {
+  id          Int          @id @default(autoincrement())
+  degree      String       @unique
+  fullName    String
+  duration    Int
+  type        DegreeType
+  Departments Department[]
+  Students    Student[]
+}
+
+model Department {
+  id                         Int            @id @default(autoincrement())
+  branch                     String         @unique
+  shortName                  String         @unique
+  code                       String
+  Degree                     Degree         @relation(fields: [degreeId], references: [id])
+  type                       DepartmentType
+  Students                   Student[]
+  degreeId                   Int
+  Subjects                   Subject[]
+  DepartmentsLeftBoys        Exam[]         @relation("DepartmentsLeftBoys")
+  DepartmentsRightBoys       Exam[]         @relation("DepartmentsRightBoys")
+  DepartmentsLeftGirls       Exam[]         @relation("DepartmentsLeftGirls")
+  DepartmentsRightGirls      Exam[]         @relation("DepartmentsRightGirls")
+  DepartmentsLeftSingleYear  Exam[]         @relation("DepartmentsLeftSingleYear")
+  DepartmentsRightSingleYear Exam[]         @relation("DepartmentsRightSingleYear")       
+  Departments                Exam[]         @relation("Departments")
+}
+
+model Building {
+  id         Int       @id @default(autoincrement())
+  name       String    @unique
+  Rooms      Room[]
+  Blocks     Block[]
+  Template   Template? @relation(fields: [templateId], references: [id])
+  templateId Int?
+}
+
+model Room {
+  id         Int        @id @default(autoincrement())
+  number     String     @unique
+  floor      Int
+  strength   Int
+  Building   Building   @relation(fields: [buildingId], references: [id])
+  buildingId Int
+  Block      Block      @relation(fields: [blockId], references: [id])
+  blockId    Int
+  RoomOrder  Exam[]     @relation("RoomsOrder")
+  GirlsRoom  Exam[]     @relation("GirlsRooms")
+  Template   Template[]
+  MeExam     Exam[]     @relation("MeRoom")
+}
+
+model Block {
+  id         Int      @id @default(autoincrement())
+  name       String   @unique
+  Rooms      Room[]
+  Building   Building @relation(fields: [buildingId], references: [id])
+  buildingId Int
+}
+
+model Subject {
+  id          Int          @id @default(autoincrement())
+  name        String
+  code        String       @unique
+  Departments Department[]
+}
+
+model Exam {
+  id                         Int                 @id @default(autoincrement())
+  name                       String              @unique
+  startDate                  DateTime
+  endDate                    DateTime
+  isPhD                      Boolean
+  isMe                       Boolean
+  isYearsTogether            Boolean
+  isDepartmentsTogether      Boolean
+  isSendWhatsappMessage      Boolean
+  timeToSendWhatsappMessage  DateTime?
+  // setsForWhichSubjects      Subject[]
+  // noOfSets                  Int?
+  Template                   Template            @relation(fields: [templateId], references: [id])
+  templateId                 Int
+  Departments                Department[]        @relation("Departments")
+  Years                      Year[]              @relation("Years")
+  Timetable                  Json                @default("{}")
+  secondColumnOptions        SecondColumnOptions
+  DepartmentsBuildingWise    Json                @default("{}")
+  DepartmentsLeftBoys        Department[]        @relation("DepartmentsLeftBoys")
+  DepartmentsRightBoys       Department[]        @relation("DepartmentsRightBoys")
+  DepartmentsLeftGirls       Department[]        @relation("DepartmentsLeftGirls")
+  DepartmentsRightGirls      Department[]        @relation("DepartmentsRightGirls")
+  DepartmentsLeftSingleYear  Department[]        @relation("DepartmentsLeftSingleYear")
+  DepartmentsRightSingleYear Department[]        @relation("DepartmentsRightSingleYear")
+  minimumStudentsInRoom      Int
+  randomizeEveryNRooms       Int                 @default(0)
+  RoomsOrder                 Room[]              @relation("RoomsOrder")
+  GirlsRooms                 Room[]              @relation("GirlsRooms")
+  MeRoom                     Room?               @relation("MeRoom", fields: [roomId], references: [id])
+  strictlyDivideBuildings    Boolean             @default(false)
+  isCommonRoomStrength       Boolean             @default(false)
+  roomId                     Int?
+}
+
+model Template {
+  id                          Int        @id @default(autoincrement())
+  name                        String     @unique
+  numberOfRows                Int
+  numberOfColumns             Int
+  // Departments              Department[] @relation("Departments")
+  roomStrength                Int
+  Rooms                       Room[]
+  isSingleSeater              Boolean
+  isBoysGirlsSeparate         Boolean
+  Buildings                   Building[]
+  startTime                   DateTime
+  endTime                     DateTime
+  isAlternateDepartmentSeated Boolean
+  isRandomizedDepartments     Boolean
+  Logo                        Logo       @relation(fields: [logoId], references: [id])
+  logoId                      Int
+  Exams                       Exam[]
+}
+
+enum DepartmentType {
+  Circuit
+  NonCircuit
+  PhD
+}
+
+enum DegreeType {
+  Bachelors
+  Masters
+  PhD
+}
+
+enum SecondColumnOptions {
+  PresentAbsent
+  SeatNumber
+}
+
+enum Gender {
+  Male
+  Female
+}
