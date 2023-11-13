@@ -1,34 +1,24 @@
 "use client";
 
-import React from "react";
+import Link from "next/link";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
+import { Eye, File } from "lucide-react";
+
 import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+
 import { Button } from "../ui/button";
-import { Eye, File } from "lucide-react";
-import Link from "next/link";
-import jsPDF from "jspdf";
-import autoTable from "jspdf-autotable";
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "../ui/table";
 
 type Props = {
   examId: number;
   dates: string[];
-  
 };
 
 function createPDF() {

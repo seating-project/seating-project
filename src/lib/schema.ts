@@ -6,6 +6,7 @@ export const examFormSchema = z.object({
     from: z.date(),
     to: z.date(),
   }),
+  college: z.string(),
   template: z.string(),
   isPhd: z.boolean(),
   isMe: z.boolean(),
@@ -37,4 +38,20 @@ export const studentFormSchema = z.object({
   year: z.string(),
   degree: z.string(),
   phoneNumber: z.string().optional(),
+});
+
+export const templateFormSchema = z.object({
+  name: z.string(),
+  numberOfRows: z.number(),
+  numberOfColumns: z.number(),
+  rooms: z.array(z.string()),
+  roomStrength: z.number(),
+  isSingleSeater: z.boolean(),
+  isBoysGirlsSeparate: z.boolean(),
+  isAlternateDepartmentSeated: z.boolean(),
+  isRandomizedDepartments: z.boolean(),
+  buildings: z.array(z.string()),
+  startTime: z.date(),
+  endTime: z.date(),
+  logo: z.string(),
 });

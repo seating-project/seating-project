@@ -24,6 +24,12 @@ export default async function CreateNewExamPage() {
     label: String(year.year),
   }));
 
+  const colleges = await api.college.getColleges.query();
+  const requiredColleges = colleges.map((college) => ({
+    value: college.name,
+    label: college.name,
+  }));
+
   return (
     <div className="w-full">
       <CreateExamForm
@@ -31,6 +37,7 @@ export default async function CreateNewExamPage() {
         templates={requiredTemplates}
         templateData={templateData}
         years={requiredYears}
+        colleges={requiredColleges}
       />
     </div>
   );

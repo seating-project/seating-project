@@ -1,6 +1,8 @@
 import Link from "next/link";
 
 import Allotments from "@/components/allotments/Allotments";
+import HallPlans from "@/components/hallplans/HallPlans";
+import MainNav from "@/components/navbar/MainNav";
 import { Button } from "@/components/ui/button";
 import { getTimeTableDates } from "@/lib/utils";
 import { api } from "@/trpc/server";
@@ -12,14 +14,14 @@ type Props = {
   };
 };
 
-
-
 const ExamPage = async (props: Props) => {
-  const exam = await api.exam.getExamById.query({ id: Number(props.params.id) });                   
+  const exam = await api.exam.getExamById.query({
+    id: Number(props.params.id),
+  });
   const timetable = exam?.Timetable;
   const examDates = getTimeTableDates(timetable as TimeTable);
 
-    console.log("LMAOOOO", props.params.id) ;
+  console.log("LMAOOOO", props.params.id);
 
   if (exam === null) {
     return (
@@ -35,19 +37,25 @@ const ExamPage = async (props: Props) => {
         </div>
       </div>
     );
-  } 
+  }
 
   return (
-    <div className="p-8">
-      <p className="text-4xl font-bold"> {exam.name} </p>
-      <div className="my-8 flex flex-col">
-        <p className="text-xl">
-          {" "}
-          From {exam.startDate.toLocaleDateString()} to{" "}
-          {exam.endDate.toLocaleDateString()}
-        </p>
+    <div>
+      <div className="sticky top-0 z-10">
+        <MainNav />
       </div>
-      <Allotments examId={Number(props.params.id)} dates={examDates} /> 
+      <div className="p-8">
+        <p className="text-4xl font-bold"> {exam.name} </p>
+        <div className="my-8 flex flex-col">
+          <p className="text-xl">
+            {" "}
+            From {exam.startDate.toLocaleDateString()} to{" "}
+            {exam.endDate.toLocaleDateString()}
+          </p>
+        </div>
+        <Allotments examId={Number(props.params.id)} dates={examDates} />
+        <HallPlans exam={exam} dates={examDates} />
+      </div>
     </div>
   );
 };

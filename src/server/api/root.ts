@@ -1,12 +1,14 @@
+import { allotmentRouter } from "@/server/api/routers/allotment";
+import { buildingRouter } from "@/server/api/routers/building";
+import { collegeRouter } from "@/server/api/routers/college";
+import { degreeRouter } from "@/server/api/routers/degree";
+import { departmentRouter } from "@/server/api/routers/department";
+import { examRouter } from "@/server/api/routers/exam";
+import { roomRouter } from "@/server/api/routers/room";
+import { studentRouter } from "@/server/api/routers/student";
+import { templateRouter } from "@/server/api/routers/template";
+import { yearRouter } from "@/server/api/routers/year";
 import { createTRPCRouter } from "@/server/api/trpc";
-import { examRouter } from "./routers/exam";
-import { templateRouter } from "./routers/template";
-import { studentRouter } from "./routers/student";
-import { departmentRouter } from "./routers/department";
-import { yearRouter } from "./routers/year";
-import { degreeRouter } from "./routers/degree";
-import { roomRouter } from "./routers/room";
-import { allotmentRouter } from "./routers/allotment";
 
 /**
  * This is the primary router for your server.
@@ -20,8 +22,10 @@ export const appRouter = createTRPCRouter({
   department: departmentRouter,
   year: yearRouter,
   degree: degreeRouter,
-  room: roomRouter, 
-  allotment: allotmentRouter, 
+  room: roomRouter,
+  allotment: allotmentRouter,
+  college: collegeRouter,
+  building: buildingRouter,
 });
 
 // export type definition of API

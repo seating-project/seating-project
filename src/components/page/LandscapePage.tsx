@@ -9,7 +9,7 @@ type Props = {
 
 const Page = ({ children, id }: Props) => {
   return (
-    <div className="page w-[297mm] h-[210mm] relative mx-auto border border-solid border-opacity-10 bg-white text-black p-8 shadow-md" id={id}>
+    <div className="page w-[297mm] h-[210mm] relative mx-auto border border-solid border-opacity-10 bg-white text-black p-6 shadow-md" id={id}>
       <style jsx>
         {`
           @page {

@@ -55,6 +55,7 @@ type Props = {
   templates: Option[];
   years: Option[];
   templateData: Template[];
+  colleges: Option[];
 };
 
 const CreateExamForm = ({
@@ -62,6 +63,7 @@ const CreateExamForm = ({
   templates,
   years,
   templateData,
+  colleges,
 }: Props) => {
   const router = useRouter();
 
@@ -124,6 +126,7 @@ const CreateExamForm = ({
       await createExam.mutateAsync({
         name: values.name,
         template: values.template,
+        college: values.college,
         departments: values.departments,
         years: values.years,
         examDates: values.examDates,
@@ -225,6 +228,43 @@ const CreateExamForm = ({
                             </FormControl>
                             <FormDescription>
                               This is the exam template
+                            </FormDescription>
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
+                        name="college"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>College</FormLabel>
+                            <FormControl>
+                              <Select
+                                value={field.value}
+                                onValueChange={field.onChange}
+                              >
+                                <SelectTrigger className="capitalize">
+                                  <SelectValue
+                                    placeholder={"Select College..."}
+                                  />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <SelectGroup>
+                                    {colleges.map((college) => (
+                                      <SelectItem
+                                        key={college.value}
+                                        value={String(college.value)}
+                                      >
+                                        {college.label}
+                                      </SelectItem>
+                                    ))}
+                                  </SelectGroup>
+                                </SelectContent>
+                              </Select>
+                            </FormControl>
+                            <FormDescription>
+                              This is the exam college
                             </FormDescription>
                           </FormItem>
                         )}
@@ -943,3 +983,4 @@ const CreateExamForm = ({
 };
 
 export default CreateExamForm;
+  

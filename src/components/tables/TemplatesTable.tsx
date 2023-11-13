@@ -164,7 +164,7 @@ const TemplateTable = (props: Props) => {
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
-                <Link href={`/profile/${template.id}`}>
+                <Link href={`/templates/${template.id}`}>
                   <View
                     className="mr-2 h-3.5 w-3.5 text-muted-foreground/70"
                     aria-hidden="true"

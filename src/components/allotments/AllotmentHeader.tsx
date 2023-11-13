@@ -1,5 +1,6 @@
 import React from "react";
 import Image from "next/image";
+
 import {
   Table,
   TableBody,
@@ -27,8 +28,21 @@ const AllotmentHeader = ({
   startTime,
   endTime,
 }: Props) => {
+  console.log(
+    startTime?.toLocaleTimeString("en-US", { timeZone: "Asia/Kolkata" }),
+  );
+
+  let session = "FN";
+  if (
+    startTime
+      ?.toLocaleTimeString("en-US", { timeZone: "Asia/Kolkata" })
+      ?.includes("PM")
+  ) {
+    session = "AN";
+  }
+
   return (
-    <>
+    <div className="space-y-2">
       <div className="flex w-full items-center justify-between  ">
         <Image
           src={image}
@@ -37,14 +51,12 @@ const AllotmentHeader = ({
           alt="dasd"
           className="object-contain pr-4"
         />
-
         <div className="">
           <p className="text-center text-xl font-bold">
             {examName?.toUpperCase()}
           </p>
           <p className="text-center text-xl font-bold">Seating Arrangment</p>
         </div>
-
         <div className="rounded-md border px-4 py-2 text-center">
           <p className="">Hall</p>
           <p className="pb-4 text-4xl font-bold">{roomNumber}</p>
@@ -56,38 +68,40 @@ const AllotmentHeader = ({
             <TableCell className="border font-medium">
               <div className="flex">
                 <p className="font-bold">Date: &nbsp;</p>
-                <p>{date}</p>
+                <p>
+                  {new Date(date).toLocaleDateString("en-IN", {
+                    weekday: "long",
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  })}
+                </p>
               </div>
             </TableCell>
             <TableCell className="border ">
               <div className="flex">
                 <p className="font-bold">Session: &nbsp;</p>
-                <p>{(Number(startTime?.getUTCHours())) > 12 ? "PM" : "AM"}</p>
+                <p>{session}</p>
               </div>
             </TableCell>
             <TableCell className="border">
               <div className="flex">
                 <p className="font-bold">Time: &nbsp;</p>
                 <p>
-                  {(Number(startTime?.getUTCHours())) > 12
-                    ? (Number(startTime?.getUTCHours())) - 12
-                    : startTime?.getUTCHours()}
-                  {startTime?.getUTCMinutes() !== 0 &&
-                    ":" + String(startTime?.getUTCMinutes())}
-                  {(Number(startTime?.getUTCHours())) > 12 ? " PM" : " AM"} -{" "}
-                  {(Number(endTime?.getUTCHours())) > 12
-                    ? (Number(endTime?.getUTCHours())) - 12
-                    : endTime?.getUTCHours()}
-                  {endTime?.getUTCMinutes() !== 0 &&
-                    ":" + String(endTime?.getUTCMinutes())}
-                  {(Number(endTime?.getUTCHours())) > 12 ? " PM" : " AM"}
+                  {startTime?.toLocaleTimeString("en-US", {
+                    timeZone: "Asia/Kolkata",
+                  })}{" "}
+                  -{" "}
+                  {endTime?.toLocaleTimeString("en-US", {
+                    timeZone: "Asia/Kolkata",
+                  })}
                 </p>
               </div>
             </TableCell>
           </TableRow>
         </TableBody>
       </Table>
-    </>
+    </div>
   );
 };
 

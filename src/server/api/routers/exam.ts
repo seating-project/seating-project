@@ -83,6 +83,7 @@ export const examRouter = createTRPCRouter({
           to: z.date(),
         }),
         template: z.string(),
+        college: z.string(),
         isPhd: z.boolean(),
         isMe: z.boolean(),
         isYearsTogether: z.boolean(),
@@ -118,6 +119,11 @@ export const examRouter = createTRPCRouter({
           Template: {
             connect: {
               name: input.template,
+            },
+          },
+          College: {
+            connect: {
+              name: input.college,
             },
           },
           name: input.name,

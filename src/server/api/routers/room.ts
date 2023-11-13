@@ -29,7 +29,12 @@ export const roomRouter = createTRPCRouter({
     }),
 
   getRooms: protectedProcedure.query(async ({ ctx }) => {
-    return ctx.db.room.findMany({});
+    return ctx.db.room.findMany({
+      include: {
+        Building: true,
+        Block: true,
+      },
+    });
   }),
 
   // getRoomsOrderForExam: protectedProcedure

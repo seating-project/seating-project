@@ -1,6 +1,3 @@
-import "@/app/globals.css";
-import MainNav from "@/components/navbar/MainNav";
-
 export default function RootLayout({
   children,
 }: {
@@ -8,9 +5,9 @@ export default function RootLayout({
 }) {
   return (
     <div>
-      <div className="sticky top-0 z-10">
+      {/* <div className="sticky top-0 z-10">
         <MainNav />
-      </div>
+      </div> */}
       {children}
     </div>
   );

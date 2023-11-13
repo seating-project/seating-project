@@ -81,6 +81,20 @@
   height: calc(100vh - 5rem);
 }
 
+@media print {
+  .unbreak {
+     break-inside: avoid !important;
+     page-break-inside: avoid !important;
+  }
+}
+
+.unbreak {
+  /* border-width: 2px; */
+  padding: 0.5rem;
+  text-align: center;
+  page-break-inside: avoid !important;
+}
+
 ::-webkit-scrollbar {
   width: 7px;
   height: 7px;
@@ -107,4 +121,4 @@
 ::-webkit-scrollbar-corner {
   background: hsl(var(--muted));
 }
-  
+

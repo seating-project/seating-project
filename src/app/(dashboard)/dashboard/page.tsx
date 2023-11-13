@@ -16,14 +16,14 @@ export default async function Home() {
   const exams = await api.exam.getLatestExams.query();
 
   return (
-    <div className="w-full ">
+    <div className="w-full">
       <div className="p-8">
         <p className="text-2xl font-bold">Current Exams</p>
         <div className="">
           <div className="flex w-full gap-y-2 space-x-4">
             {exams.map((exam) => (
               <div key={exam.id}>
-                <Link href={`/exam/${exam.name}`} className={buttonVariants()}>
+                <Link href={`/exam/${exam.id}`} className={buttonVariants()}>
                   {exam.name}
                 </Link>
               </div>

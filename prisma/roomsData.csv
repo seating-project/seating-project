@@ -1,0 +1,126 @@
+room,room_floor,room_capacity,room_block,room_building
+EH18,0,60,Block A,New Building
+EH19,0,60,Block A,New Building
+EH20,0,60,Block A,New Building
+EH22,1,25,Block B,New Building
+EH23,1,25,Block B,New Building
+EH24,1,25,Block B,New Building
+EH25,1,25,Block B,New Building
+EH26,1,25,Block B,New Building
+EH27,1,25,Block B,New Building
+EH28,1,60,Block B,New Building
+EH29,1,25,Block B,New Building
+EH30,1,25,Block B,New Building
+F10,1,60,Block Main,Main Building
+F11,1,60,Block Main,Main Building
+F12,1,60,Block Main,Main Building
+F13,1,60,Block Main,Main Building
+F14,1,60,Block Main,Main Building
+F15,1,60,Block Main,Main Building
+F16,1,60,Block Main,Main Building
+F17,1,60,Block Main,Main Building
+F18,1,60,Block Main,Main Building
+F19,1,60,Block Main,Main Building
+F2,1,60,Block Main,Main Building
+F20,1,60,Block Main,Main Building
+F21,1,60,Block Main,Main Building
+F5,1,60,Block Main,Main Building
+F6,1,60,Block Main,Main Building
+S13,2,46,Block Main,Main Building
+S24,2,62,Block Main,Main Building
+S6,2,62,Block Main,Main Building
+S7,2,62,Block Main,Main Building
+T19,3,60,Block Main,Main Building
+T22,3,60,Block Main,Main Building
+LH2,0,60,Block B,New Building
+LH3,0,60,Block B,New Building
+DH1,1,60,Block B,New Building
+DH2,1,60,Block B,New Building
+S21,2,62,Block Main,Main Building
+S2,2,64,Block Main,Main Building
+LH5,1,60,Block C,New Building
+T10,3,64,Block Main,Main Building
+S10,2,60,Block Main,Main Building
+T14,3,64,Block Main,Main Building
+S11,2,24,Block Main,Main Building
+S12,2,30,Block Main,Main Building
+S15,2,62,Block Main,Main Building
+MT1,3,66,Block Main,Main Building
+S16,2,64,Block Main,Main Building
+F8,1,58,Block Main,Main Building
+S22,2,62,Block Main,Main Building
+S23,2,62,Block Main,Main Building
+EH10,1,60,Block A,New Building
+EH8,0,60,Block A,New Building
+T3,3,64,Block Main,Main Building
+T16,3,56,Block Main,Main Building
+T6,3,64,Block Main,Main Building
+T7,3,64,Block Main,Main Building
+T9,3,64,Block Main,Main Building
+T8,3,64,Block Main,Main Building
+T12,2,60,Block Main,Main Building
+S18,2,62,Block Main,Main Building
+T18,3,66,Block Main,Main Building
+T17,3,56,Block Main,Main Building
+T20,3,64,Block Main,Main Building
+S17,2,64,Block Main,Main Building
+MT5,3,64,Block Main,Main Building
+MT4,3,68,Block Main,Main Building
+F22,1,62,Block Main,Main Building
+MT2,3,66,Block Main,Main Building
+F4,1,60,Block Main,Main Building
+MT3,3,66,Block Main,Main Building
+F1,1,60,Block Main,Main Building
+S1,1,66,Block Main,Main Building
+F3,1,62,Block Main,Main Building
+F7,1,64,Block Main,Main Building
+F9,1,72,Block Main,Main Building
+F23,1,62,Block Main,Main Building
+LH8,1,60,Block C,New Building
+EH11,1,60,Block A,New Building
+EH3,0,60,Block A,New Building
+EH4,0,60,Block A,New Building
+EH5,0,60,Block A,New Building
+EH6,0,60,Block A,New Building
+EH7,0,60,Block A,New Building
+S26,2,62,Block Main,Main Building
+S20,2,58,Block Main,Main Building
+HCL Lab,0,60,Block Main,Main Building
+CITAR 1,1,80,CITAR,New Building
+CITAR 2,1,82,CITAR,New Building
+T4,3,64,Block Main,Main Building
+T21,3,64,Block Main,Main Building
+EH9,1,60,Block A,New Building
+S8,2,62,Block Main,Main Building
+S4,2,66,Block Main,Main Building
+EH12,1,60,Block A,New Building
+EH13,1,60,Block A,New Building
+EH14,1,60,Block A,New Building
+EH15,1,30,Block A,New Building
+S5,2,66,Block Main,Main Building
+EH21,1,60,Block B,New Building
+S3,2,64,Block Main,Main Building
+T1,3,30,Block Main,Main Building
+T2,3,64,Block Main,Main Building
+T15,3,56,Block Main,Main Building
+EH16,1,60,Block A,New Building
+LH4,1,40,Block C,New Building
+LH6,1,60,Block C,New Building
+LH7,1,56,Block C,New Building
+EH1,0,60,Block A,New Building
+EH17,1,60,Block A,New Building
+EH2,0,60,Block A,New Building
+LH1,1,40,Block C,New Building
+Digital Library,2,60,Block Main,Main Building
+CITAR Computer Lab 1,1,80,CITAR,New Building
+CITAR Computer Lab 2,1,82,CITAR,New Building
+CSE Computer Lab,1,120,"",Main Building
+PE Lab,2,66,Block Main,Main Building
+EC Lab,2,66,Block Main,Main Building
+MCT Lab 2,0,66,Block Main,Main Building
+MCT Lab 1,0,66,Block Main,New Building
+L1 (Library),2,70,Block Main,New Building
+T13,3,64,Block Main,Main Building
+LH9,1,30,Block B,New Building
+LH14,0,40,Block C,New Building
+Drawing Room,1,60,Block D,New Building

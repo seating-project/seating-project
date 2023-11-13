@@ -1,18 +1,23 @@
 import "@/app/globals.css";
 
-import { Inter } from "next/font/google";
+import { Inter, Poppins } from "next/font/google";
 import { headers } from "next/headers";
-import { Toaster } from "@/components/ui/toaster";
-import { ThemeProvider } from "@/components/providers/ThemeProvider";
-
-import { TRPCReactProvider } from "@/trpc/react";
 import { twMerge } from "tailwind-merge";
-import { getServerAuthSession } from "@/server/auth";
+
 import { AuthProvider } from "@/components/providers/AuthProvider";
+import { ThemeProvider } from "@/components/providers/ThemeProvider";
+import { Toaster } from "@/components/ui/toaster";
+import { getServerAuthSession } from "@/server/auth";
+import { TRPCReactProvider } from "@/trpc/react";
 
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-sans",
+});
+
+const poppins = Poppins({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
 });
 
 export const metadata = {
@@ -33,7 +38,8 @@ export default async function RootLayout({
       <body
         className={twMerge(
           " bg-background font-sans text-foreground",
-          inter.variable,
+          // inter.variable,
+          poppins.className,
         )}
       >
         <AuthProvider session={session}>

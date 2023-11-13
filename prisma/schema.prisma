@@ -26,6 +26,14 @@ model Logo {
   Template Template[]
 }
 
+model College {
+  id        Int       @id @default(autoincrement())
+  name      String    @unique @default("Chennai Institute of Technology")
+  shortName String    @unique @default("CIT")
+  Students  Student[]
+  Exams     Exam[]
+}
+
 model Student {
   id             Int        @id @default(autoincrement())
   name           String
@@ -34,6 +42,8 @@ model Student {
   Department     Department @relation(fields: [departmentId], references: [id])
   Year           Year       @relation(fields: [yearId], references: [id])
   Degree         Degree     @relation(fields: [degreeId], references: [id])
+  College        College    @relation(fields: [collegeId], references: [id])
+  collegeId      Int
   departmentId   Int
   yearId         Int
   degreeId       Int
@@ -72,7 +82,7 @@ model Department {
   DepartmentsLeftGirls       Exam[]         @relation("DepartmentsLeftGirls")
   DepartmentsRightGirls      Exam[]         @relation("DepartmentsRightGirls")
   DepartmentsLeftSingleYear  Exam[]         @relation("DepartmentsLeftSingleYear")
-  DepartmentsRightSingleYear Exam[]         @relation("DepartmentsRightSingleYear")       
+  DepartmentsRightSingleYear Exam[]         @relation("DepartmentsRightSingleYear")
   Departments                Exam[]         @relation("Departments")
 }
 
@@ -128,6 +138,8 @@ model Exam {
   timeToSendWhatsappMessage  DateTime?
   // setsForWhichSubjects      Subject[]
   // noOfSets                  Int?
+  College                    College             @relation(fields: [collegeId], references: [id])
+  collegeId                  Int
   Template                   Template            @relation(fields: [templateId], references: [id])
   templateId                 Int
   Departments                Department[]        @relation("Departments")
