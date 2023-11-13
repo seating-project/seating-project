@@ -24,7 +24,7 @@ export const templateRouter = createTRPCRouter({
           Rooms: true,
           Buildings: true,
           Logo: true,
-        }
+        },
       });
     }),
 
@@ -73,6 +73,7 @@ export const templateRouter = createTRPCRouter({
         isAlternateDepartmentSeated: z.boolean(),
         isRandomizedDepartments: z.boolean(),
         buildings: z.array(z.string()),
+        rooms: z.array(z.string()),
         startTime: z.date(),
         endTime: z.date(),
         logo: z.string(),
@@ -99,6 +100,11 @@ export const templateRouter = createTRPCRouter({
           Buildings: {
             connect: input.buildings.map((building) => ({
               name: building,
+            })),
+          },
+          Rooms: {
+            connect: input.rooms.map((room) => ({
+              number: room,
             })),
           },
         },

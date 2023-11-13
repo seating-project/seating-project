@@ -1,7 +1,6 @@
 "use client";
 
-import React, { MouseEventHandler } from "react";
-import { useRouter } from "next/navigation";
+import React from "react";
 
 import { api } from "@/trpc/react";
 

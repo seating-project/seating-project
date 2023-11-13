@@ -1,6 +1,9 @@
 import "@/app/globals.css";
 
-import { Inter, Poppins } from "next/font/google";
+import {
+  // Inter,
+  Poppins,
+} from "next/font/google";
 import { headers } from "next/headers";
 import { twMerge } from "tailwind-merge";
 
@@ -10,10 +13,10 @@ import { Toaster } from "@/components/ui/toaster";
 import { getServerAuthSession } from "@/server/auth";
 import { TRPCReactProvider } from "@/trpc/react";
 
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-sans",
-});
+// const inter = Inter({
+//   subsets: ["latin"],
+//   variable: "--font-sans",
+// });
 
 const poppins = Poppins({
   subsets: ["latin"],
