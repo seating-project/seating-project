@@ -363,8 +363,8 @@ const TemplateTable = (props: Props) => {
                         row.original.id,
                         row.original.name,
                         row.original.roomStrength,
-                        row.original.startTime.toISOString(),
-                        row.original.endTime.toISOString(),
+                        row.original.startTime,
+                        row.original.endTime,
                       ];
                     }),
                   });
