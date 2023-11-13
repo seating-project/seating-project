@@ -1,5 +1,4 @@
 import NewAllotments from "@/components/allotments/NewAllotments";
-import AllotmentTable from "@/components/tables/AllotmentTable";
 import { api } from "@/trpc/server";
 
 type Props = {

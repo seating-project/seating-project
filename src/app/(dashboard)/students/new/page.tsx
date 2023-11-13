@@ -33,6 +33,14 @@ export default async function AddStudentPage() {
     };
   });
 
+  const colleges = await api.college.getColleges.query();
+  const requiredColleges = colleges.map((college) => {
+    return {
+      label: college.name,
+      value: college.name,
+    };
+  });
+
   return (
     <div className="w-full">
       <div className="p-8">
@@ -51,6 +59,7 @@ export default async function AddStudentPage() {
               departments={requiredDepartments}
               years={requiredYears}
               degrees={requiredDegrees}
+              colleges={requiredColleges}
             />
           </CardContent>
         </Card>

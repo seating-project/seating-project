@@ -38,9 +38,10 @@ type Props = {
   departments: AnyOptions;
   years: AnyOptions;
   degrees: AnyOptions;
+  colleges: AnyOptions;
 };
 
-const AddStudentForm = ({ departments, years, degrees }: Props) => {
+const AddStudentForm = ({ departments, years, degrees, colleges }: Props) => {
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
   const form = useForm<z.infer<typeof studentFormSchema>>({
@@ -68,6 +69,7 @@ const AddStudentForm = ({ departments, years, degrees }: Props) => {
         department: values.department,
         year: Number(values.year),
         degree: values.degree,
+        college: values.college,
       });
       if (createStudent) {
         toast({
@@ -256,6 +258,36 @@ const AddStudentForm = ({ departments, years, degrees }: Props) => {
                     </SelectContent>
                   </Select>
                   <FormDescription>This is your student gender</FormDescription>
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="college"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>College</FormLabel>
+                  <Select onValueChange={field.onChange} disabled={isPending}>
+                    <FormControl>
+                      <SelectTrigger className="w-[180px]">
+                        <SelectValue placeholder="College" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {colleges.map((college) => (
+                        <SelectItem
+                          value={String(college.value)}
+                          key={college.value}
+                        >
+                          {" "}
+                          {college.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormDescription>This is your student college</FormDescription>
+                  <FormMessage />
                 </FormItem>
               )}
             />

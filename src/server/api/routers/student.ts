@@ -72,6 +72,7 @@ export const studentRouter = createTRPCRouter({
         gender: z.string(),
         department: z.string(),
         degree: z.string(),
+        college: z.string(),
         year: z.number(),
         phoneNumber: z.string().optional(),
       }),
@@ -89,6 +90,11 @@ export const studentRouter = createTRPCRouter({
           Degree: {
             connect: {
               degree: input.degree,
+            },
+          },
+          College: {
+            connect: {
+              name: input.college,
             },
           },
           Year: {

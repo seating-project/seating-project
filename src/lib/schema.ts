@@ -37,6 +37,7 @@ export const studentFormSchema = z.object({
   department: z.string(),
   year: z.string(),
   degree: z.string(),
+  college: z.string(),
   phoneNumber: z.string().optional(),
 });
 
