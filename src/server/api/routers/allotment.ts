@@ -1,3 +1,4 @@
+import { Student } from "@prisma/client";
 import { z } from "zod";
 
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
@@ -6,17 +7,30 @@ import { getAllotments } from "../helpers";
 
 export const allotmentRouter = createTRPCRouter({
   createAllotment: protectedProcedure
-    .input(z.object({ examId: z.number(), templateId: z.number() }))
+    .input(
+      z.object({
+        examId: z.number(),
+        templateId: z.number(),
+        date: z.string(),
+      }),
+    )
     .query(async ({ input }) => {
       const students = await getAllotments({
         examId: input.examId,
         templateId: input.templateId,
+        date: input.date,
       });
       return students;
     }),
 
   createHallPlanForAll: protectedProcedure
-    .input(z.object({ examId: z.number(), templateId: z.number() }))
+    .input(
+      z.object({
+        examId: z.number(),
+        templateId: z.number(),
+        date: z.string(),
+      }),
+    )
     .query(async ({ ctx, input }) => {
       // Getting the exam data
       const exam = await ctx.db.exam.findUnique({
@@ -53,6 +67,7 @@ export const allotmentRouter = createTRPCRouter({
       const allotments = await getAllotments({
         examId: input.examId,
         templateId: input.templateId,
+        date: input.date,
       });
 
       const hallplans: Record<
@@ -267,7 +282,13 @@ export const allotmentRouter = createTRPCRouter({
     }),
 
   createHallPlanGenderWise: protectedProcedure
-    .input(z.object({ examId: z.number(), templateId: z.number() }))
+    .input(
+      z.object({
+        examId: z.number(),
+        templateId: z.number(),
+        date: z.string(),
+      }),
+    )
     .query(async ({ ctx, input }) => {
       // Getting the exam data
       const exam = await ctx.db.exam.findUnique({
@@ -304,6 +325,7 @@ export const allotmentRouter = createTRPCRouter({
       const allotments = await getAllotments({
         examId: input.examId,
         templateId: input.templateId,
+        date: input.date,
       });
 
       const hallplans: Record<
@@ -606,5 +628,108 @@ export const allotmentRouter = createTRPCRouter({
       });
 
       return hallplans;
+    }),
+
+  getAttendanceRooms: protectedProcedure
+    .input(z.object({ examId: z.number(), date: z.string() }))
+    .query(async ({ ctx, input }) => {
+      // Getting the exam data
+      const exam = await ctx.db.exam.findUnique({
+        where: { id: input.examId },
+        include: {
+          Departments: true,
+          Template: true,
+          Years: true,
+          DepartmentsLeftBoys: true,
+          DepartmentsLeftGirls: true,
+          DepartmentsRightBoys: true,
+          DepartmentsRightGirls: true,
+          DepartmentsLeftSingleYear: true,
+          DepartmentsRightSingleYear: true,
+          RoomsOrder: true,
+        },
+      });
+
+      // Getting the template data
+      const template = exam?.Template;
+
+      // If the exam or template is not found, throw an error
+      if (!exam || !template) {
+        throw new Error("Not found");
+      }
+
+      // Getting the allotments
+      const allotments = await getAllotments({
+        examId: input.examId,
+        templateId: template.id,
+        date: input.date,
+      });
+
+      const rooms = Object.keys(allotments);
+      return rooms;
+    }),
+
+  createAttendance: protectedProcedure
+    .input(
+      z.object({
+        examId: z.number(),
+        templateId: z.number(),
+        date: z.string(),
+        room: z.string(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      // Getting the exam data
+      const exam = await ctx.db.exam.findUnique({
+        where: { id: input.examId },
+        include: {
+          Departments: true,
+          Template: true,
+          Years: true,
+          DepartmentsLeftBoys: true,
+          DepartmentsLeftGirls: true,
+          DepartmentsRightBoys: true,
+          DepartmentsRightGirls: true,
+          DepartmentsLeftSingleYear: true,
+          DepartmentsRightSingleYear: true,
+          RoomsOrder: true,
+        },
+      });
+
+      // Getting the template data
+      const template = exam?.Template;
+
+      // If the exam or template is not found, throw an error
+      if (!exam || !template) {
+        throw new Error("Not found");
+      }
+
+      // Getting the allotments
+      const allotments = await getAllotments({
+        examId: input.examId,
+        templateId: template.id,
+        date: input.date,
+      });
+
+      const students = allotments[input.room];
+
+      const attendance: Record<string, Student[]> = {};
+      students?.forEach((student) => {
+        student.forEach((s) => {
+          if (s?.departmentId && s?.yearId) {
+            if (
+              !Object.keys(attendance).includes(
+                String(s.departmentId + " " + s.yearId),
+              )
+            ) {
+              attendance[String(s.departmentId + " " + s.yearId)] = [s];
+            } else {
+              attendance[String(s.departmentId + " " + s.yearId)]?.push(s);
+            }
+          }
+        });
+      });
+
+      return attendance;
     }),
 });

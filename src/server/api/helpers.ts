@@ -1,13 +1,16 @@
 import type { Room, Student } from "@prisma/client";
 
 import { db } from "@/server/db";
+import { TimeTable } from "@/types";
 
 export async function getAllotments({
   examId,
   templateId,
+  date,
 }: {
   examId: number;
   templateId: number;
+  date: string;
 }) {
   // ? ==================== ALLOTMENTS FUNCTION ====================
 
@@ -49,6 +52,26 @@ export async function getAllotments({
   // Create the allotments object
   const allotments: Record<string, [Student | null, Student | null][]> = {};
 
+  // Creating the departments array based on the timetable year wise
+  const departmentsForToday: Record<string, string[]> = {};
+  Object.keys(exam.Timetable as TimeTable).map((year) => {
+    if (year != null) {
+      const departmentsWritingToday: string[] = [];
+      Object.keys((exam.Timetable as TimeTable)?.[year] ?? {}).map(
+        (department) => {
+          Object.keys(
+            (exam.Timetable as TimeTable)?.[year]?.[department] ?? {},
+          ).map((examDate) => {
+            if (examDate === date) {
+              departmentsWritingToday.push(department);
+            }
+          });
+        },
+      );
+      departmentsForToday[year] = departmentsWritingToday;
+    }
+  });
+
   // * Creating the allotments based on the conditions of the template and exam
 
   if (template.isSingleSeater) {
@@ -57,22 +80,26 @@ export async function getAllotments({
 
       // Getting all the Circuit students
       await Promise.all(
-        exam.Departments.map(async (department) => {
-          const students = await db.student.findMany({
-            where: {
-              yearId: {
-                in: exam.Years.map((year) => year.id),
+        Object.keys(departmentsForToday).map(async (year) => {
+          if (year != null) {
+            const students = await db.student.findMany({
+              where: {
+                Year: {
+                  year: Number(year),
+                },
+                Department: {
+                  shortName: {
+                    in: departmentsForToday[year],
+                  },
+                  type: "Circuit",
+                },
               },
-              departmentId: department.id,
-              Department: {
-                type: "Circuit",
+              orderBy: {
+                registerNumber: "asc",
               },
-            },
-            orderBy: {
-              registerNumber: "asc",
-            },
-          });
-          cs.push(...students);
+            });
+            cs.push(...students);
+          }
         }),
       );
 
@@ -91,22 +118,26 @@ export async function getAllotments({
 
       // Getting all the Non-Circuit students
       await Promise.all(
-        exam.Departments.map(async (department) => {
-          const students = await db.student.findMany({
-            where: {
-              yearId: {
-                in: exam.Years.map((year) => year.id),
+        Object.keys(departmentsForToday).map(async (year) => {
+          if (year != null) {
+            const students = await db.student.findMany({
+              where: {
+                Year: {
+                  year: Number(year),
+                },
+                Department: {
+                  shortName: {
+                    in: departmentsForToday[year],
+                  },
+                  type: "NonCircuit",
+                },
               },
-              departmentId: department.id,
-              Department: {
-                type: "NonCircuit",
+              orderBy: {
+                registerNumber: "asc",
               },
-            },
-            orderBy: {
-              registerNumber: "asc",
-            },
-          });
-          ncs.push(...students);
+            });
+            ncs.push(...students);
+          }
         }),
       );
 
@@ -120,6 +151,20 @@ export async function getAllotments({
         );
         return aIndex - bIndex;
       });
+
+      // Filtering departments based on the time table
+      console.log("timetable", exam.Timetable);
+      // const departmentsForToday = Object.keys(exam.Timetable as TimeTable).map(
+      //   (year) => {
+      //     return Object.keys(exam.Timetable?.[year] ?? {}).map(
+      //       (department) => {
+      //         return exam.Timetable?.[year]?.[department] !== ""
+      //           ? department
+      //           : null;
+      //       },
+      //     );
+      //   },
+      // );
 
       // Getting the room strength (number of students per room)
       // It will always be double of the total number of benches
@@ -167,19 +212,28 @@ export async function getAllotments({
       return allotments;
     } else {
       // Getting all the students
-      const students = await db.student.findMany({
-        where: {
-          yearId: {
-            in: exam.Years.map((year) => year.id),
-          },
-          departmentId: {
-            in: exam.Departments.map((department) => department.id),
-          },
-        },
-        orderBy: {
-          registerNumber: "asc",
-        },
-      });
+      const students: Student[] = [];
+
+      await Promise.all(
+        Object.keys(departmentsForToday).map(async (year) => {
+          const s = await db.student.findMany({
+            where: {
+              Year: {
+                year: parseInt(year),
+              },
+              Department: {
+                shortName: {
+                  in: departmentsForToday[year],
+                },
+              },
+            },
+            orderBy: {
+              registerNumber: "asc",
+            },
+          });
+          students.push(...s);
+        }),
+      );
 
       // Sorting the students based on the department order
       students.sort((a, b) => {
@@ -217,23 +271,27 @@ export async function getAllotments({
       if (exam.isYearsTogether) {
         const students: Record<string, Student[]> = {}; // To store all the students based on their years
 
-        // Getting all the BOYS data
+        // Getting the boys data
         await Promise.all(
-          exam.Years.map(async (year) => {
-            if (year.year === 4 && exam.Years.length === 3) {
+          Object.keys(departmentsForToday).map(async (year) => {
+            if (year === "4" && exam.Years.length === 3) {
               const s = await db.student.findMany({
                 where: {
-                  yearId: year.id,
+                  Year: {
+                    year: parseInt(year),
+                  },
                   departmentId: {
-                    in: exam.DepartmentsLeftSingleYear.map(
-                      (department) => department.id,
-                    ),
+                    in: exam.DepartmentsLeftSingleYear.filter((department) => {
+                      return departmentsForToday[year]?.includes(
+                        department.shortName,
+                      );
+                    }).map((department) => department.id),
                   },
                   gender: "Male",
                 },
               });
-              students[`${year.year}M LEFT`] = s;
-              students[`${year.year}M LEFT`]?.sort((a, b) => {
+              students[`${year}M LEFT`] = s;
+              students[`${year}M LEFT`]?.sort((a, b) => {
                 const aIndex = exam.DepartmentsLeftSingleYear.findIndex(
                   (department) => department.id === a.departmentId,
                 );
@@ -242,20 +300,23 @@ export async function getAllotments({
                 );
                 return aIndex - bIndex;
               });
-
               const s2 = await db.student.findMany({
                 where: {
-                  yearId: year.id,
+                  Year: {
+                    year: parseInt(year),
+                  },
                   departmentId: {
-                    in: exam.DepartmentsRightSingleYear.map(
-                      (department) => department.id,
-                    ),
+                    in: exam.DepartmentsRightSingleYear.filter((department) => {
+                      return departmentsForToday[year]?.includes(
+                        department.shortName,
+                      );
+                    }).map((department) => department.id),
                   },
                   gender: "Male",
                 },
               });
-              students[`${year.year}M RIGHT`] = s2;
-              students[`${year.year}M RIGHT`]?.sort((a, b) => {
+              students[`${year}M RIGHT`] = s2;
+              students[`${year}M RIGHT`]?.sort((a, b) => {
                 const aIndex = exam.DepartmentsRightSingleYear.findIndex(
                   (department) => department.id === a.departmentId,
                 );
@@ -267,9 +328,13 @@ export async function getAllotments({
             } else {
               const s = await db.student.findMany({
                 where: {
-                  yearId: year.id,
+                  yearId: parseInt(year),
                   departmentId: {
-                    in: exam.Departments.map((department) => department.id),
+                    in: exam.Departments.filter((department) => {
+                      return departmentsForToday[year]?.includes(
+                        department.shortName,
+                      );
+                    }).map((department) => department.id),
                   },
                   gender: "Male",
                 },
@@ -277,8 +342,8 @@ export async function getAllotments({
                   registerNumber: "asc",
                 },
               });
-              students[`${year.year}M`] = s;
-              students[`${year.year}M`]?.sort((a, b) => {
+              students[`${year}M`] = s;
+              students[`${year}M`]?.sort((a, b) => {
                 const aIndex = exam.Departments.findIndex(
                   (department) => department.id === a.departmentId,
                 );
@@ -293,21 +358,25 @@ export async function getAllotments({
 
         // Getting all the GIRLS data
         await Promise.all(
-          exam.Years.map(async (year) => {
-            if (year.year === 4 && exam.Years.length === 3) {
+          Object.keys(departmentsForToday).map(async (year) => {
+            if (year === "4" && exam.Years.length === 3) {
               const s = await db.student.findMany({
                 where: {
-                  yearId: year.id,
+                  Year: {
+                    year: parseInt(year),
+                  },
                   departmentId: {
-                    in: exam.DepartmentsLeftSingleYear.map(
-                      (department) => department.id,
-                    ),
+                    in: exam.DepartmentsLeftSingleYear.filter((department) => {
+                      return departmentsForToday[year]?.includes(
+                        department.shortName,
+                      );
+                    }).map((department) => department.id),
                   },
                   gender: "Female",
                 },
               });
-              students[`${year.year}F LEFT`] = s;
-              students[`${year.year}F LEFT`]?.sort((a, b) => {
+              students[`${year}F LEFT`] = s;
+              students[`${year}F LEFT`]?.sort((a, b) => {
                 const aIndex = exam.DepartmentsLeftSingleYear.findIndex(
                   (department) => department.id === a.departmentId,
                 );
@@ -319,17 +388,21 @@ export async function getAllotments({
 
               const s2 = await db.student.findMany({
                 where: {
-                  yearId: year.id,
+                  Year: {
+                    year: parseInt(year),
+                  },
                   departmentId: {
-                    in: exam.DepartmentsRightSingleYear.map(
-                      (department) => department.id,
-                    ),
+                    in: exam.DepartmentsRightSingleYear.filter((department) => {
+                      return departmentsForToday[year]?.includes(
+                        department.shortName,
+                      );
+                    }).map((department) => department.id),
                   },
                   gender: "Female",
                 },
               });
-              students[`${year.year}F RIGHT`] = s2;
-              students[`${year.year}F RIGHT`]?.sort((a, b) => {
+              students[`${year}F RIGHT`] = s2;
+              students[`${year}F RIGHT`]?.sort((a, b) => {
                 const aIndex = exam.DepartmentsRightSingleYear.findIndex(
                   (department) => department.id === a.departmentId,
                 );
@@ -341,9 +414,15 @@ export async function getAllotments({
             } else {
               const s = await db.student.findMany({
                 where: {
-                  yearId: year.id,
+                  Year: {
+                    year: parseInt(year),
+                  },
                   departmentId: {
-                    in: exam.Departments.map((department) => department.id),
+                    in: exam.Departments.filter((department) => {
+                      return departmentsForToday[year]?.includes(
+                        department.shortName,
+                      );
+                    }).map((department) => department.id),
                   },
                   gender: "Female",
                 },
@@ -351,8 +430,8 @@ export async function getAllotments({
                   registerNumber: "asc",
                 },
               });
-              students[`${year.year}F`] = s;
-              students[`${year.year}F`]?.sort((a, b) => {
+              students[`${year}F`] = s;
+              students[`${year}F`]?.sort((a, b) => {
                 const aIndex = exam.Departments.findIndex(
                   (department) => department.id === a.departmentId,
                 );
@@ -600,13 +679,34 @@ export async function getAllotments({
         ) {
           // Getting the boys data for the left side
           await Promise.all(
-            exam.DepartmentsLeftBoys.map(async (department) => {
+            // exam.DepartmentsLeftBoys.map(async (department) => {
+            //   const s = await db.student.findMany({
+            //     where: {
+            //       yearId: {
+            //         in: exam.Years.map((year) => year.id),
+            //       },
+            //       departmentId: department.id,
+            //       gender: "Male",
+            //     },
+            //     orderBy: {
+            //       registerNumber: "asc",
+            //     },
+            //   });
+            //   students[`Male Left`]?.push(...s);
+            // }),
+            Object.keys(departmentsForToday).map(async (year) => {
               const s = await db.student.findMany({
                 where: {
-                  yearId: {
-                    in: exam.Years.map((year) => year.id),
+                  Year: {
+                    year: parseInt(year),
                   },
-                  departmentId: department.id,
+                  departmentId: {
+                    in: exam.DepartmentsLeftBoys.filter((department) => {
+                      return departmentsForToday[year]?.includes(
+                        department.shortName,
+                      );
+                    }).map((department) => department.id),
+                  },
                   gender: "Male",
                 },
                 orderBy: {
@@ -619,13 +719,34 @@ export async function getAllotments({
 
           // Getting the boys data for the right side
           await Promise.all(
-            exam.DepartmentsRightBoys.map(async (department) => {
+            // exam.DepartmentsRightBoys.map(async (department) => {
+            //   const s = await db.student.findMany({
+            //     where: {
+            //       yearId: {
+            //         in: exam.Years.map((year) => year.id),
+            //       },
+            //       departmentId: department.id,
+            //       gender: "Male",
+            //     },
+            //     orderBy: {
+            //       registerNumber: "asc",
+            //     },
+            //   });
+            //   students[`Male Right`]?.push(...s);
+            // }),
+            Object.keys(departmentsForToday).map(async (year) => {
               const s = await db.student.findMany({
                 where: {
-                  yearId: {
-                    in: exam.Years.map((year) => year.id),
+                  Year: {
+                    year: parseInt(year),
                   },
-                  departmentId: department.id,
+                  departmentId: {
+                    in: exam.DepartmentsRightBoys.filter((department) => {
+                      return departmentsForToday[year]?.includes(
+                        department.shortName,
+                      );
+                    }).map((department) => department.id),
+                  },
                   gender: "Male",
                 },
                 orderBy: {
@@ -662,13 +783,37 @@ export async function getAllotments({
 
           // Getting the circuit boy students
           await Promise.all(
-            exam.Departments.map(async (department) => {
+            // exam.Departments.map(async (department) => {
+            //   const s = await db.student.findMany({
+            //     where: {
+            //       yearId: {
+            //         in: exam.Years.map((year) => year.id),
+            //       },
+            //       departmentId: department.id,
+            //       Department: {
+            //         type: "Circuit",
+            //       },
+            //       gender: "Male",
+            //     },
+            //     orderBy: {
+            //       registerNumber: "asc",
+            //     },
+            //   });
+            //   students[`Male Left`]?.push(...s);
+            // }),
+            Object.keys(departmentsForToday).map(async (year) => {
               const s = await db.student.findMany({
                 where: {
-                  yearId: {
-                    in: exam.Years.map((year) => year.id),
+                  Year: {
+                    year: parseInt(year),
                   },
-                  departmentId: department.id,
+                  departmentId: {
+                    in: exam.Departments.filter((department) => {
+                      return departmentsForToday[year]?.includes(
+                        department.shortName,
+                      );
+                    }).map((department) => department.id),
+                  },
                   Department: {
                     type: "Circuit",
                   },
@@ -684,13 +829,37 @@ export async function getAllotments({
 
           // Getting the non-circuit boy students
           await Promise.all(
-            exam.Departments.map(async (department) => {
+            // exam.Departments.map(async (department) => {
+            //   const s = await db.student.findMany({
+            //     where: {
+            //       yearId: {
+            //         in: exam.Years.map((year) => year.id),
+            //       },
+            //       departmentId: department.id,
+            //       Department: {
+            //         type: "NonCircuit",
+            //       },
+            //       gender: "Male",
+            //     },
+            //     orderBy: {
+            //       registerNumber: "asc",
+            //     },
+            //   });
+            //   students[`Male Right`]?.push(...s);
+            // }),
+            Object.keys(departmentsForToday).map(async (year) => {
               const s = await db.student.findMany({
                 where: {
-                  yearId: {
-                    in: exam.Years.map((year) => year.id),
+                  Year: {
+                    year: parseInt(year),
                   },
-                  departmentId: department.id,
+                  departmentId: {
+                    in: exam.Departments.filter((department) => {
+                      return departmentsForToday[year]?.includes(
+                        department.shortName,
+                      );
+                    }).map((department) => department.id),
+                  },
                   Department: {
                     type: "NonCircuit",
                   },
@@ -734,13 +903,34 @@ export async function getAllotments({
         ) {
           //  Getting the left side girls data
           await Promise.all(
-            exam.DepartmentsLeftGirls.map(async (department) => {
+            // exam.DepartmentsLeftGirls.map(async (department) => {
+            //   const s = await db.student.findMany({
+            //     where: {
+            //       yearId: {
+            //         in: exam.Years.map((year) => year.id),
+            //       },
+            //       departmentId: department.id,
+            //       gender: "Female",
+            //     },
+            //     orderBy: {
+            //       registerNumber: "asc",
+            //     },
+            //   });
+            //   students[`Female Left`]?.push(...s);
+            // }),
+            Object.keys(departmentsForToday).map(async (year) => {
               const s = await db.student.findMany({
                 where: {
-                  yearId: {
-                    in: exam.Years.map((year) => year.id),
+                  Year: {
+                    year: parseInt(year),
                   },
-                  departmentId: department.id,
+                  departmentId: {
+                    in: exam.DepartmentsLeftGirls.filter((department) => {
+                      return departmentsForToday[year]?.includes(
+                        department.shortName,
+                      );
+                    }).map((department) => department.id),
+                  },
                   gender: "Female",
                 },
                 orderBy: {
@@ -753,13 +943,34 @@ export async function getAllotments({
 
           // Getting the right side girls data
           await Promise.all(
-            exam.DepartmentsRightGirls.map(async (department) => {
+            // exam.DepartmentsRightGirls.map(async (department) => {
+            //   const s = await db.student.findMany({
+            //     where: {
+            //       yearId: {
+            //         in: exam.Years.map((year) => year.id),
+            //       },
+            //       departmentId: department.id,
+            //       gender: "Female",
+            //     },
+            //     orderBy: {
+            //       registerNumber: "asc",
+            //     },
+            //   });
+            //   students[`Female Right`]?.push(...s);
+            // }),
+            Object.keys(departmentsForToday).map(async (year) => {
               const s = await db.student.findMany({
                 where: {
-                  yearId: {
-                    in: exam.Years.map((year) => year.id),
+                  Year: {
+                    year: parseInt(year),
                   },
-                  departmentId: department.id,
+                  departmentId: {
+                    in: exam.DepartmentsRightGirls.filter((department) => {
+                      return departmentsForToday[year]?.includes(
+                        department.shortName,
+                      );
+                    }).map((department) => department.id),
+                  },
                   gender: "Female",
                 },
                 orderBy: {
@@ -796,13 +1007,37 @@ export async function getAllotments({
 
           // Getting the circuit girl students data
           await Promise.all(
-            exam.Departments.map(async (department) => {
+            // exam.Departments.map(async (department) => {
+            //   const s = await db.student.findMany({
+            //     where: {
+            //       yearId: {
+            //         in: exam.Years.map((year) => year.id),
+            //       },
+            //       departmentId: department.id,
+            //       Department: {
+            //         type: "Circuit",
+            //       },
+            //       gender: "Female",
+            //     },
+            //     orderBy: {
+            //       registerNumber: "asc",
+            //     },
+            //   });
+            //   students[`Female Left`]?.push(...s);
+            // }),
+            Object.keys(departmentsForToday).map(async (year) => {
               const s = await db.student.findMany({
                 where: {
-                  yearId: {
-                    in: exam.Years.map((year) => year.id),
+                  Year: {
+                    year: parseInt(year),
                   },
-                  departmentId: department.id,
+                  departmentId: {
+                    in: exam.Departments.filter((department) => {
+                      return departmentsForToday[year]?.includes(
+                        department.shortName,
+                      );
+                    }).map((department) => department.id),
+                  },
                   Department: {
                     type: "Circuit",
                   },
@@ -818,13 +1053,37 @@ export async function getAllotments({
 
           // Getting the non-circuit girl students data
           await Promise.all(
-            exam.Departments.map(async (department) => {
+            // exam.Departments.map(async (department) => {
+            //   const s = await db.student.findMany({
+            //     where: {
+            //       yearId: {
+            //         in: exam.Years.map((year) => year.id),
+            //       },
+            //       departmentId: department.id,
+            //       Department: {
+            //         type: "NonCircuit",
+            //       },
+            //       gender: "Female",
+            //     },
+            //     orderBy: {
+            //       registerNumber: "asc",
+            //     },
+            //   });
+            //   students[`Female Right`]?.push(...s);
+            // }),
+            Object.keys(departmentsForToday).map(async (year) => {
               const s = await db.student.findMany({
                 where: {
-                  yearId: {
-                    in: exam.Years.map((year) => year.id),
+                  Year: {
+                    year: parseInt(year),
                   },
-                  departmentId: department.id,
+                  departmentId: {
+                    in: exam.Departments.filter((department) => {
+                      return departmentsForToday[year]?.includes(
+                        department.shortName,
+                      );
+                    }).map((department) => department.id),
+                  },
                   Department: {
                     type: "NonCircuit",
                   },
@@ -976,20 +1235,25 @@ export async function getAllotments({
 
         // Getting all the students data
         await Promise.all(
-          exam.Years.map(async (year) => {
-            if (year.year === 4 && exam.Years.length === 3) {
+          // exam.Years.map(async (year) => {
+          Object.keys(departmentsForToday).map(async (year) => {
+            if (year === "4" && exam.Years.length === 3) {
               const s = await db.student.findMany({
                 where: {
-                  yearId: year.id,
+                  Year: {
+                    year: parseInt(year),
+                  },
                   departmentId: {
-                    in: exam.DepartmentsLeftSingleYear.map(
-                      (department) => department.id,
-                    ),
+                    in: exam.DepartmentsLeftSingleYear.filter((department) => {
+                      return departmentsForToday[year]?.includes(
+                        department.shortName,
+                      );
+                    }).map((department) => department.id),
                   },
                 },
               });
-              students[`${year.year} LEFT`] = s;
-              students[`${year.year} LEFT`]?.sort((a, b) => {
+              students[`${year} LEFT`] = s;
+              students[`${year} LEFT`]?.sort((a, b) => {
                 const aIndex = exam.DepartmentsLeftSingleYear.findIndex(
                   (department) => department.id === a.departmentId,
                 );
@@ -1001,16 +1265,20 @@ export async function getAllotments({
 
               const s2 = await db.student.findMany({
                 where: {
-                  yearId: year.id,
+                  Year: {
+                    year: parseInt(year),
+                  },
                   departmentId: {
-                    in: exam.DepartmentsRightSingleYear.map(
-                      (department) => department.id,
-                    ),
+                    in: exam.DepartmentsRightSingleYear.filter((department) => {
+                      return departmentsForToday[year]?.includes(
+                        department.shortName,
+                      );
+                    }).map((department) => department.id),
                   },
                 },
               });
-              students[`${year.year} RIGHT`] = s2;
-              students[`${year.year} RIGHT`]?.sort((a, b) => {
+              students[`${year} RIGHT`] = s2;
+              students[`${year} RIGHT`]?.sort((a, b) => {
                 const aIndex = exam.DepartmentsRightSingleYear.findIndex(
                   (department) => department.id === a.departmentId,
                 );
@@ -1022,17 +1290,23 @@ export async function getAllotments({
             } else {
               const s = await db.student.findMany({
                 where: {
-                  yearId: year.id,
+                  Year: {
+                    year: parseInt(year),
+                  },
                   departmentId: {
-                    in: exam.Departments.map((department) => department.id),
+                    in: exam.Departments.filter((department) => {
+                      return departmentsForToday[year]?.includes(
+                        department.shortName,
+                      );
+                    }).map((department) => department.id),
                   },
                 },
                 orderBy: {
                   registerNumber: "asc",
                 },
               });
-              students[`${year.year}`] = s;
-              students[`${year.year}`]?.sort((a, b) => {
+              students[`${year}`] = s;
+              students[`${year}`]?.sort((a, b) => {
                 const aIndex = exam.Departments.findIndex(
                   (department) => department.id === a.departmentId,
                 );
@@ -1156,13 +1430,33 @@ export async function getAllotments({
         ) {
           // Getting the left side students data
           await Promise.all(
-            exam.DepartmentsLeftBoys.map(async (department) => {
+            // exam.DepartmentsLeftBoys.map(async (department) => {
+            //   const s = await db.student.findMany({
+            //     where: {
+            //       yearId: {
+            //         in: exam.Years.map((year) => year.id),
+            //       },
+            //       departmentId: department.id,
+            //     },
+            //     orderBy: {
+            //       registerNumber: "asc",
+            //     },
+            //   });
+            //   students.Left?.push(...s);
+            // }),
+            Object.keys(departmentsForToday).map(async (year) => {
               const s = await db.student.findMany({
                 where: {
-                  yearId: {
-                    in: exam.Years.map((year) => year.id),
+                  Year: {
+                    year: parseInt(year),
                   },
-                  departmentId: department.id,
+                  departmentId: {
+                    in: exam.DepartmentsLeftBoys.filter((department) => {
+                      return departmentsForToday[year]?.includes(
+                        department.shortName,
+                      );
+                    }).map((department) => department.id),
+                  },
                 },
                 orderBy: {
                   registerNumber: "asc",
@@ -1174,13 +1468,33 @@ export async function getAllotments({
 
           // Getting the right side students data
           await Promise.all(
-            exam.DepartmentsRightBoys.map(async (department) => {
+            // exam.DepartmentsRightBoys.map(async (department) => {
+            //   const s = await db.student.findMany({
+            //     where: {
+            //       yearId: {
+            //         in: exam.Years.map((year) => year.id),
+            //       },
+            //       departmentId: department.id,
+            //     },
+            //     orderBy: {
+            //       registerNumber: "asc",
+            //     },
+            //   });
+            //   students.Right?.push(...s);
+            // }),
+            Object.keys(departmentsForToday).map(async (year) => {
               const s = await db.student.findMany({
                 where: {
-                  yearId: {
-                    in: exam.Years.map((year) => year.id),
+                  Year: {
+                    year: parseInt(year),
                   },
-                  departmentId: department.id,
+                  departmentId: {
+                    in: exam.DepartmentsRightBoys.filter((department) => {
+                      return departmentsForToday[year]?.includes(
+                        department.shortName,
+                      );
+                    }).map((department) => department.id),
+                  },
                 },
                 orderBy: {
                   registerNumber: "asc",
@@ -1216,13 +1530,36 @@ export async function getAllotments({
 
           // Getting the circuit students data
           await Promise.all(
-            exam.Departments.map(async (department) => {
+            // exam.Departments.map(async (department) => {
+            //   const s = await db.student.findMany({
+            //     where: {
+            //       yearId: {
+            //         in: exam.Years.map((year) => year.id),
+            //       },
+            //       departmentId: department.id,
+            //       Department: {
+            //         type: "Circuit",
+            //       },
+            //     },
+            //     orderBy: {
+            //       registerNumber: "asc",
+            //     },
+            //   });
+            //   students.Left?.push(...s);
+            // }),
+            Object.keys(departmentsForToday).map(async (year) => {
               const s = await db.student.findMany({
                 where: {
-                  yearId: {
-                    in: exam.Years.map((year) => year.id),
+                  Year: {
+                    year: parseInt(year),
                   },
-                  departmentId: department.id,
+                  departmentId: {
+                    in: exam.Departments.filter((department) => {
+                      return departmentsForToday[year]?.includes(
+                        department.shortName,
+                      );
+                    }).map((department) => department.id),
+                  },
                   Department: {
                     type: "Circuit",
                   },
@@ -1237,13 +1574,36 @@ export async function getAllotments({
 
           // Getting the non-circuit students data
           await Promise.all(
-            exam.Departments.map(async (department) => {
+            // exam.Departments.map(async (department) => {
+            //   const s = await db.student.findMany({
+            //     where: {
+            //       yearId: {
+            //         in: exam.Years.map((year) => year.id),
+            //       },
+            //       departmentId: department.id,
+            //       Department: {
+            //         type: "NonCircuit",
+            //       },
+            //     },
+            //     orderBy: {
+            //       registerNumber: "asc",
+            //     },
+            //   });
+            //   students.Right?.push(...s);
+            // }),
+            Object.keys(departmentsForToday).map(async (year) => {
               const s = await db.student.findMany({
                 where: {
-                  yearId: {
-                    in: exam.Years.map((year) => year.id),
+                  Year: {
+                    year: parseInt(year),
                   },
-                  departmentId: department.id,
+                  departmentId: {
+                    in: exam.Departments.filter((department) => {
+                      return departmentsForToday[year]?.includes(
+                        department.shortName,
+                      );
+                    }).map((department) => department.id),
+                  },
                   Department: {
                     type: "NonCircuit",
                   },

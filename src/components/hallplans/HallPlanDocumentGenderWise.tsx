@@ -38,6 +38,7 @@ const HallPlanDocument = async ({ exam, template, date, gender }: Props) => {
   const hallplan = await api.allotment.createHallPlanGenderWise.query({
     examId: exam.id,
     templateId: template.id,
+    date: date,
   });
 
   console.log("HALLPLAN", hallplan);

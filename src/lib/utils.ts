@@ -2,6 +2,7 @@ import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
 import type { TimeTable } from "@/types";
+import { isEqual } from "lodash";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -49,7 +50,6 @@ export function getSuffix(year: number) {
 }
 
 export function getNumberNames(number: number) {
-
   switch (number) {
     case 0:
       return "Ground";
@@ -65,3 +65,58 @@ export function getNumberNames(number: number) {
       return "Unknown";
   }
 }
+
+export function getTimeTableBasedOnDays(timetable: TimeTable) {
+  const timeTableBasedOnDays: Record<string, string[]> = {};
+  Object.keys(timetable).map((year) => {
+    Object.keys(timetable[year] ?? {}).map((department) => {
+      Object.keys(timetable[year]?.[department] ?? {}).map((date) => {
+        if (!timeTableBasedOnDays[date]) {
+          timeTableBasedOnDays[date] = [];
+        }
+        timetable[year]?.[department]?.[date] !== ""
+          ? timeTableBasedOnDays[date]?.push(`${department} ${year}`)
+          : null;
+      });
+    });
+  });
+  return timeTableBasedOnDays;
+}
+
+export function findDateRangesWithDifferences(
+  timeTableBasedOnDays: Record<string, string[]>,
+): [string, string][] {
+  const dates = Object.keys(timeTableBasedOnDays);
+  const dateRanges: [string, string][] = [];
+
+  let currentRange: [string, string] | null = null;
+
+  for (let i = 0; i < dates.length; i++) {
+    const currentDate = dates[i] ?? "";
+    const currentTimetable = timeTableBasedOnDays[currentDate];
+
+    if (i === 0) {
+      currentRange = [currentDate, currentDate];
+    } else {
+      const prevDate = dates[i - 1] ?? "";
+      const prevTimetable = timeTableBasedOnDays[prevDate];
+      if (!isEqual(prevTimetable, currentTimetable)) {
+        if (currentRange) {
+          dateRanges.push(currentRange);
+        }
+        currentRange = [currentDate, currentDate];
+      } else {
+        if (currentRange) {
+          currentRange[1] = currentDate;
+        }
+      }
+    }
+  }
+
+  if (currentRange) {
+    dateRanges.push(currentRange);
+  }
+
+  return dateRanges;
+}
+

@@ -15,7 +15,7 @@ import {
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import type { RouterOutputs } from "@/trpc/shared";
 
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
 
 type Props = {
   exam: RouterOutputs["exam"]["getExamById"];

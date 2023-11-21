@@ -33,6 +33,7 @@ const HallPlanDocument = async ({ exam, template, date }: Props) => {
   const hallplan = await api.allotment.createHallPlanForAll.query({
     examId: exam.id,
     templateId: template.id,
+    date: date,
   });
 
   const departments = await api.department.getDepartments.query();

@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { getTimeTableDates } from "@/lib/utils";
 import { api } from "@/trpc/server";
 import type { TimeTable } from "@/types";
+import Attendances from "@/components/attendance/Attendances";
 
 type Props = {
   params: {
@@ -55,6 +56,7 @@ const ExamPage = async (props: Props) => {
         </div>
         <Allotments examId={Number(props.params.id)} dates={examDates} />
         <HallPlans exam={exam} dates={examDates} />
+        <Attendances examId={Number(props.params.id)} dates={examDates} timetable={timetable as TimeTable} />
       </div>
     </div>
   );

@@ -5,6 +5,7 @@ import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import { Eye, File } from "lucide-react";
 
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -13,8 +14,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-
-import { Button } from "../ui/button";
 
 type Props = {
   examId: number;

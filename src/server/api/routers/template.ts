@@ -48,8 +48,8 @@ export const templateRouter = createTRPCRouter({
       id: template.id,
       name: template.name,
       roomStrength: template.roomStrength,
-      startTime: template.startTime.toLocaleTimeString(),
-      endTime: template.endTime.toLocaleTimeString(),
+      startTime: template.startTime.toTimeString(),
+      endTime: template.endTime.toTimeString(),
     }));
   }),
 

@@ -17,7 +17,7 @@ type Props = {
   date: string;
 };
 
-const NewAllotments = async ({ exam, template, date }: Props) => {
+const AllotmentDocument = async ({ exam, template, date }: Props) => {
   if (exam === null || template === null) {
     return (
       <div>
@@ -29,6 +29,7 @@ const NewAllotments = async ({ exam, template, date }: Props) => {
   const allotments = await api.allotment.createAllotment.query({
     examId: exam.id,
     templateId: template.id,
+    date: date,
   });
 
   const logo = await api.template.getLogo.query({
@@ -255,4 +256,4 @@ const NewAllotments = async ({ exam, template, date }: Props) => {
   );
 };
 
-export default NewAllotments;
+export default AllotmentDocument;

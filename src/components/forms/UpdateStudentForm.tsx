@@ -61,6 +61,7 @@ const UpdateStudentForm = ({ student, departments, years, degrees }: Props) => {
 
   function onSubmit(values: z.infer<typeof studentFormSchema>) {
     startTransition(async () => {
+      console.log(values)
       if (values.phoneNumber === null) {
         values.phoneNumber = "";
       }
@@ -81,7 +82,7 @@ const UpdateStudentForm = ({ student, departments, years, degrees }: Props) => {
           description: "Student has been updated successfully",
         });
         form.reset();
-        router.refresh();
+        router.push("/students");
       }
     });
   }
@@ -102,7 +103,6 @@ const UpdateStudentForm = ({ student, departments, years, degrees }: Props) => {
                   <Input
                     placeholder="Roshan"
                     {...field}
-                    defaultValue={student.name}
                     disabled={isPending}
                   />
                 </FormControl>
@@ -121,7 +121,6 @@ const UpdateStudentForm = ({ student, departments, years, degrees }: Props) => {
                   <Input
                     placeholder="2104XXXXXXXX..."
                     {...field}
-                    defaultValue={student.registerNumber}
                     disabled={isPending}
                   />
                 </FormControl>
@@ -141,7 +140,6 @@ const UpdateStudentForm = ({ student, departments, years, degrees }: Props) => {
                 <FormLabel>Year</FormLabel>
                 <Select
                   onValueChange={field.onChange}
-                  defaultValue={String(student.year)}
                   disabled={isPending}
                 >
                   <FormControl>
@@ -174,7 +172,6 @@ const UpdateStudentForm = ({ student, departments, years, degrees }: Props) => {
                   <Input
                     placeholder="Phone Number"
                     {...field}
-                    defaultValue={student.phoneNumber}
                     disabled={isPending}
                   />
                 </FormControl>
@@ -199,7 +196,6 @@ const UpdateStudentForm = ({ student, departments, years, degrees }: Props) => {
 
                     <Select
                       onValueChange={field.onChange}
-                      defaultValue={student.department}
                       disabled={isPending}
                     >
                       <FormControl>
@@ -237,7 +233,6 @@ const UpdateStudentForm = ({ student, departments, years, degrees }: Props) => {
                   <FormLabel>Degree</FormLabel>
                   <Select
                     onValueChange={field.onChange}
-                    defaultValue={student.degree}
                     disabled={isPending}
                   >
                     <FormControl>
@@ -271,7 +266,6 @@ const UpdateStudentForm = ({ student, departments, years, degrees }: Props) => {
                   <FormLabel>Gender</FormLabel>
                   <Select
                     onValueChange={field.onChange}
-                    defaultValue={student.gender}
                     disabled={isPending}
                   >
                     <FormControl>
@@ -295,6 +289,8 @@ const UpdateStudentForm = ({ student, departments, years, degrees }: Props) => {
             className="mt-4 w-full self-end justify-self-end"
             variant="default"
             disabled={isPending}
+            onClick={() => onSubmit(form.getValues())}
+            // onSubmit={() => onSubmit(form.getValues())}
           >
             {isPending && (
               <Loader2

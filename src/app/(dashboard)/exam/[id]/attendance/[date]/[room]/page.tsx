@@ -1,16 +1,20 @@
-import AllotmentDocument from "@/components/allotments/AllotmentDocument";
+import React from "react";
+
+import AttendanceDocument from "@/components/attendance/AttendanceDocument";
 import { api } from "@/trpc/server";
 
 type Props = {
   params: {
     id: string;
     date: string;
+    room: string;
   };
 };
-const ExamAllotmentPage = async (props: Props) => {
 
+const AttendancePage = async (props: Props) => {
   const examId = decodeURIComponent(props.params.id);
   const date = decodeURIComponent(props.params.date);
+  const room = decodeURIComponent(props.params.room);
 
   const exam = await api.exam.getExamById.query({
     id: Number(examId),
@@ -22,13 +26,10 @@ const ExamAllotmentPage = async (props: Props) => {
 
   return (
     <div>
-      <AllotmentDocument
-        exam={exam}
-        template={template}
-        date={date}
-      />
+      {" "}
+      <AttendanceDocument exam={exam} template={template} date={date} room={room} />
     </div>
-  )
-}
+  );
+};
 
-export default ExamAllotmentPage
+export default AttendancePage;
