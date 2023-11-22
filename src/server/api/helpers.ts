@@ -1,7 +1,7 @@
 import type { Room, Student } from "@prisma/client";
 
 import { db } from "@/server/db";
-import { TimeTable } from "@/types";
+import type { TimeTable } from "@/types";
 
 export async function getAllotments({
   examId,
@@ -111,6 +111,11 @@ export async function getAllotments({
         const bIndex = exam.Departments.findIndex(
           (department) => department.id === b.departmentId,
         );
+        if (aIndex === bIndex) {
+          exam.Years.sort((a, b) => {
+            return a.year - b.year;
+          });
+        }
         return aIndex - bIndex;
       });
 
@@ -149,6 +154,11 @@ export async function getAllotments({
         const bIndex = exam.Departments.findIndex(
           (department) => department.id === b.departmentId,
         );
+        if (aIndex === bIndex) {
+          exam.Years.sort((a, b) => {
+            return a.year - b.year;
+          });
+        }
         return aIndex - bIndex;
       });
 
@@ -235,7 +245,7 @@ export async function getAllotments({
         }),
       );
 
-      // Sorting the students based on the department order
+      // Sorting the students based on the department order as well as years order
       students.sort((a, b) => {
         const aIndex = exam.Departments.findIndex(
           (department) => department.id === a.departmentId,
@@ -243,6 +253,11 @@ export async function getAllotments({
         const bIndex = exam.Departments.findIndex(
           (department) => department.id === b.departmentId,
         );
+        if (aIndex === bIndex) {
+          exam.Years.sort((a, b) => {
+            return a.year - b.year;
+          });
+        }
         return aIndex - bIndex;
       });
 
@@ -350,6 +365,11 @@ export async function getAllotments({
                 const bIndex = exam.Departments.findIndex(
                   (department) => department.id === b.departmentId,
                 );
+                if (aIndex === bIndex) {
+                  exam.Years.sort((a, b) => {
+                    return a.year - b.year;
+                  });
+                }
                 return aIndex - bIndex;
               });
             }
@@ -438,6 +458,11 @@ export async function getAllotments({
                 const bIndex = exam.Departments.findIndex(
                   (department) => department.id === b.departmentId,
                 );
+                if (aIndex === bIndex) {
+                  exam.Years.sort((a, b) => {
+                    return a.year - b.year;
+                  });
+                }
                 return aIndex - bIndex;
               });
             }
@@ -765,6 +790,11 @@ export async function getAllotments({
             const bIndex = exam.DepartmentsLeftBoys.findIndex(
               (department) => department.id === b.departmentId,
             );
+            if (aIndex === bIndex) {
+              exam.Years.sort((a, b) => {
+                return a.year - b.year;
+              });
+            }
             return aIndex - bIndex;
           });
 
@@ -776,6 +806,11 @@ export async function getAllotments({
             const bIndex = exam.DepartmentsRightBoys.findIndex(
               (department) => department.id === b.departmentId,
             );
+            if (aIndex === bIndex) {
+              exam.Years.sort((a, b) => {
+                return a.year - b.year;
+              });
+            }
             return aIndex - bIndex;
           });
         } else {
@@ -881,6 +916,11 @@ export async function getAllotments({
             const bIndex = exam.Departments.findIndex(
               (department) => department.id === b.departmentId,
             );
+            if (aIndex === bIndex) {
+              exam.Years.sort((a, b) => {
+                return a.year - b.year;
+              });
+            }
             return aIndex - bIndex;
           });
 
@@ -892,6 +932,11 @@ export async function getAllotments({
             const bIndex = exam.Departments.findIndex(
               (department) => department.id === b.departmentId,
             );
+            if (aIndex === bIndex) {
+              exam.Years.sort((a, b) => {
+                return a.year - b.year;
+              });
+            }
             return aIndex - bIndex;
           });
         }
@@ -989,6 +1034,11 @@ export async function getAllotments({
             const bIndex = exam.DepartmentsLeftGirls.findIndex(
               (department) => department.id === b.departmentId,
             );
+            if (aIndex === bIndex) {
+              exam.Years.sort((a, b) => {
+                return a.year - b.year;
+              });
+            }
             return aIndex - bIndex;
           });
 
@@ -1000,6 +1050,11 @@ export async function getAllotments({
             const bIndex = exam.DepartmentsRightGirls.findIndex(
               (department) => department.id === b.departmentId,
             );
+            if (aIndex === bIndex) {
+              exam.Years.sort((a, b) => {
+                return a.year - b.year;
+              });
+            }
             return aIndex - bIndex;
           });
         } else {
@@ -1105,6 +1160,11 @@ export async function getAllotments({
             const bIndex = exam.Departments.findIndex(
               (department) => department.id === b.departmentId,
             );
+            if (aIndex === bIndex) {
+              exam.Years.sort((a, b) => {
+                return a.year - b.year;
+              });
+            }
             return aIndex - bIndex;
           });
 
@@ -1116,6 +1176,11 @@ export async function getAllotments({
             const bIndex = exam.Departments.findIndex(
               (department) => department.id === b.departmentId,
             );
+            if (aIndex === bIndex) {
+              exam.Years.sort((a, b) => {
+                return a.year - b.year;
+              });
+            }
             return aIndex - bIndex;
           });
         }
@@ -1285,6 +1350,11 @@ export async function getAllotments({
                 const bIndex = exam.DepartmentsRightSingleYear.findIndex(
                   (department) => department.id === b.departmentId,
                 );
+                if (aIndex === bIndex) {
+                  exam.Years.sort((a, b) => {
+                    return a.year - b.year;
+                  });
+                }
                 return aIndex - bIndex;
               });
             } else {
@@ -1313,6 +1383,11 @@ export async function getAllotments({
                 const bIndex = exam.Departments.findIndex(
                   (department) => department.id === b.departmentId,
                 );
+                if (aIndex === bIndex) {
+                  exam.Years.sort((a, b) => {
+                    return a.year - b.year;
+                  });
+                }
                 return aIndex - bIndex;
               });
             }
@@ -1512,6 +1587,11 @@ export async function getAllotments({
             const bIndex = exam.DepartmentsLeftBoys.findIndex(
               (department) => department.id === b.departmentId,
             );
+            if (aIndex === bIndex) {
+              exam.Years.sort((a, b) => {
+                return a.year - b.year;
+              });
+            }
             return aIndex - bIndex;
           });
 
@@ -1523,6 +1603,11 @@ export async function getAllotments({
             const bIndex = exam.DepartmentsRightBoys.findIndex(
               (department) => department.id === b.departmentId,
             );
+            if (aIndex === bIndex) {
+              exam.Years.sort((a, b) => {
+                return a.year - b.year;
+              });
+            }
             return aIndex - bIndex;
           });
         } else {
@@ -1624,6 +1709,11 @@ export async function getAllotments({
             const bIndex = exam.Departments.findIndex(
               (department) => department.id === b.departmentId,
             );
+            if (aIndex === bIndex) {
+              exam.Years.sort((a, b) => {
+                return a.year - b.year;
+              });
+            }
             return aIndex - bIndex;
           });
 
@@ -1635,6 +1725,11 @@ export async function getAllotments({
             const bIndex = exam.Departments.findIndex(
               (department) => department.id === b.departmentId,
             );
+            if (aIndex === bIndex) {
+              exam.Years.sort((a, b) => {
+                return a.year - b.year;
+              });
+            }
             return aIndex - bIndex;
           });
         }

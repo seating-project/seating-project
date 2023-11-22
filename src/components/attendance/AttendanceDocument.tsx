@@ -2,6 +2,7 @@ import React from "react";
 import Image from "next/image";
 
 import {
+  cn,
   findDateRangesWithDifferences,
   getSuffix,
   getTimeTableBasedOnDays,
@@ -73,7 +74,7 @@ const AttendanceDocument = async ({ exam, template, date, room }: Props) => {
 
   // console.log("ATTENDANCE", attendance);
 
-  const colSpan = 4 + findNumberOfDays(currentDateRange ?? []);
+  const colSpan = 7 + findNumberOfDays(currentDateRange ?? []);
   console.log("COLSPAN", colSpan);
 
   const departments = await api.department.getDepartments.query();
@@ -84,7 +85,7 @@ const AttendanceDocument = async ({ exam, template, date, room }: Props) => {
   return (
     <div>
       <Page>
-        <Table>
+        <Table className="overflow-x">
           <TableHeader>
             <TableRow>
               <TableHead
@@ -119,32 +120,56 @@ const AttendanceDocument = async ({ exam, template, date, room }: Props) => {
               </TableHead>
             </TableRow>
             <TableRow>
-              <TableCell className="border text-center text-black" colSpan={1}>
+              <TableHead
+                className={cn(
+                  "border text-center text-black",
+                  colSpan > 7 ? "p-0.5" : "",
+                )}
+                colSpan={1}
+              >
                 S.No
-              </TableCell>
-              <TableCell className="border text-center text-black" colSpan={1}>
+              </TableHead>
+              <TableHead
+                className={cn(
+                  "border text-center text-black",
+                  colSpan > 7 ? "p-0.5" : "",
+                )}
+                colSpan={1}
+              >
                 Reg. No.
-              </TableCell>
-              <TableCell className="border text-center text-black" colSpan={1}>
+              </TableHead>
+              <TableHead
+                className={cn(
+                  "border text-center text-black",
+                  colSpan > 7 ? "p-0.5" : "",
+                )}
+                colSpan={1}
+              >
                 Name
-              </TableCell>
-              <TableCell className="border text-center text-black" colSpan={1}>
+              </TableHead>
+              <TableHead
+                className={cn(
+                  "border text-center text-black",
+                  colSpan > 7 ? "p-0.5" : "",
+                )}
+                colSpan={1}
+              >
                 Dept
-              </TableCell>
+              </TableHead>
               {allDates.map((date, index) => {
                 return (
-                  <TableCell
-                    className="border text-center text-black"
+                  <TableHead
+                    className="border p-0.5 text-center text-xs text-black"
                     colSpan={1}
                     key={index}
                   >
                     {date.toLocaleDateString()}
-                  </TableCell>
+                  </TableHead>
                 );
               })}
             </TableRow>
           </TableHeader>
-          {Object.keys(attendance)?.map((key, index) => {
+          {Object.keys(attendance)?.map((key) => {
             const department = departments.find((dept) => {
               return dept.id === Number(key.split(" ")[0]);
             });
@@ -168,32 +193,49 @@ const AttendanceDocument = async ({ exam, template, date, room }: Props) => {
                 {attendance[key]?.map((student, index) => {
                   return (
                     <TableRow key={index}>
-                      <TableCell className="border text-center text-black p-0">
+                      <TableCell
+                        className={cn(
+                          "border p-0 text-center  text-black",
+                          colSpan > 7 ? "p-0.5 text-xs" : "",
+                        )}
+                      >
                         {index + 1}
                       </TableCell>
-                      <TableCell className="border text-center text-black">
+                      <TableCell
+                        className={cn(
+                          "border p-0 text-center  text-black",
+                          colSpan > 7 ? "p-0.5 text-xs" : "",
+                        )}
+                      >
                         {student.registerNumber}
                       </TableCell>
-                      <TableCell className="border text-center text-black">
+                      <TableCell
+                        className={cn(
+                          "border p-0 text-center  text-black",
+                          colSpan > 7 ? "p-0.5 text-xs" : "",
+                        )}
+                      >
                         {student.name}
                       </TableCell>
-                      <TableCell className="border text-center text-black">
+                      <TableCell
+                        className={cn(
+                          "border p-0 text-center  text-black",
+                          colSpan > 7 ? "p-0.5 text-xs" : "",
+                        )}
+                      >
                         {department?.shortName ?? ""}
                       </TableCell>
                       {allDates.map((date, index) => {
                         return (
                           <TableCell
-                            className="border text-center text-black"
+                            className="w-[50px] border text-center text-black"
                             key={index}
-                          >
-                            
-                          </TableCell>
+                          ></TableCell>
                         );
                       })}
                     </TableRow>
                   );
-                }
-                )}
+                })}
               </TableBody>
             );
           })}

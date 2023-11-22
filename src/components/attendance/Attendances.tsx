@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import {
   Card,
   CardContent,
@@ -12,7 +14,8 @@ import {
 } from "@/lib/utils";
 import { api } from "@/trpc/server";
 import type { TimeTable } from "@/types";
-import Link from "next/link";
+
+import { Button } from "../ui/button";
 
 type Props = {
   examId: number;
@@ -25,18 +28,18 @@ const Attendances = async ({ examId, dates, timetable }: Props) => {
   const dateRangesWithDifferences =
     findDateRangesWithDifferences(timeTableBasedOnDays);
 
-  const rooms: string[][] = []
+  const rooms: string[][] = [];
   await Promise.all(
-  dateRangesWithDifferences.map(async (dateRange) => {
-    const roomsForOneDate = await api.allotment.getAttendanceRooms.query({
-      examId: examId,
-      date: dateRange[0],
-    });
-    rooms.push(roomsForOneDate)
-  })
-  )
+    dateRangesWithDifferences.map(async (dateRange) => {
+      const roomsForOneDate = await api.allotment.getAttendanceRooms.query({
+        examId: examId,
+        date: dateRange[0],
+      });
+      rooms.push(roomsForOneDate);
+    }),
+  );
 
-  console.log("ROoms", rooms)
+  console.log("ROoms", rooms);
 
   return (
     <Card>
@@ -46,58 +49,58 @@ const Attendances = async ({ examId, dates, timetable }: Props) => {
       </CardHeader>
       <CardContent>
         <ScrollArea>
-          <div className="flex flex-row space-x-4">
+          <div className="flex flex-col space-y-4">
             {dateRangesWithDifferences.map((dateRange, index) => {
               if (dateRange[0] === dateRange[1]) {
                 return (
-                  <Card key={index}>
+                  <Card key={index} className="w-full flex space-x-2 items-center">
                     <CardHeader>
                       <CardTitle>Attendance for {dateRange[0]}</CardTitle>
                       <CardDescription></CardDescription>
                     </CardHeader>
-                    <CardContent>
-                      <div>
-                      {
-                          rooms[index]?.map((room, index) => {
-                            return (
-                              <div key={index}>
+                    <CardContent className="flex flex-row">
+                      <div className="flex flex-row gap-2 item-center" >
+                        {rooms[index]?.map((room, index) => {
+                          return (
+                            <div key={index}>
+                              <Button>
                                 <Link
                                   href={`/exam/${examId}/attendance/${dateRange[0]}/${room}`}
                                 >
                                   {room}
                                 </Link>
-                              </div>
-                            );
-                          })
-                        }
+                              </Button>
+                            </div>
+                          );
+                        })}
                       </div>
                     </CardContent>
                   </Card>
                 );
               } else {
                 return (
-                  <Card key={index}>
+                  <Card key={index} className="w-full flex space-x-2 items-center">
                     <CardHeader>
                       <CardTitle>
                         Attendance for {dateRange[0]} to {dateRange[1]}
                       </CardTitle>
                       <CardDescription></CardDescription>
                     </CardHeader>
-                    <CardContent>
-                      <div>
-                        {
-                          rooms[index]?.map((room, index) => {
-                            return (
-                              <div key={index}>
+                    <CardContent className="flex flex-row">
+                      <div className="flex flex-row gap-2">
+                        {rooms[index]?.map((room, index) => {
+                          return (
+                            <div key={index}>
+                              <Button>
                                 <Link
                                   href={`/exam/${examId}/attendance/${dateRange[0]}/${room}`}
                                 >
                                   {room}
                                 </Link>
-                              </div>
-                            );
-                          })
-                        }
+                              </Button>
+                            </div>
+                          );
+                        })}
                       </div>
                     </CardContent>
                   </Card>
