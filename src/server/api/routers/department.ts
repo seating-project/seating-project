@@ -37,6 +37,10 @@ export const departmentRouter = createTRPCRouter({
     .query(async ({ ctx, input }) => {
       return ctx.db.department.findUnique({
         where: { id: input.id },
+        include: {
+          Students: true,
+
+        },
       });
     }),
 

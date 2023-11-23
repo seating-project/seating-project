@@ -42,6 +42,7 @@ const AllotmentDocument = async ({ exam, template, date }: Props) => {
       {Object.keys(allotments)?.map((allotment) => {
         let currentIndex = 0;
         let alternateFlag = false;
+        let tableCount = 1;
         return (
           <Page key={allotment}>
             <div className="space-y-8">
@@ -64,7 +65,13 @@ const AllotmentDocument = async ({ exam, template, date }: Props) => {
                       );
                       currentIndex += template.numberOfColumns;
                       alternateFlag ? currentRow : currentRow?.reverse();
+
                       alternateFlag = !alternateFlag;
+                      !alternateFlag &&
+                        (tableCount += Number(currentRow?.length) - 1);
+                      alternateFlag &&
+                        i !== 0 &&
+                        (tableCount += Number(currentRow?.length) + 1);
                       let extraStudents: typeof currentRow;
                       if (
                         i === template.numberOfRows - 1 &&
@@ -87,6 +94,11 @@ const AllotmentDocument = async ({ exam, template, date }: Props) => {
                               <TableRow>
                                 <TableHead className="w-[150px] border text-center text-black">
                                   Row {i + 1}
+                                </TableHead>
+                                <TableHead className="w-[50px] border text-center text-black">
+                                  {exam.secondColumnOptions === "PresentAbsent"
+                                    ? "P/A"
+                                    : "S.No"}
                                 </TableHead>
                               </TableRow>
                             </TableHeader>
@@ -176,6 +188,12 @@ const AllotmentDocument = async ({ exam, template, date }: Props) => {
                       currentIndex += i === template.numberOfRows - 1 ? 7 : 6;
                       alternateFlag ? currentRow?.reverse() : currentRow;
                       alternateFlag = !alternateFlag;
+                      !alternateFlag &&
+                        (tableCount += Number(currentRow?.length) - 1);
+                      alternateFlag &&
+                        i !== 0 &&
+                        (tableCount += Number(currentRow?.length) + 1);
+
                       return (
                         <div key={i} className="flex">
                           <Table className="overflow-x-none">
@@ -184,12 +202,20 @@ const AllotmentDocument = async ({ exam, template, date }: Props) => {
                                 <TableHead className="w-[150px] border text-center text-black">
                                   Row {i + 1}
                                 </TableHead>
+                                <TableHead className="w-[50px] border text-center text-black">
+                                  {exam.secondColumnOptions === "PresentAbsent"
+                                    ? "P/A"
+                                    : "S.No"}
+                                </TableHead>
                               </TableRow>
                             </TableHeader>
                             <TableBody>
                               {!(i === template.numberOfRows - 1) && (
                                 <TableRow>
                                   <TableCell className="flex h-10 flex-col border p-2 text-xs">
+                                    &nbsp;
+                                  </TableCell>
+                                  <TableCell className="h-10 border p-2 text-xs">
                                     &nbsp;
                                   </TableCell>
                                 </TableRow>
@@ -236,6 +262,20 @@ const AllotmentDocument = async ({ exam, template, date }: Props) => {
                                           ? student[1].registerNumber
                                           : " "}
                                       </p>
+                                    </TableCell>
+                                    <TableCell className="border p-2 text-center text-xs">
+                                      {exam.secondColumnOptions ===
+                                      "PresentAbsent" ? (
+                                        <div className="flex items-center justify-center">
+                                          <p className="text-slate-300">
+                                            P/A
+                                          </p>
+                                        </div>
+                                      ) : alternateFlag ? (
+                                        tableCount++
+                                      ) : (
+                                        tableCount--
+                                      )}
                                     </TableCell>
                                   </TableRow>
                                 );

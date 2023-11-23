@@ -111,6 +111,58 @@ export const templateRouter = createTRPCRouter({
       });
     }),
 
+  updateTemplate: protectedProcedure
+    .input(
+      z.object({
+        id: z.number(),
+        name: z.string(),
+        numberOfRows: z.number(),
+        numberOfColumns: z.number(),
+        roomStrength: z.number(),
+        isSingleSeater: z.boolean(),
+        isBoysGirlsSeparate: z.boolean(),
+        isAlternateDepartmentSeated: z.boolean(),
+        isRandomizedDepartments: z.boolean(),
+        buildings: z.array(z.string()),
+        rooms: z.array(z.string()),
+        startTime: z.date(),
+        endTime: z.date(),
+        logo: z.string(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      return ctx.db.template.update({
+        where: { id: input.id },
+        data: {
+          name: input.name,
+          numberOfRows: input.numberOfRows,
+          numberOfColumns: input.numberOfColumns,
+          startTime: input.startTime,
+          endTime: input.endTime,
+          roomStrength: input.roomStrength,
+          isSingleSeater: input.isSingleSeater,
+          isBoysGirlsSeparate: input.isBoysGirlsSeparate,
+          isAlternateDepartmentSeated: input.isAlternateDepartmentSeated,
+          isRandomizedDepartments: input.isRandomizedDepartments,
+          Logo: {
+            connect: {
+              id: Number(input.logo),
+            },
+          },
+          Buildings: {
+            connect: input.buildings.map((building) => ({
+              name: building,
+            })),
+          },
+          Rooms: {
+            connect: input.rooms.map((room) => ({
+              number: room,
+            })),
+          },
+        },
+      });
+    }),
+
   getLogo: protectedProcedure
     .input(z.object({ id: z.number() }))
     .query(async ({ ctx, input }) => {

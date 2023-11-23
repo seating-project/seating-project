@@ -87,7 +87,7 @@ const Attendances = async ({ examId, dates, timetable }: Props) => {
                       <CardDescription></CardDescription>
                     </CardHeader>
                     <CardContent className="flex flex-row">
-                      <div className="flex flex-row gap-2">
+                      <div className="flex flex-row gap-2 flex-wrap ">
                         {rooms[index]?.map((room, index) => {
                           return (
                             <div key={index}>

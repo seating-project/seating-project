@@ -141,6 +141,7 @@ const UpdateStudentForm = ({ student, departments, years, degrees }: Props) => {
                 <Select
                   onValueChange={field.onChange}
                   disabled={isPending}
+                  defaultValue={student.year}
                 >
                   <FormControl>
                     <SelectTrigger className="w-[180px]">
@@ -197,6 +198,7 @@ const UpdateStudentForm = ({ student, departments, years, degrees }: Props) => {
                     <Select
                       onValueChange={field.onChange}
                       disabled={isPending}
+                      defaultValue={student.department}
                     >
                       <FormControl>
                         <SelectTrigger className="w-[300px]">
@@ -234,6 +236,7 @@ const UpdateStudentForm = ({ student, departments, years, degrees }: Props) => {
                   <Select
                     onValueChange={field.onChange}
                     disabled={isPending}
+                    defaultValue={student.degree}
                   >
                     <FormControl>
                       <SelectTrigger className="w-[180px]">
@@ -267,6 +270,7 @@ const UpdateStudentForm = ({ student, departments, years, degrees }: Props) => {
                   <Select
                     onValueChange={field.onChange}
                     disabled={isPending}
+                    defaultValue={student.gender}
                   >
                     <FormControl>
                       <SelectTrigger className="w-[180px]">

@@ -3,6 +3,7 @@ import { twMerge } from "tailwind-merge";
 
 import type { TimeTable } from "@/types";
 import { isEqual } from "lodash";
+import { Room } from "@prisma/client";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -120,3 +121,15 @@ export function findDateRangesWithDifferences(
   return dateRanges;
 }
 
+export function shuffleArray(array: Room[]): Room[] {
+  // Fisher-Yates shuffle algorithm
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    if (array[i] && array[j]) {
+      // eslint-disable-next-line
+      // @ts-ignore
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+  }
+  return array;
+}

@@ -2,6 +2,7 @@ import type { Room, Student } from "@prisma/client";
 
 import { db } from "@/server/db";
 import type { TimeTable } from "@/types";
+import { shuffleArray } from "@/lib/utils";
 
 export async function getAllotments({
   examId,
@@ -32,6 +33,7 @@ export async function getAllotments({
       DepartmentsLeftSingleYear: true,
       DepartmentsRightSingleYear: true,
       RoomsOrder: true,
+      MeRoom: true,
     },
   });
 
@@ -74,6 +76,42 @@ export async function getAllotments({
 
   // * Creating the allotments based on the conditions of the template and exam
 
+  if (exam?.isMe) {
+    const meStudents = await Promise.all(
+      await db.student.findMany({
+        where: {
+          Degree: {
+           fullName: "Postgraduate" 
+          }
+        },
+        orderBy: {
+          registerNumber: "asc",
+        },
+      })
+    )
+
+    const meStudentsAllotments: [Student | null, Student | null][] = [];
+
+    meStudents.map((student) => {
+      meStudentsAllotments.push([student, null])
+    })
+
+    allotments[exam.MeRoom?.number ?? ""] = meStudentsAllotments;
+  }
+
+  if (exam.randomizeEveryNRooms) {
+    const partSize = exam.randomizeEveryNRooms;
+    const parts = []
+    for (let i = 0; i < exam.RoomsOrder.length; i += partSize) {
+      parts.push(exam.RoomsOrder.slice(i, i + partSize));
+    }
+    for (let i = 0; i < parts.length; i++) {
+      parts[i] = shuffleArray(parts[i] ?? []);
+    }
+    // eslint-disable-next-line
+    const roomListTemp = [].concat(...parts as any);
+  }
+
   if (template.isSingleSeater) {
     if (template.isAlternateDepartmentSeated) {
       const cs: Student[] = []; // Circuit students
@@ -93,6 +131,7 @@ export async function getAllotments({
                   },
                   type: "Circuit",
                 },
+                collegeId: exam.collegeId,
               },
               orderBy: {
                 registerNumber: "asc",
@@ -136,6 +175,7 @@ export async function getAllotments({
                   },
                   type: "NonCircuit",
                 },
+                collegeId: exam.collegeId,
               },
               orderBy: {
                 registerNumber: "asc",
@@ -236,6 +276,7 @@ export async function getAllotments({
                   in: departmentsForToday[year],
                 },
               },
+              collegeId: exam.collegeId,
             },
             orderBy: {
               registerNumber: "asc",
@@ -302,6 +343,7 @@ export async function getAllotments({
                       );
                     }).map((department) => department.id),
                   },
+                  collegeId: exam.collegeId,
                   gender: "Male",
                 },
               });
@@ -327,6 +369,7 @@ export async function getAllotments({
                       );
                     }).map((department) => department.id),
                   },
+                  collegeId: exam.collegeId,
                   gender: "Male",
                 },
               });
@@ -351,6 +394,7 @@ export async function getAllotments({
                       );
                     }).map((department) => department.id),
                   },
+                  collegeId: exam.collegeId,
                   gender: "Male",
                 },
                 orderBy: {
@@ -392,6 +436,7 @@ export async function getAllotments({
                       );
                     }).map((department) => department.id),
                   },
+                  collegeId: exam.collegeId,
                   gender: "Female",
                 },
               });
@@ -418,6 +463,7 @@ export async function getAllotments({
                       );
                     }).map((department) => department.id),
                   },
+                  collegeId: exam.collegeId,
                   gender: "Female",
                 },
               });
@@ -444,6 +490,7 @@ export async function getAllotments({
                       );
                     }).map((department) => department.id),
                   },
+                  collegeId: exam.collegeId,
                   gender: "Female",
                 },
                 orderBy: {
@@ -732,6 +779,7 @@ export async function getAllotments({
                       );
                     }).map((department) => department.id),
                   },
+                  collegeId: exam.collegeId,
                   gender: "Male",
                 },
                 orderBy: {
@@ -772,6 +820,7 @@ export async function getAllotments({
                       );
                     }).map((department) => department.id),
                   },
+                  collegeId: exam.collegeId,
                   gender: "Male",
                 },
                 orderBy: {
@@ -849,6 +898,7 @@ export async function getAllotments({
                       );
                     }).map((department) => department.id),
                   },
+                  collegeId: exam.collegeId,
                   Department: {
                     type: "Circuit",
                   },
@@ -895,6 +945,7 @@ export async function getAllotments({
                       );
                     }).map((department) => department.id),
                   },
+                  collegeId: exam.collegeId,
                   Department: {
                     type: "NonCircuit",
                   },
@@ -976,6 +1027,7 @@ export async function getAllotments({
                       );
                     }).map((department) => department.id),
                   },
+                  collegeId: exam.collegeId,
                   gender: "Female",
                 },
                 orderBy: {
@@ -1016,6 +1068,7 @@ export async function getAllotments({
                       );
                     }).map((department) => department.id),
                   },
+                  collegeId: exam.collegeId,
                   gender: "Female",
                 },
                 orderBy: {
@@ -1093,6 +1146,7 @@ export async function getAllotments({
                       );
                     }).map((department) => department.id),
                   },
+                  collegeId: exam.collegeId,
                   Department: {
                     type: "Circuit",
                   },
@@ -1139,6 +1193,7 @@ export async function getAllotments({
                       );
                     }).map((department) => department.id),
                   },
+                  collegeId: exam.collegeId,
                   Department: {
                     type: "NonCircuit",
                   },
@@ -1315,6 +1370,7 @@ export async function getAllotments({
                       );
                     }).map((department) => department.id),
                   },
+                  collegeId: exam.collegeId,
                 },
               });
               students[`${year} LEFT`] = s;
@@ -1340,6 +1396,7 @@ export async function getAllotments({
                       );
                     }).map((department) => department.id),
                   },
+                  collegeId: exam.collegeId,
                 },
               });
               students[`${year} RIGHT`] = s2;
@@ -1370,6 +1427,7 @@ export async function getAllotments({
                       );
                     }).map((department) => department.id),
                   },
+                  collegeId: exam.collegeId,
                 },
                 orderBy: {
                   registerNumber: "asc",
@@ -1505,20 +1563,6 @@ export async function getAllotments({
         ) {
           // Getting the left side students data
           await Promise.all(
-            // exam.DepartmentsLeftBoys.map(async (department) => {
-            //   const s = await db.student.findMany({
-            //     where: {
-            //       yearId: {
-            //         in: exam.Years.map((year) => year.id),
-            //       },
-            //       departmentId: department.id,
-            //     },
-            //     orderBy: {
-            //       registerNumber: "asc",
-            //     },
-            //   });
-            //   students.Left?.push(...s);
-            // }),
             Object.keys(departmentsForToday).map(async (year) => {
               const s = await db.student.findMany({
                 where: {
@@ -1532,6 +1576,7 @@ export async function getAllotments({
                       );
                     }).map((department) => department.id),
                   },
+                  collegeId: exam.collegeId,
                 },
                 orderBy: {
                   registerNumber: "asc",
@@ -1570,6 +1615,7 @@ export async function getAllotments({
                       );
                     }).map((department) => department.id),
                   },
+                  collegeId: exam.collegeId,
                 },
                 orderBy: {
                   registerNumber: "asc",
@@ -1645,6 +1691,7 @@ export async function getAllotments({
                       );
                     }).map((department) => department.id),
                   },
+                  collegeId: exam.collegeId,
                   Department: {
                     type: "Circuit",
                   },
@@ -1689,6 +1736,7 @@ export async function getAllotments({
                       );
                     }).map((department) => department.id),
                   },
+                  collegeId: exam.collegeId,
                   Department: {
                     type: "NonCircuit",
                   },

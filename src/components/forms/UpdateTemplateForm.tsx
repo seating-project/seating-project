@@ -48,11 +48,11 @@ const UpdateTemplateForm = ({ buildings, rooms, logos, template }: Props) => {
   const [endTime, setEndTime] = useState(`${template?.endTime.getHours()}:${template?.endTime.getMinutes() !== 0 ? (((template?.endTime.getMinutes() ?? 1) < 10) ? `0${template?.endTime.getMinutes()}` : `${template?.endTime.getMinutes()}`) : "00"}`);
 
   const { toast } = useToast();
-  const createTemplate = api.template.createTemplate.useMutation({
+  const updateTemplate = api.template.updateTemplate.useMutation({
     onSuccess: () => {
       toast({
-        title: "Template created",
-        description: "Template created successfully",
+        title: "Template updated",
+        description: "Template updated successfully",
       });
       router.push("/templates");
     },
@@ -105,6 +105,7 @@ console.log(template?.startTime.getMinutes() !== 0 ? (((template?.startTime.getM
 
       console.log(st, et);
       const formData = {
+        id: template?.id ?? 0, 
         name: data.name,
         buildings: data.buildings,
         rooms: data.rooms,
@@ -120,7 +121,7 @@ console.log(template?.startTime.getMinutes() !== 0 ? (((template?.startTime.getM
         logo: data.logo,
       };
       console.log(formData);
-      await createTemplate.mutateAsync(formData);
+      await updateTemplate.mutateAsync(formData);
     });
   }
 
