@@ -21,7 +21,9 @@ const ExamPage = async (props: Props) => {
   });
   const timetable = exam?.Timetable;
   const examDates = getTimeTableDates(timetable as TimeTable);
-
+  console.log("====================================")
+  console.log("Exam ", exam)
+  console.log("====================================")
   console.log("LMAOOOO", props.params.id);
 
   if (exam === null) {

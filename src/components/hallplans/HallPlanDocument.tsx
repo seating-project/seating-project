@@ -131,7 +131,7 @@ const HallPlanDocument = async ({ exam, template, date }: Props) => {
             const year = years.find((yr) => {
               return yr.id === Number(departmentYear.split(" ")[1]);
             });
-
+            let deptCount = 0;
             return (
               <TableBody key={departmentYear} className="unbreak">
                 <TableRow>
@@ -152,6 +152,7 @@ const HallPlanDocument = async ({ exam, template, date }: Props) => {
                   const roomObject = rooms.find((roomObj) => {
                     return roomObj.number === currentRoom;
                   });
+                  deptCount += currentRoomInfo?.strength ?? 0;
                   return (
                     <>
                       <TableRow>
@@ -178,6 +179,14 @@ const HallPlanDocument = async ({ exam, template, date }: Props) => {
                     </>
                   );
                 })}
+                <TableRow>
+                  <TableCell className="border font-medium" colSpan={4}>
+                    Total
+                  </TableCell>
+                  <TableCell className="border font-medium" colSpan={1}>
+                    {deptCount}
+                  </TableCell>
+                </TableRow>
               </TableBody>
             );
           })}

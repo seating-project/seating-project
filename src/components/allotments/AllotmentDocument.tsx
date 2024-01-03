@@ -64,7 +64,7 @@ const AllotmentDocument = async ({ exam, template, date }: Props) => {
                         currentIndex + template.numberOfColumns,
                       );
                       currentIndex += template.numberOfColumns;
-                      alternateFlag ? currentRow : currentRow?.reverse();
+                      !alternateFlag ? currentRow : currentRow?.reverse();
 
                       alternateFlag = !alternateFlag;
                       !alternateFlag &&
@@ -92,10 +92,10 @@ const AllotmentDocument = async ({ exam, template, date }: Props) => {
                           <Table className="overflow-x-none">
                             <TableHeader>
                               <TableRow>
-                                <TableHead className="w-[150px] border text-center text-black">
+                                <TableHead className="w-[150px] border border-black text-center text-black">
                                   Row {i + 1}
                                 </TableHead>
-                                <TableHead className="w-[50px] border text-center text-black">
+                                <TableHead className="w-[50px] border border-black text-center text-black">
                                   {exam.secondColumnOptions === "PresentAbsent"
                                     ? "P/A"
                                     : "S.No"}
@@ -112,21 +112,41 @@ const AllotmentDocument = async ({ exam, template, date }: Props) => {
                                         student[1]?.name ?? " "
                                     }
                                   >
-                                    <TableCell className="flex flex-col border p-2 text-xs">
+                                    <TableCell className="flex flex-col border border-black p-2 text-xs">
                                       <p>
                                         {student[0]
-                                          ? student[0].registerNumber +
+                                          ? departments.find(
+                                              (department) =>
+                                                department.id ===
+                                                student[0]?.departmentId,
+                                            )?.shortName +
                                             " " +
-                                            student[0]?.departmentId
+                                            student[0].registerNumber
                                           : "  "}
                                       </p>
                                       <p>
                                         {student[1]
-                                          ? student[1].registerNumber +
+                                          ? departments.find(
+                                              (department) =>
+                                                department.id ===
+                                                student[1]?.departmentId,
+                                            )?.shortName +
                                             " " +
-                                            student[1].departmentId
+                                            student[1].registerNumber
                                           : " "}
                                       </p>
+                                    </TableCell>
+                                    <TableCell className="border border-black p-2 text-center text-xs">
+                                      {exam.secondColumnOptions ===
+                                      "PresentAbsent" ? (
+                                        <div className="flex items-center justify-center">
+                                          <p className="text-slate-300">P/A</p>
+                                        </div>
+                                      ) : alternateFlag ? (
+                                        tableCount++
+                                      ) : (
+                                        tableCount--
+                                      )}
                                     </TableCell>
                                   </TableRow>
                                 );
@@ -137,8 +157,14 @@ const AllotmentDocument = async ({ exam, template, date }: Props) => {
                             <Table className="overflow-x-none">
                               <TableHeader>
                                 <TableRow>
-                                  <TableHead className="w-[100px] border text-center text-black">
+                                  <TableHead className="w-[100px] border border-black text-center text-black">
                                     Row {i + 2}
+                                  </TableHead>
+                                  <TableHead className="w-[50px] border border-black text-center text-black">
+                                    {exam.secondColumnOptions ===
+                                    "PresentAbsent"
+                                      ? "P/A"
+                                      : "S.No"}
                                   </TableHead>
                                 </TableRow>
                               </TableHeader>
@@ -154,17 +180,43 @@ const AllotmentDocument = async ({ exam, template, date }: Props) => {
                                             student[1]?.name ?? " "
                                         }
                                       >
-                                        <TableCell className="flex flex-col border p-2 text-xs">
+                                        <TableCell className="flex flex-col border border-black p-2 text-xs">
                                           <p>
-                                            {student[0]?.registerNumber +
-                                              " " +
-                                              student[0]?.departmentId ?? "  "}
+                                            {student[0]
+                                              ? departments.find(
+                                                  (department) =>
+                                                    department.id ===
+                                                    student[0]?.departmentId,
+                                                )?.shortName +
+                                                " " +
+                                                student[0].registerNumber
+                                              : "  "}
                                           </p>
                                           <p>
-                                            {student[1]?.registerNumber +
-                                              " " +
-                                              student[1]?.departmentId ?? "  "}
+                                            {student[1]
+                                              ? departments.find(
+                                                  (department) =>
+                                                    department.id ===
+                                                    student[1]?.departmentId,
+                                                )?.shortName +
+                                                " " +
+                                                student[1].registerNumber
+                                              : " "}
                                           </p>
+                                        </TableCell>
+                                        <TableCell className="border border-black p-2 text-center text-xs">
+                                          {exam.secondColumnOptions ===
+                                          "PresentAbsent" ? (
+                                            <div className="flex items-center justify-center">
+                                              <p className="text-slate-300">
+                                                P/A
+                                              </p>
+                                            </div>
+                                          ) : alternateFlag ? (
+                                            tableCount++
+                                          ) : (
+                                            tableCount--
+                                          )}
                                         </TableCell>
                                       </TableRow>
                                     );
@@ -199,10 +251,10 @@ const AllotmentDocument = async ({ exam, template, date }: Props) => {
                           <Table className="overflow-x-none">
                             <TableHeader>
                               <TableRow>
-                                <TableHead className="w-[150px] border text-center text-black">
+                                <TableHead className="w-[150px] border border-black text-center text-black">
                                   Row {i + 1}
                                 </TableHead>
-                                <TableHead className="w-[50px] border text-center text-black">
+                                <TableHead className="w-[50px] border border-black text-center text-black">
                                   {exam.secondColumnOptions === "PresentAbsent"
                                     ? "P/A"
                                     : "S.No"}
@@ -212,10 +264,10 @@ const AllotmentDocument = async ({ exam, template, date }: Props) => {
                             <TableBody>
                               {!(i === template.numberOfRows - 1) && (
                                 <TableRow>
-                                  <TableCell className="flex h-10 flex-col border p-2 text-xs">
+                                  <TableCell className="flex h-10 flex-col border border-black p-2 text-xs">
                                     &nbsp;
                                   </TableCell>
-                                  <TableCell className="h-10 border p-2 text-xs">
+                                  <TableCell className="h-10 border border-black p-2 text-xs">
                                     &nbsp;
                                   </TableCell>
                                 </TableRow>
@@ -237,7 +289,7 @@ const AllotmentDocument = async ({ exam, template, date }: Props) => {
                                         student[1]?.name ?? " "
                                     }
                                   >
-                                    <TableCell className="flex flex-col border p-2 text-sm">
+                                    <TableCell className="flex flex-col border border-black p-2 text-sm">
                                       <p className="">
                                         {department1 ? (
                                           <span className="mr-2 font-bold">
@@ -263,13 +315,11 @@ const AllotmentDocument = async ({ exam, template, date }: Props) => {
                                           : " "}
                                       </p>
                                     </TableCell>
-                                    <TableCell className="border p-2 text-center text-xs">
+                                    <TableCell className="border border-black p-2 text-center text-xs">
                                       {exam.secondColumnOptions ===
                                       "PresentAbsent" ? (
                                         <div className="flex items-center justify-center">
-                                          <p className="text-slate-300">
-                                            P/A
-                                          </p>
+                                          <p className="text-slate-300">P/A</p>
                                         </div>
                                       ) : alternateFlag ? (
                                         tableCount++

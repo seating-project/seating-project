@@ -54,7 +54,7 @@ const AllotmentHeader = ({
           </p>
           <p className="text-center text-xl font-bold">Seating Arrangment</p>
         </div>
-        <div className="rounded-md border px-4 py-2 text-center">
+        <div className="rounded-md border border-black px-4 py-2 text-center">
           <p className="">Hall</p>
           <p className="pb-4 text-4xl font-bold">{roomNumber}</p>
         </div>
@@ -62,7 +62,7 @@ const AllotmentHeader = ({
       <Table>
         <TableBody>
           <TableRow>
-            <TableCell className="border font-medium">
+            <TableCell className="border border-black font-medium">
               <div className="flex">
                 <p className="font-bold">Date: &nbsp;</p>
                 <p>
@@ -75,13 +75,13 @@ const AllotmentHeader = ({
                 </p>
               </div>
             </TableCell>
-            <TableCell className="border ">
+            <TableCell className="border border-black ">
               <div className="flex">
                 <p className="font-bold">Session: &nbsp;</p>
                 <p>{session}</p>
               </div>
             </TableCell>
-            <TableCell className="border">
+            <TableCell className="border border-black">
               <div className="flex">
                 <p className="font-bold">Time: &nbsp;</p>
                 <p>

@@ -7,6 +7,7 @@ export default async function CreateNewExamPage() {
     value: department.shortName,
     label: department.shortName,
   }));
+  requiredDepartments.sort((a, b) => a.value.localeCompare(b.value));
 
   const templates = await api.template.getTemplatesIncludingRooms.query();
   const requiredTemplates = templates.map((template) => ({

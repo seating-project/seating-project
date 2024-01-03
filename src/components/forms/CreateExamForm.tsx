@@ -46,7 +46,7 @@ import {
 } from "@/components/ui/table";
 import { toast } from "@/components/ui/use-toast";
 import { examFormSchema } from "@/lib/schema";
-import { cn, generateDateRange } from "@/lib/utils";
+import { cn, convertToISODate, generateDateRange } from "@/lib/utils";
 import { api } from "@/trpc/react";
 import { type Option, type Template, type TimeTable } from "@/types";
 
@@ -128,6 +128,10 @@ const CreateExamForm = ({
         template: values.template,
         college: values.college,
         departments: values.departments,
+        departmentsLeftBoys: values.departmentsLeftBoys,
+        departmentsRightBoys: values.departmentsRightBoys,
+        departmentsLeftGirls: values.departmentsLeftGirls,
+        departmentsRightGirls: values.departmentsRightGirls,
         years: values.years,
         examDates: values.examDates,
         roomsOrder: values.roomsOrder,
@@ -924,7 +928,9 @@ const CreateExamForm = ({
                                       type="text"
                                       value={
                                         timeTable?.[year]?.[department]?.[
-                                          date.toISOString().slice(0, 10)
+                                          convertToISODate(
+                                            date.toLocaleString().slice(0, 10),
+                                          ) ?? ""
                                         ] ?? ""
                                       }
                                       onChange={(event) => {
@@ -936,8 +942,11 @@ const CreateExamForm = ({
                                               ...timeTable?.[year]?.[
                                                 department
                                               ],
-                                              [date.toISOString().slice(0, 10)]:
-                                                event.target.value,
+                                              [convertToISODate(
+                                                date
+                                                  .toLocaleString()
+                                                  .slice(0, 10),
+                                              ) ?? ""]: event.target.value,
                                             },
                                           },
                                         });
@@ -983,4 +992,3 @@ const CreateExamForm = ({
 };
 
 export default CreateExamForm;
-  

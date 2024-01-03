@@ -42,7 +42,7 @@ const HallPlanDocument = async ({ exam, template, date, gender }: Props) => {
   });
 
   console.log("HALLPLAN", hallplan);
-
+  let overallTotalCount = 0;
   return (
     <div>
       <Page>
@@ -50,7 +50,7 @@ const HallPlanDocument = async ({ exam, template, date, gender }: Props) => {
           <TableHeader>
             <TableRow>
               <TableHead
-                className="border text-center text-2xl text-black"
+                className="border border-black text-center text-2xl text-black"
                 colSpan={5}
               >
                 <div className="flex w-full items-center justify-center">
@@ -66,7 +66,7 @@ const HallPlanDocument = async ({ exam, template, date, gender }: Props) => {
             </TableRow>
             <TableRow>
               <TableHead
-                className="border text-center text-2xl text-black"
+                className="border border-black text-center text-2xl text-black"
                 colSpan={5}
               >
                 {exam.name} - {gender.toUpperCase()}
@@ -74,17 +74,17 @@ const HallPlanDocument = async ({ exam, template, date, gender }: Props) => {
             </TableRow>
             <TableRow>
               <TableHead
-                className="border text-center text-lg text-black"
+                className="border border-black text-center text-lg text-black"
                 colSpan={5}
               >
                 Hall Arrangement
               </TableHead>
             </TableRow>
             <TableRow>
-              <TableHead className="border text-center text-black" colSpan={2}>
+              <TableHead className="border border-black text-center text-black" colSpan={2}>
                 Date: {date}
               </TableHead>
-              <TableHead className="border text-center text-black" colSpan={3}>
+              <TableHead className="border border-black text-center text-black" colSpan={3}>
                 Timings:{" "}
                 {template?.startTime.toLocaleTimeString().toUpperCase() +
                   " to " +
@@ -93,14 +93,14 @@ const HallPlanDocument = async ({ exam, template, date, gender }: Props) => {
             </TableRow>
 
             <TableRow>
-              <TableHead className="border text-center text-black" colSpan={1}>
+              <TableHead className="border border-black text-center text-black" colSpan={1}>
                 S.No
               </TableHead>
-              <TableHead className="border text-center text-black" colSpan={3}>
+              <TableHead className="border border-black text-center text-black" colSpan={3}>
                 Room
               </TableHead>
 
-              <TableHead className="border text-center text-black" colSpan={1}>
+              <TableHead className="border border-black text-center text-black" colSpan={1}>
                 Strength
               </TableHead>
             </TableRow>
@@ -112,12 +112,12 @@ const HallPlanDocument = async ({ exam, template, date, gender }: Props) => {
             const year = years.find((yr) => {
               return yr.id === Number(departmentYear.split(" ")[1]);
             });
-
+            let deptCount = 0;
             return (
               <TableBody key={departmentYear} className="unbreak">
                 <TableRow>
                   <TableCell
-                    className="border text-center text-xl font-medium"
+                    className="border border-black text-center text-xl font-medium"
                     colSpan={5}
                   >
                     {`
@@ -133,30 +133,49 @@ const HallPlanDocument = async ({ exam, template, date, gender }: Props) => {
                   const roomObject = rooms.find((roomObj) => {
                     return roomObj.number === currentRoom;
                   });
-
+                  deptCount += currentRoomInfo?.strength ?? 0;
+                  overallTotalCount += currentRoomInfo?.strength ?? 0;
                   return (
                     <>
                       <TableRow>
-                        <TableCell className="border text-center" colSpan={1}>
+                        <TableCell className="border border-black text-center" colSpan={1}>
                           {index + 1}
                         </TableCell>
-                        <TableCell className="border " colSpan={3}>
+                        <TableCell className="border border-black " colSpan={3}>
                           <b className="text-xl font-medium"> {currentRoom} </b>{" "}
                           <br />
                           {getNumberNames(roomObject?.floor ?? 0) +
                             " Floor"} - {roomObject?.Block.name} -{" "}
                           {roomObject?.Building.name}
                         </TableCell>
-                        <TableCell className="border font-medium" colSpan={1}>
+                        <TableCell className="border border-black font-medium" colSpan={1}>
                           {currentRoomInfo?.strength}
                         </TableCell>
                       </TableRow>
                     </>
                   );
                 })}
+                <TableRow>
+                  <TableCell className="border border-black text-center" colSpan={4}>
+                    <b className="text-xl font-medium"> Total </b>
+                  </TableCell>
+                  <TableCell className="border border-black font-medium" colSpan={1}>
+                    {deptCount}
+                  </TableCell>
+                </TableRow>
               </TableBody>
             );
           })}
+          <TableBody>
+            <TableRow>
+              <TableCell className="border border-black text-center" colSpan={4}>
+                <b className="text-xl font-medium"> Overall Total </b>
+              </TableCell>
+              <TableCell className="border border-black font-medium text-xl text-center" colSpan={1}>
+                {overallTotalCount}
+              </TableCell>
+            </TableRow>
+          </TableBody>
         </Table>
       </Page>
     </div>

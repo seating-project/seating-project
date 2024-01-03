@@ -1,9 +1,9 @@
+import type { Room } from "@prisma/client";
 import { clsx, type ClassValue } from "clsx";
+import { isEqual } from "lodash";
 import { twMerge } from "tailwind-merge";
 
 import type { TimeTable } from "@/types";
-import { isEqual } from "lodash";
-import { Room } from "@prisma/client";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -132,4 +132,27 @@ export function shuffleArray(array: Room[]): Room[] {
     }
   }
   return array;
+}
+
+export function convertToISODate(inputDate: string): string | null {
+  const trimmedDate = inputDate.trim().replace(/,$/, "");
+  const dateParts = trimmedDate.split("/");
+
+  if (dateParts.length !== 3) {
+    return null;
+  }
+
+  const year = parseInt(dateParts[2] ?? "");
+  const month = parseInt(dateParts[1] ?? "");
+  const day = parseInt(dateParts[0] ?? "");
+
+  if (isNaN(year) || isNaN(month) || isNaN(day)) {
+    return null;
+  }
+
+  const isoDateString = `${year}-${month.toString().padStart(2, "0")}-${day
+    .toString()
+    .padStart(2, "0")}`;
+
+  return isoDateString;
 }

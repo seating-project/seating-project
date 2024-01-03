@@ -28,7 +28,7 @@ async function readCSVFile(filePath: string): Promise<StudentsInCSV[]> {
 
 export default async function seedStudents(prisma: PrismaClient) {
 
-  const filePath = path.join(__dirname, "..", "studentsData.csv");
+  const filePath = path.join(__dirname, "..", "studentsNew.csv");
   const students = await readCSVFile(filePath);
 
   const college = await prisma.college.findFirst({

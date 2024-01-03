@@ -749,6 +749,28 @@ export async function getAllotments({
           exam.DepartmentsLeftBoys.length > 0 &&
           exam.DepartmentsRightBoys.length > 0
         ) {
+
+                    
+          exam.DepartmentsLeftBoys.sort((a, b) => {
+            const aIndex = exam.deptLeftBoysArray.findIndex(
+              (department) => department === a.shortName,
+            );
+            const bIndex = exam.deptLeftBoysArray.findIndex(
+              (department) => department === b.shortName,
+            );
+            return aIndex - bIndex;
+          });
+
+          exam.DepartmentsRightBoys.sort((a, b) => {
+            const aIndex = exam.deptRightBoysArray.findIndex(
+              (department) => department === a.shortName,
+            );
+            const bIndex = exam.deptRightBoysArray.findIndex(
+              (department) => department === b.shortName,
+            );
+            return aIndex - bIndex;
+          });
+
           // Getting the boys data for the left side
           await Promise.all(
             // exam.DepartmentsLeftBoys.map(async (department) => {
@@ -832,6 +854,7 @@ export async function getAllotments({
           );
 
           // Sorting the left side boys according to the department order
+
           students[`Male Left`]?.sort((a, b) => {
             const aIndex = exam.DepartmentsLeftBoys.findIndex(
               (department) => department.id === a.departmentId,
@@ -997,6 +1020,27 @@ export async function getAllotments({
           exam.DepartmentsLeftGirls.length > 0 &&
           exam.DepartmentsRightGirls.length > 0
         ) {
+
+          exam.DepartmentsLeftGirls.sort((a, b) => {
+            const aIndex = exam.deptLeftGirlsArray.findIndex(
+              (department) => department === a.shortName,
+            );
+            const bIndex = exam.deptLeftGirlsArray.findIndex(
+              (department) => department === b.shortName,
+            );
+            return aIndex - bIndex;
+          });
+          
+          exam.DepartmentsRightGirls.sort((a, b) => {
+            const aIndex = exam.deptRightGirlsArray.findIndex(
+              (department) => department === a.shortName,
+            );
+            const bIndex = exam.deptRightGirlsArray.findIndex(
+              (department) => department === b.shortName,
+            );
+            return aIndex - bIndex;
+          });
+
           //  Getting the left side girls data
           await Promise.all(
             // exam.DepartmentsLeftGirls.map(async (department) => {
@@ -1245,10 +1289,19 @@ export async function getAllotments({
         let firstPointer = 0; // A pointer to keep track of the left side students
         let secondPointer = 0; // A pointer to keep track of the right side students
 
+        // Sorting RoomsOrder using the roomsOrderArray (string[])
+        const roomsOrderArray = exam.roomOrderArray
+        exam.RoomsOrder.sort((a, b) => {
+          const aIndex = roomsOrderArray.findIndex((room) => room === a.number);
+          const bIndex = roomsOrderArray.findIndex((room) => room === b.number);
+          return aIndex - bIndex;
+        }); 
+
         // Looping through all the rooms
         exam.RoomsOrder.map((room) => {
           // If the girls are entirely alloted, then return
           if (girlsFinished) return;
+          console.log("Room", room.number); 
 
           const roomAllotments: [Student | null, Student | null][] = []; // To store the allotments of the current room
 
@@ -1269,6 +1322,7 @@ export async function getAllotments({
                 students[`Female Right`][firstPointer] ?? null,
               ]);
               firstPointer++;
+              secondPointer++;
             } else if (students[`Female Left`]?.[firstPointer]) {
               roomAllotments.push([
                 students[`Female Left`][firstPointer] ?? null,
@@ -1295,12 +1349,15 @@ export async function getAllotments({
           ) {
             girlsFinished = true;
           }
+          console.log("First Pointer", firstPointer);
+          console.log("Second Pointer", secondPointer);
         });
 
         // Initialising the boys rooms array
         const boysRooms: Room[] = exam.RoomsOrder.filter(
           (room) => !girlsRooms.includes(room),
         );
+        console.log("Boys Room ", boysRooms)
 
         firstPointer = 0; // The pointer to keep track of the left side students (it is already initialised above, so we are just resetting it)
         secondPointer = 0; // The pointer to keep track of the right side students (it is already initialised above, so we are just resetting it)

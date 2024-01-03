@@ -10,7 +10,7 @@ const MainNav = async () => {
   const session = await getServerAuthSession();
 
   return (
-    <div className="flex h-20 w-full items-center justify-between space-x-4 border-b p-4 dark:bg-[#020817]">
+    <div className="flex h-20 w-full items-center justify-between space-x-4 border-b p-4 bg-slate-50 dark:bg-[#020817]">
       <div className="flex space-x-4">
         <div className="rounded-md bg-black p-2 font-mono text-2xl dark:bg-white">
           {session?.user.id ? (
@@ -25,7 +25,6 @@ const MainNav = async () => {
         </div>
         <Navbar />
       </div>
-
       <div className="flex items-center space-x-4">
         <ModeToggle />
         <UserProfile />

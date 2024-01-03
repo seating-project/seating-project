@@ -1,4 +1,4 @@
-import { Student } from "@prisma/client";
+import type { Student } from "@prisma/client";
 import { z } from "zod";
 
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
@@ -278,6 +278,14 @@ export const allotmentRouter = createTRPCRouter({
           }
         });
       });
+
+      // // Reducing the strength of the hallplans by 1
+      // Object.keys(hallplans).forEach((department) => {
+      //   hallplans[department]?.forEach((hall) => {
+      //     Object.values(hall)[0]!.strength -= 1;
+      //   });
+      // });
+
       return hallplans;
     }),
 
@@ -373,7 +381,7 @@ export const allotmentRouter = createTRPCRouter({
                     [room]: {
                       startRegisterNumber: student[0]?.registerNumber ?? "",
                       endRegisterNumber: student[0]?.registerNumber ?? "",
-                      strength: student.length,
+                      strength: student.length - 1,
                     },
                   },
                 ];
@@ -394,7 +402,7 @@ export const allotmentRouter = createTRPCRouter({
                     [room]: {
                       startRegisterNumber: student[0]?.registerNumber ?? "",
                       endRegisterNumber: student[0]?.registerNumber ?? "",
-                      strength: student.length,
+                      strength: student.length - 1,
                     },
                   });
                 } else {
@@ -430,7 +438,7 @@ export const allotmentRouter = createTRPCRouter({
                       startRegisterNumber: student[1]?.registerNumber ?? "",
                       endRegisterNumber:
                         student[student.length - 1]?.registerNumber ?? "",
-                      strength: student.length,
+                      strength: student.length - 1,
                     },
                   },
                 ];
@@ -443,7 +451,7 @@ export const allotmentRouter = createTRPCRouter({
                       startRegisterNumber: student[1]?.registerNumber ?? "",
                       endRegisterNumber:
                         student[student.length - 1]?.registerNumber ?? "",
-                      strength: student.length,
+                      strength: student.length - 1,
                     },
                   })
                 ) {
@@ -466,7 +474,7 @@ export const allotmentRouter = createTRPCRouter({
                         startRegisterNumber: student[1]?.registerNumber ?? "",
                         endRegisterNumber:
                           student[student.length - 1]?.registerNumber ?? "",
-                        strength: student.length,
+                        strength: student.length - 1,
                       },
                     });
                   } else {
@@ -506,7 +514,7 @@ export const allotmentRouter = createTRPCRouter({
                     [room]: {
                       startRegisterNumber: student[0]?.registerNumber ?? "",
                       endRegisterNumber: student[0]?.registerNumber ?? "",
-                      strength: student.length,
+                      strength: student.length - 1,
                     },
                   },
                 ];
@@ -527,7 +535,7 @@ export const allotmentRouter = createTRPCRouter({
                     [room]: {
                       startRegisterNumber: student[0]?.registerNumber ?? "",
                       endRegisterNumber: student[0]?.registerNumber ?? "",
-                      strength: student.length,
+                      strength: student.length - 1,
                     },
                   });
                 } else {
@@ -563,7 +571,7 @@ export const allotmentRouter = createTRPCRouter({
                       startRegisterNumber: student[1]?.registerNumber ?? "",
                       endRegisterNumber:
                         student[student.length - 1]?.registerNumber ?? "",
-                      strength: student.length,
+                      strength: student.length - 1,
                     },
                   },
                 ];
@@ -576,7 +584,7 @@ export const allotmentRouter = createTRPCRouter({
                       startRegisterNumber: student[1]?.registerNumber ?? "",
                       endRegisterNumber:
                         student[student.length - 1]?.registerNumber ?? "",
-                      strength: student.length,
+                      strength: student.length - 1,
                     },
                   })
                 ) {
@@ -599,7 +607,7 @@ export const allotmentRouter = createTRPCRouter({
                         startRegisterNumber: student[1]?.registerNumber ?? "",
                         endRegisterNumber:
                           student[student.length - 1]?.registerNumber ?? "",
-                        strength: student.length,
+                        strength: student.length - 1,
                       },
                     });
                   } else {

@@ -156,6 +156,11 @@ model Exam {
   minimumStudentsInRoom      Int
   randomizeEveryNRooms       Int                 @default(0)
   RoomsOrder                 Room[]              @relation("RoomsOrder")
+  roomOrderArray             String[]            @default([])
+  deptLeftBoysArray          String[]            @default([])
+  deptRightBoysArray         String[]            @default([])
+  deptLeftGirlsArray         String[]            @default([])
+  deptRightGirlsArray        String[]            @default([])
   GirlsRooms                 Room[]              @relation("GirlsRooms")
   MeRoom                     Room?               @relation("MeRoom", fields: [roomId], references: [id])
   strictlyDivideBuildings    Boolean             @default(false)

@@ -17,17 +17,17 @@ async function main() {
   //   min: 17,
   //   max: 20,
   // });
-  await seedAccounts(db);
-  await seedColleges(db)
-  await seedYears(db);
-  await seedDegrees(db);  
-  await seedDepartments(db);
+  // await seedAccounts(db);
+  // await seedColleges(db)
+  // await seedYears(db);
+  // await seedDegrees(db);  
+  // await seedDepartments(db);
   await seedStudents(db);
-  await seedBuildings(db);
-  seedBlocks(db);
-  await seedRooms(db);
-  await seedLogos(db);
-  seedTemplates(db);
+  // await seedBuildings(db);
+  // seedBlocks(db);
+  // await seedRooms(db);
+  // await seedLogos(db);
+  // seedTemplates(db);
   // await updateStudent(db);
   
 }

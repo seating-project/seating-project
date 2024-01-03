@@ -149,22 +149,22 @@ export const examRouter = createTRPCRouter({
           },
           DepartmentsLeftBoys: {
             connect: input.departmentsLeftBoys?.map((department) => ({
-              branch: department,
+              shortName: department,
             })),
           },
           DepartmentsRightBoys: {
             connect: input.departmentsRightBoys?.map((department) => ({
-              branch: department,
+              shortName: department,
             })),
           },
           DepartmentsLeftGirls: {
             connect: input.departmentsLeftGirls?.map((department) => ({
-              branch: department,
+              shortName: department,
             })),
           },
           DepartmentsRightGirls: {
             connect: input.departmentsRightGirls?.map((department) => ({
-              branch: department,
+              shortName: department,
             })),
           },
           RoomsOrder: {
@@ -173,6 +173,11 @@ export const examRouter = createTRPCRouter({
             })),
           },
           Timetable: input.timeTable,
+          roomOrderArray: input.roomsOrder,
+          deptLeftBoysArray: input.departmentsLeftBoys,
+          deptRightBoysArray: input.departmentsRightBoys,
+          deptLeftGirlsArray: input.departmentsLeftGirls,
+          deptRightGirlsArray: input.departmentsRightGirls,
         },
       });
     }),
