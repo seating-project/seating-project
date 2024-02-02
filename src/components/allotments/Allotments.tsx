@@ -28,7 +28,7 @@ function createPDF() {
 
 const Allotments = ({ examId, dates }: Props) => {
   return (
-    <Card>
+    <Card className="my-2">
       <CardHeader>
         <CardTitle>Allotments</CardTitle>
         <CardDescription>

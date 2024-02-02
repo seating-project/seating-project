@@ -30,7 +30,7 @@ function createPDF() {
 
 const HallPlans = ({ exam, dates }: Props) => {
   return (
-    <Card>
+    <Card className="my-2">
       <CardHeader>
         <CardTitle>Hall Plans</CardTitle>
         <CardDescription>The hallplans for the exam</CardDescription>
@@ -44,7 +44,7 @@ const HallPlans = ({ exam, dates }: Props) => {
                   return (
                     <Card className="w-96" key={date}>
                       <CardHeader>
-                        <CardTitle>Hall Plan for all</CardTitle>
+                        <CardTitle>Hall Plan for all ({date})</CardTitle>
                       </CardHeader>
                       <CardContent>
                         <div className="flex items-center  space-x-4">
@@ -77,7 +77,7 @@ const HallPlans = ({ exam, dates }: Props) => {
                     <div key={date}>
                       <Card className="w-96">
                         <CardHeader>
-                          <CardTitle>Hall Plan for Boys</CardTitle>
+                          <CardTitle>Hall Plan for Boys ({date})</CardTitle>
                         </CardHeader>
                         <CardContent>
                           <div className="flex items-center  space-x-4">
@@ -105,7 +105,7 @@ const HallPlans = ({ exam, dates }: Props) => {
                       </Card>
                       <Card className="w-96">
                         <CardHeader>
-                          <CardTitle>Hall Plan for Girls</CardTitle>
+                          <CardTitle>Hall Plan for Girls ({date})</CardTitle>
                         </CardHeader>
                         <CardContent>
                           <div className="flex items-center  space-x-4">

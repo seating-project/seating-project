@@ -83,7 +83,7 @@ export default function UserAuthForm({
               />
             </div>
           </div>
-          <Button disabled={isLoading} onClick={onSubmit}>
+          <Button disabled={isLoading} onClick={onSubmit} id="login-button">
             {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             Sign In with Email
           </Button>

@@ -1,8 +1,8 @@
 import type { Room, Student } from "@prisma/client";
 
+import { shuffleArray } from "@/lib/utils";
 import { db } from "@/server/db";
 import type { TimeTable } from "@/types";
-import { shuffleArray } from "@/lib/utils";
 
 export async function getAllotments({
   examId,
@@ -81,27 +81,27 @@ export async function getAllotments({
       await db.student.findMany({
         where: {
           Degree: {
-           fullName: "Postgraduate" 
-          }
+            fullName: "Postgraduate",
+          },
         },
         orderBy: {
           registerNumber: "asc",
         },
-      })
-    )
+      }),
+    );
 
     const meStudentsAllotments: [Student | null, Student | null][] = [];
 
     meStudents.map((student) => {
-      meStudentsAllotments.push([student, null])
-    })
+      meStudentsAllotments.push([student, null]);
+    });
 
     allotments[exam.MeRoom?.number ?? ""] = meStudentsAllotments;
   }
 
   if (exam.randomizeEveryNRooms) {
     const partSize = exam.randomizeEveryNRooms;
-    const parts = []
+    const parts = [];
     for (let i = 0; i < exam.RoomsOrder.length; i += partSize) {
       parts.push(exam.RoomsOrder.slice(i, i + partSize));
     }
@@ -109,7 +109,7 @@ export async function getAllotments({
       parts[i] = shuffleArray(parts[i] ?? []);
     }
     // eslint-disable-next-line
-    const roomListTemp = [].concat(...parts as any);
+    const roomListTemp = [].concat(...(parts as any));
   }
 
   if (template.isSingleSeater) {
@@ -202,6 +202,14 @@ export async function getAllotments({
         return aIndex - bIndex;
       });
 
+      // Sorting RoomsOrder using the roomsOrderArray (string[])
+      const roomsOrderArray = exam.roomOrderArray;
+      exam.RoomsOrder.sort((a, b) => {
+        const aIndex = roomsOrderArray.findIndex((room) => room === a.number);
+        const bIndex = roomsOrderArray.findIndex((room) => room === b.number);
+        return aIndex - bIndex;
+      });
+
       // Filtering departments based on the time table
       console.log("timetable", exam.Timetable);
       // const departmentsForToday = Object.keys(exam.Timetable as TimeTable).map(
@@ -286,6 +294,14 @@ export async function getAllotments({
         }),
       );
 
+      // Sorting RoomsOrder using the roomsOrderArray (string[])
+      const roomsOrderArray = exam.roomOrderArray;
+      exam.RoomsOrder.sort((a, b) => {
+        const aIndex = roomsOrderArray.findIndex((room) => room === a.number);
+        const bIndex = roomsOrderArray.findIndex((room) => room === b.number);
+        return aIndex - bIndex;
+      });
+
       // Sorting the students based on the department order as well as years order
       students.sort((a, b) => {
         const aIndex = exam.Departments.findIndex(
@@ -326,6 +342,14 @@ export async function getAllotments({
     if (template.isBoysGirlsSeparate) {
       if (exam.isYearsTogether) {
         const students: Record<string, Student[]> = {}; // To store all the students based on their years
+
+        // Sorting RoomsOrder using the roomsOrderArray (string[])
+        const roomsOrderArray = exam.roomOrderArray;
+        exam.RoomsOrder.sort((a, b) => {
+          const aIndex = roomsOrderArray.findIndex((room) => room === a.number);
+          const bIndex = roomsOrderArray.findIndex((room) => room === b.number);
+          return aIndex - bIndex;
+        });
 
         // Getting the boys data
         await Promise.all(
@@ -749,8 +773,6 @@ export async function getAllotments({
           exam.DepartmentsLeftBoys.length > 0 &&
           exam.DepartmentsRightBoys.length > 0
         ) {
-
-                    
           exam.DepartmentsLeftBoys.sort((a, b) => {
             const aIndex = exam.deptLeftBoysArray.findIndex(
               (department) => department === a.shortName,
@@ -1020,7 +1042,6 @@ export async function getAllotments({
           exam.DepartmentsLeftGirls.length > 0 &&
           exam.DepartmentsRightGirls.length > 0
         ) {
-
           exam.DepartmentsLeftGirls.sort((a, b) => {
             const aIndex = exam.deptLeftGirlsArray.findIndex(
               (department) => department === a.shortName,
@@ -1030,7 +1051,7 @@ export async function getAllotments({
             );
             return aIndex - bIndex;
           });
-          
+
           exam.DepartmentsRightGirls.sort((a, b) => {
             const aIndex = exam.deptRightGirlsArray.findIndex(
               (department) => department === a.shortName,
@@ -1290,18 +1311,18 @@ export async function getAllotments({
         let secondPointer = 0; // A pointer to keep track of the right side students
 
         // Sorting RoomsOrder using the roomsOrderArray (string[])
-        const roomsOrderArray = exam.roomOrderArray
+        const roomsOrderArray = exam.roomOrderArray;
         exam.RoomsOrder.sort((a, b) => {
           const aIndex = roomsOrderArray.findIndex((room) => room === a.number);
           const bIndex = roomsOrderArray.findIndex((room) => room === b.number);
           return aIndex - bIndex;
-        }); 
+        });
 
         // Looping through all the rooms
         exam.RoomsOrder.map((room) => {
           // If the girls are entirely alloted, then return
           if (girlsFinished) return;
-          console.log("Room", room.number); 
+          console.log("Room", room.number);
 
           const roomAllotments: [Student | null, Student | null][] = []; // To store the allotments of the current room
 
@@ -1357,7 +1378,7 @@ export async function getAllotments({
         const boysRooms: Room[] = exam.RoomsOrder.filter(
           (room) => !girlsRooms.includes(room),
         );
-        console.log("Boys Room ", boysRooms)
+        console.log("Boys Room ", boysRooms);
 
         firstPointer = 0; // The pointer to keep track of the left side students (it is already initialised above, so we are just resetting it)
         secondPointer = 0; // The pointer to keep track of the right side students (it is already initialised above, so we are just resetting it)

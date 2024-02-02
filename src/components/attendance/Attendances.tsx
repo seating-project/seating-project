@@ -23,7 +23,7 @@ type Props = {
   timetable: TimeTable;
 };
 
-const Attendances = async ({ examId, dates, timetable }: Props) => {
+const Attendances = async ({ examId, timetable }: Props) => {
   const timeTableBasedOnDays = getTimeTableBasedOnDays(timetable);
   const dateRangesWithDifferences =
     findDateRangesWithDifferences(timeTableBasedOnDays);
@@ -42,7 +42,7 @@ const Attendances = async ({ examId, dates, timetable }: Props) => {
   console.log("ROoms", rooms);
 
   return (
-    <Card>
+    <Card className="my-2">
       <CardHeader>
         <CardTitle>Attendance Copies</CardTitle>
         <CardDescription>The attendance sheets for the exam</CardDescription>
