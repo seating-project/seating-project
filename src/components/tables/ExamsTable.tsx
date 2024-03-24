@@ -184,7 +184,7 @@ const ExamTable = (props: Props) => {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-[150px]">
               <DropdownMenuItem asChild>
-                <Link href={`/exams/${exam.id}`}>
+                <Link href={`/exam/${exam.id}/edit`}>
                   <Edit
                     className="mr-2 h-3.5 w-3.5 text-muted-foreground/70"
                     aria-hidden="true"

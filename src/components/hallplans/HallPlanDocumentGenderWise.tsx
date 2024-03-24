@@ -112,6 +112,9 @@ const HallPlanDocument = async ({ exam, template, date, gender }: Props) => {
             const year = years.find((yr) => {
               return yr.id === Number(departmentYear.split(" ")[1]);
             });
+            if (!department || !year) {
+              return null;
+            }
             let deptCount = 0;
             return (
               <TableBody key={departmentYear} className="unbreak">

@@ -32,6 +32,9 @@ export default async function Home() {
           <Button className="my-4">
             <Link href="/create-new">Create Exam</Link>
           </Button>
+          <Button className="my-4 mx-4">
+            <Link href="/create-new-with-practicals">Create Exam With Practicals</Link>
+          </Button>
         </div>
       </div>
     </div>

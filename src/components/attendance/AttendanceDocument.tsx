@@ -59,7 +59,10 @@ const AttendanceDocument = async ({ exam, template, date, room }: Props) => {
     const end = new Date(dateRange[1] ?? "");
     const dates = [];
     for (let date = start; date <= end; date.setDate(date.getDate() + 1)) {
-      dates.push(new Date(date));
+      // if ((exam?.Timetable as TimeTable) )
+      console.log("DATE", date.toLocaleDateString());
+      if (date.toLocaleDateString() !== "17/3/2024" )
+        dates.push(new Date(date));
     }
     return dates;
   }

@@ -13,6 +13,170 @@ export async function getAllotments({
   templateId: number;
   date: string;
 }) {
+  // const gaterolls = [
+  //   "210421104001",
+  //   "210421104002",
+  //   "210421104004",
+  //   "210421104007",
+  //   "210421104009",
+  //   "210421104010",
+  //   "210421104011",
+  //   "210421104012",
+  //   "210421104014",
+  //   "210421104018",
+  //   "210421104020",
+  //   "210421104026",
+  //   "210421104027",
+  //   "210421104030",
+  //   "210421104032",
+  //   "210421104035",
+  //   "210421104036",
+  //   "210421104045",
+  //   "210421104046",
+  //   "210421104048",
+  //   "210421104049",
+  //   "210421104052",
+  //   "210421104053",
+  //   "210421104055",
+  //   "210421104059",
+  //   "210421104060",
+  //   "210421104061",
+  //   "210421104064",
+  //   "210421104065",
+  //   "210421104067",
+  //   "210421104068",
+  //   "210421104070",
+  //   "210421104073",
+  //   "210421104074",
+  //   "210421104075",
+  //   "210421104077",
+  //   "210421104080",
+  //   "210421104084",
+  //   "210421104086",
+  //   "210421104087",
+  //   "210421104091",
+  //   "210421104093",
+  //   "210421104096",
+  //   "210421104098",
+  //   "210421104106",
+  //   "210421104108",
+  //   "210421104110",
+  //   "210421104112",
+  //   "210421104113",
+  //   "210421104116",
+  //   "210421104119",
+  //   "210421104120",
+  //   "210421104121",
+  //   "210421104126",
+  //   "210421104127",
+  //   "210421104131",
+  //   "210421104133",
+  //   "210421104135",
+  //   "210421104136",
+  //   "210421104138",
+  //   "210421104139",
+  //   "210421104142",
+  //   "210421104144",
+  //   "210421104153",
+  //   "210421104154",
+  //   "210421104158",
+  //   "210421104159",
+  //   "210421104161",
+  //   "210421104162",
+  //   "210421104163",
+  //   "210421104170",
+  //   "210421104172",
+  //   "210421104173",
+  //   "210421104174",
+  //   "210421104175",
+  //   "210421104176",
+  //   "210421104178",
+  //   "210421104181",
+  //   "210421104182",
+  //   "210421104183",
+  //   "210421104186",
+  //   "210421104189",
+  //   "210421104305",
+  //   "210421205002",
+  //   "210421205015",
+  //   "210421205016",
+  //   "210421205021",
+  //   "210421205027",
+  //   "210421205034",
+  //   "210421205045",
+  //   "210421205053",
+  //   "210421205056",
+  //   "210421205061",
+  //   "210421205062",
+  //   "210421244004",
+  //   "210421244005",
+  //   "210421244023",
+  //   "210421244024",
+  //   "210421244030",
+  //   "210421244033",
+  //   "210421244044",
+  //   "210421244048",
+  //   "210421244050",
+  //   "210421244056",
+  //   "210421106018",
+  //   "210421106023",
+  //   "210421106025",
+  //   "210421106052",
+  //   "210421106053",
+  //   "210421106063",
+  //   "210421106067",
+  //   "210421106068",
+  //   "210421106074",
+  //   "210421106079",
+  //   "210421106090",
+  //   "210421106093",
+  //   "210421106100",
+  //   "210421106101",
+  //   "210421106112",
+  //   "210421106114",
+  //   "210421106117",
+  //   "210421106120",
+  //   "210421106121",
+  //   "210421106124",
+  //   "210421106125",
+  //   "210421106126",
+  //   "210421105004",
+  //   "210421105007",
+  //   "210421105008",
+  //   "210421105013",
+  //   "210421105014",
+  //   "210421105015",
+  //   "210421105018",
+  //   "210421105027",
+  //   "210421105028",
+  //   "210421105034",
+  //   "210421105037",
+  //   "210421105042",
+  //   "210421105047",
+  //   "210421105048",
+  //   "210421105051",
+  //   "210421105053",
+  //   "210421105054",
+  //   "210421105059",
+  //   "210421105062",
+  //   "210421105003",
+  // ]
+
+  // const gaterolls = [
+  //   "210421244004",
+  //   "210421244005",
+  //   "210421244023",
+  //   "210421244041",
+  //   "210421244048",
+  //   "210421244050",
+  //   "210421244056",
+  //   "210421244030",
+  //   "210421244033",
+  //   "210421244044",
+  //   "210421244024",
+  //   "210421244058",
+  // ]
+
   // ? ==================== ALLOTMENTS FUNCTION ====================
 
   // ! IMPORTANT NOTE
@@ -285,6 +449,11 @@ export async function getAllotments({
                 },
               },
               collegeId: exam.collegeId,
+              // registerNumber: {
+              //   not: {
+              //     in: gaterolls,
+              //   },
+              // },
             },
             orderBy: {
               registerNumber: "asc",
@@ -317,6 +486,21 @@ export async function getAllotments({
         }
         return aIndex - bIndex;
       });
+
+      // const departmentOrder = exam.Departments.map((department) => {
+      //   return department.id;
+      // });
+
+      // // Sorting the students based on the department order as well as years order
+      // students.sort((a, b) => {
+      //   const aIndex = departmentOrder.findIndex(
+      //     (department) => department === a.departmentId,
+      //   );
+      //   const bIndex = departmentOrder.findIndex(
+      //     (department) => department === b.departmentId,
+      //   );
+      //   return aIndex - bIndex;
+      // });
 
       // Getting the room strength (number of students per room)
       // It will always be double of the total number of benches
@@ -825,6 +1009,11 @@ export async function getAllotments({
                   },
                   collegeId: exam.collegeId,
                   gender: "Male",
+                  // registerNumber: {
+                  //   not: {
+                  //     in: gaterolls,
+                  //   },
+                  // },
                 },
                 orderBy: {
                   registerNumber: "asc",
@@ -866,6 +1055,11 @@ export async function getAllotments({
                   },
                   collegeId: exam.collegeId,
                   gender: "Male",
+                  // registerNumber: {
+                  //   not: {
+                  //     in: gaterolls,
+                  //   },
+                  // },
                 },
                 orderBy: {
                   registerNumber: "asc",
@@ -948,6 +1142,11 @@ export async function getAllotments({
                     type: "Circuit",
                   },
                   gender: "Male",
+                  // registerNumber: {
+                  //   not: {
+                  //     in: gaterolls,
+                  //   },
+                  // },
                 },
                 orderBy: {
                   registerNumber: "asc",
@@ -995,6 +1194,11 @@ export async function getAllotments({
                     type: "NonCircuit",
                   },
                   gender: "Male",
+                  // registerNumber: {
+                  //   not: {
+                  //     in: gaterolls,
+                  //   },
+                  // },
                 },
                 orderBy: {
                   registerNumber: "asc",
@@ -1094,6 +1298,11 @@ export async function getAllotments({
                   },
                   collegeId: exam.collegeId,
                   gender: "Female",
+                  // registerNumber: {
+                  //   not: {
+                  //     in: gaterolls,
+                  //   },
+                  // },
                 },
                 orderBy: {
                   registerNumber: "asc",
@@ -1135,6 +1344,11 @@ export async function getAllotments({
                   },
                   collegeId: exam.collegeId,
                   gender: "Female",
+                  // registerNumber: {
+                  //   not: {
+                  //     in: gaterolls,
+                  //   },
+                  // },
                 },
                 orderBy: {
                   registerNumber: "asc",
@@ -1216,6 +1430,11 @@ export async function getAllotments({
                     type: "Circuit",
                   },
                   gender: "Female",
+                  // registerNumber: {
+                  //   not: {
+                  //     in: gaterolls,
+                  //   },
+                  // },
                 },
                 orderBy: {
                   registerNumber: "asc",
@@ -1263,6 +1482,11 @@ export async function getAllotments({
                     type: "NonCircuit",
                   },
                   gender: "Female",
+                  // registerNumber: {
+                  //   not: {
+                  //     in: gaterolls,
+                  //   },
+                  // },
                 },
                 orderBy: {
                   registerNumber: "asc",
@@ -1336,11 +1560,11 @@ export async function getAllotments({
           for (let i = 0; i < roomStrength; i++) {
             if (
               students[`Female Left`]?.[firstPointer] &&
-              students[`Female Right`]?.[firstPointer]
+              students[`Female Right`]?.[secondPointer]
             ) {
               roomAllotments.push([
                 students[`Female Left`][firstPointer] ?? null,
-                students[`Female Right`][firstPointer] ?? null,
+                students[`Female Right`][secondPointer] ?? null,
               ]);
               firstPointer++;
               secondPointer++;
@@ -1385,6 +1609,9 @@ export async function getAllotments({
 
         // Looping through all the rooms (boys rooms)
         boysRooms.map((room) => {
+          //   return;
+          // if (room.number === "F9" ) {
+          // }
           const roomAllotments: [Student | null, Student | null][] = []; // To store the allotments of the current room
 
           // Getting the room strength (number of students per room)
@@ -1397,13 +1624,14 @@ export async function getAllotments({
           for (let i = 0; i < roomStrength; i++) {
             if (
               students[`Male Left`]?.[firstPointer] &&
-              students[`Male Right`]?.[firstPointer]
+              students[`Male Right`]?.[secondPointer]
             ) {
               roomAllotments.push([
                 students[`Male Left`][firstPointer] ?? null,
-                students[`Male Right`][firstPointer] ?? null,
+                students[`Male Right`][secondPointer] ?? null,
               ]);
               firstPointer++;
+              secondPointer++;
             } else if (students[`Male Left`]?.[firstPointer]) {
               roomAllotments.push([
                 students[`Male Left`][firstPointer] ?? null,

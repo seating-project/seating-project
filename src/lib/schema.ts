@@ -12,6 +12,7 @@ export const examFormSchema = z.object({
   isMe: z.boolean(),
   isYearsTogether: z.boolean(),
   isDepartmentsTogether: z.boolean(),
+  isCombinedWithPracticals: z.boolean(),
   isSendWhatsappMessage: z.boolean(),
   timeToSendWhatsappMessage: z.date().optional(),
   secondColumnOptions: z.string(),

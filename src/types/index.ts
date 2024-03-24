@@ -38,3 +38,11 @@ export type Option = {
 };
 
 export type TimeTable = Record<string, Record<string, Record<string, string>>>;
+
+export type ExamWithPracticals = Record<
+  string,
+  Record<
+    string,
+    { morningBatches: [string, string][]; afternoonBatches: [string, string][] }
+  >
+>;

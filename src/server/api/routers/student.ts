@@ -17,7 +17,7 @@ export const studentRouter = createTRPCRouter({
       },
     });
   }),
-
+  
   getStudentsAdminTable: protectedProcedure.query(async ({ ctx }) => {
     const students = await ctx.db.student.findMany({
       include: {

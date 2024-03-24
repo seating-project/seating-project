@@ -11,6 +11,7 @@ import seedLogos from "./seeds/logos";
 import seedTemplates from "./seeds/templates";
 import updateStudent from "./seeds/updateStudent";
 import seedColleges from "./seeds/colleges";
+import seedFromExcel from "./seeds/firstYearStudent";
 
 async function main() {
   // const count = faker.number.int({
@@ -22,14 +23,14 @@ async function main() {
   // await seedYears(db);
   // await seedDegrees(db);  
   // await seedDepartments(db);
-  await seedStudents(db);
+  // await seedStudents(db);
   // await seedBuildings(db);
   // seedBlocks(db);
   // await seedRooms(db);
   // await seedLogos(db);
   // seedTemplates(db);
   // await updateStudent(db);
-  
+  seedFromExcel(db);
 }
 
 main()

@@ -95,7 +95,14 @@ const ExamPage = async (props: Props) => {
         <MainNav />
       </div>
       <div className="p-8">
-        <p className="text-4xl font-bold"> {exam.name} </p>
+        <div className="flex justify-between items-center">
+          <p className="text-4xl font-bold"> {exam.name} </p>
+          <div>
+            <Link href={`/exam/${exam.id}/edit`}>
+              <Button>Edit Exam</Button>
+            </Link>
+          </div>
+        </div>
         <div className="my-8 flex flex-col">
           <p className="text-xl">
             {" "}

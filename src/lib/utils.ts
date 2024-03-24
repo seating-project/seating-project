@@ -156,3 +156,44 @@ export function convertToISODate(inputDate: string): string | null {
 
   return isoDateString;
 }
+
+export function sanitizeTimeTable(timeTable: TimeTable): TimeTable {
+  // Make a deep copy of the timeTable object
+  const sanitizedTimeTable: TimeTable = timeTable;
+
+  // Iterate over the years
+  for (const year in sanitizedTimeTable) {
+    if (sanitizedTimeTable.hasOwnProperty(year)) {
+      const departments = sanitizedTimeTable[year];
+
+      // Iterate over the departments
+      for (const department in departments) {
+        if (departments.hasOwnProperty(department)) {
+          const dates = departments[department];
+
+          // Iterate over the dates
+          for (const date in dates) {
+            if (dates.hasOwnProperty(date)) {
+              // Check for blank "" values and delete if found
+              if (dates[date] === "") {
+                delete dates[date];
+              }
+            }
+          }
+
+          // Optionally, clean up any empty department objects
+          if (Object.keys(departments[department] ?? {}).length === 0) {
+            delete departments[department];
+          }
+        }
+      }
+
+      // Optionally, clean up any empty year objects
+      if (Object.keys(sanitizedTimeTable[year] ?? {}).length === 0) {
+        delete sanitizedTimeTable[year];
+      }
+    }
+  }
+
+  return sanitizedTimeTable;
+}

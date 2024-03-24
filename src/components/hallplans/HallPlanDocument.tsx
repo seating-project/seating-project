@@ -41,6 +41,7 @@ const HallPlanDocument = async ({ exam, template, date }: Props) => {
   const rooms = await api.room.getRooms.query();
 
   console.log("HALLPLAN", hallplan);
+  let overallTotalCount = 0;
 
   return (
     <div>
@@ -49,7 +50,7 @@ const HallPlanDocument = async ({ exam, template, date }: Props) => {
           <TableHeader>
             <TableRow>
               <TableHead
-                className="border text-center text-2xl text-black"
+                className="border border-black text-center text-2xl text-black"
                 colSpan={5}
               >
                 <div className="flex w-full items-center justify-center">
@@ -65,7 +66,7 @@ const HallPlanDocument = async ({ exam, template, date }: Props) => {
             </TableRow>
             <TableRow>
               <TableHead
-                className="border text-center text-2xl text-black"
+                className="border border-black text-center text-2xl text-black"
                 colSpan={5}
               >
                 {exam.name}
@@ -73,15 +74,21 @@ const HallPlanDocument = async ({ exam, template, date }: Props) => {
             </TableRow>
             <TableRow>
               <TableHead
-                className="border text-center text-lg text-black"
+                className="border border-black text-center text-lg text-black"
                 colSpan={2}
               >
                 Hall Arrangement
               </TableHead>
-              <TableHead className="border text-center text-black" colSpan={1}>
+              <TableHead
+                className="border border-black text-center text-black"
+                colSpan={1}
+              >
                 Date: {date}
               </TableHead>
-              <TableHead className="border text-center text-black" colSpan={2}>
+              <TableHead
+                className="border border-black text-center text-black"
+                colSpan={2}
+              >
                 Timings:{" "}
                 {template?.startTime.toLocaleTimeString().toUpperCase() +
                   " to " +
@@ -90,24 +97,27 @@ const HallPlanDocument = async ({ exam, template, date }: Props) => {
             </TableRow>
             <TableRow>
               <TableHead
-                className="border text-center text-black"
+                className="border border-black text-center text-black"
                 colSpan={1}
                 rowSpan={2}
               >
                 S.No
               </TableHead>
               <TableHead
-                className="border text-center text-black"
+                className="border border-black text-center text-black"
                 colSpan={1}
                 rowSpan={2}
               >
                 Room
               </TableHead>
-              <TableHead className="border text-center text-black" colSpan={2}>
+              <TableHead
+                className="border border-black text-center text-black"
+                colSpan={2}
+              >
                 Register Number Range
               </TableHead>
               <TableHead
-                className="border text-center text-black"
+                className="border border-black text-center text-black"
                 colSpan={1}
                 rowSpan={2}
               >
@@ -115,10 +125,16 @@ const HallPlanDocument = async ({ exam, template, date }: Props) => {
               </TableHead>
             </TableRow>
             <TableRow>
-              <TableHead className="border text-center text-black" colSpan={1}>
+              <TableHead
+                className="border border-black text-center text-black"
+                colSpan={1}
+              >
                 Starting
               </TableHead>
-              <TableHead className="border text-center text-black" colSpan={1}>
+              <TableHead
+                className="border border-black text-center text-black"
+                colSpan={1}
+              >
                 Ending
               </TableHead>
             </TableRow>
@@ -131,12 +147,15 @@ const HallPlanDocument = async ({ exam, template, date }: Props) => {
             const year = years.find((yr) => {
               return yr.id === Number(departmentYear.split(" ")[1]);
             });
+            if (!department || !year) {
+              return null;
+            }
             let deptCount = 0;
             return (
               <TableBody key={departmentYear} className="unbreak">
                 <TableRow>
                   <TableCell
-                    className="border text-center text-xl font-medium"
+                    className="border border-black text-center text-xl font-medium"
                     colSpan={5}
                   >
                     {`
@@ -153,26 +172,39 @@ const HallPlanDocument = async ({ exam, template, date }: Props) => {
                     return roomObj.number === currentRoom;
                   });
                   deptCount += currentRoomInfo?.strength ?? 0;
+                  overallTotalCount += currentRoomInfo?.strength ?? 0;
                   return (
                     <>
                       <TableRow>
-                        <TableCell className="border" colSpan={1}>
+                        <TableCell
+                          className="border border-black text-center"
+                          colSpan={1}
+                        >
                           {index + 1}
                         </TableCell>
-                        <TableCell className="border" colSpan={1}>
+                        <TableCell className="border border-black " colSpan={1}>
                           <b className="text-xl font-medium"> {currentRoom} </b>{" "}
                           <br />
                           {getNumberNames(roomObject?.floor ?? 0) +
                             " Floor"} - {roomObject?.Block.name} -{" "}
                           {roomObject?.Building.name}
                         </TableCell>
-                        <TableCell className="border font-medium" colSpan={1}>
+                        <TableCell
+                          className="border border-black font-medium"
+                          colSpan={1}
+                        >
                           {currentRoomInfo?.startRegisterNumber}
                         </TableCell>
-                        <TableCell className="border font-medium" colSpan={1}>
+                        <TableCell
+                          className="border border-black font-medium"
+                          colSpan={1}
+                        >
                           {currentRoomInfo?.endRegisterNumber}
                         </TableCell>
-                        <TableCell className="border font-medium" colSpan={1}>
+                        <TableCell
+                          className="border border-black font-medium"
+                          colSpan={1}
+                        >
                           {currentRoomInfo?.strength}
                         </TableCell>
                       </TableRow>
@@ -180,16 +212,38 @@ const HallPlanDocument = async ({ exam, template, date }: Props) => {
                   );
                 })}
                 <TableRow>
-                  <TableCell className="border font-medium" colSpan={4}>
+                  <TableCell
+                    className="border border-black font-medium"
+                    colSpan={4}
+                  >
                     Total
                   </TableCell>
-                  <TableCell className="border font-medium" colSpan={1}>
+                  <TableCell
+                    className="border border-black font-medium"
+                    colSpan={1}
+                  >
                     {deptCount}
                   </TableCell>
                 </TableRow>
               </TableBody>
             );
           })}
+          <TableBody>
+            <TableRow>
+              <TableCell
+                className="border border-black text-center"
+                colSpan={4}
+              >
+                <b className="text-xl font-medium"> Overall Total </b>
+              </TableCell>
+              <TableCell
+                className="border border-black text-center text-xl font-medium"
+                colSpan={1}
+              >
+                {overallTotalCount}
+              </TableCell>
+            </TableRow>
+          </TableBody>
         </Table>
       </Page>
     </div>

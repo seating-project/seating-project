@@ -165,6 +165,8 @@ model Exam {
   MeRoom                     Room?               @relation("MeRoom", fields: [roomId], references: [id])
   strictlyDivideBuildings    Boolean             @default(false)
   isCommonRoomStrength       Boolean             @default(false)
+  isCombinedWithPracticals   Boolean             @default(false)
+  ExamWithPracticalsJSON     Json                @default("{}")
   roomId                     Int?
 }
 

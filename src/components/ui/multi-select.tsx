@@ -13,12 +13,13 @@ interface Props {
   onChange?: (values: { value: string; label: string }[]) => void;
   data: Data[];
   name: string;
+  selectedData?: Data[];
 }
 
-export const FancyMultiSelect = ({ onChange, data, name }: Props) => {
+export const FancyMultiSelect = ({ onChange, data, name, selectedData }: Props) => {
   const inputRef = React.useRef<HTMLInputElement>(null);
   const [open, setOpen] = React.useState(false);
-  const [selected, setSelected] = React.useState<Data[]>([]);
+  const [selected, setSelected] = React.useState<Data[]>(selectedData ?? []);
   const [inputValue, setInputValue] = React.useState("");
 
   const handleUnselect = React.useCallback((data: Data) => {

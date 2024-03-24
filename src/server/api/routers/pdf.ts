@@ -70,7 +70,8 @@ export const pdfRouter = createTRPCRouter({
             timeout: 0,
           });
           await page.pdf({ path: pdfPath, format: "A4", timeout: 0 });
-        } else if (docName === "allotments") {
+        } 
+         if (docName === "allotment") {
           const date = link.split("/")[link.split("/").length - 1] ?? "";
           const dateObj = new Date(date);
           const month = dateObj.toLocaleString("default", { month: "long" });
@@ -101,7 +102,7 @@ export const pdfRouter = createTRPCRouter({
             const month = dateObj.toLocaleString("default", { month: "long" });
             const numDate = dateObj.getDate();
             const pdfPath = `${pdfsDir}/${docName}_${month}_${numDate}.pdf`;
-            await page.goto(link, { waitUntil: "networkidle0" });
+            await page.goto(`${env.BASE_URL}${link}`  , { waitUntil: "networkidle0" });
             await page.pdf({ path: pdfPath, format: "A4", timeout: 0 });
           }
         }
