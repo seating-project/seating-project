@@ -1,10 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import jsPDF from "jspdf";
-import autoTable from "jspdf-autotable";
-import { Eye, File } from "lucide-react";
+import { Eye } from "lucide-react";
 
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -15,18 +14,12 @@ import {
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import type { RouterOutputs } from "@/trpc/shared";
 
-import { Button } from "@/components/ui/button";
+import DownloadButton from "../client/DownloadButton";
 
 type Props = {
   exam: RouterOutputs["exam"]["getExamById"];
   dates: string[];
 };
-
-function createPDF() {
-  const doc = new jsPDF();
-  autoTable(doc, { html: "#sample-table" });
-  doc.save("sample.pdf");
-}
 
 const HallPlans = ({ exam, dates }: Props) => {
   return (
@@ -59,14 +52,10 @@ const HallPlans = ({ exam, dates }: Props) => {
                               </div>
                             </Button>
                           </Link>
-                          {/* <Link> */}
-                          <Button className="" onClick={createPDF}>
-                            <div className="flex items-center">
-                              <File className=" mr-2 h-4 w-4" />
-                              <p>Download </p>
-                            </div>
-                          </Button>
-                          {/* </Link> */}
+                          <DownloadButton
+                            links={[`/exam/${exam?.id}/hallplan/${date}`]}
+                            title="Download"
+                          />
                         </div>
                       </CardContent>
                     </Card>
@@ -92,14 +81,12 @@ const HallPlans = ({ exam, dates }: Props) => {
                                 </div>
                               </Button>
                             </Link>
-                            {/* <Link> */}
-                            <Button className="" onClick={createPDF}>
-                              <div className="flex items-center">
-                                <File className=" mr-2 h-4 w-4" />
-                                <p>Download </p>
-                              </div>
-                            </Button>
-                            {/* </Link> */}
+                            <DownloadButton
+                              links={[
+                                `/exam/${exam.id}//hallplan/${date}/boys`,
+                              ]}
+                              title="Download"
+                            />
                           </div>
                         </CardContent>
                       </Card>
@@ -120,14 +107,12 @@ const HallPlans = ({ exam, dates }: Props) => {
                                 </div>
                               </Button>
                             </Link>
-                            {/* <Link> */}
-                            <Button className="" onClick={createPDF}>
-                              <div className="flex items-center">
-                                <File className=" mr-2 h-4 w-4" />
-                                <p>Download </p>
-                              </div>
-                            </Button>
-                            {/* </Link> */}
+                            <DownloadButton
+                              links={[
+                                `/exam/${exam.id}/hallplan/${date}/girls`,
+                              ]}
+                              title="Download"
+                            />
                           </div>
                         </CardContent>
                       </Card>

@@ -28,7 +28,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import {
   Select,
   SelectContent,
@@ -165,7 +165,7 @@ const CreateExamForm = ({
   return (
     <Form {...form}>
       <form>
-        <div className="flex">
+        <div className="flex w-full">
           <ScrollArea className="form-area w-1/3 border-r">
             <div className=" p-8">
               <p className="text-2xl font-bold">Create New Exam</p>
@@ -883,7 +883,7 @@ const CreateExamForm = ({
               </div>
             </div>
           </ScrollArea>
-          <ScrollArea className="form-area w-2/3 ">
+          <ScrollArea className="form-area overflow-scroll  ">
             <div className="p-8 ">
               {showTimeTable ? (
                 <div>
@@ -892,7 +892,7 @@ const CreateExamForm = ({
                       Time Table
                     </span>
                   </p>
-                  <div className="mt-4 space-y-8">
+                  <div className="mt-4 space-y-8 overflow-scroll">
                     {form.getValues("years").map((year) => (
                       <>
                         <p>
@@ -900,65 +900,75 @@ const CreateExamForm = ({
                             {year} Year Timetable
                           </span>
                         </p>
-                        <Table className="w-full border" key={year}>
-                          {/* <TableCaption>Timetable for {year} Year</TableCaption> */}
-                          <TableHeader>
-                            <TableRow>
-                              <TableCell>Departments/Dates</TableCell>
-                              {generateDateRange(
-                                form.getValues("examDates.from"),
-                                form.getValues("examDates.to"),
-                              ).map((date) => (
-                                <TableCell key={date.toISOString()}>
-                                  {date.toLocaleDateString().slice(0, 10)}
-                                </TableCell>
-                              ))}
-                            </TableRow>
-                          </TableHeader>
-                          <TableBody>
-                            {form.getValues("departments").map((department) => (
-                              <TableRow key={department}>
-                                <TableCell>{department}</TableCell>
+                        <ScrollArea>
+                          <Table
+                            className="w-full border"
+                            key={year}
+                          >
+                            {/* <TableCaption>Timetable for {year} Year</TableCaption> */}
+                            <TableHeader>
+                              <TableRow>
+                                <TableCell>Departments/Dates</TableCell>
                                 {generateDateRange(
                                   form.getValues("examDates.from"),
                                   form.getValues("examDates.to"),
                                 ).map((date) => (
                                   <TableCell key={date.toISOString()}>
-                                    <Input
-                                      type="text"
-                                      value={
-                                        timeTable?.[year]?.[department]?.[
-                                          convertToISODate(
-                                            date.toLocaleString().slice(0, 10),
-                                          ) ?? ""
-                                        ] ?? ""
-                                      }
-                                      onChange={(event) => {
-                                        setTimeTable({
-                                          ...timeTable,
-                                          [year]: {
-                                            ...timeTable?.[year],
-                                            [department]: {
-                                              ...timeTable?.[year]?.[
-                                                department
-                                              ],
-                                              [convertToISODate(
-                                                date
-                                                  .toLocaleString()
-                                                  .slice(0, 10),
-                                              ) ?? ""]: event.target.value,
-                                            },
-                                          },
-                                        });
-                                        console.log(timeTable);
-                                      }}
-                                    />
+                                    {date.toLocaleDateString().slice(0, 10)}
                                   </TableCell>
                                 ))}
                               </TableRow>
-                            ))}
-                          </TableBody>
-                        </Table>
+                            </TableHeader>
+                            <TableBody>
+                              {form
+                                .getValues("departments")
+                                .map((department) => (
+                                  <TableRow key={department}>
+                                    <TableCell>{department}</TableCell>
+                                    {generateDateRange(
+                                      form.getValues("examDates.from"),
+                                      form.getValues("examDates.to"),
+                                    ).map((date) => (
+                                      <TableCell key={date.toISOString()}>
+                                        <Input
+                                          type="text"
+                                          value={
+                                            timeTable?.[year]?.[department]?.[
+                                              convertToISODate(
+                                                date
+                                                  .toLocaleString()
+                                                  .slice(0, 10),
+                                              ) ?? ""
+                                            ] ?? ""
+                                          }
+                                          onChange={(event) => {
+                                            setTimeTable({
+                                              ...timeTable,
+                                              [year]: {
+                                                ...timeTable?.[year],
+                                                [department]: {
+                                                  ...timeTable?.[year]?.[
+                                                    department
+                                                  ],
+                                                  [convertToISODate(
+                                                    date
+                                                      .toLocaleString()
+                                                      .slice(0, 10),
+                                                  ) ?? ""]: event.target.value,
+                                                },
+                                              },
+                                            });
+                                            console.log(timeTable);
+                                          }}
+                                        />
+                                      </TableCell>
+                                    ))}
+                                  </TableRow>
+                                ))}
+                            </TableBody>
+                          </Table>
+                          <ScrollBar orientation="horizontal" />
+                        </ScrollArea>
                       </>
                     ))}
                   </div>

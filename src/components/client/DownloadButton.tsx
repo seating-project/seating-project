@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Download } from "lucide-react";
+import { Download, File } from "lucide-react";
 
 import { toast } from "@/components/ui/use-toast";
 import { cn } from "@/lib/utils";
@@ -12,9 +12,10 @@ import { Button } from "../ui/button";
 
 type Props = {
   links: string[];
+  title?: string;
 };
 
-const DownloadButton = ({ links }: Props) => {
+const DownloadButton = ({ links, title }: Props) => {
   const [downloading, setDownloading] = React.useState(false);
   const downloadPagesMutation = api.pdf.downloadPDFs.useMutation({
     onSettled: () => {
@@ -39,7 +40,10 @@ const DownloadButton = ({ links }: Props) => {
 
   return (
     <div className="my-2">
-      <Button onClick={handleDownloadClick}>Download All</Button>
+      <Button onClick={handleDownloadClick}>
+        <File className=" mr-2 h-4 w-4" />
+        {title ? title : "Download All"}
+      </Button>
       <Alert className={cn(!downloading ? "hidden" : "")}>
         <Download className="h-4 w-4" />
         <AlertTitle>Downloading...</AlertTitle>

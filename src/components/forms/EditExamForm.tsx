@@ -129,13 +129,11 @@ const EditExamForm = ({
       ),
       minimumStudentsInRoom: exam?.minimumStudentsInRoom,
       randomizeEveryNRooms: exam?.randomizeEveryNRooms,
-      roomsOrder: exam?.RoomsOrder.map((room) => room.number),
+      roomsOrder: exam?.roomOrderArray,
       strictlyDivideBuildings: exam?.strictlyDivideBuildings,
       isCommonRoomStrength: exam?.isCommonRoomStrength,
     },
   });
-
-  console.log(exam?.deptLeftBoysArray);
 
   useEffect(
     () => {
@@ -152,22 +150,14 @@ const EditExamForm = ({
         );
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [form, form.getValues("template")],
+    [form.getValues("template")],
   );
 
   useEffect(
     () => {
       form.setValue(
-        "roomsOrder",
-        (exam?.RoomsOrder?.map((room) => room.number) ?? []).sort((a, b) => {
-          const aIndex = exam?.roomOrderArray.findIndex((dept) => dept === a);
-          const bIndex = exam?.roomOrderArray.findIndex((dept) => dept === b);
-          if (!aIndex || !bIndex || aIndex === -1 || bIndex === -1) {
-            return 0;
-          }
-          return aIndex - bIndex;
-        }),
-      );
+        "roomsOrder", exam?.roomOrderArray ?? []
+      )
       form.setValue(
         "departments",
         exam?.Departments.map((department) => department.shortName) ?? [],
@@ -258,7 +248,7 @@ const EditExamForm = ({
       );
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [exam, form],
+    [exam],
   );
 
   function onSubmit(
@@ -274,7 +264,16 @@ const EditExamForm = ({
         return;
       }
 
-      console.log(values, timetable);
+      Object.keys(timetable).forEach((year) => {
+        Object.keys(timetable[year] ?? {}).forEach((dept) => {
+          console.log(dept)
+          if (!values.departments.includes(dept)) {
+            delete timetable[year]?.[dept];
+          }
+        });
+      });
+
+      console.log(values, timetable, values.roomsOrder);
       await updateExam.mutateAsync({
         id: exam.id,
         name: values.name,

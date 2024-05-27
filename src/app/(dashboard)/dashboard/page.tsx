@@ -1,8 +1,9 @@
-import { Button, buttonVariants } from "@/components/ui/button";
-import { getServerAuthSession } from "@/server/auth";
 import Link from "next/link";
-import { api } from "@/trpc/server";
 import { redirect } from "next/navigation";
+
+import { Button } from "@/components/ui/button";
+import { getServerAuthSession } from "@/server/auth";
+import { api } from "@/trpc/server";
 
 export const revalidate = 0;
 
@@ -20,20 +21,20 @@ export default async function Home() {
       <div className="p-8">
         <p className="text-2xl font-bold">Current Exams</p>
         <div className="">
-          <div className="flex w-full gap-y-2 space-x-4">
+          <div className="flex w-full flex-wrap gap-y-2 space-x-4">
             {exams.map((exam) => (
-              <div key={exam.id}>
-                <Link href={`/exam/${exam.id}`} className={buttonVariants()}>
-                  {exam.name}
-                </Link>
+              <div key={exam.id} className={"rounded border bg-white p-4"}>
+                <Link href={`/exam/${exam.id}`}>{exam.name}</Link>
               </div>
             ))}
           </div>
           <Button className="my-4">
             <Link href="/create-new">Create Exam</Link>
           </Button>
-          <Button className="my-4 mx-4">
-            <Link href="/create-new-with-practicals">Create Exam With Practicals</Link>
+          <Button className="mx-4 my-4">
+            <Link href="/create-new-with-practicals">
+              Create Exam With Practicals
+            </Link>
           </Button>
         </div>
       </div>

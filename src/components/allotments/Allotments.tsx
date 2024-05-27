@@ -1,9 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import jsPDF from "jspdf";
-import autoTable from "jspdf-autotable";
-import { Eye, File } from "lucide-react";
+import { Eye } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -15,16 +13,12 @@ import {
 } from "@/components/ui/card";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 
+import DownloadButton from "../client/DownloadButton";
+
 type Props = {
   examId: number;
   dates: string[];
 };
-
-function createPDF() {
-  const doc = new jsPDF();
-  autoTable(doc, { html: "#sample-table" });
-  doc.save("sample.pdf");
-}
 
 const Allotments = ({ examId, dates }: Props) => {
   return (
@@ -57,14 +51,10 @@ const Allotments = ({ examId, dates }: Props) => {
                           </div>
                         </Button>
                       </Link>
-                      {/* <Link> */}
-                      <Button className="" onClick={createPDF}>
-                        <div className="flex items-center">
-                          <File className=" mr-2 h-4 w-4" />
-                          <p>Download </p>
-                        </div>
-                      </Button>
-                      {/* </Link> */}
+                      <DownloadButton
+                        links={[`/exam/${examId}/allotment/${date}`]}
+                        title="Download"
+                      />
                     </div>
                   </CardContent>
                 </Card>

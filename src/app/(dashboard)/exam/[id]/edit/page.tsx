@@ -1,7 +1,6 @@
 import React from "react";
 
 import EditExamForm from "@/components/forms/EditExamForm";
-import MainNav from "@/components/navbar/MainNav";
 import { api } from "@/trpc/server";
 
 type Props = {

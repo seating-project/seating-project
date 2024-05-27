@@ -45,6 +45,26 @@ const AttendanceDocument = async ({ exam, template, date, room }: Props) => {
     return dateRange[0] === date;
   });
 
+  function extractDates(): string[] {
+    const datesArray: string[] = [];
+    for (const year of Object.values(timetable)) {
+      for (const department of Object.values(year)) {
+        const dates = Object.keys(department);
+        dates.forEach((date) => {
+          if (!datesArray.includes(date)) {
+            datesArray.push(date);
+          }
+        });
+      }
+    }
+
+    datesArray.sort((a, b) => {
+      return new Date(a).getTime() - new Date(b).getTime();
+    });
+    return datesArray;
+  }
+  const datesThatHaveExams = extractDates();
+
   function findNumberOfDays(dateRange: string[]) {
     const start = new Date(dateRange[0] ?? "");
     const end = new Date(dateRange[1] ?? "");
@@ -59,9 +79,7 @@ const AttendanceDocument = async ({ exam, template, date, room }: Props) => {
     const end = new Date(dateRange[1] ?? "");
     const dates = [];
     for (let date = start; date <= end; date.setDate(date.getDate() + 1)) {
-      // if ((exam?.Timetable as TimeTable) )
-      console.log("DATE", date.toLocaleDateString());
-      if (date.toLocaleDateString() !== "17/3/2024" )
+      if (datesThatHaveExams.includes(date.toISOString().split("T")[0] ?? ""))
         dates.push(new Date(date));
     }
     return dates;
