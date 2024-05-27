@@ -1,0 +1,28 @@
+version: "3.7"
+
+services:
+  nextjs:
+    ports:
+      - "5173:5173"
+      - "5556:5556"
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    env_file:
+      - .env
+  db:
+    image: postgres:latest
+    container_name: seats_postgres
+    ports:
+      - 5433:5432
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_HOST_AUTH_METHOD: "trust"
+      POSTGRES_DB: $DB_NAME
+      POSTGRES_USER: $DB_USER
+      POSTGRES_PASSWORD: $DB_PASSWORD
+
+volumes:
+  postgres_data:
+  

@@ -32,14 +32,16 @@ export const pdfRouter = createTRPCRouter({
         await fs.mkdir(pdfsDir, { recursive: true });
         await fs.mkdir(attendanceDir, { recursive: true });
       } catch (error) {
+        console.log("Error creating directory", error);
         throw error;
       }
 
       const browser = await puppeteer.launch({
         headless: "new",
+        executablePath: process.env.PUPPETEER_EXECUTABLE_PATH,
         args: [
-          "--disable-gpu",
-          "--disable-dev-shm-usage",
+          // "--disable-gpu",
+          // "--disable-dev-shm-usage",
           "--disable-setuid-sandbox",
           "--no-sandbox",
         ],
@@ -48,7 +50,7 @@ export const pdfRouter = createTRPCRouter({
 
       await page.goto(`${env.BASE_URL}/login`);
       console.log("LOGIN PAGE", `${env.BASE_URL}/login`);
-
+      
       await page.type("#email", env.DOWNLOAD_EMAIL);
       await page.type("#password", env.DOWNLOAD_PASSWORD);
 
@@ -70,8 +72,8 @@ export const pdfRouter = createTRPCRouter({
             timeout: 0,
           });
           await page.pdf({ path: pdfPath, format: "A4", timeout: 0 });
-        } 
-         if (docName === "allotment") {
+        }
+        if (docName === "allotment") {
           const date = link.split("/")[link.split("/").length - 1] ?? "";
           const dateObj = new Date(date);
           const month = dateObj.toLocaleString("default", { month: "long" });

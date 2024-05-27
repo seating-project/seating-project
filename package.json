@@ -82,7 +82,7 @@
   "ct3aMetadata": {
     "initVersion": "7.22.0"
   },
-  "packageManager": "pnpm@8.8.0",
+  "packageManager": "pnpm@9.1.2",
   "prisma": {
     "schema": "prisma/schema.prisma",
     "seed": "tsx prisma/seed.ts"
