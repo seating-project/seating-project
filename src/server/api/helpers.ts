@@ -13,7 +13,6 @@ export async function getAllotments({
   templateId: number;
   date: string;
 }) {
-
   // ? ==================== ALLOTMENTS FUNCTION ====================
 
   // ! IMPORTANT NOTE
@@ -228,7 +227,6 @@ export async function getAllotments({
       // Getting the room strength (number of students per room)
       // It will always be double of the total number of benches
       // So we need to divide it into two
-      const roomStrength = template.roomStrength / 2;
 
       let alternateFlag = false; // To keep track of the alternate flag
       let firstPointer = 0; // To keep track of the first pointer
@@ -237,6 +235,13 @@ export async function getAllotments({
       // Looping through all the rooms
       exam.RoomsOrder.map((room) => {
         const roomAllotments: [Student | null, Student | null][] = [];
+        let roomStrength = exam.isCommonRoomStrength
+          ? template.roomStrength / 2
+          : room.strength / 2;
+        if (exam.minimumStudentsInRoom) {
+          roomStrength = Math.max(roomStrength, exam.minimumStudentsInRoom / 2);
+        }
+
         for (let i = 0; i < roomStrength; i++) {
           if (!alternateFlag && circuitStudents[firstPointer]) {
             roomAllotments.push([circuitStudents[firstPointer] ?? null, null]);
@@ -342,13 +347,18 @@ export async function getAllotments({
       // Getting the room strength (number of students per room)
       // It will always be double of the total number of benches
       // So we need to divide it into two
-      const roomStrength = template.roomStrength / 2;
 
       let studentCount = 0; // To keep track of the student index
 
       // Looping through all the rooms
       exam.RoomsOrder.map((room) => {
         const roomAllotments: [Student | null, Student | null][] = [];
+        let roomStrength = exam.isCommonRoomStrength
+          ? template.roomStrength / 2
+          : room.strength / 2;
+        if (exam.minimumStudentsInRoom) {
+          roomStrength = Math.max(roomStrength, exam.minimumStudentsInRoom / 2);
+        }
         for (let i = 0; i < roomStrength; i++) {
           roomAllotments.push([students[studentCount] ?? null, null]);
           studentCount++;
@@ -581,10 +591,15 @@ export async function getAllotments({
           const roomAllotments: [Student | null, Student | null][] = []; // To store the allotments of the current room
 
           // Getting the room strength (number of students per room)
-          const roomStrength = exam.isCommonRoomStrength
+          let roomStrength = exam.isCommonRoomStrength
             ? template.roomStrength / 2 // If the room strength is common, then divide the template room strength by 2
             : room.strength / 2; // Else divide the room strength by 2
-
+          if (exam.minimumStudentsInRoom) {
+            roomStrength = Math.max(
+              roomStrength,
+              exam.minimumStudentsInRoom / 2,
+            );
+          }
           // Looping through the room strength
           // We allocate 2 students per bench, till all of them are filled
           for (let i = 0; i < roomStrength; i++) {
@@ -695,10 +710,15 @@ export async function getAllotments({
           const roomAllotments: [Student | null, Student | null][] = []; // To store the allotments of the current room
 
           // Getting the room strength (number of students per room)
-          const roomStrength = exam.isCommonRoomStrength
+          let roomStrength = exam.isCommonRoomStrength
             ? template.roomStrength / 2 // If the room strength is common, then divide the template room strength by 2
             : room.strength / 2; // Else divide the room strength by 2
-
+          if (exam.minimumStudentsInRoom) {
+            roomStrength = Math.max(
+              roomStrength,
+              exam.minimumStudentsInRoom / 2,
+            );
+          }
           // Looping through the room strength
           // We allocate 2 students per bench, till all of them are filled
           for (let i = 0; i < roomStrength; i++) {
@@ -1388,9 +1408,15 @@ export async function getAllotments({
           const roomAllotments: [Student | null, Student | null][] = []; // To store the allotments of the current room
 
           // Getting the room strength (number of students per room)
-          const roomStrength = exam.isCommonRoomStrength
+          let roomStrength = exam.isCommonRoomStrength
             ? template.roomStrength / 2 // If the room strength is common, then divide the template room strength by 2
             : room.strength / 2; // Else divide the room strength by 2
+          if (exam.minimumStudentsInRoom) {
+            roomStrength = Math.max(
+              roomStrength,
+              exam.minimumStudentsInRoom / 2,
+            );
+          }
 
           // Looping through the room strength
           // We allocate 2 students per bench, till all of them are filled
@@ -1452,9 +1478,15 @@ export async function getAllotments({
           const roomAllotments: [Student | null, Student | null][] = []; // To store the allotments of the current room
 
           // Getting the room strength (number of students per room)
-          const roomStrength = exam.isCommonRoomStrength
+          let roomStrength = exam.isCommonRoomStrength
             ? template.roomStrength / 2 // If the room strength is common, then divide the template room strength by 2
             : room.strength / 2; // Else divide the room strength by 2
+          if (exam.minimumStudentsInRoom) {
+            roomStrength = Math.max(
+              roomStrength,
+              exam.minimumStudentsInRoom / 2,
+            );
+          }
 
           // Looping through the room strength
           // We allocate 2 students per bench, till all of them are filled
@@ -1606,9 +1638,15 @@ export async function getAllotments({
           const roomAllotments: [Student | null, Student | null][] = []; // To store the allotments of the current room
 
           // Getting the room strength (number of students per room)
-          const roomStrength = exam.isCommonRoomStrength
+          let roomStrength = exam.isCommonRoomStrength
             ? template.roomStrength / 2 // If the room strength is common, then divide the template room strength by 2
             : room.strength / 2; // Else divide the room strength by 2
+          if (exam.minimumStudentsInRoom) {
+            roomStrength = Math.max(
+              roomStrength,
+              exam.minimumStudentsInRoom / 2,
+            );
+          }
 
           // Looping through the room strength
           // We allocate 2 students per bench, till all of them are filled
@@ -1933,9 +1971,15 @@ export async function getAllotments({
           const roomAllotments: [Student | null, Student | null][] = []; // To store the allotments of the current room
 
           // Getting the room strength (number of students per room)
-          const roomStrength = exam.isCommonRoomStrength
+          let roomStrength = exam.isCommonRoomStrength
             ? template.roomStrength / 2 // If the room strength is common, then divide the template room strength by 2
             : room.strength / 2; // Else divide the room strength by 2
+          if (exam.minimumStudentsInRoom) {
+            roomStrength = Math.max(
+              roomStrength,
+              exam.minimumStudentsInRoom / 2,
+            );
+          }
 
           // Looping through the room strength
           // We allocate 2 students per bench, till all of them are filled
