@@ -10,6 +10,7 @@ import { studentRouter } from "@/server/api/routers/student";
 import { templateRouter } from "@/server/api/routers/template";
 import { yearRouter } from "@/server/api/routers/year";
 import { createTRPCRouter } from "@/server/api/trpc";
+import { blockRouter } from "./routers/block";
 
 /**
  * This is the primary router for your server.
@@ -28,6 +29,7 @@ export const appRouter = createTRPCRouter({
   college: collegeRouter,
   building: buildingRouter,
   pdf: pdfRouter,
+  block: blockRouter,
 });
 
 // export type definition of API

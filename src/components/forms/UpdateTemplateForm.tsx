@@ -44,23 +44,51 @@ type Props = {
 const UpdateTemplateForm = ({ buildings, rooms, logos, template }: Props) => {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
-  const [startTime, setStartTime] = useState(`${template?.startTime.getHours()}:${template?.startTime.getMinutes() !== 0 ? (((template?.startTime.getMinutes() ?? 1) < 10) ? `0${template?.startTime.getMinutes()}` : `${template?.startTime.getMinutes()}`) : "00"}`);
-  const [endTime, setEndTime] = useState(`${template?.endTime.getHours()}:${template?.endTime.getMinutes() !== 0 ? (((template?.endTime.getMinutes() ?? 1) < 10) ? `0${template?.endTime.getMinutes()}` : `${template?.endTime.getMinutes()}`) : "00"}`);
+  const [startTime, setStartTime] = useState(
+    `${template?.startTime.getHours()}:${
+      template?.startTime.getMinutes() !== 0
+        ? (template?.startTime.getMinutes() ?? 1) < 10
+          ? `0${template?.startTime.getMinutes()}`
+          : `${template?.startTime.getMinutes()}`
+        : "00"
+    }`,
+  );
+  const [endTime, setEndTime] = useState(
+    `${template?.endTime.getHours()}:${
+      template?.endTime.getMinutes() !== 0
+        ? (template?.endTime.getMinutes() ?? 1) < 10
+          ? `0${template?.endTime.getMinutes()}`
+          : `${template?.endTime.getMinutes()}`
+        : "00"
+    }`,
+  );
 
   const { toast } = useToast();
+  const utils = api.useUtils();
   const updateTemplate = api.template.updateTemplate.useMutation({
-    onSuccess: () => {
+    onSuccess: async () => {
       toast({
         title: "Template updated",
         description: "Template updated successfully",
       });
+      await utils.template.invalidate();
+      router.refresh();
       router.push("/templates");
     },
   });
 
-//   console.log((template?.startTime.getMinutes() ?? 0 < 10) ? `0sdsd${template?.startTime.getMinutes()}` : template?.startTime.getMinutes())
-console.log(template?.startTime.getMinutes() !== 0 ? (((template?.startTime.getMinutes() ?? 1) < 10) ? `0${template?.startTime.getMinutes()}` : `${template?.startTime.getMinutes()}`) : "00")
-  console.log(template?.endTime.getHours())
+  // Sort Rooms
+  rooms.sort((a, b) => a.label.localeCompare(b.label));
+
+  //   console.log((template?.startTime.getMinutes() ?? 0 < 10) ? `0sdsd${template?.startTime.getMinutes()}` : template?.startTime.getMinutes())
+  console.log(
+    template?.startTime.getMinutes() !== 0
+      ? (template?.startTime.getMinutes() ?? 1) < 10
+        ? `0${template?.startTime.getMinutes()}`
+        : `${template?.startTime.getMinutes()}`
+      : "00",
+  );
+  console.log(template?.endTime.getHours());
   const form = useForm<z.infer<typeof templateFormSchema>>({
     resolver: zodResolver(templateFormSchema),
     defaultValues: {
@@ -76,42 +104,135 @@ console.log(template?.startTime.getMinutes() !== 0 ? (((template?.startTime.getM
       roomStrength: template?.roomStrength,
       startTime: template?.startTime,
       endTime: template?.endTime,
-      logo: String(template?.Logo.id),
+      logo: String(template?.Logo.name),
     },
   });
 
   function onSubmit(data: z.infer<typeof templateFormSchema>) {
+    console.log(data.rooms);
+    console.log(startTime, endTime);
     startTransition(async () => {
-      let st: Date;
-      let et: Date;
+      const st = new Date();
+      const et = new Date();
+      const [sh, sm] = startTime.split(":");
+      const [eh, em] = endTime.split(":");
+      st.setHours(Number(sh));
+      st.setMinutes(Number(sm));
+      st.setSeconds(0);
+      st.setMilliseconds(0);
+      et.setHours(Number(eh));
+      et.setMinutes(Number(em));
+      et.setSeconds(0);
+      et.setMilliseconds(0);
+      // }
 
-      if (startTime || endTime) {
-        st = data.startTime;
-        et = data.endTime;
-      } else {
-        st = new Date();
-        et = new Date();
-        const [sh, sm] = startTime.split(":");
-        const [eh, em] = endTime.split(":");
-        st.setHours(Number(sh));
-        st.setMinutes(Number(sm));
-        st.setSeconds(0);
-        st.setMilliseconds(0);
-        et.setHours(Number(eh));
-        et.setMinutes(Number(em));
-        et.setSeconds(0);
-        et.setMilliseconds(0);
+      if (st > et) {
+        toast({
+          title: "Invalid Time",
+          description: "Start time cannot be greater than end time",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      if (data.name === "") {
+        toast({
+          title: "Invalid Name",
+          description: "Name cannot be empty",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      if (
+        Number(data.numberOfRows) <= 0 ||
+        Number.isNaN(Number(data.numberOfRows))
+      ) {
+        toast({
+          title: "Invalid Rows",
+          description: "Rows cannot be empty or zero",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      if (
+        Number(data.numberOfColumns) <= 0 ||
+        Number.isNaN(Number(data.numberOfColumns))
+      ) {
+        toast({
+          title: "Invalid Columns",
+          description: "Columns cannot be empty or zero",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      if (
+        Number(data.roomStrength) <= 0 ||
+        Number.isNaN(Number(data.roomStrength))
+      ) {
+        toast({
+          title: "Invalid Room Strength",
+          description: "Room Strength cannot be empty or zero",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      if (data.buildings.length === 0) {
+        toast({
+          title: "Invalid Buildings",
+          description: "Buildings cannot be empty",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      if (data.rooms.length === 0) {
+        toast({
+          title: "Invalid Rooms",
+          description: "Rooms cannot be empty",
+          variant: "destructive",
+        });
+        return;
+      }
+      if (startTime === "00:00" || endTime === "00:00") {
+        toast({
+          title: "Invalid Time",
+          description: "Start and End time cannot be empty",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      if (startTime === endTime) {
+        toast({
+          title: "Invalid Time",
+          description: "Start and End time cannot be same",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      if (data.logo === "" || data.logo === undefined || data.logo === null) {
+        toast({
+          title: "Logo is required",
+          description: "Logo is required for the template",
+          variant: "destructive",
+        });
+        return;
       }
 
       console.log(st, et);
-      const formData = {
-        id: template?.id ?? 0, 
+      await updateTemplate.mutateAsync({
+        id: template?.id ?? 0,
         name: data.name,
         buildings: data.buildings,
         rooms: data.rooms,
-        numberOfRows: data.numberOfRows,
-        numberOfColumns: data.numberOfColumns,
-        roomStrength: data.roomStrength,
+        numberOfRows: Number(data.numberOfRows),
+        numberOfColumns: Number(data.numberOfColumns),
+        roomStrength: Number(data.roomStrength),
         isSingleSeater: data.isSingleSeater,
         isBoysGirlsSeparate: data.isBoysGirlsSeparate,
         isAlternateDepartmentSeated: data.isAlternateDepartmentSeated,
@@ -119,9 +240,7 @@ console.log(template?.startTime.getMinutes() !== 0 ? (((template?.startTime.getM
         startTime: st,
         endTime: et,
         logo: data.logo,
-      };
-      console.log(formData);
-      await updateTemplate.mutateAsync(formData);
+      });
     });
   }
 
@@ -164,7 +283,9 @@ console.log(template?.startTime.getMinutes() !== 0 ? (((template?.startTime.getM
                     value={field.value}
                     onChange={field.onChange}
                     autoComplete="on"
-                    defaultValue={5}
+                    onWheel={(e) =>
+                      e.target instanceof HTMLElement && e.target.blur()
+                    }
                   />
                 </FormControl>
                 <FormDescription>
@@ -188,7 +309,9 @@ console.log(template?.startTime.getMinutes() !== 0 ? (((template?.startTime.getM
                     value={field.value}
                     onChange={field.onChange}
                     autoComplete="on"
-                    defaultValue={6}
+                    onWheel={(e) =>
+                      e.target instanceof HTMLElement && e.target.blur()
+                    }
                   />
                 </FormControl>
                 <FormDescription>
@@ -212,7 +335,9 @@ console.log(template?.startTime.getMinutes() !== 0 ? (((template?.startTime.getM
                     value={field.value}
                     onChange={field.onChange}
                     autoComplete="on"
-                    defaultValue={60}
+                    onWheel={(e) =>
+                      e.target instanceof HTMLElement && e.target.blur()
+                    }
                   />
                 </FormControl>
                 <FormDescription>
@@ -232,19 +357,27 @@ console.log(template?.startTime.getMinutes() !== 0 ? (((template?.startTime.getM
                 <FormControl>
                   <FancyMultiSelect
                     onChange={(values) => {
+                      console.log(values);
                       field.onChange(values.map(({ value }) => value));
                     }}
                     name="rooms"
+                    selectedData={form
+                      .getValues("rooms")
+                      .map((room) => ({
+                        label: room,
+                        value: room,
+                      }))
+                      .sort((a, b) => {
+                        if (a.value < b.value) return -1;
+                        if (a.value > b.value) return 1;
+                        return 0;
+                      })}
                     data={rooms}
                   />
                 </FormControl>
-                <FormDescription>
-                  This is the rooms needed for the exam
-                </FormDescription>
               </FormItem>
             )}
           />
-
           <FormField
             name="buildings"
             control={form.control}
@@ -257,12 +390,20 @@ console.log(template?.startTime.getMinutes() !== 0 ? (((template?.startTime.getM
                       field.onChange(values.map(({ value }) => value));
                     }}
                     name="buildings"
+                    selectedData={form
+                      .getValues("buildings")
+                      .map((building) => ({
+                        label: building,
+                        value: building,
+                      }))
+                      .sort((a, b) => {
+                        if (a.value < b.value) return -1;
+                        if (a.value > b.value) return 1;
+                        return 0;
+                      })}
                     data={buildings}
                   />
                 </FormControl>
-                <FormDescription>
-                  This is the buildings for the exam.
-                </FormDescription>
               </FormItem>
             )}
           />
@@ -425,7 +566,7 @@ console.log(template?.startTime.getMinutes() !== 0 ? (((template?.startTime.getM
             }}
             className="w-full"
           >
-            Create Template
+            Update Template
           </Button>
         </div>
       </form>

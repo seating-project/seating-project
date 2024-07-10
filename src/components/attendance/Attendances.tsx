@@ -39,8 +39,6 @@ const Attendances = async ({ examId, timetable }: Props) => {
     }),
   );
 
-  console.log("ROoms", rooms);
-
   return (
     <Card className="my-2">
       <CardHeader>

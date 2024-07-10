@@ -3,6 +3,7 @@ import Link from "next/link";
 import Allotments from "@/components/allotments/Allotments";
 import Attendances from "@/components/attendance/Attendances";
 import DownloadButton from "@/components/client/DownloadButton";
+import DownloadZipButton from "@/components/client/DownloadZipButton";
 import HallPlans from "@/components/hallplans/HallPlans";
 import MainNav from "@/components/navbar/MainNav";
 import { Button } from "@/components/ui/button";
@@ -26,15 +27,8 @@ const ExamPage = async (props: Props) => {
   });
   const timetable = exam?.Timetable;
   const examDates = getTimeTableDates(timetable as TimeTable);
-  console.log("====================================");
-  console.log("Exam ", exam);
-  console.log("====================================");
-  console.log("LMAOOOO", props.params.id);
 
   const links = [];
-  // for (let i = 0; i < examDates.length; i++) {
-  //   links.push(`/exam/${exam?.id}/allotment/${examDates[i]}`);
-  // }
 
   for (const date of examDates) {
     links.push(`/exam/${exam?.id}/allotment/${date}`);
@@ -95,7 +89,7 @@ const ExamPage = async (props: Props) => {
         <MainNav />
       </div>
       <div className="p-8">
-        <div className="flex justify-between items-center">
+        <div className="flex items-center justify-between">
           <p className="text-4xl font-bold"> {exam.name} </p>
           <div>
             <Link href={`/exam/${exam.id}/edit`}>
@@ -111,7 +105,12 @@ const ExamPage = async (props: Props) => {
           </p>
         </div>
         <div>
-          <DownloadButton links={links} />
+          <DownloadZipButton
+            examId={exam.id}
+            examName={exam.name}
+            templateId={exam.templateId}
+            links={links}
+          />
         </div>
         <Allotments examId={Number(props.params.id)} dates={examDates} />
         <HallPlans exam={exam} dates={examDates} />

@@ -131,6 +131,31 @@ export const templateRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
+      const template = await ctx.db.template.findUnique({
+        where: { id: input.id },
+        include: {
+          Rooms: true,
+          Buildings: true,
+          Logo: true,
+        },
+      });
+
+      if (!template) {
+        throw new Error("Template not found");
+      }
+
+      await ctx.db.template.update({
+        where: { id: input.id },
+        data: {
+          Buildings: {
+            disconnect: template.Buildings,
+          },
+          Rooms: {
+            disconnect: template.Rooms,
+          },
+        },
+      });
+
       return ctx.db.template.update({
         where: { id: input.id },
         data: {

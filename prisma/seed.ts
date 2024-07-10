@@ -30,7 +30,7 @@ async function main() {
   // await seedLogos(db);
   // seedTemplates(db);
   // await updateStudent(db);
-  seedFromExcel(db);
+  // seedFromExcel(db);
 }
 
 main()

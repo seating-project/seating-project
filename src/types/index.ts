@@ -6,6 +6,7 @@ export type Student = {
   department: string;
   year: string;
   degree: string;
+  gateStudent: boolean;
   phoneNumber: string | undefined;
 };
 

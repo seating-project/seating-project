@@ -50,7 +50,7 @@ export const pdfRouter = createTRPCRouter({
 
       await page.goto(`${env.BASE_URL}/login`);
       console.log("LOGIN PAGE", `${env.BASE_URL}/login`);
-      
+
       await page.type("#email", env.DOWNLOAD_EMAIL);
       await page.type("#password", env.DOWNLOAD_PASSWORD);
 
@@ -104,7 +104,9 @@ export const pdfRouter = createTRPCRouter({
             const month = dateObj.toLocaleString("default", { month: "long" });
             const numDate = dateObj.getDate();
             const pdfPath = `${pdfsDir}/${docName}_${month}_${numDate}.pdf`;
-            await page.goto(`${env.BASE_URL}${link}`  , { waitUntil: "networkidle0" });
+            await page.goto(`${env.BASE_URL}${link}`, {
+              waitUntil: "networkidle0",
+            });
             await page.pdf({ path: pdfPath, format: "A4", timeout: 0 });
           }
         }

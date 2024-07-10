@@ -1,20 +1,24 @@
 "use client";
 
 import React, { useTransition } from "react";
+import { useRouter } from "next/navigation";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Loader2 } from "lucide-react";
 import { useForm } from "react-hook-form";
+import { type z } from "zod";
+
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
-  FormDescription,
   //   UncontrolledFormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { type z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Select,
   SelectContent,
@@ -22,12 +26,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Button } from "@/components/ui/button";
-import { api } from "@/trpc/react";
-import { Loader2 } from "lucide-react";
 import { toast } from "@/components/ui/use-toast";
-import { useRouter } from "next/navigation";
 import { studentFormSchema } from "@/lib/schema";
+import { api } from "@/trpc/react";
+
+import { Checkbox } from "../ui/checkbox";
 
 type AnyOptions = {
   label: string | number;
@@ -48,6 +51,7 @@ const AddStudentForm = ({ departments, years, degrees, colleges }: Props) => {
     resolver: zodResolver(studentFormSchema),
     defaultValues: {
       phoneNumber: "",
+      gateStudent: false,
     },
   });
 
@@ -70,6 +74,7 @@ const AddStudentForm = ({ departments, years, degrees, colleges }: Props) => {
         year: Number(values.year),
         degree: values.degree,
         college: values.college,
+        gateStudent: values.gateStudent,
       });
       if (createStudent) {
         toast({
@@ -167,6 +172,27 @@ const AddStudentForm = ({ departments, years, degrees, colleges }: Props) => {
                   This is your student phone number
                 </FormDescription>
                 <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="gateStudent"
+            render={({ field }) => (
+              <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                <FormControl>
+                  <Checkbox
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                  />
+                </FormControl>
+                <div className="space-y-2 leading-none">
+                  <FormLabel>Is Gate Student?</FormLabel>
+                  <FormDescription>
+                    Check this if the student is a GATE student
+                  </FormDescription>
+                </div>
               </FormItem>
             )}
           />
@@ -286,7 +312,9 @@ const AddStudentForm = ({ departments, years, degrees, colleges }: Props) => {
                       ))}
                     </SelectContent>
                   </Select>
-                  <FormDescription>This is your student college</FormDescription>
+                  <FormDescription>
+                    This is your student college
+                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}

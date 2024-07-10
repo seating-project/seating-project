@@ -155,9 +155,7 @@ const EditExamForm = ({
 
   useEffect(
     () => {
-      form.setValue(
-        "roomsOrder", exam?.roomOrderArray ?? []
-      )
+      form.setValue("roomsOrder", exam?.roomOrderArray ?? []);
       form.setValue(
         "departments",
         exam?.Departments.map((department) => department.shortName) ?? [],
@@ -255,6 +253,119 @@ const EditExamForm = ({
     values: z.infer<typeof examFormSchema>,
     timetable: TimeTable,
   ) {
+    if (!values.name || values.name === "") {
+      toast({
+        title: "Exam Name Required",
+        description: "Please enter the exam name",
+      });
+      return;
+    }
+
+    if (!values.template || values.template === "") {
+      toast({
+        title: "Template Required",
+        description: "Please select the template",
+      });
+      return;
+    }
+
+    if (!values.college || values.college === "") {
+      toast({
+        title: "College Required",
+        description: "Please select the college",
+      });
+      return;
+    }
+
+    if (values.departments.length === 0) {
+      toast({
+        title: "Departments Required",
+        description: "Please select the departments",
+      });
+      return;
+    }
+
+    if (values.years.length === 0) {
+      toast({
+        title: "Years Required",
+        description: "Please select the years",
+      });
+      return;
+    }
+
+    if (!values.examDates.from || !values.examDates.to) {
+      toast({
+        title: "Exam Dates Required",
+        description: "Please select the exam dates",
+      });
+      return;
+    }
+
+    if (values.roomsOrder.length === 0) {
+      toast({
+        title: "Rooms Order Required",
+        description: "Please select the rooms order",
+      });
+      return;
+    }
+
+    if (values.isDepartmentsTogether && values.isYearsTogether) {
+      toast({
+        title: "Invalid Selection",
+        description: "Please select either departments or years together",
+      });
+      return;
+    }
+
+    if (!values.isDepartmentsTogether && !values.isYearsTogether) {
+      toast({
+        title: "Invalid Selection",
+        description: "Please select either departments or years together",
+      });
+      return;
+    }
+
+    if (values.isDepartmentsTogether) {
+      if (values.departmentsLeftBoys?.length === 0) {
+        toast({
+          title: "Left side departments required",
+          description: "Please select the left side departments",
+        });
+        return;
+      }
+
+      if (values.departmentsRightBoys?.length === 0) {
+        toast({
+          title: "Right side departments required",
+          description: "Please select the right side departments",
+        });
+        return;
+      }
+
+      if (values.departmentsLeftGirls?.length === 0) {
+        toast({
+          title: "Left side departments required",
+          description: "Please select the left side departments",
+        });
+        return;
+      }
+
+      if (values.departmentsRightGirls?.length === 0) {
+        toast({
+          title: "Right side departments required",
+          description: "Please select the right side departments",
+        });
+        return;
+      }
+    }
+
+    if (!values.secondColumnOptions || values.secondColumnOptions === "") {
+      toast({
+        title: "Second Column Options Required",
+        description: "Please select the second column options",
+      });
+      return;
+    }
     startTransition(async () => {
       if (!exam) {
         toast({
@@ -266,7 +377,7 @@ const EditExamForm = ({
 
       Object.keys(timetable).forEach((year) => {
         Object.keys(timetable[year] ?? {}).forEach((dept) => {
-          console.log(dept)
+          console.log(dept);
           if (!values.departments.includes(dept)) {
             delete timetable[year]?.[dept];
           }
@@ -301,8 +412,8 @@ const EditExamForm = ({
           values.departmentsRightSingleYear?.length === 0
             ? undefined
             : values.departmentsRightSingleYear,
-        minimumStudentsInRoom: values.minimumStudentsInRoom,
-        randomizeEveryNRooms: values.randomizeEveryNRooms,
+        minimumStudentsInRoom: Number(values.minimumStudentsInRoom ?? 0),
+        randomizeEveryNRooms: Number(values.randomizeEveryNRooms ?? 0),
         roomsOrder: values.roomsOrder,
         strictlyDivideBuildings: values.strictlyDivideBuildings,
         isCommonRoomStrength: values.isCommonRoomStrength,
@@ -1094,6 +1205,10 @@ const EditExamForm = ({
                                   onChange={field.onChange}
                                   autoComplete="on"
                                   defaultValue={60}
+                                  onWheel={(e) =>
+                                    e.target instanceof HTMLElement &&
+                                    e.target.blur()
+                                  }
                                 />
                               </FormControl>
                               <FormDescription>
@@ -1117,6 +1232,10 @@ const EditExamForm = ({
                                   onChange={field.onChange}
                                   autoComplete="on"
                                   defaultValue={0}
+                                  onWheel={(e) =>
+                                    e.target instanceof HTMLElement &&
+                                    e.target.blur()
+                                  }
                                 />
                               </FormControl>
                               <FormDescription>

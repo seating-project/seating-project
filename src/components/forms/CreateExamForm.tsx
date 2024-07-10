@@ -90,6 +90,7 @@ const CreateExamForm = ({
       minimumStudentsInRoom: 0,
       randomizeEveryNRooms: 0,
       isCommonRoomStrength: false,
+      isGateSeparate: false,
       strictlyDivideBuildings: false,
       isPhd: false,
       isDepartmentsTogether: false,
@@ -110,7 +111,11 @@ const CreateExamForm = ({
                 label: room.number,
                 value: room.number,
               };
-            }) as Data[],
+            })
+            .sort(
+              // Sort Rooms
+              (a, b) => a.label.localeCompare(b.label),
+            ) as Data[],
         );
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -121,6 +126,126 @@ const CreateExamForm = ({
     values: z.infer<typeof examFormSchema>,
     timetable: TimeTable,
   ) {
+    if (!values.name || values.name === "") {
+      toast({
+        title: "Exam Name Required",
+        description: "Please enter the exam name",
+      });
+      return;
+    }
+
+    if (!values.template || values.template === "") {
+      toast({
+        title: "Template Required",
+        description: "Please select the template",
+      });
+      return;
+    }
+
+    if (!values.college || values.college === "") {
+      toast({
+        title: "College Required",
+        description: "Please select the college",
+      });
+      return;
+    }
+
+    if (values.departments.length === 0) {
+      toast({
+        title: "Departments Required",
+        description: "Please select the departments",
+      });
+      return;
+    }
+
+    if (values.years.length === 0) {
+      toast({
+        title: "Years Required",
+        description: "Please select the years",
+      });
+      return;
+    }
+
+    if (!values.examDates.from || !values.examDates.to) {
+      toast({
+        title: "Exam Dates Required",
+        description: "Please select the exam dates",
+      });
+      return;
+    }
+
+    if (values.roomsOrder.length === 0) {
+      toast({
+        title: "Rooms Order Required",
+        description: "Please select the rooms order",
+      });
+      return;
+    }
+
+    if (values.isDepartmentsTogether && values.isYearsTogether) {
+      toast({
+        title: "Invalid Selection",
+        description: "Please select either departments or years together",
+      });
+      return;
+    }
+
+    if (
+      !templateData.find(
+        (template) => form.getValues("template") === template.name,
+      )?.isSingleSeater &&
+      !values.isDepartmentsTogether &&
+      !values.isYearsTogether
+    ) {
+      toast({
+        title: "Invalid Selection",
+        description: "Please select either departments or years together",
+      });
+      return;
+    }
+
+    if (values.isDepartmentsTogether) {
+      if (values.departmentsLeftBoys?.length === 0) {
+        toast({
+          title: "Left side departments required",
+          description: "Please select the left side departments",
+        });
+        return;
+      }
+
+      if (values.departmentsRightBoys?.length === 0) {
+        toast({
+          title: "Right side departments required",
+          description: "Please select the right side departments",
+        });
+        return;
+      }
+
+      if (values.departmentsLeftGirls?.length === 0) {
+        toast({
+          title: "Left side departments required",
+          description: "Please select the left side departments",
+        });
+        return;
+      }
+
+      if (values.departmentsRightGirls?.length === 0) {
+        toast({
+          title: "Right side departments required",
+          description: "Please select the right side departments",
+        });
+        return;
+      }
+    }
+
+    if (!values.secondColumnOptions || values.secondColumnOptions === "") {
+      toast({
+        title: "Second Column Options Required",
+        description: "Please select the second column options",
+      });
+      return;
+    }
+
     startTransition(async () => {
       console.log(values);
       await createExam.mutateAsync({
@@ -135,9 +260,10 @@ const CreateExamForm = ({
         years: values.years,
         examDates: values.examDates,
         roomsOrder: values.roomsOrder,
-        minimumStudentsInRoom: Number(values.minimumStudentsInRoom),
-        randomizeEveryNRooms: Number(values.randomizeEveryNRooms),
+        minimumStudentsInRoom: Number(values.minimumStudentsInRoom ?? 0),
+        randomizeEveryNRooms: Number(values.randomizeEveryNRooms ?? 0),
         isCommonRoomStrength: values.isCommonRoomStrength,
+        isGateSeparate: values.isGateSeparate,
         strictlyDivideBuildings: values.strictlyDivideBuildings,
         isPhd: values.isPhd,
         isDepartmentsTogether: values.isDepartmentsTogether,
@@ -782,6 +908,28 @@ const CreateExamForm = ({
 
                         <FormField
                           control={form.control}
+                          name="isGateSeparate"
+                          render={({ field }) => (
+                            <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                              <FormControl>
+                                <Checkbox
+                                  checked={field.value}
+                                  onCheckedChange={field.onChange}
+                                />
+                              </FormControl>
+                              <div className="space-y-2 leading-none">
+                                <FormLabel>Separate Gate Students?</FormLabel>
+                                <FormDescription>
+                                  If you want to separate gate students from
+                                  others, check this box.
+                                </FormDescription>
+                              </div>
+                            </FormItem>
+                          )}
+                        />
+
+                        <FormField
+                          control={form.control}
                           name="minimumStudentsInRoom"
                           render={({ field }) => (
                             <FormItem>
@@ -794,6 +942,10 @@ const CreateExamForm = ({
                                   onChange={field.onChange}
                                   autoComplete="on"
                                   defaultValue={60}
+                                  onWheel={(e) =>
+                                    e.target instanceof HTMLElement &&
+                                    e.target.blur()
+                                  }
                                 />
                               </FormControl>
                               <FormDescription>
@@ -817,6 +969,10 @@ const CreateExamForm = ({
                                   onChange={field.onChange}
                                   autoComplete="on"
                                   defaultValue={0}
+                                  onWheel={(e) =>
+                                    e.target instanceof HTMLElement &&
+                                    e.target.blur()
+                                  }
                                 />
                               </FormControl>
                               <FormDescription>
@@ -901,10 +1057,7 @@ const CreateExamForm = ({
                           </span>
                         </p>
                         <ScrollArea>
-                          <Table
-                            className="w-full border"
-                            key={year}
-                          >
+                          <Table className="w-full border" key={year}>
                             {/* <TableCaption>Timetable for {year} Year</TableCaption> */}
                             <TableHeader>
                               <TableRow>

@@ -6,8 +6,9 @@ generator client {
 }
 
 datasource db {
-  provider = "postgres"
-  url      = env("DATABASE_URL")
+  provider = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 model User {
@@ -48,6 +49,7 @@ model Student {
   yearId         Int
   degreeId       Int
   phone_number   String?
+  gateStudent    Boolean    @default(false)
 }
 
 model Year {
@@ -166,6 +168,7 @@ model Exam {
   strictlyDivideBuildings    Boolean             @default(false)
   isCommonRoomStrength       Boolean             @default(false)
   isCombinedWithPracticals   Boolean             @default(false)
+  isGateSeparate             Boolean             @default(false)
   ExamWithPracticalsJSON     Json                @default("{}")
   roomId                     Int?
 }

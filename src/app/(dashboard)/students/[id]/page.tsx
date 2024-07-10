@@ -29,6 +29,7 @@ export default async function StudentPage({ params }: Props) {
     department: studentCurrent?.Department.branch ?? "",
     year: String(studentCurrent?.Year.year),
     degree: studentCurrent?.Degree.degree ?? "",
+    gateStudent: studentCurrent?.gateStudent ?? false,
   };
 
   const departments = await api.department.getDepartments.query();

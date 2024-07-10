@@ -197,3 +197,16 @@ export function sanitizeTimeTable(timeTable: TimeTable): TimeTable {
 
   return sanitizedTimeTable;
 }
+
+export const getAllotmentTemplate = async () => {
+  try {
+    // eslint-disable-next-line
+    const module = await import(`@/components/allotments/AllotmentTemplate`);
+    return module.default;
+  } catch (err) {
+    console.error(`Error importing template: ${err as string}`);
+
+    // Provide a default template
+    return null;
+  }
+};

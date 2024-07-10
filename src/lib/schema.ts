@@ -29,6 +29,7 @@ export const examFormSchema = z.object({
   roomsOrder: z.array(z.string()),
   strictlyDivideBuildings: z.boolean(),
   isCommonRoomStrength: z.boolean(),
+  isGateSeparate: z.boolean(),
 });
 
 export const studentFormSchema = z.object({
@@ -39,6 +40,7 @@ export const studentFormSchema = z.object({
   year: z.string(),
   degree: z.string(),
   college: z.string(),
+  gateStudent: z.boolean(),
   phoneNumber: z.string().optional(),
 });
 
@@ -56,4 +58,12 @@ export const templateFormSchema = z.object({
   startTime: z.date(),
   endTime: z.date(),
   logo: z.string(),
+});
+
+export const roomFormSchema = z.object({
+  number: z.string(),
+  strength: z.number(),
+  floor: z.number(),
+  block: z.number(),
+  building: z.number(),
 });

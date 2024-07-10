@@ -17,7 +17,7 @@ export const studentRouter = createTRPCRouter({
       },
     });
   }),
-  
+
   getStudentsAdminTable: protectedProcedure.query(async ({ ctx }) => {
     const students = await ctx.db.student.findMany({
       include: {
@@ -74,6 +74,7 @@ export const studentRouter = createTRPCRouter({
         degree: z.string(),
         college: z.string(),
         year: z.number(),
+        gateStudent: z.boolean(),
         phoneNumber: z.string().optional(),
       }),
     )
@@ -104,10 +105,12 @@ export const studentRouter = createTRPCRouter({
           },
           phone_number: input.phoneNumber,
           gender: input.gender as Gender,
+          gateStudent: input.gateStudent,
         },
       });
       return createStudent;
     }),
+
   updateStudent: protectedProcedure
     .input(
       z.object({
@@ -118,6 +121,7 @@ export const studentRouter = createTRPCRouter({
         department: z.string(),
         degree: z.string(),
         year: z.number(),
+        gateStudent: z.boolean(),
         phoneNumber: z.string().optional(),
       }),
     )
@@ -144,6 +148,7 @@ export const studentRouter = createTRPCRouter({
           },
           phone_number: input.phoneNumber,
           gender: input.gender as Gender,
+          gateStudent: input.gateStudent,
         },
       });
       return updateStudent;

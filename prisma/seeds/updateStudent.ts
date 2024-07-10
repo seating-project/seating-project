@@ -1,6 +1,14 @@
 import { type PrismaClient } from "@prisma/client";
 
 export default async function updateStudent(prisma: PrismaClient) {
+  const passedOut = await prisma.student.deleteMany({
+    where: {
+      Year: {
+        year: 5,
+      },
+    },
+  });
+
   const fourthYear = await prisma.student.updateMany({
     where: {
       Year: {
@@ -47,9 +55,10 @@ export default async function updateStudent(prisma: PrismaClient) {
 
   console.log(
     "✔ Updated students: ",
+    passedOut,
     firstYear,
     secondYear,
     thirdYear,
-    fourthYear
-  )
+    fourthYear,
+  );
 }

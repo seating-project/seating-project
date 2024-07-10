@@ -20,7 +20,7 @@ services:
     environment:
       POSTGRES_HOST_AUTH_METHOD: "trust"
       POSTGRES_DB: $DB_NAME
-      POSTGRES_USER: $DB_USER
+      POSTGRES_USER: $DB_USER 
       POSTGRES_PASSWORD: $DB_PASSWORD
 
 volumes:

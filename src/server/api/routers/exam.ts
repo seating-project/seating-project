@@ -110,6 +110,7 @@ export const examRouter = createTRPCRouter({
         roomsOrder: z.array(z.string()),
         strictlyDivideBuildings: z.boolean(),
         isCommonRoomStrength: z.boolean(),
+        isGateSeparate: z.boolean(),
         // timeTable: z.object(),
         timeTable: z.record(
           z.string(),
@@ -145,6 +146,7 @@ export const examRouter = createTRPCRouter({
           randomizeEveryNRooms: input.randomizeEveryNRooms,
           strictlyDivideBuildings: input.strictlyDivideBuildings,
           isCommonRoomStrength: input.isCommonRoomStrength,
+          isGateSeparate: input.isGateSeparate,
           Years: {
             connect: input.years.map((year) => ({
               year: Number(year),

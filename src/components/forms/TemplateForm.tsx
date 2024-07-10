@@ -45,6 +45,9 @@ const TemplateForm = ({ buildings, rooms, logos }: Props) => {
   const [startTime, setStartTime] = useState("00:00");
   const [endTime, setEndTime] = useState("00:00");
 
+  // Sort Rooms
+  rooms.sort((a, b) => a.label.localeCompare(b.label));
+
   const { toast } = useToast();
   const createTemplate = api.template.createTemplate.useMutation({
     onSuccess: () => {
@@ -73,20 +76,119 @@ const TemplateForm = ({ buildings, rooms, logos }: Props) => {
   });
 
   function onSubmit(data: z.infer<typeof templateFormSchema>) {
-    startTransition(async () => {
-      const st = new Date();
-      const et = new Date();
-      const [sh, sm] = startTime.split(":");
-      const [eh, em] = endTime.split(":");
-      st.setHours(Number(sh));
-      st.setMinutes(Number(sm));
-      st.setSeconds(0);
-      st.setMilliseconds(0);
-      et.setHours(Number(eh));
-      et.setMinutes(Number(em));
-      et.setSeconds(0);
-      et.setMilliseconds(0);
+    if (data.name === "") {
+      toast({
+        title: "Name is required",
+        description: "Name is required for the template",
+        variant: "destructive",
+      });
+      return;
+    }
 
+    if (
+      Number(data.numberOfRows) <= 0 ||
+      Number.isNaN(Number(data.numberOfRows))
+    ) {
+      toast({
+        title: "Invalid Rows",
+        description: "Rows cannot be empty or zero",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (
+      Number(data.numberOfColumns) <= 0 ||
+      Number.isNaN(Number(data.numberOfColumns))
+    ) {
+      toast({
+        title: "Invalid Columns",
+        description: "Columns cannot be empty or zero",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (
+      Number(data.roomStrength) <= 0 ||
+      Number.isNaN(Number(data.roomStrength))
+    ) {
+      toast({
+        title: "Invalid Room Strength",
+        description: "Room Strength cannot be empty or zero",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (data.rooms.length === 0) {
+      toast({
+        title: "Rooms are required",
+        description: "Rooms are required for the template",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (data.buildings.length === 0) {
+      toast({
+        title: "Buildings are required",
+        description: "Buildings are required for the template",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (startTime === "00:00" || endTime === "00:00") {
+      toast({
+        title: "Invalid Time",
+        description: "Start and End time cannot be empty",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (startTime === endTime) {
+      toast({
+        title: "Invalid Time",
+        description: "Start and End time cannot be same",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    const st = new Date();
+    const et = new Date();
+    const [sh, sm] = startTime.split(":");
+    const [eh, em] = endTime.split(":");
+    st.setHours(Number(sh));
+    st.setMinutes(Number(sm));
+    st.setSeconds(0);
+    st.setMilliseconds(0);
+    et.setHours(Number(eh));
+    et.setMinutes(Number(em));
+    et.setSeconds(0);
+    et.setMilliseconds(0);
+
+    if (st > et) {
+      toast({
+        title: "Invalid Time",
+        description: "Start time cannot be greater than end time",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (data.logo === "" || data.logo === undefined || data.logo === null) {
+      toast({
+        title: "Logo is required",
+        description: "Logo is required for the template",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    startTransition(async () => {
       console.log(st, et);
       const formData = {
         name: data.name,
@@ -148,6 +250,9 @@ const TemplateForm = ({ buildings, rooms, logos }: Props) => {
                     onChange={field.onChange}
                     autoComplete="on"
                     defaultValue={5}
+                    onWheel={(e) =>
+                      e.target instanceof HTMLElement && e.target.blur()
+                    }
                   />
                 </FormControl>
                 <FormDescription>
@@ -172,6 +277,9 @@ const TemplateForm = ({ buildings, rooms, logos }: Props) => {
                     onChange={field.onChange}
                     autoComplete="on"
                     defaultValue={6}
+                    onWheel={(e) =>
+                      e.target instanceof HTMLElement && e.target.blur()
+                    }
                   />
                 </FormControl>
                 <FormDescription>
@@ -196,6 +304,9 @@ const TemplateForm = ({ buildings, rooms, logos }: Props) => {
                     onChange={field.onChange}
                     autoComplete="on"
                     defaultValue={60}
+                    onWheel={(e) =>
+                      e.target instanceof HTMLElement && e.target.blur()
+                    }
                   />
                 </FormControl>
                 <FormDescription>

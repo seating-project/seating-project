@@ -5,7 +5,7 @@ FROM base AS deps
 # Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
 RUN apk add --no-cache libc6-compat
 # Skipping Chromium Download for Puppeteer
-ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD true
+# ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD true
 
 # Update APK repository and install required packages (gnupg, wget, and chromium)
 RUN apk update && apk add --no-cache \
@@ -21,7 +21,7 @@ RUN apk update && apk add --no-cache \
 
 # Note: The installation of Google Chrome Stable is replaced with Chromium.
 # The necessary libraries for Puppeteer to interact with Chromium are included in the installation commands above.
-ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium-browser
+ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
 
 WORKDIR /app
 
@@ -35,7 +35,7 @@ COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
 #   else echo "Lockfile not found." && exit 1; \
 #   fi
 RUN yarn global add pnpm && pnpm i;
-
+RUN yarn puppeteer browsers install chrome
 
 # Rebuild the source code only when needed
 FROM base AS builder
@@ -59,6 +59,24 @@ RUN yarn build
 # Production image, copy all the files and run next
 FROM base AS runner
 WORKDIR /app
+
+# ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD true
+
+# Update APK repository and install required packages (gnupg, wget, and chromium)
+RUN apk update && apk add --no-cache \
+    gnupg \
+    wget \
+    chromium \
+    nss \
+    freetype \
+    freetype-dev \
+    harfbuzz \
+    ca-certificates \
+    ttf-freefont
+
+# Note: The installation of Google Chrome Stable is replaced with Chromium.
+# The necessary libraries for Puppeteer to interact with Chromium are included in the installation commands above.
+ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
 
 ENV NODE_ENV production
 # Uncomment the following line in case you want to disable telemetry during runtime.

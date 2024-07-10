@@ -50,7 +50,14 @@ const Navbar = () => {
         <NavigationMenuItem>
           <Link href="/college" legacyBehavior passHref>
             <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-              College
+              Colleges
+            </NavigationMenuLink>
+          </Link>
+        </NavigationMenuItem>
+        <NavigationMenuItem>
+          <Link href="/rooms" legacyBehavior passHref>
+            <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+              Rooms
             </NavigationMenuLink>
           </Link>
         </NavigationMenuItem>

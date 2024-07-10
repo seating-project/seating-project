@@ -1,20 +1,23 @@
 "use client";
 
 import React, { useTransition } from "react";
+import { useRouter } from "next/navigation";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Loader2 } from "lucide-react";
 import { useForm } from "react-hook-form";
+import { type z } from "zod";
+
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
-  FormDescription,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { type Student, type Option } from "@/types";
-import { type z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Select,
   SelectContent,
@@ -22,12 +25,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Button } from "@/components/ui/button";
-import { api } from "@/trpc/react";
-import { Loader2 } from "lucide-react";
 import { toast } from "@/components/ui/use-toast";
-import { useRouter } from "next/navigation";
 import { studentFormSchema } from "@/lib/schema";
+import { api } from "@/trpc/react";
+import { type Option, type Student } from "@/types";
+
+import { Checkbox } from "../ui/checkbox";
 
 type Props = {
   student: Student;
@@ -56,12 +59,13 @@ const UpdateStudentForm = ({ student, departments, years, degrees }: Props) => {
       department: student.department,
       year: student.year,
       gender: student.gender,
+      gateStudent: student.gateStudent,
     },
   });
 
   function onSubmit(values: z.infer<typeof studentFormSchema>) {
     startTransition(async () => {
-      console.log(values)
+      console.log(values);
       if (values.phoneNumber === null) {
         values.phoneNumber = "";
       }
@@ -74,6 +78,7 @@ const UpdateStudentForm = ({ student, departments, years, degrees }: Props) => {
         department: values.department,
         year: Number(values.year),
         gender: values.gender,
+        gateStudent: values.gateStudent,
       });
 
       if (updateStudent) {
@@ -100,11 +105,7 @@ const UpdateStudentForm = ({ student, departments, years, degrees }: Props) => {
               <FormItem>
                 <FormLabel>Username</FormLabel>
                 <FormControl>
-                  <Input
-                    placeholder="Roshan"
-                    {...field}
-                    disabled={isPending}
-                  />
+                  <Input placeholder="Roshan" {...field} disabled={isPending} />
                 </FormControl>
                 <FormDescription>This is your student name</FormDescription>
                 <FormMessage />
@@ -180,6 +181,27 @@ const UpdateStudentForm = ({ student, departments, years, degrees }: Props) => {
                   This is your student phone number
                 </FormDescription>
                 <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="gateStudent"
+            render={({ field }) => (
+              <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                <FormControl>
+                  <Checkbox
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                  />
+                </FormControl>
+                <div className="space-y-2 leading-none">
+                  <FormLabel>Is Gate Student?</FormLabel>
+                  <FormDescription>
+                    Check this if the student is a GATE student
+                  </FormDescription>
+                </div>
               </FormItem>
             )}
           />

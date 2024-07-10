@@ -158,6 +158,19 @@ export async function getAllotments({
         return aIndex - bIndex;
       });
 
+      // Grouping Gate Students to first, then the other students
+      if (exam.isGateSeparate) {
+        circuitStudents.sort((a, b) => {
+          if (a.gateStudent && !b.gateStudent) {
+            return -1;
+          }
+          if (!a.gateStudent && b.gateStudent) {
+            return 1;
+          }
+          return 0;
+        });
+      }
+
       const ncs: Student[] = []; // Non-Circuit students
 
       // Getting all the Non-Circuit students
@@ -202,6 +215,19 @@ export async function getAllotments({
         return aIndex - bIndex;
       });
 
+      // Grouping Gate Students to first, then the other students
+      if (exam.isGateSeparate) {
+        nonCircuitStudents.sort((a, b) => {
+          if (a.gateStudent && !b.gateStudent) {
+            return -1;
+          }
+          if (!a.gateStudent && b.gateStudent) {
+            return 1;
+          }
+          return 0;
+        });
+      }
+
       // Sorting RoomsOrder using the roomsOrderArray (string[])
       const roomsOrderArray = exam.roomOrderArray;
       exam.RoomsOrder.sort((a, b) => {
@@ -211,7 +237,6 @@ export async function getAllotments({
       });
 
       // Filtering departments based on the time table
-      console.log("timetable", exam.Timetable);
       // const departmentsForToday = Object.keys(exam.Timetable as TimeTable).map(
       //   (year) => {
       //     return Object.keys(exam.Timetable?.[year] ?? {}).map(
@@ -328,6 +353,19 @@ export async function getAllotments({
         }
         return aIndex - bIndex;
       });
+
+      // Grouping Gate Students to first, then the other students
+      if (exam.isGateSeparate) {
+        students.sort((a, b) => {
+          if (a.gateStudent && !b.gateStudent) {
+            return -1;
+          }
+          if (!a.gateStudent && b.gateStudent) {
+            return 1;
+          }
+          return 0;
+        });
+      }
 
       // const departmentOrder = exam.Departments.map((department) => {
       //   return department.id;
@@ -571,6 +609,21 @@ export async function getAllotments({
           }),
         );
 
+        // If separation of gate students is enabled, then sort the students based on the gate students
+        if (exam.isGateSeparate) {
+          Object.keys(students).map((year) => {
+            students[year]?.sort((a, b) => {
+              if (a.gateStudent && !b.gateStudent) {
+                return -1;
+              }
+              if (!a.gateStudent && b.gateStudent) {
+                return 1;
+              }
+              return 0;
+            });
+          });
+        }
+
         // * OBJECTIVE: Fill up the allotments with just 2nd and 3rd Year students, then fill up the 4th year students
 
         // Girls Rooms Array so we can store it filter to get the boys rooms (leftover rooms)
@@ -607,7 +660,6 @@ export async function getAllotments({
               students["2F"]?.[firstPointer] &&
               students["3F"]?.[firstPointer]
             ) {
-              console.log("first condition");
               roomAllotments.push([
                 students["2F"][firstPointer] ?? null,
                 students["3F"][firstPointer] ?? null,
@@ -617,7 +669,6 @@ export async function getAllotments({
               students["2F"]?.[firstPointer] &&
               students["4F RIGHT"]?.[secondPointer]
             ) {
-              console.log("4th Year", students["4F RIGHT"]?.[secondPointer]);
               roomAllotments.push([
                 students["2F"][firstPointer] ?? null,
                 students["4F RIGHT"][secondPointer] ?? null,
@@ -628,7 +679,6 @@ export async function getAllotments({
               students["4F LEFT"]?.[thirdPointer] &&
               students["3F"]?.[firstPointer]
             ) {
-              console.log("4th Year", students["4F LEFT"]?.[thirdPointer]);
               roomAllotments.push([
                 students["4F LEFT"][thirdPointer] ?? null,
                 students["3F"][firstPointer] ?? null,
@@ -664,7 +714,6 @@ export async function getAllotments({
               ]);
               secondPointer++;
             } else if (students["2F"]?.[firstPointer]) {
-              console.log("second condition");
               roomAllotments.push([
                 students["2F"]?.[firstPointer] ?? null,
                 null,
@@ -677,7 +726,6 @@ export async function getAllotments({
               ]);
               firstPointer++;
             } else {
-              console.log("last condition");
               roomAllotments.push([null, null]);
             }
 
@@ -1386,6 +1434,21 @@ export async function getAllotments({
           });
         }
 
+        // If separation of gate students is enabled, then sort the students based on the gate students
+        if (exam.isGateSeparate) {
+          Object.keys(students).map((year) => {
+            students[year]?.sort((a, b) => {
+              if (a.gateStudent && !b.gateStudent) {
+                return -1;
+              }
+              if (!a.gateStudent && b.gateStudent) {
+                return 1;
+              }
+              return 0;
+            });
+          });
+        }
+
         const girlsRooms: Room[] = []; // Initialising the girls rooms array, so that we can filter out for boys
         let girlsFinished = false; // A flag to check if the girls allotment is finished or not
         let firstPointer = 0; // A pointer to keep track of the left side students
@@ -1403,7 +1466,6 @@ export async function getAllotments({
         exam.RoomsOrder.map((room) => {
           // If the girls are entirely alloted, then return
           if (girlsFinished) return;
-          console.log("Room", room.number);
 
           const roomAllotments: [Student | null, Student | null][] = []; // To store the allotments of the current room
 
@@ -1457,15 +1519,12 @@ export async function getAllotments({
           ) {
             girlsFinished = true;
           }
-          console.log("First Pointer", firstPointer);
-          console.log("Second Pointer", secondPointer);
         });
 
         // Initialising the boys rooms array
         const boysRooms: Room[] = exam.RoomsOrder.filter(
           (room) => !girlsRooms.includes(room),
         );
-        console.log("Boys Room ", boysRooms);
 
         firstPointer = 0; // The pointer to keep track of the left side students (it is already initialised above, so we are just resetting it)
         secondPointer = 0; // The pointer to keep track of the right side students (it is already initialised above, so we are just resetting it)
@@ -1626,6 +1685,21 @@ export async function getAllotments({
             }
           }),
         );
+
+        // If separation of gate students is enabled, then sort the students based on the gate students
+        if (exam.isGateSeparate) {
+          Object.keys(students).map((year) => {
+            students[year]?.sort((a, b) => {
+              if (a.gateStudent && !b.gateStudent) {
+                return -1;
+              }
+              if (!a.gateStudent && b.gateStudent) {
+                return 1;
+              }
+              return 0;
+            });
+          });
+        }
 
         let firstPointer = 0; // A pointer to keep track of the 2nd year students
         let secondPointer = 0; // A pointer to keep track of the 3rd year students
@@ -1960,6 +2034,21 @@ export async function getAllotments({
               });
             }
             return aIndex - bIndex;
+          });
+        }
+
+        // If separation of gate students is enabled, then sort the students based on the gate students
+        if (exam.isGateSeparate) {
+          Object.keys(students).map((year) => {
+            students[year]?.sort((a, b) => {
+              if (a.gateStudent && !b.gateStudent) {
+                return -1;
+              }
+              if (!a.gateStudent && b.gateStudent) {
+                return 1;
+              }
+              return 0;
+            });
           });
         }
 
