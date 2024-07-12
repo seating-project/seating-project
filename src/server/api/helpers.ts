@@ -667,6 +667,26 @@ export async function getAllotments({
               firstPointer++;
             } else if (
               students["2F"]?.[firstPointer] &&
+              students["4F"]?.[thirdPointer]
+            ) {
+              roomAllotments.push([
+                students["2F"][firstPointer] ?? null,
+                students["4F"][thirdPointer] ?? null,
+              ]);
+              firstPointer++;
+              thirdPointer++;
+            } else if (
+              students["3F"]?.[firstPointer] &&
+              students["4F"]?.[thirdPointer]
+            ) {
+              roomAllotments.push([
+                students["3F"][firstPointer] ?? null,
+                students["4F"][thirdPointer] ?? null,
+              ]);
+              firstPointer++;
+              thirdPointer++;
+            } else if (
+              students["2F"]?.[firstPointer] &&
               students["4F RIGHT"]?.[secondPointer]
             ) {
               roomAllotments.push([
@@ -725,6 +745,12 @@ export async function getAllotments({
                 students["3F"]?.[firstPointer] ?? null,
               ]);
               firstPointer++;
+            } else if (students["4F"]?.[thirdPointer]) {
+              roomAllotments.push([
+                null,
+                students["4F"]?.[thirdPointer] ?? null,
+              ]);
+              thirdPointer++;
             } else {
               roomAllotments.push([null, null]);
             }
@@ -779,6 +805,26 @@ export async function getAllotments({
                 students["3M"][firstPointer] ?? null,
               ]);
               firstPointer++;
+            } else if (
+              students["2M"]?.[firstPointer] &&
+              students["4M"]?.[thirdPointer]
+            ) {
+              roomAllotments.push([
+                students["2M"][firstPointer] ?? null,
+                students["4M"][thirdPointer] ?? null,
+              ]);
+              firstPointer++;
+              thirdPointer++;
+            } else if (
+              students["3M"]?.[firstPointer] &&
+              students["4M"]?.[thirdPointer]
+            ) {
+              roomAllotments.push([
+                students["3M"][firstPointer] ?? null,
+                students["4M"][thirdPointer] ?? null,
+              ]);
+              firstPointer++;
+              thirdPointer++;
             } else if (
               students["2M"]?.[firstPointer] &&
               students["4M RIGHT"]?.[secondPointer]
@@ -839,6 +885,12 @@ export async function getAllotments({
                 students["3M"]?.[firstPointer] ?? null,
               ]);
               firstPointer++;
+            } else if (students["4M"]?.[thirdPointer]) {
+              roomAllotments.push([
+                null,
+                students["4M"]?.[thirdPointer] ?? null,
+              ]);
+              thirdPointer++;
             } else {
               roomAllotments.push([null, null]);
             }
