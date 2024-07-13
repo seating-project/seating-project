@@ -24,7 +24,7 @@ const TemplatePage = async (props: Props) => {
 
   const logos = await api.template.getLogos.query();
   const requiredLogos = logos.map((logo) => ({
-    value: logo.name,
+    value: String(logo.id),
     label: logo.name,
   }));
 

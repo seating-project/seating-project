@@ -1,11 +1,11 @@
 "use client";
 
 import * as React from "react";
+import { Command as CommandPrimitive } from "cmdk";
 import { X } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Command, CommandGroup, CommandItem } from "@/components/ui/command";
-import { Command as CommandPrimitive } from "cmdk";
 
 export type Data = Record<"value" | "label", string>;
 
@@ -16,7 +16,12 @@ interface Props {
   selectedData?: Data[];
 }
 
-export const FancyMultiSelect = ({ onChange, data, name, selectedData }: Props) => {
+export const FancyMultiSelect = ({
+  onChange,
+  data,
+  name,
+  selectedData,
+}: Props) => {
   const inputRef = React.useRef<HTMLInputElement>(null);
   const [open, setOpen] = React.useState(false);
   const [selected, setSelected] = React.useState<Data[]>(selectedData ?? []);
@@ -48,7 +53,9 @@ export const FancyMultiSelect = ({ onChange, data, name, selectedData }: Props) 
     [],
   );
 
-  const selectables = data.filter((item) => !selected.includes(item));
+  const selectables = data.filter(
+    (item) => !selected.map((item) => item.value).includes(item.value),
+  );
 
   React.useEffect(() => {
     onChange?.(selected);

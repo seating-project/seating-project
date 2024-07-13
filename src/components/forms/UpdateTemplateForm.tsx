@@ -87,6 +87,7 @@ const UpdateTemplateForm = ({ buildings, rooms, logos, template }: Props) => {
         ? `0${template?.startTime.getMinutes()}`
         : `${template?.startTime.getMinutes()}`
       : "00",
+    template?.Buildings
   );
   console.log(template?.endTime.getHours());
   const form = useForm<z.infer<typeof templateFormSchema>>({
@@ -104,7 +105,7 @@ const UpdateTemplateForm = ({ buildings, rooms, logos, template }: Props) => {
       roomStrength: template?.roomStrength,
       startTime: template?.startTime,
       endTime: template?.endTime,
-      logo: String(template?.Logo.name),
+      logo: String(template?.Logo.id),
     },
   });
 
