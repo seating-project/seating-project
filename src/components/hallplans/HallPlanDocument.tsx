@@ -90,9 +90,17 @@ const HallPlanDocument = async ({ exam, template, date }: Props) => {
                 colSpan={2}
               >
                 Timings:{" "}
-                {template?.startTime.toLocaleTimeString().toUpperCase() +
+                {template?.startTime
+                  ?.toLocaleTimeString("en-US", {
+                    timeZone: "Asia/Kolkata",
+                  })
+                  .toUpperCase() +
                   " to " +
-                  template?.endTime.toLocaleTimeString().toUpperCase()}
+                  template?.endTime
+                    ?.toLocaleTimeString("en-US", {
+                      timeZone: "Asia/Kolkata",
+                    })
+                    .toUpperCase()}
               </TableHead>
             </TableRow>
             <TableRow>

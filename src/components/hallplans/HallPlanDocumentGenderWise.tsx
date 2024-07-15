@@ -81,26 +81,49 @@ const HallPlanDocument = async ({ exam, template, date, gender }: Props) => {
               </TableHead>
             </TableRow>
             <TableRow>
-              <TableHead className="border border-black text-center text-black" colSpan={2}>
+              <TableHead
+                className="border border-black text-center text-black"
+                colSpan={2}
+              >
                 Date: {date}
               </TableHead>
-              <TableHead className="border border-black text-center text-black" colSpan={3}>
+              <TableHead
+                className="border border-black text-center text-black"
+                colSpan={3}
+              >
                 Timings:{" "}
-                {template?.startTime.toLocaleTimeString().toUpperCase() +
+                {template?.startTime
+                  ?.toLocaleTimeString("en-US", {
+                    timeZone: "Asia/Kolkata",
+                  })
+                  .toUpperCase() +
                   " to " +
-                  template?.endTime.toLocaleTimeString().toUpperCase()}
+                  template?.endTime
+                    ?.toLocaleTimeString("en-US", {
+                      timeZone: "Asia/Kolkata",
+                    })
+                    .toUpperCase()}
               </TableHead>
             </TableRow>
 
             <TableRow>
-              <TableHead className="border border-black text-center text-black" colSpan={1}>
+              <TableHead
+                className="border border-black text-center text-black"
+                colSpan={1}
+              >
                 S.No
               </TableHead>
-              <TableHead className="border border-black text-center text-black" colSpan={3}>
+              <TableHead
+                className="border border-black text-center text-black"
+                colSpan={3}
+              >
                 Room
               </TableHead>
 
-              <TableHead className="border border-black text-center text-black" colSpan={1}>
+              <TableHead
+                className="border border-black text-center text-black"
+                colSpan={1}
+              >
                 Strength
               </TableHead>
             </TableRow>
@@ -141,7 +164,10 @@ const HallPlanDocument = async ({ exam, template, date, gender }: Props) => {
                   return (
                     <>
                       <TableRow>
-                        <TableCell className="border border-black text-center" colSpan={1}>
+                        <TableCell
+                          className="border border-black text-center"
+                          colSpan={1}
+                        >
                           {index + 1}
                         </TableCell>
                         <TableCell className="border border-black " colSpan={3}>
@@ -151,7 +177,10 @@ const HallPlanDocument = async ({ exam, template, date, gender }: Props) => {
                             " Floor"} - {roomObject?.Block.name} -{" "}
                           {roomObject?.Building.name}
                         </TableCell>
-                        <TableCell className="border border-black font-medium" colSpan={1}>
+                        <TableCell
+                          className="border border-black font-medium"
+                          colSpan={1}
+                        >
                           {currentRoomInfo?.strength}
                         </TableCell>
                       </TableRow>
@@ -159,10 +188,16 @@ const HallPlanDocument = async ({ exam, template, date, gender }: Props) => {
                   );
                 })}
                 <TableRow>
-                  <TableCell className="border border-black text-center" colSpan={4}>
+                  <TableCell
+                    className="border border-black text-center"
+                    colSpan={4}
+                  >
                     <b className="text-xl font-medium"> Total </b>
                   </TableCell>
-                  <TableCell className="border border-black font-medium" colSpan={1}>
+                  <TableCell
+                    className="border border-black font-medium"
+                    colSpan={1}
+                  >
                     {deptCount}
                   </TableCell>
                 </TableRow>
@@ -171,10 +206,16 @@ const HallPlanDocument = async ({ exam, template, date, gender }: Props) => {
           })}
           <TableBody>
             <TableRow>
-              <TableCell className="border border-black text-center" colSpan={4}>
+              <TableCell
+                className="border border-black text-center"
+                colSpan={4}
+              >
                 <b className="text-xl font-medium"> Overall Total </b>
               </TableCell>
-              <TableCell className="border border-black font-medium text-xl text-center" colSpan={1}>
+              <TableCell
+                className="border border-black text-center text-xl font-medium"
+                colSpan={1}
+              >
                 {overallTotalCount}
               </TableCell>
             </TableRow>
