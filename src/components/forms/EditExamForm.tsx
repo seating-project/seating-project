@@ -317,14 +317,6 @@ const EditExamForm = ({
       return;
     }
 
-    if (!values.isDepartmentsTogether && !values.isYearsTogether) {
-      toast({
-        title: "Invalid Selection",
-        description: "Please select either departments or years together",
-      });
-      return;
-    }
-
     if (values.isDepartmentsTogether) {
       if (values.departmentsLeftBoys?.length === 0) {
         toast({
