@@ -30,6 +30,7 @@ export const examFormSchema = z.object({
   strictlyDivideBuildings: z.boolean(),
   isCommonRoomStrength: z.boolean(),
   isGateSeparate: z.boolean(),
+  isRollNumber: z.boolean(),
 });
 
 export const studentFormSchema = z.object({

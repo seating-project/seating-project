@@ -7,8 +7,8 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url       = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL")
+  url      = env("DATABASE_URL")
+  // directUrl = env("DIRECT_URL")
 }
 
 model User {
@@ -39,6 +39,7 @@ model Student {
   id             Int        @id @default(autoincrement())
   name           String
   registerNumber String     @unique
+  rollNumber     String?    @unique
   gender         Gender
   Department     Department @relation(fields: [departmentId], references: [id])
   Year           Year       @relation(fields: [yearId], references: [id])
@@ -169,6 +170,7 @@ model Exam {
   isCommonRoomStrength       Boolean             @default(false)
   isCombinedWithPracticals   Boolean             @default(false)
   isGateSeparate             Boolean             @default(false)
+  isRollNumber               Boolean             @default(false)
   ExamWithPracticalsJSON     Json                @default("{}")
   roomId                     Int?
 }

@@ -96,6 +96,7 @@ const CreateExamForm = ({
       randomizeEveryNRooms: 0,
       isCommonRoomStrength: false,
       isGateSeparate: false,
+      isRollNumber: false,
       strictlyDivideBuildings: false,
       isPhd: false,
       isDepartmentsTogether: false,
@@ -269,6 +270,7 @@ const CreateExamForm = ({
         randomizeEveryNRooms: Number(values.randomizeEveryNRooms ?? 0),
         isCommonRoomStrength: values.isCommonRoomStrength,
         isGateSeparate: values.isGateSeparate,
+        isRollNumber: values.isRollNumber,
         strictlyDivideBuildings: values.strictlyDivideBuildings,
         isPhd: values.isPhd,
         isDepartmentsTogether: values.isDepartmentsTogether,
@@ -956,6 +958,28 @@ const CreateExamForm = ({
 
                             <FormField
                               control={form.control}
+                              name="isRollNumber"
+                              render={({ field }) => (
+                                <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                                  <FormControl>
+                                    <Checkbox
+                                      checked={field.value}
+                                      onCheckedChange={field.onChange}
+                                    />
+                                  </FormControl>
+                                  <div className="space-y-2 leading-none">
+                                    <FormLabel>Use Roll Number?</FormLabel>
+                                    <FormDescription>
+                                      If you want to use the roll number instead
+                                      of register number, check this box.
+                                    </FormDescription>
+                                  </div>
+                                </FormItem>
+                              )}
+                            />
+
+                            <FormField
+                              control={form.control}
                               name="minimumStudentsInRoom"
                               render={({ field }) => (
                                 <FormItem>
@@ -1167,6 +1191,7 @@ const CreateExamForm = ({
                           console.log("TIME", timeTable);
                           onSubmit(form.getValues(), timeTable);
                         }}
+                        className="mt-2"
                       >
                         Create Exam
                       </Button>

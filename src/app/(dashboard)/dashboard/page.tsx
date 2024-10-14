@@ -23,7 +23,10 @@ export default async function Home() {
         <div className="">
           <div className="flex w-full flex-wrap gap-y-2 space-x-4">
             {exams.map((exam) => (
-              <div key={exam.id} className={"rounded border bg-white p-4"}>
+              <div
+                key={exam.id}
+                className={"rounded border bg-white p-4 dark:bg-background"}
+              >
                 <Link href={`/exam/${exam.id}`}>{exam.name}</Link>
               </div>
             ))}

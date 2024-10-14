@@ -96,9 +96,7 @@ const AllotmentTemplate = ({
                                 return (
                                   <TableRow
                                     key={
-                                      student[0]?.name +
-                                        " " +
-                                        student[1]?.name ?? " "
+                                      student[0]?.name + " " + student[1]?.name
                                     }
                                   >
                                     <TableCell className="flex flex-col border border-black p-2 text-xs">
@@ -110,7 +108,9 @@ const AllotmentTemplate = ({
                                                 student[0]?.departmentId,
                                             )?.shortName +
                                             " " +
-                                            student[0].registerNumber
+                                            (exam.isRollNumber
+                                              ? student[0].rollNumber
+                                              : student[0].registerNumber)
                                           : ""}{" "}
                                         {student[0]?.gateStudent ? "(G)" : ""}
                                       </p>
@@ -122,7 +122,9 @@ const AllotmentTemplate = ({
                                                 student[1]?.departmentId,
                                             )?.shortName +
                                             " " +
-                                            student[1].registerNumber
+                                            (exam.isRollNumber
+                                              ? student[1].rollNumber
+                                              : student[1].registerNumber)
                                           : ""}{" "}
                                         {student[1]?.gateStudent ? "(G)" : ""}
                                       </p>
@@ -167,8 +169,8 @@ const AllotmentTemplate = ({
                                       <TableRow
                                         key={
                                           student[0]?.name +
-                                            " " +
-                                            student[1]?.name ?? " "
+                                          " " +
+                                          student[1]?.name
                                         }
                                       >
                                         <TableCell className="flex flex-col border border-black p-2 text-xs">
@@ -180,7 +182,9 @@ const AllotmentTemplate = ({
                                                     student[0]?.departmentId,
                                                 )?.shortName +
                                                 " " +
-                                                student[0].registerNumber
+                                                (exam.isRollNumber
+                                                  ? student[0].rollNumber
+                                                  : student[0].registerNumber)
                                               : ""}{" "}
                                             {student[0]?.gateStudent
                                               ? "(G)"
@@ -194,7 +198,9 @@ const AllotmentTemplate = ({
                                                     student[1]?.departmentId,
                                                 )?.shortName +
                                                 " " +
-                                                student[1].registerNumber
+                                                (exam.isRollNumber
+                                                  ? student[1].rollNumber
+                                                  : student[1].registerNumber)
                                               : ""}{" "}
                                             {student[1]?.gateStudent
                                               ? "(G)"
@@ -281,9 +287,7 @@ const AllotmentTemplate = ({
                                 return (
                                   <TableRow
                                     key={
-                                      student[0]?.name +
-                                        " " +
-                                        student[1]?.name ?? " "
+                                      student[0]?.name + " " + student[1]?.name
                                     }
                                   >
                                     <TableCell className="flex flex-col border border-black p-2 text-sm">
@@ -296,7 +300,9 @@ const AllotmentTemplate = ({
                                           " "
                                         )}
                                         {student[0]
-                                          ? student[0].registerNumber
+                                          ? exam.isRollNumber
+                                            ? student[0].rollNumber
+                                            : student[0].registerNumber
                                           : ""}{" "}
                                         {student[0]?.gateStudent ? "(G)" : ""}
                                       </p>
@@ -309,7 +315,9 @@ const AllotmentTemplate = ({
                                           " "
                                         )}
                                         {student[1]
-                                          ? student[1].registerNumber
+                                          ? exam.isRollNumber
+                                            ? student[1].rollNumber
+                                            : student[1].registerNumber
                                           : ""}{" "}
                                         {student[1]?.gateStudent ? "(G)" : ""}
                                       </p>

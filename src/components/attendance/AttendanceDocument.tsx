@@ -228,7 +228,9 @@ const AttendanceDocument = async ({ exam, template, date, room }: Props) => {
                           colSpan > 7 ? "p-0.5 text-xs" : "",
                         )}
                       >
-                        {student.registerNumber}
+                        {exam.isRollNumber
+                          ? student.rollNumber
+                          : student.registerNumber}
                       </TableCell>
                       <TableCell
                         className={cn(
