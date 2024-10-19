@@ -133,9 +133,13 @@ export async function getAllotments({
                 },
                 collegeId: exam.collegeId,
               },
-              orderBy: {
-                registerNumber: "asc",
-              },
+              orderBy: exam.isRollNumber
+                ? {
+                    rollNumber: "asc",
+                  }
+                : {
+                    registerNumber: "asc",
+                  },
             });
             cs.push(...students);
           }
@@ -190,9 +194,13 @@ export async function getAllotments({
                 },
                 collegeId: exam.collegeId,
               },
-              orderBy: {
-                registerNumber: "asc",
-              },
+              orderBy: exam.isRollNumber
+                ? {
+                    rollNumber: "asc",
+                  }
+                : {
+                    registerNumber: "asc",
+                  },
             });
             ncs.push(...students);
           }
@@ -322,9 +330,13 @@ export async function getAllotments({
               //   },
               // },
             },
-            orderBy: {
-              registerNumber: "asc",
-            },
+            orderBy: exam.isRollNumber
+              ? {
+                  rollNumber: "asc",
+                }
+              : {
+                  registerNumber: "asc",
+                },
           });
           students.push(...s);
         }),
@@ -439,6 +451,13 @@ export async function getAllotments({
                   collegeId: exam.collegeId,
                   gender: "Male",
                 },
+                orderBy: exam.isRollNumber
+                  ? {
+                      rollNumber: "asc",
+                    }
+                  : {
+                      registerNumber: "asc",
+                    },
               });
               students[`${year}M LEFT`] = s;
               students[`${year}M LEFT`]?.sort((a, b) => {
@@ -465,6 +484,13 @@ export async function getAllotments({
                   collegeId: exam.collegeId,
                   gender: "Male",
                 },
+                orderBy: exam.isRollNumber
+                  ? {
+                      rollNumber: "asc",
+                    }
+                  : {
+                      registerNumber: "asc",
+                    },
               });
               students[`${year}M RIGHT`] = s2;
               students[`${year}M RIGHT`]?.sort((a, b) => {
@@ -490,9 +516,13 @@ export async function getAllotments({
                   collegeId: exam.collegeId,
                   gender: "Male",
                 },
-                orderBy: {
-                  registerNumber: "asc",
-                },
+                orderBy: exam.isRollNumber
+                  ? {
+                      rollNumber: "asc",
+                    }
+                  : {
+                      registerNumber: "asc",
+                    },
               });
               students[`${year}M`] = s;
               students[`${year}M`]?.sort((a, b) => {
@@ -532,6 +562,13 @@ export async function getAllotments({
                   collegeId: exam.collegeId,
                   gender: "Female",
                 },
+                orderBy: exam.isRollNumber
+                  ? {
+                      rollNumber: "asc",
+                    }
+                  : {
+                      registerNumber: "asc",
+                    },
               });
               students[`${year}F LEFT`] = s;
               students[`${year}F LEFT`]?.sort((a, b) => {
@@ -559,6 +596,13 @@ export async function getAllotments({
                   collegeId: exam.collegeId,
                   gender: "Female",
                 },
+                orderBy: exam.isRollNumber
+                  ? {
+                      rollNumber: "asc",
+                    }
+                  : {
+                      registerNumber: "asc",
+                    },
               });
               students[`${year}F RIGHT`] = s2;
               students[`${year}F RIGHT`]?.sort((a, b) => {
@@ -586,9 +630,13 @@ export async function getAllotments({
                   collegeId: exam.collegeId,
                   gender: "Female",
                 },
-                orderBy: {
-                  registerNumber: "asc",
-                },
+                orderBy: exam.isRollNumber
+                  ? {
+                      rollNumber: "asc",
+                    }
+                  : {
+                      registerNumber: "asc",
+                    },
               });
               students[`${year}F`] = s;
               students[`${year}F`]?.sort((a, b) => {
@@ -972,9 +1020,13 @@ export async function getAllotments({
                   //   },
                   // },
                 },
-                orderBy: {
-                  registerNumber: "asc",
-                },
+                orderBy: exam.isRollNumber
+                  ? {
+                      rollNumber: "asc",
+                    }
+                  : {
+                      registerNumber: "asc",
+                    },
               });
               students[`Male Left`]?.push(...s);
             }),
@@ -1018,9 +1070,13 @@ export async function getAllotments({
                   //   },
                   // },
                 },
-                orderBy: {
-                  registerNumber: "asc",
-                },
+                orderBy: exam.isRollNumber
+                  ? {
+                      rollNumber: "asc",
+                    }
+                  : {
+                      registerNumber: "asc",
+                    },
               });
               students[`Male Right`]?.push(...s);
             }),
@@ -1105,9 +1161,13 @@ export async function getAllotments({
                   //   },
                   // },
                 },
-                orderBy: {
-                  registerNumber: "asc",
-                },
+                orderBy: exam.isRollNumber
+                  ? {
+                      rollNumber: "asc",
+                    }
+                  : {
+                      registerNumber: "asc",
+                    },
               });
               students[`Male Left`]?.push(...s);
             }),
@@ -1157,9 +1217,13 @@ export async function getAllotments({
                   //   },
                   // },
                 },
-                orderBy: {
-                  registerNumber: "asc",
-                },
+                orderBy: exam.isRollNumber
+                  ? {
+                      rollNumber: "asc",
+                    }
+                  : {
+                      registerNumber: "asc",
+                    },
               });
               students[`Male Right`]?.push(...s);
             }),
@@ -1261,9 +1325,13 @@ export async function getAllotments({
                   //   },
                   // },
                 },
-                orderBy: {
-                  registerNumber: "asc",
-                },
+                orderBy: exam.isRollNumber
+                  ? {
+                      rollNumber: "asc",
+                    }
+                  : {
+                      registerNumber: "asc",
+                    },
               });
               students[`Female Left`]?.push(...s);
             }),
@@ -1307,9 +1375,13 @@ export async function getAllotments({
                   //   },
                   // },
                 },
-                orderBy: {
-                  registerNumber: "asc",
-                },
+                orderBy: exam.isRollNumber
+                  ? {
+                      rollNumber: "asc",
+                    }
+                  : {
+                      registerNumber: "asc",
+                    },
               });
               students[`Female Right`]?.push(...s);
             }),
@@ -1393,9 +1465,13 @@ export async function getAllotments({
                   //   },
                   // },
                 },
-                orderBy: {
-                  registerNumber: "asc",
-                },
+                orderBy: exam.isRollNumber
+                  ? {
+                      rollNumber: "asc",
+                    }
+                  : {
+                      registerNumber: "asc",
+                    },
               });
               students[`Female Left`]?.push(...s);
             }),
@@ -1445,9 +1521,13 @@ export async function getAllotments({
                   //   },
                   // },
                 },
-                orderBy: {
-                  registerNumber: "asc",
-                },
+                orderBy: exam.isRollNumber
+                  ? {
+                      rollNumber: "asc",
+                    }
+                  : {
+                      registerNumber: "asc",
+                    },
               });
               students[`Female Right`]?.push(...s);
             }),
@@ -1658,6 +1738,13 @@ export async function getAllotments({
                   },
                   collegeId: exam.collegeId,
                 },
+                orderBy: exam.isRollNumber
+                  ? {
+                      rollNumber: "asc",
+                    }
+                  : {
+                      registerNumber: "asc",
+                    },
               });
               students[`${year} LEFT`] = s;
               students[`${year} LEFT`]?.sort((a, b) => {
@@ -1684,6 +1771,13 @@ export async function getAllotments({
                   },
                   collegeId: exam.collegeId,
                 },
+                orderBy: exam.isRollNumber
+                  ? {
+                      rollNumber: "asc",
+                    }
+                  : {
+                      registerNumber: "asc",
+                    },
               });
               students[`${year} RIGHT`] = s2;
               students[`${year} RIGHT`]?.sort((a, b) => {
@@ -1715,9 +1809,13 @@ export async function getAllotments({
                   },
                   collegeId: exam.collegeId,
                 },
-                orderBy: {
-                  registerNumber: "asc",
-                },
+                orderBy: exam.isRollNumber
+                  ? {
+                      rollNumber: "asc",
+                    }
+                  : {
+                      registerNumber: "asc",
+                    },
               });
               students[`${year}`] = s;
               students[`${year}`]?.sort((a, b) => {
@@ -1885,9 +1983,13 @@ export async function getAllotments({
                   },
                   collegeId: exam.collegeId,
                 },
-                orderBy: {
-                  registerNumber: "asc",
-                },
+                orderBy: exam.isRollNumber
+                  ? {
+                      rollNumber: "asc",
+                    }
+                  : {
+                      registerNumber: "asc",
+                    },
               });
               students.Left?.push(...s);
             }),
@@ -1924,9 +2026,13 @@ export async function getAllotments({
                   },
                   collegeId: exam.collegeId,
                 },
-                orderBy: {
-                  registerNumber: "asc",
-                },
+                orderBy: exam.isRollNumber
+                  ? {
+                      rollNumber: "asc",
+                    }
+                  : {
+                      registerNumber: "asc",
+                    },
               });
               students.Right?.push(...s);
             }),
@@ -2003,9 +2109,13 @@ export async function getAllotments({
                     type: "Circuit",
                   },
                 },
-                orderBy: {
-                  registerNumber: "asc",
-                },
+                orderBy: exam.isRollNumber
+                  ? {
+                      rollNumber: "asc",
+                    }
+                  : {
+                      registerNumber: "asc",
+                    },
               });
               students.Left?.push(...s);
             }),
@@ -2048,9 +2158,13 @@ export async function getAllotments({
                     type: "NonCircuit",
                   },
                 },
-                orderBy: {
-                  registerNumber: "asc",
-                },
+                orderBy: exam.isRollNumber
+                  ? {
+                      rollNumber: "asc",
+                    }
+                  : {
+                      registerNumber: "asc",
+                    },
               });
               students.Right?.push(...s);
             }),
