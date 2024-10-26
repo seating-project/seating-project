@@ -31,6 +31,7 @@ export const examFormSchema = z.object({
   isCommonRoomStrength: z.boolean(),
   isGateSeparate: z.boolean(),
   isRollNumber: z.boolean(),
+  isAcceleratedExam: z.boolean(),
 });
 
 export const studentFormSchema = z.object({
@@ -42,6 +43,7 @@ export const studentFormSchema = z.object({
   degree: z.string(),
   college: z.string(),
   gateStudent: z.boolean(),
+  acceleratedStudent: z.boolean(),
   phoneNumber: z.string().optional(),
 });
 

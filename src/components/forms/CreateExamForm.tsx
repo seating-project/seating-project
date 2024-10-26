@@ -97,6 +97,7 @@ const CreateExamForm = ({
       isCommonRoomStrength: false,
       isGateSeparate: false,
       isRollNumber: false,
+      isAcceleratedExam: false,
       strictlyDivideBuildings: false,
       isPhd: false,
       isDepartmentsTogether: false,
@@ -271,6 +272,7 @@ const CreateExamForm = ({
         isCommonRoomStrength: values.isCommonRoomStrength,
         isGateSeparate: values.isGateSeparate,
         isRollNumber: values.isRollNumber,
+        isAcceleratedExam: values.isAcceleratedExam,
         strictlyDivideBuildings: values.strictlyDivideBuildings,
         isPhd: values.isPhd,
         isDepartmentsTogether: values.isDepartmentsTogether,
@@ -972,6 +974,28 @@ const CreateExamForm = ({
                                     <FormDescription>
                                       If you want to use the roll number instead
                                       of register number, check this box.
+                                    </FormDescription>
+                                  </div>
+                                </FormItem>
+                              )}
+                            />
+
+                            <FormField
+                              control={form.control}
+                              name="isAcceleratedExam"
+                              render={({ field }) => (
+                                <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                                  <FormControl>
+                                    <Checkbox
+                                      checked={field.value}
+                                      onCheckedChange={field.onChange}
+                                    />
+                                  </FormControl>
+                                  <div className="space-y-2 leading-none">
+                                    <FormLabel>Is Accelerated Exam?</FormLabel>
+                                    <FormDescription>
+                                      If this is a accelerated course exam (only
+                                      selected students), check this box.
                                     </FormDescription>
                                   </div>
                                 </FormItem>

@@ -7,6 +7,7 @@ export type Student = {
   year: string;
   degree: string;
   gateStudent: boolean;
+  acceleratedStudent: boolean;
   phoneNumber: string | undefined;
 };
 

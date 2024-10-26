@@ -112,6 +112,7 @@ export const examRouter = createTRPCRouter({
         isCommonRoomStrength: z.boolean(),
         isGateSeparate: z.boolean(),
         isRollNumber: z.boolean(),
+        isAcceleratedExam: z.boolean(),
         // timeTable: z.object(),
         timeTable: z.record(
           z.string(),
@@ -149,6 +150,7 @@ export const examRouter = createTRPCRouter({
           isCommonRoomStrength: input.isCommonRoomStrength,
           isGateSeparate: input.isGateSeparate,
           isRollNumber: input.isRollNumber,
+          isAcceleratedCourses: input.isAcceleratedExam,
           Years: {
             connect: input.years.map((year) => ({
               year: Number(year),
@@ -226,6 +228,7 @@ export const examRouter = createTRPCRouter({
         strictlyDivideBuildings: z.boolean(),
         isCommonRoomStrength: z.boolean(),
         isRollNumber: z.boolean(),
+        isAcceleratedExam: z.boolean(),
         // timeTable: z.object(),
         timeTable: z.record(
           z.string(),
@@ -313,6 +316,7 @@ export const examRouter = createTRPCRouter({
           strictlyDivideBuildings: input.strictlyDivideBuildings,
           isCommonRoomStrength: input.isCommonRoomStrength,
           isRollNumber: input.isRollNumber,
+          isAcceleratedCourses: input.isAcceleratedExam,
           Years: {
             connect: input.years.map((year) => ({
               year: Number(year),

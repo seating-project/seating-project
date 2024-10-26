@@ -36,21 +36,22 @@ model College {
 }
 
 model Student {
-  id             Int        @id @default(autoincrement())
-  name           String
-  registerNumber String     @unique
-  rollNumber     String?    @unique
-  gender         Gender
-  Department     Department @relation(fields: [departmentId], references: [id])
-  Year           Year       @relation(fields: [yearId], references: [id])
-  Degree         Degree     @relation(fields: [degreeId], references: [id])
-  College        College    @relation(fields: [collegeId], references: [id])
-  collegeId      Int
-  departmentId   Int
-  yearId         Int
-  degreeId       Int
-  phone_number   String?
-  gateStudent    Boolean    @default(false)
+  id                 Int        @id @default(autoincrement())
+  name               String
+  registerNumber     String     @unique
+  rollNumber         String?    @unique
+  gender             Gender
+  Department         Department @relation(fields: [departmentId], references: [id])
+  Year               Year       @relation(fields: [yearId], references: [id])
+  Degree             Degree     @relation(fields: [degreeId], references: [id])
+  College            College    @relation(fields: [collegeId], references: [id])
+  collegeId          Int
+  departmentId       Int
+  yearId             Int
+  degreeId           Int
+  phone_number       String?
+  gateStudent        Boolean    @default(false)
+  acceleratedStudent Boolean    @default(false)
 }
 
 model Year {
@@ -171,6 +172,7 @@ model Exam {
   isCombinedWithPracticals   Boolean             @default(false)
   isGateSeparate             Boolean             @default(false)
   isRollNumber               Boolean             @default(false)
+  isAcceleratedCourses       Boolean             @default(false)
   ExamWithPracticalsJSON     Json                @default("{}")
   roomId                     Int?
 }

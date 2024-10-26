@@ -139,6 +139,7 @@ const EditExamForm = ({
       isCommonRoomStrength: exam?.isCommonRoomStrength,
       isGateSeparate: exam?.isGateSeparate,
       isRollNumber: exam?.isRollNumber,
+      isAcceleratedExam: exam?.isAcceleratedCourses,
     },
   });
 
@@ -417,6 +418,7 @@ const EditExamForm = ({
         strictlyDivideBuildings: values.strictlyDivideBuildings,
         isCommonRoomStrength: values.isCommonRoomStrength,
         isRollNumber: values.isRollNumber,
+        isAcceleratedExam: values.isAcceleratedExam,
         timeTable: timetable,
       });
 
@@ -1251,7 +1253,28 @@ const EditExamForm = ({
                                   </div>
                                 </FormItem>
                               )}
-                            />{" "}
+                            />
+                            <FormField
+                              control={form.control}
+                              name="isAcceleratedExam"
+                              render={({ field }) => (
+                                <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                                  <FormControl>
+                                    <Checkbox
+                                      checked={field.value}
+                                      onCheckedChange={field.onChange}
+                                    />
+                                  </FormControl>
+                                  <div className="space-y-2 leading-none">
+                                    <FormLabel>Is Accelerated Exam?</FormLabel>
+                                    <FormDescription>
+                                      If this is a accelerated course exam (only
+                                      selected students), check this box.
+                                    </FormDescription>
+                                  </div>
+                                </FormItem>
+                              )}
+                            />
                             <FormField
                               control={form.control}
                               name="minimumStudentsInRoom"

@@ -132,6 +132,11 @@ export async function getAllotments({
                   type: "Circuit",
                 },
                 collegeId: exam.collegeId,
+                ...(exam.isAcceleratedCourses
+                  ? {
+                      acceleratedStudent: true,
+                    }
+                  : null),
               },
               orderBy: exam.isRollNumber
                 ? {
@@ -193,6 +198,11 @@ export async function getAllotments({
                   type: "NonCircuit",
                 },
                 collegeId: exam.collegeId,
+                ...(exam.isAcceleratedCourses
+                  ? {
+                      acceleratedStudent: true,
+                    }
+                  : null),
               },
               orderBy: exam.isRollNumber
                 ? {
@@ -324,11 +334,11 @@ export async function getAllotments({
                 },
               },
               collegeId: exam.collegeId,
-              // registerNumber: {
-              //   not: {
-              //     in: gaterolls,
-              //   },
-              // },
+              ...(exam.isAcceleratedCourses
+                ? {
+                    acceleratedStudent: true,
+                  }
+                : null),
             },
             orderBy: exam.isRollNumber
               ? {
@@ -450,6 +460,11 @@ export async function getAllotments({
                   },
                   collegeId: exam.collegeId,
                   gender: "Male",
+                  ...(exam.isAcceleratedCourses
+                    ? {
+                        acceleratedStudent: true,
+                      }
+                    : null),
                 },
                 orderBy: exam.isRollNumber
                   ? {
@@ -483,6 +498,11 @@ export async function getAllotments({
                   },
                   collegeId: exam.collegeId,
                   gender: "Male",
+                  ...(exam.isAcceleratedCourses
+                    ? {
+                        acceleratedStudent: true,
+                      }
+                    : null),
                 },
                 orderBy: exam.isRollNumber
                   ? {
@@ -515,6 +535,11 @@ export async function getAllotments({
                   },
                   collegeId: exam.collegeId,
                   gender: "Male",
+                  ...(exam.isAcceleratedCourses
+                    ? {
+                        acceleratedStudent: true,
+                      }
+                    : null),
                 },
                 orderBy: exam.isRollNumber
                   ? {
@@ -561,6 +586,11 @@ export async function getAllotments({
                   },
                   collegeId: exam.collegeId,
                   gender: "Female",
+                  ...(exam.isAcceleratedCourses
+                    ? {
+                        acceleratedStudent: true,
+                      }
+                    : null),
                 },
                 orderBy: exam.isRollNumber
                   ? {
@@ -595,6 +625,11 @@ export async function getAllotments({
                   },
                   collegeId: exam.collegeId,
                   gender: "Female",
+                  ...(exam.isAcceleratedCourses
+                    ? {
+                        acceleratedStudent: true,
+                      }
+                    : null),
                 },
                 orderBy: exam.isRollNumber
                   ? {
@@ -629,6 +664,11 @@ export async function getAllotments({
                   },
                   collegeId: exam.collegeId,
                   gender: "Female",
+                  ...(exam.isAcceleratedCourses
+                    ? {
+                        acceleratedStudent: true,
+                      }
+                    : null),
                 },
                 orderBy: exam.isRollNumber
                   ? {
@@ -984,21 +1024,6 @@ export async function getAllotments({
 
           // Getting the boys data for the left side
           await Promise.all(
-            // exam.DepartmentsLeftBoys.map(async (department) => {
-            //   const s = await db.student.findMany({
-            //     where: {
-            //       yearId: {
-            //         in: exam.Years.map((year) => year.id),
-            //       },
-            //       departmentId: department.id,
-            //       gender: "Male",
-            //     },
-            //     orderBy: {
-            //       registerNumber: "asc",
-            //     },
-            //   });
-            //   students[`Male Left`]?.push(...s);
-            // }),
             Object.keys(departmentsForToday).map(async (year) => {
               const s = await db.student.findMany({
                 where: {
@@ -1014,11 +1039,11 @@ export async function getAllotments({
                   },
                   collegeId: exam.collegeId,
                   gender: "Male",
-                  // registerNumber: {
-                  //   not: {
-                  //     in: gaterolls,
-                  //   },
-                  // },
+                  ...(exam.isAcceleratedCourses
+                    ? {
+                        acceleratedStudent: true,
+                      }
+                    : null),
                 },
                 orderBy: exam.isRollNumber
                   ? {
@@ -1034,21 +1059,6 @@ export async function getAllotments({
 
           // Getting the boys data for the right side
           await Promise.all(
-            // exam.DepartmentsRightBoys.map(async (department) => {
-            //   const s = await db.student.findMany({
-            //     where: {
-            //       yearId: {
-            //         in: exam.Years.map((year) => year.id),
-            //       },
-            //       departmentId: department.id,
-            //       gender: "Male",
-            //     },
-            //     orderBy: {
-            //       registerNumber: "asc",
-            //     },
-            //   });
-            //   students[`Male Right`]?.push(...s);
-            // }),
             Object.keys(departmentsForToday).map(async (year) => {
               const s = await db.student.findMany({
                 where: {
@@ -1064,11 +1074,11 @@ export async function getAllotments({
                   },
                   collegeId: exam.collegeId,
                   gender: "Male",
-                  // registerNumber: {
-                  //   not: {
-                  //     in: gaterolls,
-                  //   },
-                  // },
+                  ...(exam.isAcceleratedCourses
+                    ? {
+                        acceleratedStudent: true,
+                      }
+                    : null),
                 },
                 orderBy: exam.isRollNumber
                   ? {
@@ -1119,24 +1129,6 @@ export async function getAllotments({
 
           // Getting the circuit boy students
           await Promise.all(
-            // exam.Departments.map(async (department) => {
-            //   const s = await db.student.findMany({
-            //     where: {
-            //       yearId: {
-            //         in: exam.Years.map((year) => year.id),
-            //       },
-            //       departmentId: department.id,
-            //       Department: {
-            //         type: "Circuit",
-            //       },
-            //       gender: "Male",
-            //     },
-            //     orderBy: {
-            //       registerNumber: "asc",
-            //     },
-            //   });
-            //   students[`Male Left`]?.push(...s);
-            // }),
             Object.keys(departmentsForToday).map(async (year) => {
               const s = await db.student.findMany({
                 where: {
@@ -1155,11 +1147,11 @@ export async function getAllotments({
                     type: "Circuit",
                   },
                   gender: "Male",
-                  // registerNumber: {
-                  //   not: {
-                  //     in: gaterolls,
-                  //   },
-                  // },
+                  ...(exam.isAcceleratedCourses
+                    ? {
+                        acceleratedStudent: true,
+                      }
+                    : null),
                 },
                 orderBy: exam.isRollNumber
                   ? {
@@ -1175,24 +1167,6 @@ export async function getAllotments({
 
           // Getting the non-circuit boy students
           await Promise.all(
-            // exam.Departments.map(async (department) => {
-            //   const s = await db.student.findMany({
-            //     where: {
-            //       yearId: {
-            //         in: exam.Years.map((year) => year.id),
-            //       },
-            //       departmentId: department.id,
-            //       Department: {
-            //         type: "NonCircuit",
-            //       },
-            //       gender: "Male",
-            //     },
-            //     orderBy: {
-            //       registerNumber: "asc",
-            //     },
-            //   });
-            //   students[`Male Right`]?.push(...s);
-            // }),
             Object.keys(departmentsForToday).map(async (year) => {
               const s = await db.student.findMany({
                 where: {
@@ -1211,11 +1185,11 @@ export async function getAllotments({
                     type: "NonCircuit",
                   },
                   gender: "Male",
-                  // registerNumber: {
-                  //   not: {
-                  //     in: gaterolls,
-                  //   },
-                  // },
+                  ...(exam.isAcceleratedCourses
+                    ? {
+                        acceleratedStudent: true,
+                      }
+                    : null),
                 },
                 orderBy: exam.isRollNumber
                   ? {
@@ -1289,21 +1263,6 @@ export async function getAllotments({
 
           //  Getting the left side girls data
           await Promise.all(
-            // exam.DepartmentsLeftGirls.map(async (department) => {
-            //   const s = await db.student.findMany({
-            //     where: {
-            //       yearId: {
-            //         in: exam.Years.map((year) => year.id),
-            //       },
-            //       departmentId: department.id,
-            //       gender: "Female",
-            //     },
-            //     orderBy: {
-            //       registerNumber: "asc",
-            //     },
-            //   });
-            //   students[`Female Left`]?.push(...s);
-            // }),
             Object.keys(departmentsForToday).map(async (year) => {
               const s = await db.student.findMany({
                 where: {
@@ -1319,11 +1278,11 @@ export async function getAllotments({
                   },
                   collegeId: exam.collegeId,
                   gender: "Female",
-                  // registerNumber: {
-                  //   not: {
-                  //     in: gaterolls,
-                  //   },
-                  // },
+                  ...(exam.isAcceleratedCourses
+                    ? {
+                        acceleratedStudent: true,
+                      }
+                    : null),
                 },
                 orderBy: exam.isRollNumber
                   ? {
@@ -1339,21 +1298,6 @@ export async function getAllotments({
 
           // Getting the right side girls data
           await Promise.all(
-            // exam.DepartmentsRightGirls.map(async (department) => {
-            //   const s = await db.student.findMany({
-            //     where: {
-            //       yearId: {
-            //         in: exam.Years.map((year) => year.id),
-            //       },
-            //       departmentId: department.id,
-            //       gender: "Female",
-            //     },
-            //     orderBy: {
-            //       registerNumber: "asc",
-            //     },
-            //   });
-            //   students[`Female Right`]?.push(...s);
-            // }),
             Object.keys(departmentsForToday).map(async (year) => {
               const s = await db.student.findMany({
                 where: {
@@ -1369,11 +1313,11 @@ export async function getAllotments({
                   },
                   collegeId: exam.collegeId,
                   gender: "Female",
-                  // registerNumber: {
-                  //   not: {
-                  //     in: gaterolls,
-                  //   },
-                  // },
+                  ...(exam.isAcceleratedCourses
+                    ? {
+                        acceleratedStudent: true,
+                      }
+                    : null),
                 },
                 orderBy: exam.isRollNumber
                   ? {
@@ -1423,24 +1367,6 @@ export async function getAllotments({
 
           // Getting the circuit girl students data
           await Promise.all(
-            // exam.Departments.map(async (department) => {
-            //   const s = await db.student.findMany({
-            //     where: {
-            //       yearId: {
-            //         in: exam.Years.map((year) => year.id),
-            //       },
-            //       departmentId: department.id,
-            //       Department: {
-            //         type: "Circuit",
-            //       },
-            //       gender: "Female",
-            //     },
-            //     orderBy: {
-            //       registerNumber: "asc",
-            //     },
-            //   });
-            //   students[`Female Left`]?.push(...s);
-            // }),
             Object.keys(departmentsForToday).map(async (year) => {
               const s = await db.student.findMany({
                 where: {
@@ -1459,11 +1385,11 @@ export async function getAllotments({
                     type: "Circuit",
                   },
                   gender: "Female",
-                  // registerNumber: {
-                  //   not: {
-                  //     in: gaterolls,
-                  //   },
-                  // },
+                  ...(exam.isAcceleratedCourses
+                    ? {
+                        acceleratedStudent: true,
+                      }
+                    : null),
                 },
                 orderBy: exam.isRollNumber
                   ? {
@@ -1479,24 +1405,6 @@ export async function getAllotments({
 
           // Getting the non-circuit girl students data
           await Promise.all(
-            // exam.Departments.map(async (department) => {
-            //   const s = await db.student.findMany({
-            //     where: {
-            //       yearId: {
-            //         in: exam.Years.map((year) => year.id),
-            //       },
-            //       departmentId: department.id,
-            //       Department: {
-            //         type: "NonCircuit",
-            //       },
-            //       gender: "Female",
-            //     },
-            //     orderBy: {
-            //       registerNumber: "asc",
-            //     },
-            //   });
-            //   students[`Female Right`]?.push(...s);
-            // }),
             Object.keys(departmentsForToday).map(async (year) => {
               const s = await db.student.findMany({
                 where: {
@@ -1515,11 +1423,11 @@ export async function getAllotments({
                     type: "NonCircuit",
                   },
                   gender: "Female",
-                  // registerNumber: {
-                  //   not: {
-                  //     in: gaterolls,
-                  //   },
-                  // },
+                  ...(exam.isAcceleratedCourses
+                    ? {
+                        acceleratedStudent: true,
+                      }
+                    : null),
                 },
                 orderBy: exam.isRollNumber
                   ? {
@@ -1737,6 +1645,11 @@ export async function getAllotments({
                     }).map((department) => department.id),
                   },
                   collegeId: exam.collegeId,
+                  ...(exam.isAcceleratedCourses
+                    ? {
+                        acceleratedStudent: true,
+                      }
+                    : null),
                 },
                 orderBy: exam.isRollNumber
                   ? {
@@ -1770,6 +1683,11 @@ export async function getAllotments({
                     }).map((department) => department.id),
                   },
                   collegeId: exam.collegeId,
+                  ...(exam.isAcceleratedCourses
+                    ? {
+                        acceleratedStudent: true,
+                      }
+                    : null),
                 },
                 orderBy: exam.isRollNumber
                   ? {
@@ -1808,6 +1726,11 @@ export async function getAllotments({
                     }).map((department) => department.id),
                   },
                   collegeId: exam.collegeId,
+                  ...(exam.isAcceleratedCourses
+                    ? {
+                        acceleratedStudent: true,
+                      }
+                    : null),
                 },
                 orderBy: exam.isRollNumber
                   ? {
@@ -1982,6 +1905,11 @@ export async function getAllotments({
                     }).map((department) => department.id),
                   },
                   collegeId: exam.collegeId,
+                  ...(exam.isAcceleratedCourses
+                    ? {
+                        acceleratedStudent: true,
+                      }
+                    : null),
                 },
                 orderBy: exam.isRollNumber
                   ? {
@@ -1997,20 +1925,6 @@ export async function getAllotments({
 
           // Getting the right side students data
           await Promise.all(
-            // exam.DepartmentsRightBoys.map(async (department) => {
-            //   const s = await db.student.findMany({
-            //     where: {
-            //       yearId: {
-            //         in: exam.Years.map((year) => year.id),
-            //       },
-            //       departmentId: department.id,
-            //     },
-            //     orderBy: {
-            //       registerNumber: "asc",
-            //     },
-            //   });
-            //   students.Right?.push(...s);
-            // }),
             Object.keys(departmentsForToday).map(async (year) => {
               const s = await db.student.findMany({
                 where: {
@@ -2025,6 +1939,11 @@ export async function getAllotments({
                     }).map((department) => department.id),
                   },
                   collegeId: exam.collegeId,
+                  ...(exam.isAcceleratedCourses
+                    ? {
+                        acceleratedStudent: true,
+                      }
+                    : null),
                 },
                 orderBy: exam.isRollNumber
                   ? {
@@ -2074,23 +1993,6 @@ export async function getAllotments({
 
           // Getting the circuit students data
           await Promise.all(
-            // exam.Departments.map(async (department) => {
-            //   const s = await db.student.findMany({
-            //     where: {
-            //       yearId: {
-            //         in: exam.Years.map((year) => year.id),
-            //       },
-            //       departmentId: department.id,
-            //       Department: {
-            //         type: "Circuit",
-            //       },
-            //     },
-            //     orderBy: {
-            //       registerNumber: "asc",
-            //     },
-            //   });
-            //   students.Left?.push(...s);
-            // }),
             Object.keys(departmentsForToday).map(async (year) => {
               const s = await db.student.findMany({
                 where: {
@@ -2108,6 +2010,11 @@ export async function getAllotments({
                   Department: {
                     type: "Circuit",
                   },
+                  ...(exam.isAcceleratedCourses
+                    ? {
+                        acceleratedStudent: true,
+                      }
+                    : null),
                 },
                 orderBy: exam.isRollNumber
                   ? {
@@ -2123,23 +2030,6 @@ export async function getAllotments({
 
           // Getting the non-circuit students data
           await Promise.all(
-            // exam.Departments.map(async (department) => {
-            //   const s = await db.student.findMany({
-            //     where: {
-            //       yearId: {
-            //         in: exam.Years.map((year) => year.id),
-            //       },
-            //       departmentId: department.id,
-            //       Department: {
-            //         type: "NonCircuit",
-            //       },
-            //     },
-            //     orderBy: {
-            //       registerNumber: "asc",
-            //     },
-            //   });
-            //   students.Right?.push(...s);
-            // }),
             Object.keys(departmentsForToday).map(async (year) => {
               const s = await db.student.findMany({
                 where: {
@@ -2157,6 +2047,11 @@ export async function getAllotments({
                   Department: {
                     type: "NonCircuit",
                   },
+                  ...(exam.isAcceleratedCourses
+                    ? {
+                        acceleratedStudent: true,
+                      }
+                    : null),
                 },
                 orderBy: exam.isRollNumber
                   ? {

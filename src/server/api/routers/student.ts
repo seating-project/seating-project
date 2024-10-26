@@ -75,6 +75,7 @@ export const studentRouter = createTRPCRouter({
         college: z.string(),
         year: z.number(),
         gateStudent: z.boolean(),
+        acceleratedStudent: z.boolean(),
         phoneNumber: z.string().optional(),
       }),
     )
@@ -106,6 +107,7 @@ export const studentRouter = createTRPCRouter({
           phone_number: input.phoneNumber,
           gender: input.gender as Gender,
           gateStudent: input.gateStudent,
+          acceleratedStudent: input.acceleratedStudent,
         },
       });
       return createStudent;
@@ -122,6 +124,7 @@ export const studentRouter = createTRPCRouter({
         degree: z.string(),
         year: z.number(),
         gateStudent: z.boolean(),
+        acceleratedStudent: z.boolean(),
         phoneNumber: z.string().optional(),
       }),
     )
@@ -149,6 +152,7 @@ export const studentRouter = createTRPCRouter({
           phone_number: input.phoneNumber,
           gender: input.gender as Gender,
           gateStudent: input.gateStudent,
+          acceleratedStudent: input.acceleratedStudent,
         },
       });
       return updateStudent;

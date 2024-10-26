@@ -60,6 +60,7 @@ const UpdateStudentForm = ({ student, departments, years, degrees }: Props) => {
       year: student.year,
       gender: student.gender,
       gateStudent: student.gateStudent,
+      acceleratedStudent: student.acceleratedStudent,
     },
   });
 
@@ -79,6 +80,7 @@ const UpdateStudentForm = ({ student, departments, years, degrees }: Props) => {
         year: Number(values.year),
         gender: values.gender,
         gateStudent: values.gateStudent,
+        acceleratedStudent: values.acceleratedStudent,
       });
 
       if (updateStudent) {
@@ -200,6 +202,27 @@ const UpdateStudentForm = ({ student, departments, years, degrees }: Props) => {
                   <FormLabel>Is Gate Student?</FormLabel>
                   <FormDescription>
                     Check this if the student is a GATE student
+                  </FormDescription>
+                </div>
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="acceleratedStudent"
+            render={({ field }) => (
+              <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                <FormControl>
+                  <Checkbox
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                  />
+                </FormControl>
+                <div className="space-y-2 leading-none">
+                  <FormLabel>Is Accelerated Student?</FormLabel>
+                  <FormDescription>
+                    Check this if the student is an Accelerated student
                   </FormDescription>
                 </div>
               </FormItem>

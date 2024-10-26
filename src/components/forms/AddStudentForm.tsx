@@ -47,17 +47,21 @@ type Props = {
 const AddStudentForm = ({ departments, years, degrees, colleges }: Props) => {
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
+  const utils = api.useUtils();
   const form = useForm<z.infer<typeof studentFormSchema>>({
     resolver: zodResolver(studentFormSchema),
     defaultValues: {
       phoneNumber: "",
       gateStudent: false,
+      acceleratedStudent: false,
     },
   });
 
   const createStudent = api.student.createStudent.useMutation({
-    onSuccess: () => {
+    onSuccess: async () => {
       router.refresh();
+      await utils.student.invalidate();
+      router.push("/students");
     },
   });
 
@@ -75,6 +79,7 @@ const AddStudentForm = ({ departments, years, degrees, colleges }: Props) => {
         degree: values.degree,
         college: values.college,
         gateStudent: values.gateStudent,
+        acceleratedStudent: values.acceleratedStudent,
       });
       if (createStudent) {
         toast({
@@ -191,6 +196,26 @@ const AddStudentForm = ({ departments, years, degrees, colleges }: Props) => {
                   <FormLabel>Is Gate Student?</FormLabel>
                   <FormDescription>
                     Check this if the student is a GATE student
+                  </FormDescription>
+                </div>
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="acceleratedStudent"
+            render={({ field }) => (
+              <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                <FormControl>
+                  <Checkbox
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                  />
+                </FormControl>
+                <div className="space-y-2 leading-none">
+                  <FormLabel>Is Accelerated Student?</FormLabel>
+                  <FormDescription>
+                    Check this if the student is an accelerated student
                   </FormDescription>
                 </div>
               </FormItem>

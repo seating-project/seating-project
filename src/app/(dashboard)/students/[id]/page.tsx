@@ -30,6 +30,7 @@ export default async function StudentPage({ params }: Props) {
     year: String(studentCurrent?.Year.year),
     degree: studentCurrent?.Degree.degree ?? "",
     gateStudent: studentCurrent?.gateStudent ?? false,
+    acceleratedStudent: studentCurrent?.acceleratedStudent ?? false,
   };
 
   const departments = await api.department.getDepartments.query();
