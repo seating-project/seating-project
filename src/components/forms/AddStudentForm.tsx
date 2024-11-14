@@ -73,6 +73,7 @@ const AddStudentForm = ({ departments, years, degrees, colleges }: Props) => {
       await createStudent.mutateAsync({
         name: values.name,
         registerNumber: values.registerNumber,
+        rollNumber: values.rollNumber,
         gender: values.gender,
         department: values.department,
         year: Number(values.year),
@@ -103,7 +104,7 @@ const AddStudentForm = ({ departments, years, degrees, colleges }: Props) => {
             name="name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Username</FormLabel>
+                <FormLabel>Name</FormLabel>
                 <FormControl>
                   <Input placeholder="Roshan" {...field} disabled={isPending} />
                 </FormControl>
@@ -127,6 +128,27 @@ const AddStudentForm = ({ departments, years, degrees, colleges }: Props) => {
                 </FormControl>
                 <FormDescription>
                   This is your student register number
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="rollNumber"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Roll Number</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="Roll Number"
+                    {...field}
+                    disabled={isPending}
+                  />
+                </FormControl>
+                <FormDescription>
+                  This is your student roll number
                 </FormDescription>
                 <FormMessage />
               </FormItem>

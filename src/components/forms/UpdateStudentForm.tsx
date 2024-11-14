@@ -54,6 +54,7 @@ const UpdateStudentForm = ({ student, departments, years, degrees }: Props) => {
     defaultValues: {
       name: student.name,
       registerNumber: student.registerNumber,
+      rollNumber: student.rollNumber ?? "",
       phoneNumber: student.phoneNumber ?? "",
       degree: student.degree,
       department: student.department,
@@ -74,6 +75,7 @@ const UpdateStudentForm = ({ student, departments, years, degrees }: Props) => {
         id: student.id,
         name: values.name,
         registerNumber: values.registerNumber,
+        rollNumber: values.rollNumber,
         phoneNumber: values.phoneNumber ?? "",
         degree: values.degree,
         department: values.department,
@@ -129,6 +131,27 @@ const UpdateStudentForm = ({ student, departments, years, degrees }: Props) => {
                 </FormControl>
                 <FormDescription>
                   This is your student register number
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="rollNumber"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Roll Number</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="Roll Number"
+                    {...field}
+                    disabled={isPending}
+                  />
+                </FormControl>
+                <FormDescription>
+                  This is your student roll number
                 </FormDescription>
                 <FormMessage />
               </FormItem>

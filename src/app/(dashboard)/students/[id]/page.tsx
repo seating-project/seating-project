@@ -24,6 +24,7 @@ export default async function StudentPage({ params }: Props) {
     id: studentCurrent?.id ?? 0,
     name: studentCurrent?.name ?? "",
     registerNumber: studentCurrent?.registerNumber ?? "",
+    rollNumber: studentCurrent?.rollNumber ?? "",
     gender: studentCurrent?.gender ?? "",
     phoneNumber: studentCurrent?.phone_number ?? "",
     department: studentCurrent?.Department.branch ?? "",

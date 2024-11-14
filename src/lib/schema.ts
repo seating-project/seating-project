@@ -37,6 +37,7 @@ export const examFormSchema = z.object({
 export const studentFormSchema = z.object({
   name: z.string(),
   registerNumber: z.string(),
+  rollNumber: z.string().optional(),
   gender: z.string(),
   department: z.string(),
   year: z.string(),

@@ -2,6 +2,7 @@ export type Student = {
   id: number;
   name: string;
   registerNumber: string;
+  rollNumber: string | undefined;
   gender: string;
   department: string;
   year: string;

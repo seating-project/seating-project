@@ -69,6 +69,7 @@ export const studentRouter = createTRPCRouter({
       z.object({
         name: z.string(),
         registerNumber: z.string(),
+        rollNumber: z.string().optional(),
         gender: z.string(),
         department: z.string(),
         degree: z.string(),
@@ -84,6 +85,7 @@ export const studentRouter = createTRPCRouter({
         data: {
           name: input.name,
           registerNumber: input.registerNumber,
+          rollNumber: input.rollNumber,
           Department: {
             connect: {
               branch: input.department,
@@ -119,6 +121,7 @@ export const studentRouter = createTRPCRouter({
         id: z.number(),
         name: z.string(),
         registerNumber: z.string(),
+        rollNumber: z.string().optional(),
         gender: z.string(),
         department: z.string(),
         degree: z.string(),
@@ -134,6 +137,7 @@ export const studentRouter = createTRPCRouter({
         data: {
           name: input.name,
           registerNumber: input.registerNumber,
+          rollNumber: input.rollNumber,
           Department: {
             connect: {
               branch: input.department,
