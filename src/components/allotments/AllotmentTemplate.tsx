@@ -31,9 +31,14 @@ const AllotmentTemplate = ({
   if (!exam || !template || !allotments || !logo || !departments) {
     return null;
   }
+
+  const sortedRoomKeys = Object.keys(allotments).sort(
+    (a, b) => exam.roomOrderArray.indexOf(a) - exam.roomOrderArray.indexOf(b),
+  );
+
   return (
     <div className="">
-      {Object.keys(allotments)?.map((allotment) => {
+      {sortedRoomKeys?.map((allotment) => {
         let currentIndex = 0;
         let alternateFlag = false;
         let tableCount = 1;
