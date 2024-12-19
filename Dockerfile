@@ -35,7 +35,7 @@ COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
 #   else echo "Lockfile not found." && exit 1; \
 #   fi
 RUN npm i -g pnpm && pnpm i;
-RUN yarn puppeteer browsers install chrome
+RUN pnpm puppeteer browsers install chrome
 
 # Rebuild the source code only when needed
 FROM base AS builder
