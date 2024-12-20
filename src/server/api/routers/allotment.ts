@@ -292,8 +292,12 @@ export const allotmentRouter = createTRPCRouter({
         if (deptHallplans) {
           hallplans[department] = deptHallplans.sort((a, b) => {
             return (
-              exam?.RoomsOrder.findIndex((room) => Object.keys(a)[0] === room.number) -
-              exam?.RoomsOrder.findIndex((room) => Object.keys(b)[0] === room.number)
+              exam?.roomOrderArray.findIndex(
+                (room) => Object.keys(a)[0] === room,
+              ) -
+              exam?.roomOrderArray.findIndex(
+                (room) => Object.keys(b)[0] === room,
+              )
             );
           });
         }

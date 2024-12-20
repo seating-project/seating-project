@@ -43,6 +43,24 @@ const HallPlanDocument = async ({ exam, template, date, gender }: Props) => {
 
   console.log("HALLPLAN", hallplan);
   let overallTotalCount = 0;
+
+  const departmentOrder = exam.departmentOrderArray;
+
+  const departmentsInThisOrder = departmentOrder.flatMap((deptShortName) =>
+    exam.Years.map((year) => {
+      const d = departments.find((dept) => dept.shortName === deptShortName);
+      return `${d?.id} ${year.year}`;
+    }),
+  );
+
+  const hallPlanKeys = Object.keys(hallplan[gender]);
+  // Sort based on departmentsInThisOrder
+  hallPlanKeys.sort((a, b) => {
+    return (
+      departmentsInThisOrder.indexOf(a) - departmentsInThisOrder.indexOf(b)
+    );
+  });
+
   return (
     <div>
       <Page>
@@ -128,7 +146,7 @@ const HallPlanDocument = async ({ exam, template, date, gender }: Props) => {
               </TableHead>
             </TableRow>
           </TableHeader>
-          {Object.keys(hallplan[gender])?.map((departmentYear) => {
+          {hallPlanKeys?.map((departmentYear) => {
             const department = departments.find((dept) => {
               return dept.id === Number(departmentYear.split(" ")[0]);
             });

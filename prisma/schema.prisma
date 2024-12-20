@@ -161,6 +161,7 @@ model Exam {
   randomizeEveryNRooms       Int                 @default(0)
   RoomsOrder                 Room[]              @relation("RoomsOrder")
   roomOrderArray             String[]            @default([])
+  departmentOrderArray       String[]            @default([])
   deptLeftBoysArray          String[]            @default([])
   deptRightBoysArray         String[]            @default([])
   deptLeftGirlsArray         String[]            @default([])
