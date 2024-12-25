@@ -51,7 +51,7 @@ import {
 } from "@/components/ui/table";
 import { toast } from "@/components/ui/use-toast";
 import { examFormSchema } from "@/lib/schema";
-import { cn, convertToISODate, generateDateRange } from "@/lib/utils";
+import { cn, generateDateRange } from "@/lib/utils";
 import { api } from "@/trpc/react";
 import { type Option, type Template, type TimeTable } from "@/types";
 
@@ -1167,13 +1167,7 @@ const CreateExamForm = ({
                                               value={
                                                 timeTable?.[year]?.[
                                                   department
-                                                ]?.[
-                                                  convertToISODate(
-                                                    date
-                                                      .toLocaleString()
-                                                      .slice(0, 10),
-                                                  ) ?? ""
-                                                ] ?? ""
+                                                ]?.[date.toISOString()] ?? ""
                                               }
                                               onChange={(event) => {
                                                 setTimeTable({
@@ -1184,11 +1178,7 @@ const CreateExamForm = ({
                                                       ...timeTable?.[year]?.[
                                                         department
                                                       ],
-                                                      [convertToISODate(
-                                                        date
-                                                          .toLocaleString()
-                                                          .slice(0, 10),
-                                                      ) ?? ""]:
+                                                      [date.toISOString()]:
                                                         event.target.value,
                                                     },
                                                   },

@@ -37,7 +37,16 @@ const HallPlans = ({ exam, dates }: Props) => {
                   return (
                     <Card className="w-96" key={date}>
                       <CardHeader>
-                        <CardTitle>Hall Plan for all ({date})</CardTitle>
+                        <CardTitle>
+                          Hall Plan for all (
+                          {new Date(date).toLocaleDateString("en-IN", {
+                            weekday: "long",
+                            year: "numeric",
+                            month: "long",
+                            day: "numeric",
+                          })}
+                          )
+                        </CardTitle>
                       </CardHeader>
                       <CardContent>
                         <div className="flex items-center  space-x-4">
@@ -66,7 +75,16 @@ const HallPlans = ({ exam, dates }: Props) => {
                     <div key={date}>
                       <Card className="w-96">
                         <CardHeader>
-                          <CardTitle>Hall Plan for Boys ({date})</CardTitle>
+                          <CardTitle>
+                            Hall Plan for Boys (
+                            {new Date(date).toLocaleDateString("en-IN", {
+                              weekday: "long",
+                              year: "numeric",
+                              month: "long",
+                              day: "numeric",
+                            })}
+                            )
+                          </CardTitle>
                         </CardHeader>
                         <CardContent>
                           <div className="flex items-center  space-x-4">
@@ -92,7 +110,16 @@ const HallPlans = ({ exam, dates }: Props) => {
                       </Card>
                       <Card className="w-96">
                         <CardHeader>
-                          <CardTitle>Hall Plan for Girls ({date})</CardTitle>
+                          <CardTitle>
+                            Hall Plan for Girls (
+                            {new Date(date).toLocaleDateString("en-IN", {
+                              weekday: "long",
+                              year: "numeric",
+                              month: "long",
+                              day: "numeric",
+                            })}
+                            )
+                          </CardTitle>
                         </CardHeader>
                         <CardContent>
                           <div className="flex items-center  space-x-4">

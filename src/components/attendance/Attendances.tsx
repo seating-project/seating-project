@@ -51,13 +51,24 @@ const Attendances = async ({ examId, timetable }: Props) => {
             {dateRangesWithDifferences.map((dateRange, index) => {
               if (dateRange[0] === dateRange[1]) {
                 return (
-                  <Card key={index} className="w-full flex space-x-2 items-center">
+                  <Card
+                    key={index}
+                    className="flex w-full items-center space-x-2"
+                  >
                     <CardHeader>
-                      <CardTitle>Attendance for {dateRange[0]}</CardTitle>
+                      <CardTitle>
+                        Attendance for{" "}
+                        {new Date(dateRange[0]).toLocaleDateString("en-IN", {
+                          weekday: "long",
+                          year: "numeric",
+                          month: "long",
+                          day: "numeric",
+                        })}
+                      </CardTitle>
                       <CardDescription></CardDescription>
                     </CardHeader>
                     <CardContent className="flex flex-row">
-                      <div className="flex flex-row gap-2 item-center" >
+                      <div className="item-center flex flex-row gap-2">
                         {rooms[index]?.map((room, index) => {
                           return (
                             <div key={index}>
@@ -77,15 +88,31 @@ const Attendances = async ({ examId, timetable }: Props) => {
                 );
               } else {
                 return (
-                  <Card key={index} className="w-full flex space-x-2 items-center">
+                  <Card
+                    key={index}
+                    className="flex w-full items-center space-x-2"
+                  >
                     <CardHeader>
                       <CardTitle>
-                        Attendance for {dateRange[0]} to {dateRange[1]}
+                        Attendance for{" "}
+                        {new Date(dateRange[0]).toLocaleDateString("en-IN", {
+                          weekday: "long",
+                          year: "numeric",
+                          month: "long",
+                          day: "numeric",
+                        })}{" "}
+                        to{" "}
+                        {new Date(dateRange[1]).toLocaleDateString("en-IN", {
+                          weekday: "long",
+                          year: "numeric",
+                          month: "long",
+                          day: "numeric",
+                        })}
                       </CardTitle>
                       <CardDescription></CardDescription>
                     </CardHeader>
                     <CardContent className="flex flex-row">
-                      <div className="flex flex-row gap-2 flex-wrap ">
+                      <div className="flex flex-row flex-wrap gap-2 ">
                         {rooms[index]?.map((room, index) => {
                           return (
                             <div key={index}>

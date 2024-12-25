@@ -36,7 +36,15 @@ const Allotments = ({ examId, dates }: Props) => {
               return (
                 <Card key={date} className="w-96">
                   <CardHeader>
-                    <CardTitle>Allotments for {date}</CardTitle>
+                    <CardTitle>
+                      Allotments for{" "}
+                      {new Date(date).toLocaleDateString("en-IN", {
+                        weekday: "long",
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                      })}
+                    </CardTitle>
                   </CardHeader>
                   <CardContent>
                     <div className="flex items-center  space-x-4">

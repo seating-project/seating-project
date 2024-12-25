@@ -51,7 +51,7 @@ import {
 } from "@/components/ui/table";
 import { toast } from "@/components/ui/use-toast";
 import { examFormSchema } from "@/lib/schema";
-import { cn, convertToISODate, generateDateRange } from "@/lib/utils";
+import { cn, generateDateRange } from "@/lib/utils";
 import { api } from "@/trpc/react";
 import type { RouterOutputs } from "@/trpc/shared";
 import { type Option, type Template, type TimeTable } from "@/types";
@@ -1462,11 +1462,7 @@ const EditExamForm = ({
                                             type="text"
                                             value={
                                               timeTable?.[year]?.[department]?.[
-                                                convertToISODate(
-                                                  date
-                                                    .toLocaleString()
-                                                    .slice(0, 10),
-                                                ) ?? ""
+                                                date.toISOString()
                                               ] ?? ""
                                             }
                                             onChange={(event) => {
@@ -1480,11 +1476,7 @@ const EditExamForm = ({
 
                                                 // Convert the date to ISO format
                                                 const isoDate =
-                                                  convertToISODate(
-                                                    date
-                                                      .toLocaleString()
-                                                      .slice(0, 10),
-                                                  ) ?? "";
+                                                  date.toISOString();
 
                                                 // Check if the year and department exist in the timeTable
                                                 if (
@@ -1533,11 +1525,7 @@ const EditExamForm = ({
                                                       ...timeTable?.[year]?.[
                                                         department
                                                       ],
-                                                      [convertToISODate(
-                                                        date
-                                                          .toLocaleString()
-                                                          .slice(0, 10),
-                                                      ) ?? ""]:
+                                                      [date.toISOString()]:
                                                         event.target.value,
                                                     },
                                                   },

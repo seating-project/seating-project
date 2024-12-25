@@ -100,7 +100,13 @@ const HallPlanDocument = async ({ exam, template, date }: Props) => {
                 className="border border-black text-center text-black"
                 colSpan={1}
               >
-                Date: {date}
+                Date:{" "}
+                {new Date(date).toLocaleDateString("en-IN", {
+                  weekday: "long",
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                })}
               </TableHead>
               <TableHead
                 className="border border-black text-center text-black"

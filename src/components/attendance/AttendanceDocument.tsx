@@ -79,7 +79,7 @@ const AttendanceDocument = async ({ exam, template, date, room }: Props) => {
     const end = new Date(dateRange[1] ?? "");
     const dates = [];
     for (let date = start; date <= end; date.setDate(date.getDate() + 1)) {
-      if (datesThatHaveExams.includes(date.toISOString().split("T")[0] ?? ""))
+      if (datesThatHaveExams.includes(date.toISOString()))
         dates.push(new Date(date));
     }
     return dates;
