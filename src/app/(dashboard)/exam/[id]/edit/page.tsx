@@ -4,24 +4,25 @@ import EditExamForm from "@/components/forms/EditExamForm";
 import { api } from "@/trpc/server";
 
 type Props = {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 };
 
 const ExamEditPage = async (props: Props) => {
-  const exam = await api.exam.getExamById.query({
-    id: Number(props.params.id),
+  const params = await props.params;
+  const exam = await api.exam.getExamById({
+    id: Number(params.id),
   });
 
-  const departments = await api.department.getDepartments.query();
+  const departments = await api.department.getDepartments();
   const requiredDepartments = departments.map((department) => ({
     value: department.shortName,
     label: department.shortName,
   }));
   requiredDepartments.sort((a, b) => a.value.localeCompare(b.value));
 
-  const templates = await api.template.getTemplatesIncludingRooms.query();
+  const templates = await api.template.getTemplatesIncludingRooms();
   const requiredTemplates = templates.map((template) => ({
     value: template.name,
     label: template.name,
@@ -31,13 +32,13 @@ const ExamEditPage = async (props: Props) => {
     ...template,
   }));
 
-  const years = await api.year.getYears.query();
+  const years = await api.year.getYears();
   const requiredYears = years.map((year) => ({
     value: String(year.year),
     label: String(year.year),
   }));
 
-  const colleges = await api.college.getColleges.query();
+  const colleges = await api.college.getColleges();
   const requiredColleges = colleges.map((college) => ({
     value: college.name,
     label: college.name,

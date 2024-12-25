@@ -1,20 +1,17 @@
 import React from "react";
-import Image from "next/image";
 
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableRow,
-} from "@/components/ui/table";
+// import Image from "next/image";
+
+import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
+import { env } from "@/env";
 
 type Props = {
   image: string;
   examName: string | undefined;
   roomNumber: string | undefined;
   date: string;
-  startTime: Date | undefined;
-  endTime: Date | undefined;
+  startTime: Date | string | undefined;
+  endTime: Date | string | undefined;
 };
 
 const AllotmentHeader = ({
@@ -25,24 +22,27 @@ const AllotmentHeader = ({
   startTime,
   endTime,
 }: Props) => {
-  console.log(
-    startTime?.toLocaleTimeString("en-US", { timeZone: "Asia/Kolkata" }),
-  );
-
   let session = "FN";
+  if (!(startTime instanceof Date)) {
+    startTime = new Date(startTime!);
+  }
+  if (!(endTime instanceof Date)) {
+    endTime = new Date(endTime!);
+  }
   if (
     startTime
-      ?.toLocaleTimeString("en-US", { timeZone: "Asia/Kolkata" })
-      ?.includes("PM")
+      .toLocaleTimeString("en-US", { timeZone: "Asia/Kolkata" })
+      .includes("PM")
   ) {
     session = "AN";
   }
 
   return (
     <div className="space-y-2">
-      <div className="flex w-full items-center justify-between  ">
-        <Image
-          src={image}
+      <div className="flex w-full items-center justify-between">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={`${env.BASE_URL}/${image}`}
           width={400}
           height={400}
           alt="dasd"
@@ -75,7 +75,7 @@ const AllotmentHeader = ({
                 </p>
               </div>
             </TableCell>
-            <TableCell className="border border-black ">
+            <TableCell className="border border-black">
               <div className="flex">
                 <p className="font-bold">Session: &nbsp;</p>
                 <p>{session}</p>

@@ -62,7 +62,7 @@ import {
 } from "@/components/ui/table";
 import { useToast } from "@/components/ui/use-toast";
 import { api } from "@/trpc/react";
-import type { RouterOutputs } from "@/trpc/shared";
+import type { RouterOutputs } from "@/trpc/react";
 
 type Props = {
   data: RouterOutputs["exam"]["getLatestExamsAdminTable"];
@@ -261,7 +261,7 @@ const ExamTable = (props: Props) => {
   return (
     <div className="w-full dark:text-white">
       <div className="flex items-center justify-between pb-4">
-        <div className="flex gap-x-2  ">
+        <div className="flex gap-x-2">
           <Input
             placeholder="Filter records..."
             value={
@@ -297,7 +297,7 @@ const ExamTable = (props: Props) => {
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
-        <div className="flex items-center gap-x-2 ">
+        <div className="flex items-center gap-x-2">
           {!(table.getFilteredSelectedRowModel().rows.length === 0) && (
             <Button
               aria-label="Delete selected rows"
@@ -307,6 +307,7 @@ const ExamTable = (props: Props) => {
               onClick={() => {
                 startTransition(() => {
                   try {
+                    // eslint-disable-next-line
                     table.getSelectedRowModel().rows.map(
                       async (row) =>
                         await deleteExam.mutateAsync({
@@ -315,6 +316,7 @@ const ExamTable = (props: Props) => {
                     );
                     router.refresh();
                   } catch (error) {
+                    // eslint-disable-next-line
                     error instanceof Error
                       ? toast({
                           title: "Oops!",

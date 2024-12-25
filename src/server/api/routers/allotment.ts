@@ -135,12 +135,12 @@ export const allotmentRouter = createTRPCRouter({
                 Object.values(
                   hallplans[
                     String(student[0]?.departmentId + " " + student[0]?.yearId)
-                  ]?.filter((hall) => Object.keys(hall)[0] === room)[0] ?? {},
+                  ]?.find((hall) => Object.keys(hall)[0] === room) ?? {},
                 )[0]!.strength += 1;
                 Object.values(
                   hallplans[
                     String(student[0]?.departmentId + " " + student[0]?.yearId)
-                  ]?.filter((hall) => Object.keys(hall)[0] === room)[0] ?? {},
+                  ]?.find((hall) => Object.keys(hall)[0] === room) ?? {},
                 )[0]!.endRegisterNumber = student[0]?.registerNumber ?? "";
               }
             }
@@ -188,14 +188,14 @@ export const allotmentRouter = createTRPCRouter({
                       String(
                         student[0]?.departmentId + " " + student[0]?.yearId,
                       )
-                    ]?.filter((hall) => Object.keys(hall)[0] === room)[0] ?? {},
+                    ]?.find((hall) => Object.keys(hall)[0] === room) ?? {},
                   )[0]!.strength += 1;
                   Object.values(
                     hallplans[
                       String(
                         student[0]?.departmentId + " " + student[0]?.yearId,
                       )
-                    ]?.filter((hall) => Object.keys(hall)[0] === room)[0] ?? {},
+                    ]?.find((hall) => Object.keys(hall)[0] === room) ?? {},
                   )[0]!.endRegisterNumber = student[0]?.registerNumber ?? "";
                 }
               }
@@ -260,16 +260,14 @@ export const allotmentRouter = createTRPCRouter({
                         String(
                           student[1]?.departmentId + " " + student[1]?.yearId,
                         )
-                      ]?.filter((hall) => Object.keys(hall)[0] === room)[0] ??
-                        {},
+                      ]?.find((hall) => Object.keys(hall)[0] === room) ?? {},
                     )[0]!.strength += 1;
                     Object.values(
                       hallplans[
                         String(
                           student[1]?.departmentId + " " + student[1]?.yearId,
                         )
-                      ]?.filter((hall) => Object.keys(hall)[0] === room)[0] ??
-                        {},
+                      ]?.find((hall) => Object.keys(hall)[0] === room) ?? {},
                     )[0]!.endRegisterNumber = student[1]?.registerNumber ?? "";
                   }
                 }
@@ -428,14 +426,14 @@ export const allotmentRouter = createTRPCRouter({
                       String(
                         student[0]?.departmentId + " " + student[0]?.yearId,
                       )
-                    ]?.filter((hall) => Object.keys(hall)[0] === room)[0] ?? {},
+                    ]?.find((hall) => Object.keys(hall)[0] === room) ?? {},
                   )[0]!.strength += 1;
                   Object.values(
                     hallplans.girls[
                       String(
                         student[0]?.departmentId + " " + student[0]?.yearId,
                       )
-                    ]?.filter((hall) => Object.keys(hall)[0] === room)[0] ?? {},
+                    ]?.find((hall) => Object.keys(hall)[0] === room) ?? {},
                   )[0]!.endRegisterNumber = student[0]?.registerNumber ?? "";
                 }
               }
@@ -500,16 +498,14 @@ export const allotmentRouter = createTRPCRouter({
                         String(
                           student[1]?.departmentId + " " + student[1]?.yearId,
                         )
-                      ]?.filter((hall) => Object.keys(hall)[0] === room)[0] ??
-                        {},
+                      ]?.find((hall) => Object.keys(hall)[0] === room) ?? {},
                     )[0]!.strength += 1;
                     Object.values(
                       hallplans.girls[
                         String(
                           student[1]?.departmentId + " " + student[1]?.yearId,
                         )
-                      ]?.filter((hall) => Object.keys(hall)[0] === room)[0] ??
-                        {},
+                      ]?.find((hall) => Object.keys(hall)[0] === room) ?? {},
                     )[0]!.endRegisterNumber = student[1]?.registerNumber ?? "";
                   }
                 }
@@ -561,14 +557,14 @@ export const allotmentRouter = createTRPCRouter({
                       String(
                         student[0]?.departmentId + " " + student[0]?.yearId,
                       )
-                    ]?.filter((hall) => Object.keys(hall)[0] === room)[0] ?? {},
+                    ]?.find((hall) => Object.keys(hall)[0] === room) ?? {},
                   )[0]!.strength += 1;
                   Object.values(
                     hallplans.boys[
                       String(
                         student[0]?.departmentId + " " + student[0]?.yearId,
                       )
-                    ]?.filter((hall) => Object.keys(hall)[0] === room)[0] ?? {},
+                    ]?.find((hall) => Object.keys(hall)[0] === room) ?? {},
                   )[0]!.endRegisterNumber = student[0]?.registerNumber ?? "";
                 }
               }
@@ -633,16 +629,14 @@ export const allotmentRouter = createTRPCRouter({
                         String(
                           student[1]?.departmentId + " " + student[1]?.yearId,
                         )
-                      ]?.filter((hall) => Object.keys(hall)[0] === room)[0] ??
-                        {},
+                      ]?.find((hall) => Object.keys(hall)[0] === room) ?? {},
                     )[0]!.strength += 1;
                     Object.values(
                       hallplans.boys[
                         String(
                           student[1]?.departmentId + " " + student[1]?.yearId,
                         )
-                      ]?.filter((hall) => Object.keys(hall)[0] === room)[0] ??
-                        {},
+                      ]?.find((hall) => Object.keys(hall)[0] === room) ?? {},
                     )[0]!.endRegisterNumber = student[1]?.registerNumber ?? "";
                   }
                 }

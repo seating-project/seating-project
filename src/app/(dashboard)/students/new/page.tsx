@@ -9,7 +9,7 @@ import { api } from "@/trpc/server";
 import AddStudentForm from "@/components/forms/AddStudentForm";
 
 export default async function AddStudentPage() {
-  const departments = await api.department.getDepartments.query();
+  const departments = await api.department.getDepartments();
   const requiredDepartments = departments.map((department) => {
     return {
       label: department.branch,
@@ -17,7 +17,7 @@ export default async function AddStudentPage() {
     };
   });
 
-  const years = await api.year.getYears.query();
+  const years = await api.year.getYears();
   const requiredYears = years.map((year) => {
     return {
       label: year.year,
@@ -25,7 +25,7 @@ export default async function AddStudentPage() {
     };
   });
 
-  const degrees = await api.degree.getDegrees.query();
+  const degrees = await api.degree.getDegrees();
   const requiredDegrees = degrees.map((degree) => {
     return {
       label: degree.degree,
@@ -33,7 +33,7 @@ export default async function AddStudentPage() {
     };
   });
 
-  const colleges = await api.college.getColleges.query();
+  const colleges = await api.college.getColleges();
   const requiredColleges = colleges.map((college) => {
     return {
       label: college.name,

@@ -2,7 +2,7 @@ import StudentTable from "@/components/tables/StudentsTable";
 import { api } from "@/trpc/server";
 
 export default async function StudentsPage() {
-  const students = await api.student.getStudentsAdminTable.query();
+  const students = await api.student.getStudentsAdminTable();
   return (
     <div className="w-full">
       <div className="p-8">

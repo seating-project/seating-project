@@ -3,14 +3,15 @@ import React from "react";
 import { api } from "@/trpc/server";
 
 type Props = {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 };
 
 const DepartmentPage = async (props: Props) => {
-  const department = await api.department.getDepartment.query({
-    id: Number(props.params.id),
+  const params = await props.params;
+  const department = await api.department.getDepartment({
+    id: Number(params.id),
   });
 
   return (
@@ -18,8 +19,8 @@ const DepartmentPage = async (props: Props) => {
       <div className="p-8">
         <p className="text-2xl font-bold">{department?.branch}</p>
         <div className="my-4">
-          <p className="text-xl ">Students: {department?.Students.length}</p>
-          <p className="text-xl ">ShortName: {department?.shortName}</p>
+          <p className="text-xl">Students: {department?.Students.length}</p>
+          <p className="text-xl">ShortName: {department?.shortName}</p>
         </div>
       </div>
     </div>

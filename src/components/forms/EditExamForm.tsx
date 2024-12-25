@@ -53,7 +53,7 @@ import { toast } from "@/components/ui/use-toast";
 import { examFormSchema } from "@/lib/schema";
 import { cn, generateDateRange } from "@/lib/utils";
 import { api } from "@/trpc/react";
-import type { RouterOutputs } from "@/trpc/shared";
+import type { RouterOutputs } from "@/trpc/react";
 import { type Option, type Template, type TimeTable } from "@/types";
 
 type Props = {
@@ -145,6 +145,7 @@ const EditExamForm = ({
 
   useEffect(
     () => {
+      // eslint-disable-next-line
       form.getValues("template") !== "" &&
         setRooms(
           templateData
@@ -422,6 +423,7 @@ const EditExamForm = ({
         timeTable: timetable,
       });
 
+      // eslint-disable-next-line
       updateExam.isError
         ? toast({
             title: "Error",
@@ -441,7 +443,7 @@ const EditExamForm = ({
           <ResizablePanelGroup direction="horizontal">
             <ResizablePanel defaultSize={25}>
               <ScrollArea className="form-area">
-                <div className=" p-8">
+                <div className="p-8">
                   <p className="text-2xl font-bold">Edit Exam</p>
                   <p>
                     Exam: {exam?.name} ({exam?.id})
@@ -1391,7 +1393,7 @@ const EditExamForm = ({
                       </div>
                       <Button
                         // type="submit"
-                        className="mt-4 w-full "
+                        className="mt-4 w-full"
                         variant="default"
                         disabled={isPending}
                         onClick={(e) => {
@@ -1416,7 +1418,7 @@ const EditExamForm = ({
             <ResizableHandle withHandle />
             <ResizablePanel defaultSize={75}>
               <ScrollArea className="form-area overflow-scroll">
-                <div className="p-8 ">
+                <div className="p-8">
                   {showTimeTable ? (
                     <div>
                       <p>
@@ -1557,7 +1559,7 @@ const EditExamForm = ({
                       </Button>
                     </div>
                   ) : (
-                    <div className="w-full items-center justify-center ">
+                    <div className="w-full items-center justify-center">
                       <p>
                         <span className="text-lg font-medium text-gray-900 dark:text-gray-100">
                           Fill other details to display time table

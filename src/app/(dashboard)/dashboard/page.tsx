@@ -2,19 +2,19 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
-import { getServerAuthSession } from "@/server/auth";
+import { auth } from "@/server/auth";
 import { api } from "@/trpc/server";
 
 export const revalidate = 0;
 
 export default async function Home() {
-  const session = await getServerAuthSession();
+  const session = await auth();
 
   if (!session) {
     redirect("/login");
   }
 
-  const exams = await api.exam.getLatestExams.query();
+  const exams = await api.exam.getLatestExams();
 
   return (
     <div className="w-full">

@@ -1,19 +1,8 @@
 import React from "react";
-import Image from "next/image";
 
-import Page from "@/components/page/PotraitPage";
-import { getNumberNames, getSuffix } from "@/lib/utils";
+import HallPlanTemplateGenderWise from "@/components/hallplans/HallPlanTemplateGenderWise";
+import type { RouterOutputs } from "@/trpc/react";
 import { api } from "@/trpc/server";
-import type { RouterOutputs } from "@/trpc/shared";
-
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "../ui/table";
 
 type Props = {
   exam: RouterOutputs["exam"]["getExamById"];
@@ -31,222 +20,27 @@ const HallPlanDocument = async ({ exam, template, date, gender }: Props) => {
     );
   }
 
-  const departments = await api.department.getDepartments.query();
-  const years = await api.year.getYears.query();
-  const rooms = await api.room.getRooms.query();
+  const departments = await api.department.getDepartments();
+  const years = await api.year.getYears();
+  const rooms = await api.room.getRooms();
 
-  const hallplan = await api.allotment.createHallPlanGenderWise.query({
+  const hallplan = await api.allotment.createHallPlanGenderWise({
     examId: exam.id,
     templateId: template.id,
     date: date,
   });
 
-  console.log("HALLPLAN", hallplan);
-  let overallTotalCount = 0;
-
-  const departmentOrder = exam.departmentOrderArray;
-
-  const departmentsInThisOrder = departmentOrder.flatMap((deptShortName) =>
-    exam.Years.map((year) => {
-      const d = departments.find((dept) => dept.shortName === deptShortName);
-      return `${d?.id} ${year.year}`;
-    }),
-  );
-
-  const hallPlanKeys = Object.keys(hallplan[gender]);
-  // Sort based on departmentsInThisOrder
-  hallPlanKeys.sort((a, b) => {
-    return (
-      departmentsInThisOrder.indexOf(a) - departmentsInThisOrder.indexOf(b)
-    );
-  });
-
   return (
-    <div>
-      <Page>
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead
-                className="border border-black text-center text-2xl text-black"
-                colSpan={5}
-              >
-                <div className="flex w-full items-center justify-center">
-                  <Image
-                    src={template.Logo.image}
-                    width={400}
-                    height={400}
-                    alt="dasd"
-                    className="object-contain"
-                  />
-                </div>
-              </TableHead>
-            </TableRow>
-            <TableRow>
-              <TableHead
-                className="border border-black text-center text-2xl text-black"
-                colSpan={5}
-              >
-                {exam.name} - {gender.toUpperCase()}
-              </TableHead>
-            </TableRow>
-            <TableRow>
-              <TableHead
-                className="border border-black text-center text-lg text-black"
-                colSpan={5}
-              >
-                Hall Arrangement
-              </TableHead>
-            </TableRow>
-            <TableRow>
-              <TableHead
-                className="border border-black text-center text-black"
-                colSpan={2}
-              >
-                Date:{" "}
-                {new Date(date).toLocaleDateString("en-IN", {
-                  weekday: "long",
-                  year: "numeric",
-                  month: "long",
-                  day: "numeric",
-                })}
-              </TableHead>
-              <TableHead
-                className="border border-black text-center text-black"
-                colSpan={3}
-              >
-                Timings:{" "}
-                {template?.startTime
-                  ?.toLocaleTimeString("en-US", {
-                    timeZone: "Asia/Kolkata",
-                  })
-                  .toUpperCase() +
-                  " to " +
-                  template?.endTime
-                    ?.toLocaleTimeString("en-US", {
-                      timeZone: "Asia/Kolkata",
-                    })
-                    .toUpperCase()}
-              </TableHead>
-            </TableRow>
-
-            <TableRow>
-              <TableHead
-                className="border border-black text-center text-black"
-                colSpan={1}
-              >
-                S.No
-              </TableHead>
-              <TableHead
-                className="border border-black text-center text-black"
-                colSpan={3}
-              >
-                Room
-              </TableHead>
-
-              <TableHead
-                className="border border-black text-center text-black"
-                colSpan={1}
-              >
-                Strength
-              </TableHead>
-            </TableRow>
-          </TableHeader>
-          {hallPlanKeys?.map((departmentYear) => {
-            const department = departments.find((dept) => {
-              return dept.id === Number(departmentYear.split(" ")[0]);
-            });
-            const year = years.find((yr) => {
-              return yr.id === Number(departmentYear.split(" ")[1]);
-            });
-            if (!department || !year) {
-              return null;
-            }
-            let deptCount = 0;
-            return (
-              <TableBody key={departmentYear} className="unbreak">
-                <TableRow>
-                  <TableCell
-                    className="border border-black text-center text-xl font-medium"
-                    colSpan={5}
-                  >
-                    {`
-                        ${department?.branch ?? ""} (${
-                          department?.shortName ?? ""
-                        }) ${year?.year}${getSuffix(year?.year ?? 0)} Year
-                        `}
-                  </TableCell>
-                </TableRow>
-                {hallplan[gender][departmentYear]?.map((room, index) => {
-                  const currentRoom = Object.keys(room)[0];
-                  const currentRoomInfo = Object.values(room)[0];
-                  const roomObject = rooms.find((roomObj) => {
-                    return roomObj.number === currentRoom;
-                  });
-                  deptCount += currentRoomInfo?.strength ?? 0;
-                  overallTotalCount += currentRoomInfo?.strength ?? 0;
-                  return (
-                    <>
-                      <TableRow>
-                        <TableCell
-                          className="border border-black text-center"
-                          colSpan={1}
-                        >
-                          {index + 1}
-                        </TableCell>
-                        <TableCell className="border border-black " colSpan={3}>
-                          <b className="text-xl font-medium"> {currentRoom} </b>{" "}
-                          <br />
-                          {getNumberNames(roomObject?.floor ?? 0) +
-                            " Floor"} - {roomObject?.Block.name} -{" "}
-                          {roomObject?.Building.name}
-                        </TableCell>
-                        <TableCell
-                          className="border border-black font-medium"
-                          colSpan={1}
-                        >
-                          {currentRoomInfo?.strength}
-                        </TableCell>
-                      </TableRow>
-                    </>
-                  );
-                })}
-                <TableRow>
-                  <TableCell
-                    className="border border-black text-center"
-                    colSpan={4}
-                  >
-                    <b className="text-xl font-medium"> Total </b>
-                  </TableCell>
-                  <TableCell
-                    className="border border-black font-medium"
-                    colSpan={1}
-                  >
-                    {deptCount}
-                  </TableCell>
-                </TableRow>
-              </TableBody>
-            );
-          })}
-          <TableBody>
-            <TableRow>
-              <TableCell
-                className="border border-black text-center"
-                colSpan={4}
-              >
-                <b className="text-xl font-medium"> Overall Total </b>
-              </TableCell>
-              <TableCell
-                className="border border-black text-center text-xl font-medium"
-                colSpan={1}
-              >
-                {overallTotalCount}
-              </TableCell>
-            </TableRow>
-          </TableBody>
-        </Table>
-      </Page>
-    </div>
+    <HallPlanTemplateGenderWise
+      exam={exam}
+      template={template}
+      date={date}
+      hallplan={hallplan}
+      departments={departments}
+      years={years}
+      rooms={rooms}
+      gender={gender}
+    />
   );
 };
 

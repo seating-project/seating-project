@@ -1,9 +1,9 @@
 import React from "react";
 import Link from "next/link";
-import { getServerAuthSession } from "@/server/auth";
+import { auth } from "@/server/auth";
 
 const RootNav = async () => {
-  const session = await getServerAuthSession();
+  const session = await auth();
   return (
     <div className=" flex items-center justify-between border-b p-4">
       <div className="rounded-md bg-black p-2 font-mono text-2xl dark:bg-white">

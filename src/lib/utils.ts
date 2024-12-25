@@ -75,9 +75,9 @@ export function getTimeTableBasedOnDays(timetable: TimeTable) {
         if (!timeTableBasedOnDays[date]) {
           timeTableBasedOnDays[date] = [];
         }
-        timetable[year]?.[department]?.[date] !== ""
-          ? timeTableBasedOnDays[date]?.push(`${department} ${year}`)
-          : null;
+        if (timetable[year]?.[department]?.[date] !== "") {
+          timeTableBasedOnDays[date]?.push(`${department} ${year}`);
+        }
       });
     });
   });

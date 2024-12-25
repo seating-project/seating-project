@@ -7,21 +7,21 @@ RUN apk add --no-cache libc6-compat
 # Skipping Chromium Download for Puppeteer
 # ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD true
 
-# Update APK repository and install required packages (gnupg, wget, and chromium)
-RUN apk update && apk add --no-cache \
-    gnupg \
-    wget \
-    chromium \
-    nss \
-    freetype \
-    freetype-dev \
-    harfbuzz \
-    ca-certificates \
-    ttf-freefont
+# # Update APK repository and install required packages (gnupg, wget, and chromium)
+# RUN apk update && apk add --no-cache \
+#     gnupg \
+#     wget \
+#     chromium \
+#     nss \
+#     freetype \
+#     freetype-dev \
+#     harfbuzz \
+#     ca-certificates \
+#     ttf-freefont
 
 # Note: The installation of Google Chrome Stable is replaced with Chromium.
 # The necessary libraries for Puppeteer to interact with Chromium are included in the installation commands above.
-ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
+# ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
 
 WORKDIR /app
 
@@ -35,7 +35,7 @@ COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
 #   else echo "Lockfile not found." && exit 1; \
 #   fi
 RUN npm i -g pnpm && pnpm i;
-RUN pnpm puppeteer browsers install chrome
+# RUN pnpm puppeteer browsers install chrome
 
 # Rebuild the source code only when needed
 FROM base AS builder
@@ -64,20 +64,20 @@ WORKDIR /app
 # ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD true
 
 # Update APK repository and install required packages (gnupg, wget, and chromium)
-RUN apk update && apk add --no-cache \
-    gnupg \
-    wget \
-    chromium \
-    nss \
-    freetype \
-    freetype-dev \
-    harfbuzz \
-    ca-certificates \
-    ttf-freefont
+# RUN apk update && apk add --no-cache \
+#     gnupg \
+#     wget \
+#     chromium \
+#     nss \
+#     freetype \
+#     freetype-dev \
+#     harfbuzz \
+#     ca-certificates \
+#     ttf-freefont
 
 # Note: The installation of Google Chrome Stable is replaced with Chromium.
 # The necessary libraries for Puppeteer to interact with Chromium are included in the installation commands above.
-ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
+# ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
 
 ENV NODE_ENV production
 # Uncomment the following line in case you want to disable telemetry during runtime.

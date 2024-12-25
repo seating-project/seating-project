@@ -1,5 +1,3 @@
-"use client";
-
 import React from "react";
 
 type Props = {
@@ -7,20 +5,15 @@ type Props = {
   id?: string;
 };
 
-const Page = ({children, id}: Props) => {
+const Page = ({ children, id }: Props) => {
   return (
-    <div className="page w-[210mm] h-[297mm] relative mx-auto border border-solid border-opacity-10 bg-white text-black p-8 shadow-md" id={id}>
-      <style jsx>
-        {`
-          @page {
-            size: A4;
-            margin: 0;
-          }
-        `}
-      </style>
+    <div
+      className="relative mx-auto h-[297mm] w-[210mm] border border-solid border-opacity-10 bg-white p-8 text-black shadow-md"
+      id={id}
+    >
       {children}
     </div>
-  )
-}
+  );
+};
 
-export default Page
+export default Page;

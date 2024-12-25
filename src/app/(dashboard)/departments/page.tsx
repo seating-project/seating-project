@@ -2,7 +2,7 @@ import DepartmentTable from "@/components/tables/DepartmentsTable";
 import { api } from "@/trpc/server";
 
 export default async function DepartmentPage() {
-  const departments = await api.department.getDepartmentsAdminTable.query();
+  const departments = await api.department.getDepartmentsAdminTable();
 
   return (
     <div className="w-full ">

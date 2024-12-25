@@ -61,7 +61,7 @@ import {
 } from "@/components/ui/table";
 import { useToast } from "@/components/ui/use-toast";
 import { api } from "@/trpc/react";
-import type { RouterOutputs } from "@/trpc/shared";
+import type { RouterOutputs } from "@/trpc/react";
 
 type Props = {
   data: RouterOutputs["student"]["getStudentsAdminTable"];
@@ -298,6 +298,7 @@ const StudentTable = (props: Props) => {
               onClick={() => {
                 startTransition(() => {
                   try {
+                    // eslint-disable-next-line
                     table.getSelectedRowModel().rows.map(
                       async (row) =>
                         await deleteStudent.mutateAsync({
@@ -306,6 +307,7 @@ const StudentTable = (props: Props) => {
                     );
                     router.refresh();
                   } catch (error) {
+                    // eslint-disable-next-line
                     error instanceof Error
                       ? toast({
                           title: "Oops!",

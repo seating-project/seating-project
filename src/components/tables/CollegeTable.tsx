@@ -60,7 +60,7 @@ import {
 } from "@/components/ui/table";
 import { useToast } from "@/components/ui/use-toast";
 import { api } from "@/trpc/react";
-import type { RouterOutputs } from "@/trpc/shared";
+import type { RouterOutputs } from "@/trpc/react";
 
 type Props = {
   data: RouterOutputs["college"]["getColleges"];
@@ -75,90 +75,86 @@ const DepartmentTable = (props: Props) => {
 
   const [isPending, startTransition] = React.useTransition();
 
-  const getDepartments = api.college.getColleges.useQuery(
-    undefined,
-    {
-      initialData: props.data,
-      refetchOnMount: false,
-      refetchOnReconnect: false,
-      refetchOnWindowFocus: false,
-    },
-  );
+  const getDepartments = api.college.getColleges.useQuery(undefined, {
+    initialData: props.data,
+    refetchOnMount: false,
+    refetchOnReconnect: false,
+    refetchOnWindowFocus: false,
+  });
   const deleteCollege = api.college.delete.useMutation({
     onSuccess: async () => {
       await getDepartments.refetch();
     },
   });
 
-  const columns: ColumnDef<
-    RouterOutputs["college"]["getColleges"][number]
-  >[] = [
-    {
-      id: "select",
-      header: ({ table }) => (
-        <Checkbox
-          checked={table.getIsAllPageRowsSelected()}
-          onCheckedChange={(value) => {
-            table.toggleAllPageRowsSelected(!!value);
-          }}
-          aria-label="Select all"
-          className="flex items-center justify-center"
-        />
-      ),
-      cell: ({ row }) => (
-        <Checkbox
-          checked={row.getIsSelected()}
-          onCheckedChange={(value) => {
-            row.toggleSelected(!!value);
-          }}
-          aria-label="Select row"
-          className="flex items-center justify-center"
-        />
-      ),
-      enableSorting: false,
-      enableHiding: false,
-    },
-    {
-      header: "ID",
-      accessorKey: "id",
-    },
-    {
-      header: "Name",
-      accessorKey: "name",
-    },
-    {
-      accessorKey: "shortName",
-      header: "Short Name",
-    },
-    {
-      // Column for row actions
-      id: "actions",
-      enableHiding: false,
-      cell: ({ row }) => {
-        const college = row.original;
+  const columns: ColumnDef<RouterOutputs["college"]["getColleges"][number]>[] =
+    [
+      {
+        id: "select",
+        header: ({ table }) => (
+          <Checkbox
+            checked={table.getIsAllPageRowsSelected()}
+            onCheckedChange={(value) => {
+              table.toggleAllPageRowsSelected(!!value);
+            }}
+            aria-label="Select all"
+            className="flex items-center justify-center"
+          />
+        ),
+        cell: ({ row }) => (
+          <Checkbox
+            checked={row.getIsSelected()}
+            onCheckedChange={(value) => {
+              row.toggleSelected(!!value);
+            }}
+            aria-label="Select row"
+            className="flex items-center justify-center"
+          />
+        ),
+        enableSorting: false,
+        enableHiding: false,
+      },
+      {
+        header: "ID",
+        accessorKey: "id",
+      },
+      {
+        header: "Name",
+        accessorKey: "name",
+      },
+      {
+        accessorKey: "shortName",
+        header: "Short Name",
+      },
+      {
+        // Column for row actions
+        id: "actions",
+        enableHiding: false,
+        cell: ({ row }) => {
+          const college = row.original;
 
-        return (
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button
-                aria-label="Open menu"
-                variant="ghost"
-                className="h-8 w-8 p-0"
-              >
-                <MoreVertical className="h-4 w-4" aria-hidden="true" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-[150px]">
-              <DropdownMenuItem asChild>
-                <Link href={`/college/${college.id}`}>
-                  <Edit
-                    className="mr-2 h-3.5 w-3.5 text-muted-foreground/70"
-                    aria-hidden="true"
-                  />
-                  Edit
-                </Link>
-              </DropdownMenuItem>
-              {/* <DropdownMenuItem asChild>
+          return (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  aria-label="Open menu"
+                  variant="ghost"
+                  className="h-8 w-8 p-0"
+                >
+                  <MoreVertical className="h-4 w-4" aria-hidden="true" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-[150px]">
+                <DropdownMenuItem asChild>
+                  <Link href={`/college/${college.id}`}>
+                    <Edit
+                      className="mr-2 h-3.5 w-3.5 text-muted-foreground/70"
+                      aria-hidden="true"
+                    />
+                    Edit
+                  </Link>
+                </DropdownMenuItem>
+                {/* <DropdownMenuItem asChild>
                 <Link href={`/profile/${customer.id}`}>
                   <View
                     className="mr-2 h-3.5 w-3.5 text-muted-foreground/70"
@@ -167,30 +163,30 @@ const DepartmentTable = (props: Props) => {
                   View
                 </Link>
               </DropdownMenuItem> */}
-              <DropdownMenuSeparator />
-              <DropdownMenuItem
-                onClick={() => {
-                  startTransition(async () => {
-                    await deleteCollege.mutateAsync({ id: college.id });
-                    toast({
-                      title: "College deleted",
-                      description: `The college ${college.shortName} has been deleted.`,
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  onClick={() => {
+                    startTransition(async () => {
+                      await deleteCollege.mutateAsync({ id: college.id });
+                      toast({
+                        title: "College deleted",
+                        description: `The college ${college.shortName} has been deleted.`,
+                      });
                     });
-                  });
-                }}
-              >
-                <Trash2
-                  className="mr-2 h-3.5 w-3.5 text-muted-foreground/70"
-                  aria-hidden="true"
-                />
-                Delete
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        );
+                  }}
+                >
+                  <Trash2
+                    className="mr-2 h-3.5 w-3.5 text-muted-foreground/70"
+                    aria-hidden="true"
+                  />
+                  Delete
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          );
+        },
       },
-    },
-  ];
+    ];
 
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -227,7 +223,7 @@ const DepartmentTable = (props: Props) => {
   return (
     <div className="w-full dark:text-white">
       <div className="flex items-center justify-between pb-4">
-        <div className="flex gap-x-2  ">
+        <div className="flex gap-x-2">
           <Input
             placeholder="Filter records..."
             value={
@@ -263,7 +259,7 @@ const DepartmentTable = (props: Props) => {
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
-        <div className="flex items-center gap-x-2 ">
+        <div className="flex items-center gap-x-2">
           {!(table.getFilteredSelectedRowModel().rows.length === 0) && (
             <Button
               aria-label="Delete selected rows"
@@ -273,6 +269,7 @@ const DepartmentTable = (props: Props) => {
               onClick={() => {
                 startTransition(() => {
                   try {
+                    // eslint-disable-next-line
                     table.getSelectedRowModel().rows.map(
                       async (row) =>
                         await deleteCollege.mutateAsync({
@@ -281,6 +278,7 @@ const DepartmentTable = (props: Props) => {
                     );
                     router.refresh();
                   } catch (error) {
+                    // eslint-disable-next-line
                     error instanceof Error
                       ? toast({
                           title: "Oops!",

@@ -1,13 +1,9 @@
-import { PrismaAdapter } from "@next-auth/prisma-adapter";
-import {
-  getServerSession,
-  type NextAuthOptions,
-  type DefaultSession,
-  type User,
-} from "next-auth";
-import { db as prisma } from "@/server/db";
-import Credentials from "next-auth/providers/credentials";
+import { PrismaAdapter } from "@auth/prisma-adapter";
 import argon2 from "argon2";
+import { type DefaultSession, type NextAuthConfig, type User } from "next-auth";
+import Credentials from "next-auth/providers/credentials";
+
+import { db as prisma } from "@/server/db";
 
 export async function isPasswordValid(
   password: string,
@@ -20,24 +16,19 @@ export async function isPasswordValid(
 declare module "next-auth" {
   interface Session extends DefaultSession {
     user: {
-      id: string | null | undefined;
-      email: string | null | undefined;
-      name: string | null | undefined;
+      id: string;
       // ...other properties
       // role: UserRole;
     } & DefaultSession["user"];
   }
 
-  interface User {
-    // ...other properties
-    // role: UserRole;
-    id: string;
-    email: string;
-    name: string;
-  }
+  // interface User {
+  //   // ...other properties
+  //   // role: UserRole;
+  // }
 }
 
-export const authOptions: NextAuthOptions = {
+export const authConfig = {
   pages: {
     signIn: "/login",
     signOut: "/",
@@ -62,7 +53,7 @@ export const authOptions: NextAuthOptions = {
     session({ session, token }) {
       if (token) {
         session.user.name = token.name;
-        session.user.email = token.email;
+        session.user.email = token.email!;
         session.user.id = token.id as string;
       }
       return session;
@@ -81,16 +72,19 @@ export const authOptions: NextAuthOptions = {
           return null;
         }
 
+        const { email, password } = credentials as Record<string, string>;
+
+        if (!email || !password) {
+          return null;
+        }
+
         const user = await prisma.user.findFirst({
           where: {
-            email: credentials?.email,
+            email,
           },
         });
 
-        if (
-          user &&
-          (await isPasswordValid(credentials?.password, user?.password ?? ""))
-        ) {
+        if (user && (await isPasswordValid(password, user?.password ?? ""))) {
           return {
             id: user.id,
             name: user.name ?? "",
@@ -102,6 +96,4 @@ export const authOptions: NextAuthOptions = {
       },
     }),
   ],
-};
-
-export const getServerAuthSession = () => getServerSession(authOptions);
+} satisfies NextAuthConfig;

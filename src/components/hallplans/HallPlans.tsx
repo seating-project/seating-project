@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { Eye } from "lucide-react";
 
+import HallPlanDownloadButton from "@/components/client/HallPlanDownloadButton";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -12,9 +13,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-import type { RouterOutputs } from "@/trpc/shared";
-
-import DownloadButton from "../client/DownloadButton";
+import type { RouterOutputs } from "@/trpc/react";
 
 type Props = {
   exam: RouterOutputs["exam"]["getExamById"];
@@ -22,6 +21,13 @@ type Props = {
 };
 
 const HallPlans = ({ exam, dates }: Props) => {
+  if (!exam) {
+    return (
+      <div>
+        <p>Exam not found</p>
+      </div>
+    );
+  }
   return (
     <Card className="my-2">
       <CardHeader>
@@ -49,7 +55,7 @@ const HallPlans = ({ exam, dates }: Props) => {
                         </CardTitle>
                       </CardHeader>
                       <CardContent>
-                        <div className="flex items-center  space-x-4">
+                        <div className="flex items-center space-x-4">
                           <Link
                             href={`/exam/${exam?.id}/hallplan/${date}`}
                             className=""
@@ -61,9 +67,10 @@ const HallPlans = ({ exam, dates }: Props) => {
                               </div>
                             </Button>
                           </Link>
-                          <DownloadButton
-                            links={[`/exam/${exam?.id}/hallplan/${date}`]}
+                          <HallPlanDownloadButton
+                            examId={exam.id}
                             title="Download"
+                            date={date}
                           />
                         </div>
                       </CardContent>
@@ -87,7 +94,7 @@ const HallPlans = ({ exam, dates }: Props) => {
                           </CardTitle>
                         </CardHeader>
                         <CardContent>
-                          <div className="flex items-center  space-x-4">
+                          <div className="flex items-center space-x-4">
                             <Link
                               href={`/exam/${exam?.id}/hallplan/${date}/boys`}
                               className=""
@@ -99,11 +106,10 @@ const HallPlans = ({ exam, dates }: Props) => {
                                 </div>
                               </Button>
                             </Link>
-                            <DownloadButton
-                              links={[
-                                `/exam/${exam.id}//hallplan/${date}/boys`,
-                              ]}
+                            <HallPlanDownloadButton
+                              examId={exam.id}
                               title="Download"
+                              date={date}
                             />
                           </div>
                         </CardContent>
@@ -122,7 +128,7 @@ const HallPlans = ({ exam, dates }: Props) => {
                           </CardTitle>
                         </CardHeader>
                         <CardContent>
-                          <div className="flex items-center  space-x-4">
+                          <div className="flex items-center space-x-4">
                             <Link
                               href={`/exam/${exam?.id}/hallplan/${date}/girls`}
                               className=""
@@ -134,11 +140,10 @@ const HallPlans = ({ exam, dates }: Props) => {
                                 </div>
                               </Button>
                             </Link>
-                            <DownloadButton
-                              links={[
-                                `/exam/${exam.id}/hallplan/${date}/girls`,
-                              ]}
+                            <HallPlanDownloadButton
+                              examId={exam.id}
                               title="Download"
+                              date={date}
                             />
                           </div>
                         </CardContent>

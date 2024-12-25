@@ -2,13 +2,13 @@ import RoomForm from "@/components/forms/RoomForm";
 import { api } from "@/trpc/server";
 
 const NewRoomPage = async () => {
-  const buildings = await api.building.getBuildings.query();
+  const buildings = await api.building.getBuildings();
   const requiredBuildings = buildings.map((building) => ({
     value: String(building.id),
     label: building.name,
   }));
 
-  const blocks = await api.block.findAllBlocks.query();
+  const blocks = await api.block.findAllBlocks();
   const requiredBlocks = blocks.map((block) => ({
     value: String(block.id),
     label: block.name,

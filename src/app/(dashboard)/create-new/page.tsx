@@ -2,14 +2,14 @@ import CreateExamForm from "@/components/forms/CreateExamForm";
 import { api } from "@/trpc/server";
 
 export default async function CreateNewExamPage() {
-  const departments = await api.department.getDepartments.query();
+  const departments = await api.department.getDepartments();
   const requiredDepartments = departments.map((department) => ({
     value: department.shortName,
     label: department.shortName,
   }));
   requiredDepartments.sort((a, b) => a.value.localeCompare(b.value));
 
-  const templates = await api.template.getTemplatesIncludingRooms.query();
+  const templates = await api.template.getTemplatesIncludingRooms();
   const requiredTemplates = templates.map((template) => ({
     value: template.name,
     label: template.name,
@@ -19,13 +19,13 @@ export default async function CreateNewExamPage() {
     ...template,
   }));
 
-  const years = await api.year.getYears.query();
+  const years = await api.year.getYears();
   const requiredYears = years.map((year) => ({
     value: String(year.year),
     label: String(year.year),
   }));
 
-  const colleges = await api.college.getColleges.query();
+  const colleges = await api.college.getColleges();
   const requiredColleges = colleges.map((college) => ({
     value: college.name,
     label: college.name,

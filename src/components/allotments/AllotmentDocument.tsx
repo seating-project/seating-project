@@ -1,5 +1,5 @@
 import { api } from "@/trpc/server";
-import type { RouterOutputs } from "@/trpc/shared";
+import type { RouterOutputs } from "@/trpc/react";
 
 import AllotmentTemplate from "./AllotmentTemplate";
 
@@ -18,16 +18,16 @@ const AllotmentDocument = async ({ exam, template, date }: Props) => {
     );
   }
 
-  const allotments = await api.allotment.createAllotment.query({
+  const allotments = await api.allotment.createAllotment({
     examId: exam.id,
     templateId: template.id,
     date: date,
   });
 
-  const logo = await api.template.getLogo.query({
+  const logo = await api.template.getLogo({
     id: template.logoId,
   });
-  const departments = await api.department.getDepartments.query();
+  const departments = await api.department.getDepartments();
 
   return (
     <AllotmentTemplate

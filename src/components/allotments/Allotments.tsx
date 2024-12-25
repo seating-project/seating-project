@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/card";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 
-import DownloadButton from "../client/DownloadButton";
+import AllotmentDownloadButton from "../client/AllotmentDownloadButton";
 
 type Props = {
   examId: number;
@@ -47,7 +47,7 @@ const Allotments = ({ examId, dates }: Props) => {
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <div className="flex items-center  space-x-4">
+                    <div className="flex items-center space-x-4">
                       <Link
                         href={`/exam/${examId}/allotment/${date}`}
                         className=""
@@ -59,9 +59,10 @@ const Allotments = ({ examId, dates }: Props) => {
                           </div>
                         </Button>
                       </Link>
-                      <DownloadButton
-                        links={[`/exam/${examId}/allotment/${date}`]}
+                      <AllotmentDownloadButton
                         title="Download"
+                        examId={examId}
+                        date={date}
                       />
                     </div>
                   </CardContent>

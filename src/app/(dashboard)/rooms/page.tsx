@@ -4,7 +4,7 @@ import RoomsTable from "@/components/tables/RoomsTable";
 import { api } from "@/trpc/server";
 
 const RoomsPage = async () => {
-  const rooms = await api.room.getRoomsAdminTable.query();
+  const rooms = await api.room.getRoomsAdminTable();
 
   return (
     <div className="w-full">

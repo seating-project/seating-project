@@ -2,7 +2,7 @@ import ExamTable from "@/components/tables/ExamsTable";
 import { api } from "@/trpc/server";
 
 export default async function ExamPage() {
-  const exams = await api.exam.getLatestExamsAdminTable.query();
+  const exams = await api.exam.getLatestExamsAdminTable();
 
   return (
     <div className="w-full">

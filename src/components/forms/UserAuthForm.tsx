@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Loader2 } from "lucide-react";
 import { signIn } from "next-auth/react";
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
+// eslint-disable-next-line
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export default function UserAuthForm({

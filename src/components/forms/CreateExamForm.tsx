@@ -109,6 +109,7 @@ const CreateExamForm = ({
 
   useEffect(
     () => {
+      // eslint-disable-next-line
       form.getValues("template") !== "" &&
         setRooms(
           templateData
@@ -285,6 +286,7 @@ const CreateExamForm = ({
       console.log(createExam);
       console.log(timetable);
 
+      // eslint-disable-next-line
       createExam
         ? toast({
             title: "Exam Created",
@@ -304,7 +306,7 @@ const CreateExamForm = ({
           <ResizablePanelGroup direction="horizontal">
             <ResizablePanel defaultSize={25}>
               <ScrollArea className="form-area">
-                <div className=" p-8">
+                <div className="p-8">
                   <p className="text-2xl font-bold">Create New Exam</p>
                   <div className="my-4 w-full">
                     <div className="flex w-full flex-col gap-x-8 text-black dark:text-white">
@@ -1094,7 +1096,7 @@ const CreateExamForm = ({
                       </div>
                       <Button
                         // type="submit"
-                        className="mt-4 w-full "
+                        className="mt-4 w-full"
                         variant="default"
                         disabled={isPending}
                         onClick={(e) => {
@@ -1119,7 +1121,7 @@ const CreateExamForm = ({
             <ResizableHandle withHandle />
             <ResizablePanel defaultSize={75}>
               <ScrollArea className="form-area overflow-scroll">
-                <div className="p-8 ">
+                <div className="p-8">
                   {showTimeTable ? (
                     <div>
                       <p>
@@ -1211,7 +1213,7 @@ const CreateExamForm = ({
                       </Button>
                     </div>
                   ) : (
-                    <div className="w-full items-center justify-center ">
+                    <div className="w-full items-center justify-center">
                       <p>
                         <span className="text-lg font-medium text-gray-900 dark:text-gray-100">
                           Fill other details to display time table

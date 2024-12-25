@@ -2,19 +2,19 @@ import TemplateForm from "@/components/forms/TemplateForm";
 import { api } from "@/trpc/server";
 
 const TemplateFormPage = async () => {
-  const buildings = await api.building.getBuildings.query();
+  const buildings = await api.building.getBuildings();
   const requiredBuildings = buildings.map((building) => ({
     value: building.name,
     label: building.name,
   }));
 
-  const rooms = await api.room.getRooms.query();
+  const rooms = await api.room.getRooms();
   const requiredRooms = rooms.map((room) => ({
     value: room.number,
     label: room.number,
   }));
 
-  const logos = await api.template.getLogos.query();
+  const logos = await api.template.getLogos();
   const requiredLogos = logos.map((logo) => ({
     value: String(logo.id),
     label: logo.name,

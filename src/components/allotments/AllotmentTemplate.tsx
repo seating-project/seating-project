@@ -6,7 +6,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import type { RouterOutputs } from "@/trpc/shared";
+import type { RouterOutputs } from "@/trpc/react";
 
 import Page from "../page/LandscapePage";
 import AllotmentHeader from "./AllotmentHeader";
@@ -29,7 +29,11 @@ const AllotmentTemplate = ({
   date,
 }: Props) => {
   if (!exam || !template || !allotments || !logo || !departments) {
-    return null;
+    return (
+      <div>
+        <p>Exam or Template not found</p>
+      </div>
+    );
   }
 
   const sortedRoomKeys = Object.keys(allotments).sort(
@@ -63,14 +67,16 @@ const AllotmentTemplate = ({
                         currentIndex + template.numberOfColumns,
                       );
                       currentIndex += template.numberOfColumns;
-                      !alternateFlag ? currentRow : currentRow?.reverse();
-
+                      if (alternateFlag) {
+                        currentRow?.reverse();
+                      }
                       alternateFlag = !alternateFlag;
-                      !alternateFlag &&
-                        (tableCount += Number(currentRow?.length) - 1);
-                      alternateFlag &&
-                        i !== 0 &&
-                        (tableCount += Number(currentRow?.length) + 1);
+                      if (!alternateFlag) {
+                        tableCount += Number(currentRow?.length) - 1;
+                      }
+                      if (alternateFlag && i !== 0) {
+                        tableCount += Number(currentRow?.length) + 1;
+                      }
                       let extraStudents: typeof currentRow;
                       if (
                         i === template.numberOfRows - 1 &&
@@ -246,13 +252,16 @@ const AllotmentTemplate = ({
                               currentIndex + 6,
                             );
                       currentIndex += i === template.numberOfRows - 1 ? 7 : 6;
-                      alternateFlag ? currentRow?.reverse() : currentRow;
+                      if (alternateFlag) {
+                        currentRow?.reverse();
+                      }
                       alternateFlag = !alternateFlag;
-                      !alternateFlag &&
-                        (tableCount += Number(currentRow?.length) - 1);
-                      alternateFlag &&
-                        i !== 0 &&
-                        (tableCount += Number(currentRow?.length) + 1);
+                      if (!alternateFlag) {
+                        tableCount += Number(currentRow?.length) - 1;
+                      }
+                      if (alternateFlag && i !== 0) {
+                        tableCount += Number(currentRow?.length) + 1;
+                      }
 
                       return (
                         <div key={i} className="flex">

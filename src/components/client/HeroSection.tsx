@@ -1,10 +1,10 @@
 import React from "react";
 import { buttonVariants } from "@/components/ui/button";
 import Link from "next/link";
-import { getServerAuthSession } from "@/server/auth";
+import { auth } from "@/server/auth";
 
 const HeroSection = async () => {
-  const session = await getServerAuthSession();
+  const session = await auth();
 
   return (
     <section className="">

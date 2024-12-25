@@ -2,7 +2,7 @@ import TemplateTable from "@/components/tables/TemplatesTable";
 import { api } from "@/trpc/server";
 
 export default async function TemplatePage() {
-  const templates = await api.template.getTemplatesAdminTable.query();
+  const templates = await api.template.getTemplatesAdminTable();
 
   return (
     <div className="w-full ">

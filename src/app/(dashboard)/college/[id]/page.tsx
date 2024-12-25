@@ -3,13 +3,14 @@ import React from "react";
 import { api } from "@/trpc/server";
 
 interface Props {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 const CollegePage = async (props: Props) => {
-  const college = await api.college.getCollege.query({
-    id: Number(props.params.id),
+  const params = await props.params;
+  const college = await api.college.getCollege({
+    id: Number(params.id),
   });
 
   return (

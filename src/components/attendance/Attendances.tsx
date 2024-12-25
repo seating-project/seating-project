@@ -31,7 +31,7 @@ const Attendances = async ({ examId, timetable }: Props) => {
   const rooms: string[][] = [];
   await Promise.all(
     dateRangesWithDifferences.map(async (dateRange) => {
-      const roomsForOneDate = await api.allotment.getAttendanceRooms.query({
+      const roomsForOneDate = await api.allotment.getAttendanceRooms({
         examId: examId,
         date: dateRange[0],
       });

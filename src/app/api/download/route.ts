@@ -1,17 +1,23 @@
 import { NextResponse, type NextRequest } from "next/server";
+import chromium from "@sparticuz/chromium";
 import JSZip from "jszip";
-import puppeteer from "puppeteer";
-// import puppeteer from 'puppeteer-core';
 import { z } from "zod";
 
-import { env } from "@/env.mjs";
+import { env } from "@/env";
 import { db } from "@/server/db";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const downloadSchema = z.object({
   links: z.array(z.string()),
   examId: z.number(),
   templateId: z.number(),
 });
+
+/**
+ * Chromium for Puppeteer
+ */
+const CHROMIUM_EXECUTABLE_PATH =
+  "https://github.com/Sparticuz/chromium/releases/download/v122.0.0/chromium-v122.0.0-pack.tar";
 
 export async function POST(req: NextRequest) {
   const body = (await req.json()) as z.infer<typeof downloadSchema>;
@@ -60,17 +66,34 @@ export async function POST(req: NextRequest) {
       status: 500,
     });
   }
-  // const puppeteer = await import("puppeteer-core");
-  const browser = await puppeteer.launch({
-    headless: true,
-    executablePath: process.env.PUPPETEER_EXECUTABLE_PATH,
-    args: [
-      // "--disable-gpu",
-      // "--disable-dev-shm-usage",
-      "--disable-setuid-sandbox",
-      "--no-sandbox",
-    ],
-  });
+
+  let browser;
+  if (env.NODE_ENV === "production") {
+    const puppeteer = await import("puppeteer-core");
+    browser = await puppeteer.launch({
+      args: chromium.args,
+      defaultViewport: chromium.defaultViewport,
+      executablePath: await chromium.executablePath(CHROMIUM_EXECUTABLE_PATH),
+      headless: true,
+      acceptInsecureCerts: true,
+    });
+  } else if (env.NODE_ENV === "development") {
+    const puppeteer = await import("puppeteer");
+    browser = await puppeteer.launch({
+      args: [
+        "--no-sandbox",
+        "--disable-setuid-sandbox",
+        "--allow-file-access-from-files",
+        "--enable-local-file-accesses",
+      ],
+      headless: true,
+    });
+  }
+
+  if (!browser) {
+    throw new Error("Browser not found");
+  }
+
   const page = await browser.newPage();
 
   await page.goto(`${env.BASE_URL}/login`);
@@ -90,13 +113,18 @@ export async function POST(req: NextRequest) {
 
     if (docName === "attendance") {
       const room = link.split("/")[link.split("/").length - 1];
-      const date = link.split("/")[link.split("/").length - 2];
+      const date = link.split("/")[link.split("/").length - 2] ?? "";
+      const dateObj = new Date(date);
+      const month = dateObj.toLocaleString("default", { month: "long" });
+      const numDate = dateObj.getDate();
       await page.goto(`${env.BASE_URL}${link}`, {
         waitUntil: "load",
         timeout: 0,
       });
       const pdf = await page.pdf({ format: "A4", timeout: 0 });
-      zip.file(`attendance-${date}-${room}.pdf`, pdf, { binary: true });
+      zip.file(`attendance-${month}-${numDate}-${room}.pdf`, pdf, {
+        binary: true,
+      });
     }
     if (docName === "allotment") {
       const date = link.split("/")[link.split("/").length - 1] ?? "";
@@ -106,6 +134,7 @@ export async function POST(req: NextRequest) {
 
       await page.goto(`${env.BASE_URL}${link}`, {
         waitUntil: "networkidle0",
+        timeout: 0,
       });
       const pdf = await Promise.resolve(
         await page.pdf({ format: "A4", timeout: 0 }),
@@ -124,8 +153,9 @@ export async function POST(req: NextRequest) {
 
         await page.goto(`${env.BASE_URL}${link}`, {
           waitUntil: "networkidle0",
+          timeout: 0,
         });
-        const pdf: Buffer = await page.pdf({ format: "A4", timeout: 0 });
+        const pdf = await page.pdf({ format: "A4", timeout: 0 });
         zip.file(`hallplan-${month}-${numDate}-${gender}.pdf`, pdf, {
           binary: true,
         });
@@ -137,6 +167,7 @@ export async function POST(req: NextRequest) {
 
         await page.goto(`${env.BASE_URL}${link}`, {
           waitUntil: "networkidle0",
+          timeout: 0,
         });
         const pdf = await page.pdf({ format: "A4", timeout: 0 });
         zip.file(`hallplan-${month}-${numDate}.pdf`, pdf, { binary: true });

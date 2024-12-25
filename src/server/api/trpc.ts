@@ -8,11 +8,10 @@
  */
 
 import { initTRPC, TRPCError } from "@trpc/server";
-import { type NextRequest } from "next/server";
 import superjson from "superjson";
 import { ZodError } from "zod";
 
-import { getServerAuthSession } from "@/server/auth";
+import { auth } from "@/server/auth";
 import { db } from "@/server/db";
 
 /**
@@ -21,44 +20,20 @@ import { db } from "@/server/db";
  * This section defines the "contexts" that are available in the backend API.
  *
  * These allow you to access things when processing a request, like the database, the session, etc.
- */
-
-interface CreateContextOptions {
-  headers: Headers;
-}
-
-/**
- * This helper generates the "internals" for a tRPC context. If you need to use it, you can export
- * it from here.
  *
- * Examples of things you may need it for:
- * - testing, so we don't have to mock Next.js' req/res
- * - tRPC's `createSSGHelpers`, where we don't have req/res
+ * This helper generates the "internals" for a tRPC context. The API handler and RSC clients each
+ * wrap this and provides the required context.
  *
- * @see https://create.t3.gg/en/usage/trpc#-serverapitrpcts
+ * @see https://trpc.io/docs/server/context
  */
-export const createInnerTRPCContext = async (opts: CreateContextOptions) => {
-  const session = await getServerAuthSession();
+export const createTRPCContext = async (opts: { headers: Headers }) => {
+  const session = await auth();
 
   return {
-    session,
-    headers: opts.headers,
     db,
+    session,
+    ...opts,
   };
-};
-
-/**
- * This is the actual context you will use in your router. It will be used to process every request
- * that goes through your tRPC endpoint.
- *
- * @see https://trpc.io/docs/context
- */
-export const createTRPCContext = async (opts: { req: NextRequest }) => {
-  // Fetch stuff that depends on the request
-
-  return await createInnerTRPCContext({
-    headers: opts.req.headers,
-  });
 };
 
 /**
@@ -84,6 +59,13 @@ const t = initTRPC.context<typeof createTRPCContext>().create({
 });
 
 /**
+ * Create a server-side caller.
+ *
+ * @see https://trpc.io/docs/server/server-side-calls
+ */
+export const createCallerFactory = t.createCallerFactory;
+
+/**
  * 3. ROUTER & PROCEDURE (THE IMPORTANT BIT)
  *
  * These are the pieces you use to build your tRPC API. You should import these a lot in the
@@ -98,13 +80,36 @@ const t = initTRPC.context<typeof createTRPCContext>().create({
 export const createTRPCRouter = t.router;
 
 /**
+ * Middleware for timing procedure execution and adding an artificial delay in development.
+ *
+ * You can remove this if you don't like it, but it can help catch unwanted waterfalls by simulating
+ * network latency that would occur in production but not in local development.
+ */
+const timingMiddleware = t.middleware(async ({ next, path }) => {
+  const start = Date.now();
+
+  if (t._config.isDev) {
+    // artificial delay in dev
+    const waitMs = Math.floor(Math.random() * 400) + 100;
+    await new Promise((resolve) => setTimeout(resolve, waitMs));
+  }
+
+  const result = await next();
+
+  const end = Date.now();
+  console.log(`[TRPC] ${path} took ${end - start}ms to execute`);
+
+  return result;
+});
+
+/**
  * Public (unauthenticated) procedure
  *
  * This is the base piece you use to build new queries and mutations on your tRPC API. It does not
  * guarantee that a user querying is authorized, but you can still access user session data if they
  * are logged in.
  */
-export const publicProcedure = t.procedure;
+export const publicProcedure = t.procedure.use(timingMiddleware);
 
 /** Reusable middleware that enforces users are logged in before running the procedure. */
 const enforceUserIsAuthed = t.middleware(({ ctx, next }) => {
@@ -127,4 +132,6 @@ const enforceUserIsAuthed = t.middleware(({ ctx, next }) => {
  *
  * @see https://trpc.io/docs/procedures
  */
-export const protectedProcedure = t.procedure.use(enforceUserIsAuthed);
+export const protectedProcedure = t.procedure
+  .use(timingMiddleware)
+  .use(enforceUserIsAuthed);

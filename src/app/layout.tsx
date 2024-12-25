@@ -4,13 +4,12 @@ import {
   // Inter,
   Poppins,
 } from "next/font/google";
-import { headers } from "next/headers";
 import { twMerge } from "tailwind-merge";
 
 import { AuthProvider } from "@/components/providers/AuthProvider";
-import { ThemeProvider } from "@/components/providers/ThemeProvider";
+import { ThemeProvider } from "@/components/ui/theme";
 import { Toaster } from "@/components/ui/toaster";
-import { getServerAuthSession } from "@/server/auth";
+import { auth } from "@/server/auth";
 import { TRPCReactProvider } from "@/trpc/react";
 
 // const inter = Inter({
@@ -34,19 +33,19 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const session = await getServerAuthSession();
+  const session = await auth();
 
   return (
     <html lang="en">
       <body
         className={twMerge(
-          " bg-background font-sans text-foreground",
+          "bg-background font-sans text-foreground",
           // inter.variable,
           poppins.className,
         )}
       >
         <AuthProvider session={session}>
-          <TRPCReactProvider headers={headers()}>
+          <TRPCReactProvider>
             <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
               {children}
             </ThemeProvider>

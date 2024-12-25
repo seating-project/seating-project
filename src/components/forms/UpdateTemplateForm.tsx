@@ -27,7 +27,7 @@ import {
 } from "@/components/ui/select";
 import { templateFormSchema } from "@/lib/schema";
 import { api } from "@/trpc/react";
-import type { RouterOutputs } from "@/trpc/shared";
+import type { RouterOutputs } from "@/trpc/react";
 import type { Option } from "@/types";
 
 import { Checkbox } from "../ui/checkbox";

@@ -10,13 +10,14 @@ import {
 import { api } from "@/trpc/server";
 
 type Props = {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 };
 
-export default async function StudentPage({ params }: Props) {
-  const studentCurrent = await api.student.getStudent.query({
+export default async function StudentPage(props: Props) {
+  const params = await props.params;
+  const studentCurrent = await api.student.getStudent({
     id: Number(params.id),
   });
 
@@ -34,7 +35,7 @@ export default async function StudentPage({ params }: Props) {
     acceleratedStudent: studentCurrent?.acceleratedStudent ?? false,
   };
 
-  const departments = await api.department.getDepartments.query();
+  const departments = await api.department.getDepartments();
   const requiredDepartments = departments.map((department) => {
     return {
       label: department.branch,
@@ -42,7 +43,7 @@ export default async function StudentPage({ params }: Props) {
     };
   });
 
-  const years = await api.year.getYears.query();
+  const years = await api.year.getYears();
   const requiredYears = years.map((year) => {
     return {
       label: String(year.year),
@@ -50,7 +51,7 @@ export default async function StudentPage({ params }: Props) {
     };
   });
 
-  const degrees = await api.degree.getDegrees.query();
+  const degrees = await api.degree.getDegrees();
   const requiredDegrees = degrees.map((degree) => {
     return {
       label: degree.degree,
@@ -63,7 +64,7 @@ export default async function StudentPage({ params }: Props) {
       <div className="p-8">
         <p className="text-2xl font-bold">Students</p>
         <Card className="my-4">
-          <CardHeader className="w-full space-y-1 ">
+          <CardHeader className="w-full space-y-1">
             <div className="flex justify-between">
               <div>
                 <div className="flex items-center justify-between space-x-2">

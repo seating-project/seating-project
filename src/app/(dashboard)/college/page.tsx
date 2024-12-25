@@ -4,7 +4,7 @@ import React from 'react'
 
 const CollegePage = async () => {
 
-  const colleges = await api.college.getColleges.query()
+  const colleges = await api.college.getColleges()
 
   return (
     <div className="w-full ">

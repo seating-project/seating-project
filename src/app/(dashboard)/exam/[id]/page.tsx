@@ -2,7 +2,6 @@ import Link from "next/link";
 
 import Allotments from "@/components/allotments/Allotments";
 import Attendances from "@/components/attendance/Attendances";
-import DownloadButton from "@/components/client/DownloadButton";
 import DownloadZipButton from "@/components/client/DownloadZipButton";
 import HallPlans from "@/components/hallplans/HallPlans";
 import MainNav from "@/components/navbar/MainNav";
@@ -16,14 +15,15 @@ import { api } from "@/trpc/server";
 import type { TimeTable } from "@/types";
 
 type Props = {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 };
 
 const ExamPage = async (props: Props) => {
-  const exam = await api.exam.getExamById.query({
-    id: Number(props.params.id),
+  const params = await props.params;
+  const exam = await api.exam.getExamById({
+    id: Number(params.id),
   });
   const timetable = exam?.Timetable;
   const examDates = getTimeTableDates(timetable as TimeTable);
@@ -49,7 +49,7 @@ const ExamPage = async (props: Props) => {
   const rooms: string[][] = [];
   await Promise.all(
     dateRangesWithDifferences.map(async (dateRange) => {
-      const roomsForOneDate = await api.allotment.getAttendanceRooms.query({
+      const roomsForOneDate = await api.allotment.getAttendanceRooms({
         examId: exam?.id ?? 0,
         date: dateRange[0],
       });
@@ -69,7 +69,7 @@ const ExamPage = async (props: Props) => {
   });
   if (exam === null) {
     return (
-      <div className="fle x-col flex h-96  w-full items-center justify-center space-y-8 p-8">
+      <div className="fle x-col flex h-96 w-full items-center justify-center space-y-8 p-8">
         <p className="text-4xl font-bold underline">Exam not found</p>
         <div className="space-x-4">
           <Button>
@@ -112,10 +112,10 @@ const ExamPage = async (props: Props) => {
             links={links}
           />
         </div>
-        <Allotments examId={Number(props.params.id)} dates={examDates} />
+        <Allotments examId={Number(params.id)} dates={examDates} />
         <HallPlans exam={exam} dates={examDates} />
         <Attendances
-          examId={Number(props.params.id)}
+          examId={Number(params.id)}
           dates={examDates}
           timetable={timetable as TimeTable}
         />
